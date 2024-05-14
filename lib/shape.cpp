@@ -1,10 +1,10 @@
 #include <iostream>
 #include <thread>
-
 #include "shape.h"
+
 namespace vueron
 {
-    Rectangle::Rectangle(int width, int height) : width_(width), height_(height) {}
+    Rectangle::Rectangle(int width, int height) : width_(width), height_(height) {};
     Rectangle::Rectangle(){
         width_ = 1;
         height_ = 5;

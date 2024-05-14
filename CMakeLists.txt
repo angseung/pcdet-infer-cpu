@@ -6,7 +6,19 @@ project(
   DESCRIPTION "cpu inference framework for pcdet models"
   LANGUAGES C CXX)
 
-set(CMAKE_CXX_STANDARD 17)
+# GoogleTest requires at least C++14
+set(CMAKE_CXX_STANDARD 14)
+set(CMAKE_CXX_STANDARD_REQUIRED ON)
+
+include(FetchContent)
+FetchContent_Declare(
+  googletest
+  URL https://github.com/google/googletest/archive/03597a01ee50ed33e9dfd640b249b4be3799d395.zip
+)
+# For Windows: Prevent overriding the parent project's compiler/linker settings
+set(gtest_force_shared_crt ON CACHE BOOL "" FORCE)
+FetchContent_MakeAvailable(googletest)
+
 # Set the output directory for executable files
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin)
 
@@ -15,3 +27,5 @@ target_include_directories(test PUBLIC ${CMAKE_SOURCE_DIR}/includes)
 target_compile_options(test PUBLIC -Wall -Werror)
 add_subdirectory(lib)
 target_link_libraries(test PUBLIC shape)
+
+add_subdirectory(tests)

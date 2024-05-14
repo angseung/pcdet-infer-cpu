@@ -9,6 +9,14 @@
         "cwd": "${workspaceFolder}",
         "program": "${workspaceFolder}/Debug/bin/test"
       },
+      {
+        "name": "hello_test",
+        "type": "cppdbg",
+        "request": "launch",
+        "args": [],
+        "cwd": "${workspaceFolder}",
+        "program": "${workspaceFolder}/Debug/bin/hello_test"
+      },
     ]
   }
   
