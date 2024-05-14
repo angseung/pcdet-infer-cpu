@@ -12,10 +12,6 @@ namespace vueron
     Rectangle::~Rectangle() {};
 
     int Rectangle::GetSize() const {
-    std::thread t([this]() { std::cout << "Calulate .." << std::endl; });
-    t.join();
-
-    // 직사각형의 넓이를 리턴한다.
     return width_ * height_;
     }
 }

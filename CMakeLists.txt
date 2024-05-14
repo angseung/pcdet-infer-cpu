@@ -22,10 +22,9 @@ FetchContent_MakeAvailable(googletest)
 # Set the output directory for executable files
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin)
 
-add_executable (test main.cpp foo.cpp)
+add_executable (test main.cpp)
+add_subdirectory(tests)
+add_subdirectory(lib)
 target_include_directories(test PUBLIC ${CMAKE_SOURCE_DIR}/includes)
 target_compile_options(test PUBLIC -Wall -Werror)
-add_subdirectory(lib)
 target_link_libraries(test PUBLIC shape)
-
-add_subdirectory(tests)
