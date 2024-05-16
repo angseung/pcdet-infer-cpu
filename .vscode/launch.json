@@ -2,12 +2,12 @@
     "version": "0.2.0",
     "configurations": [
       {
-        "name": "test",
+        "name": "main",
         "type": "cppdbg",
         "request": "launch",
         "args": ["--profile"],
         "cwd": "${workspaceFolder}",
-        "program": "${workspaceFolder}/Debug/bin/test"
+        "program": "${workspaceFolder}/Debug/bin/main"
       },
       {
         "name": "hello_test",
