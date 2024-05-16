@@ -26,12 +26,14 @@ struct BaseVoxel {
 };
 
 struct Voxel {
-    float x, y, z;
+    float x = 0, y = 0, z = 0;
 #if NUM_POINT_VALUES >= 4
-    float w;
+    float w = 0;
 #endif
-    float offset_from_mean_x, offset_from_mean_y, offset_from_mean_z;
-    float offset_from_center_x, offset_from_center_y, offset_from_center_z;
+    float offset_from_mean_x = 0, offset_from_mean_y = 0,
+          offset_from_mean_z = 0;
+    float offset_from_center_x = 0, offset_from_center_y = 0,
+          offset_from_center_z = 0;
 };
 
 struct Pillar {
@@ -58,13 +60,15 @@ void voxelization(std::vector<Pillar> &bev_pillar, const float *points,
     std::vector<size_t> indices(points_num, 0);
     std::vector<BaseVoxel> shuffled(points_num);
     std::iota(indices.begin(), indices.end(), 0);
+    size_t processed = 0;
 
 #if _SHIFFLE == ON
     std::shuffle(indices.begin(), indices.end(), rng);
 #endif
 
     for (size_t i : indices) {
-        if (i > MAX_POINTS_NUM)
+        // check max_point_num_per_frame
+        if (processed > MAX_POINTS_NUM)
             break;
         float point_x = points[point_stride * i];
         float point_y = points[point_stride * i + 1];
@@ -73,6 +77,8 @@ void voxelization(std::vector<Pillar> &bev_pillar, const float *points,
 #if NUM_POINT_VALUES >= 4
         float point_i = points[point_stride * i + 3];
 #endif
+        processed++;
+        assert(processed < MAX_POINTS_NUM);
 
         size_t voxel_id_x = floorf((point_x - MIN_X_RANGE) / VOXEL_X_SIZE);
         size_t voxel_id_y = floorf((point_y - MIN_Y_RANGE) / VOXEL_Y_SIZE);
@@ -89,18 +95,20 @@ void voxelization(std::vector<Pillar> &bev_pillar, const float *points,
 
         // bev_pillar : GRID_Y_SIZE * GRID_X_SIZE vector<Pillar>
         if (bev_pillar[voxel_index].point_num_in_pillar < 20) {
-            bev_pillar[voxel_index].pillar_grid_x = GRID_X_SIZE;
-            bev_pillar[voxel_index].pillar_grid_y = GRID_Y_SIZE;
-            bev_pillar[voxel_index]
-                .point_index[bev_pillar[voxel_index].point_num_in_pillar] = i;
+            size_t voxel_index_in_pillar =
+                bev_pillar[voxel_index].point_num_in_pillar;
+            bev_pillar[voxel_index].pillar_grid_x = voxel_id_x;
+            bev_pillar[voxel_index].pillar_grid_y = voxel_id_y;
+            bev_pillar[voxel_index].point_index[voxel_index_in_pillar] = i;
             bev_pillar[voxel_index].point_num_in_pillar++;
+            assert(bev_pillar[voxel_index].point_num_in_pillar <=
+                   MAX_NUM_POINTS_PER_PILLAR);
             bev_pillar[voxel_index].is_empty = false;
         }
     }
 
-    size_t count_voxel = 0;
-
 #ifdef _DEBUG
+    size_t count_voxel = 0;
     for (Pillar pillar : bev_pillar) {
         if (!pillar.is_empty) {
             count_voxel++;
@@ -110,9 +118,83 @@ void voxelization(std::vector<Pillar> &bev_pillar, const float *points,
 #endif
 }
 
-void voxel_feature_encode(std::vector<Voxel> &voxel,
-                          std::vector<BaseVoxel> &base_voxel,
-                          const float *points, size_t points_buf_len,
-                          size_t point_stride) {}
+void voxel_feature_encode(std::vector<Pillar> &bev_pillar,
+                          std::vector<Voxel> &voxels, const float *points,
+                          size_t points_buf_len, size_t point_stride) {
+    // for (Pillar pillar : bev_pillar) {
+    //     if (pillar.is_empty) {
+    //         continue;
+    //     }
+    for (size_t curr_pillar_index = 0; curr_pillar_index < bev_pillar.size();
+         curr_pillar_index++) {
+        Pillar pillar = bev_pillar[curr_pillar_index];
+        if (pillar.is_empty) {
+            continue;
+        }
+        // calc mean values for all points in current pillar
+        float mean_x = 0.0f;
+        float mean_y = 0.0f;
+        float mean_z = 0.0f;
+
+        for (size_t i = 0; i < pillar.point_num_in_pillar; i++) {
+            size_t point_index = pillar.point_index[i];
+            float curr_x = points[point_stride * point_index];
+            float curr_y = points[point_stride * point_index + 1];
+            float curr_z = points[point_stride * point_index + 2];
+            mean_x += curr_x;
+            mean_y += curr_y;
+            mean_z += curr_z;
+
+            // double check if current point is out-of-range point
+            // assert(curr_x < MIN_X_RANGE || curr_x > MAX_X_RANGE ||
+            //        curr_y < MIN_Y_RANGE || curr_y > MAX_Y_RANGE ||
+            //        curr_z < MIN_Z_RANGE || curr_z > MAX_Z_RANGE);
+            if (curr_x < MIN_X_RANGE || curr_x > MAX_X_RANGE ||
+                curr_y < MIN_Y_RANGE || curr_y > MAX_Y_RANGE ||
+                curr_z < MIN_Z_RANGE || curr_z > MAX_Z_RANGE) {
+                std::cout << "" << std::endl;
+            };
+        }
+        mean_x /= pillar.point_num_in_pillar;
+        mean_y /= pillar.point_num_in_pillar;
+        mean_z /= pillar.point_num_in_pillar;
+
+        // calc centeral values of current pillar
+        float x_center = (VOXEL_X_SIZE / 2.0f) +
+                         (pillar.pillar_grid_x * VOXEL_X_SIZE) + MIN_X_RANGE;
+        float y_center = (VOXEL_Y_SIZE / 2.0f) +
+                         (pillar.pillar_grid_y * VOXEL_Y_SIZE) + MIN_Y_RANGE;
+        float z_center = (VOXEL_Z_SIZE / 2.0f) + MIN_Z_RANGE;
+
+        // write encoded features into Voxel
+        for (size_t i = 0; i < pillar.point_num_in_pillar; i++) {
+            size_t point_index = pillar.point_index[i];
+            size_t voxel_index = MAX_NUM_POINTS_PER_PILLAR *
+                                     (pillar.pillar_grid_x +
+                                      pillar.pillar_grid_y * GRID_X_SIZE) +
+                                 i;
+            voxels[voxel_index].x = points[point_stride * point_index];
+            voxels[voxel_index].y = points[point_stride * point_index + 1];
+            voxels[voxel_index].z = points[point_stride * point_index + 2];
+            voxels[voxel_index].w = points[point_stride * point_index + 3];
+            voxels[voxel_index].offset_from_mean_x =
+                voxels[voxel_index].x - mean_x;
+            voxels[voxel_index].offset_from_mean_y =
+                voxels[voxel_index].y - mean_y;
+            voxels[voxel_index].offset_from_mean_z =
+                voxels[voxel_index].z - mean_z;
+
+            voxels[voxel_index].offset_from_center_x =
+                voxels[voxel_index].x - x_center;
+            voxels[voxel_index].offset_from_center_y =
+                voxels[voxel_index].y - y_center;
+            voxels[voxel_index].offset_from_center_z =
+                voxels[voxel_index].z - z_center;
+        }
+    }
+}
+
+void pre(std::vector<Voxel> &voxel, std::vector<BaseVoxel> &base_voxel,
+         const float *points, size_t points_buf_len, size_t point_stride) {}
 
 } // namespace vueron
