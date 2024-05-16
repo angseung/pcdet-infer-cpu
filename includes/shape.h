@@ -1,6 +1,5 @@
-namespace vueron
-{
-    class Rectangle {
+namespace vueron {
+class Rectangle {
     public:
     Rectangle(int width, int height);
     Rectangle();
@@ -10,5 +9,5 @@ namespace vueron
 
     private:
     int width_, height_;
-    };
-} //namespace vueron
+};
+} // namespace vueron
