@@ -90,6 +90,11 @@ void voxelization(std::vector<Pillar> &bev_pillar, const float *points,
             continue;
         }
 
+        // check out-of-range point
+        assert(point_x >= MIN_X_RANGE || point_x <= MAX_X_RANGE ||
+               point_y >= MIN_Y_RANGE || point_y <= MAX_Y_RANGE ||
+               point_z >= MIN_Z_RANGE || point_z <= MAX_Z_RANGE);
+
         assert(voxel_id_x < GRID_X_SIZE && voxel_id_y < GRID_Y_SIZE);
         size_t voxel_index = voxel_id_y * GRID_X_SIZE + voxel_id_x;
 
@@ -118,16 +123,13 @@ void voxelization(std::vector<Pillar> &bev_pillar, const float *points,
 #endif
 }
 
-void voxel_feature_encode(std::vector<Pillar> &bev_pillar,
-                          std::vector<Voxel> &voxels, const float *points,
-                          size_t points_buf_len, size_t point_stride) {
-    // for (Pillar pillar : bev_pillar) {
-    //     if (pillar.is_empty) {
-    //         continue;
-    //     }
-    for (size_t curr_pillar_index = 0; curr_pillar_index < bev_pillar.size();
-         curr_pillar_index++) {
-        Pillar pillar = bev_pillar[curr_pillar_index];
+void point_decoration(std::vector<Pillar> &bev_pillar,
+                      std::vector<Voxel> &voxels, const float *points,
+                      size_t points_buf_len, size_t point_stride) {
+    for (Pillar pillar : bev_pillar) {
+        if (pillar.is_empty) {
+            continue;
+        }
         if (pillar.is_empty) {
             continue;
         }
@@ -146,14 +148,9 @@ void voxel_feature_encode(std::vector<Pillar> &bev_pillar,
             mean_z += curr_z;
 
             // double check if current point is out-of-range point
-            // assert(curr_x < MIN_X_RANGE || curr_x > MAX_X_RANGE ||
-            //        curr_y < MIN_Y_RANGE || curr_y > MAX_Y_RANGE ||
-            //        curr_z < MIN_Z_RANGE || curr_z > MAX_Z_RANGE);
-            if (curr_x < MIN_X_RANGE || curr_x > MAX_X_RANGE ||
-                curr_y < MIN_Y_RANGE || curr_y > MAX_Y_RANGE ||
-                curr_z < MIN_Z_RANGE || curr_z > MAX_Z_RANGE) {
-                std::cout << "" << std::endl;
-            };
+            assert(curr_x >= MIN_X_RANGE || curr_x <= MAX_X_RANGE ||
+                   curr_y >= MIN_Y_RANGE || curr_y <= MAX_Y_RANGE ||
+                   curr_z >= MIN_Z_RANGE || curr_z <= MAX_Z_RANGE);
         }
         mean_x /= pillar.point_num_in_pillar;
         mean_y /= pillar.point_num_in_pillar;

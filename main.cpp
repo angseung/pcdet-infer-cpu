@@ -22,8 +22,8 @@ int main(int argc, const char **argv) {
                                           MAX_NUM_POINTS_PER_PILLAR);
         vueron::voxelization(bev_pillar, (float *)points.data(), points.size(),
                              sizeof(float));
-        vueron::voxel_feature_encode(bev_pillar, voxels, (float *)points.data(),
-                                     points.size(), sizeof(float));
+        vueron::point_decoration(bev_pillar, voxels, (float *)points.data(),
+                                 points.size(), sizeof(float));
     }
 
     return 0;
