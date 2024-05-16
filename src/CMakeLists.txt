@@ -11,5 +11,5 @@ target_include_directories(pcdet PUBLIC ${PROJECT_SOURCE_DIR}/src ${PROJECT_SOUR
 target_compile_options(pcdet PRIVATE -Wall -Werror)
 target_link_libraries(pcdet ${PCL_LIBRARIES})
 
-include(${PROJECT_SOURCE_DIR}/cmake/Format.cmake)
-Format(pcdet ${CMAKE_CURRENT_LIST_DIR})
+# include(${PROJECT_SOURCE_DIR}/cmake/Format.cmake)
+# Format(pcdet ${CMAKE_CURRENT_LIST_DIR})
