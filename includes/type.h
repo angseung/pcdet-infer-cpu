@@ -1,24 +1,11 @@
-// #include "params.h"
-// #include <iostream>
+// I avoided to use #pragma once for c
+#ifndef __PCDET_BOX_H__
+#define __PCDET_BOX_H__
 
-// namespace vueron {
-// struct VoxelCoord {
-//     size_t _, __, y, x;
-// };
+// TODO: float -> double or boosted int16_t value
+// TODO: should I pad it?
+struct BndBox {
+    float x, y, z, dx, dy, dz, heading; // , _ /*pad*/;
+};
 
-// struct Point {
-//     float x, y, z;
-// #if NUM_POINT_VALUES >= 4
-//     float w;
-// #endif
-// };
-
-// struct Voxel {
-//     float x, y, z;
-// #if NUM_POINT_VALUES >= 4
-//     float w;
-// #endif
-//     float offset_from_mean_x, offset_from_mean_y, offset_from_mean_z;
-//     float offset_from_center_x, offset_from_center_y, offset_from_center_z;
-// };
-// } // namespace vueron
+#endif // __PCDET_BOX_H__
