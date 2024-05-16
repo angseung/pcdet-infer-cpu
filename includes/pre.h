@@ -69,6 +69,7 @@ void voxelization(std::vector<Pillar> &bev_pillar, const float *points,
     for (size_t i : indices) {
         // check max_point_num_per_frame
         if (processed > MAX_POINTS_NUM)
+            // requires valiation here
             break;
         float point_x = points[point_stride * i];
         float point_y = points[point_stride * i + 1];
@@ -91,11 +92,13 @@ void voxelization(std::vector<Pillar> &bev_pillar, const float *points,
         }
 
         // check out-of-range point
-        assert(point_x >= MIN_X_RANGE || point_x <= MAX_X_RANGE ||
-               point_y >= MIN_Y_RANGE || point_y <= MAX_Y_RANGE ||
-               point_z >= MIN_Z_RANGE || point_z <= MAX_Z_RANGE);
+        assert(point_x >= MIN_X_RANGE && point_x <= MAX_X_RANGE &&
+               point_y >= MIN_Y_RANGE && point_y <= MAX_Y_RANGE &&
+               point_z >= MIN_Z_RANGE && point_z <= MAX_Z_RANGE);
 
+        // check out-of-range grid
         assert(voxel_id_x < GRID_X_SIZE && voxel_id_y < GRID_Y_SIZE);
+
         size_t voxel_index = voxel_id_y * GRID_X_SIZE + voxel_id_x;
 
         // bev_pillar : GRID_Y_SIZE * GRID_X_SIZE vector<Pillar>
@@ -138,6 +141,10 @@ void point_decoration(std::vector<Pillar> &bev_pillar,
         float mean_y = 0.0f;
         float mean_z = 0.0f;
 
+        // double check grid index of current pillar
+        assert(pillar.pillar_grid_x < GRID_X_SIZE &&
+               pillar.pillar_grid_y < GRID_Y_SIZE);
+
         for (size_t i = 0; i < pillar.point_num_in_pillar; i++) {
             size_t point_index = pillar.point_index[i];
             float curr_x = points[point_stride * point_index];
@@ -148,9 +155,9 @@ void point_decoration(std::vector<Pillar> &bev_pillar,
             mean_z += curr_z;
 
             // double check if current point is out-of-range point
-            assert(curr_x >= MIN_X_RANGE || curr_x <= MAX_X_RANGE ||
-                   curr_y >= MIN_Y_RANGE || curr_y <= MAX_Y_RANGE ||
-                   curr_z >= MIN_Z_RANGE || curr_z <= MAX_Z_RANGE);
+            assert(curr_x >= MIN_X_RANGE && curr_x <= MAX_X_RANGE &&
+                   curr_y >= MIN_Y_RANGE && curr_y <= MAX_Y_RANGE &&
+                   curr_z >= MIN_Z_RANGE && curr_z <= MAX_Z_RANGE);
         }
         mean_x /= pillar.point_num_in_pillar;
         mean_y /= pillar.point_num_in_pillar;
@@ -166,10 +173,9 @@ void point_decoration(std::vector<Pillar> &bev_pillar,
         // write encoded features into Voxel
         for (size_t i = 0; i < pillar.point_num_in_pillar; i++) {
             size_t point_index = pillar.point_index[i];
-            size_t voxel_index = MAX_NUM_POINTS_PER_PILLAR *
-                                     (pillar.pillar_grid_x +
-                                      pillar.pillar_grid_y * GRID_X_SIZE) +
-                                 i;
+            size_t voxel_index = i + MAX_NUM_POINTS_PER_PILLAR *
+                                         (pillar.pillar_grid_x +
+                                          pillar.pillar_grid_y * GRID_X_SIZE);
             voxels[voxel_index].x = points[point_stride * point_index];
             voxels[voxel_index].y = points[point_stride * point_index + 1];
             voxels[voxel_index].z = points[point_stride * point_index + 2];
@@ -191,7 +197,13 @@ void point_decoration(std::vector<Pillar> &bev_pillar,
     }
 }
 
-void pre(std::vector<Voxel> &voxel, std::vector<BaseVoxel> &base_voxel,
-         const float *points, size_t points_buf_len, size_t point_stride) {}
+void preprocess(const float *points, size_t points_buf_len,
+                size_t point_stride) {
+    std::vector<Pillar> bev_pillar(GRID_Y_SIZE * GRID_X_SIZE);
+    std::vector<Voxel> voxels(GRID_Y_SIZE * GRID_X_SIZE *
+                              MAX_NUM_POINTS_PER_PILLAR);
+    voxelization(bev_pillar, points, points_buf_len, point_stride);
+    point_decoration(bev_pillar, voxels, points, points_buf_len, point_stride);
+}
 
 } // namespace vueron

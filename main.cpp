@@ -20,10 +20,8 @@ int main(int argc, const char **argv) {
         std::vector<vueron::Pillar> bev_pillar(GRID_Y_SIZE * GRID_X_SIZE);
         std::vector<vueron::Voxel> voxels(GRID_Y_SIZE * GRID_X_SIZE *
                                           MAX_NUM_POINTS_PER_PILLAR);
-        vueron::voxelization(bev_pillar, (float *)points.data(), points.size(),
-                             sizeof(float));
-        vueron::point_decoration(bev_pillar, voxels, (float *)points.data(),
-                                 points.size(), sizeof(float));
+        vueron::preprocess((float *)points.data(), points.size(),
+                           sizeof(float));
     }
 
     return 0;
