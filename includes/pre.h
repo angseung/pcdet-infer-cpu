@@ -213,8 +213,7 @@ size_t point_decoration(std::vector<Pillar> &bev_pillar,
     return num_pillars;
 }
 
-// TODO: Implement here
-void gather(std::vector<Voxel> &raw_voxels, std::vector<float> &pfe_input) {
+size_t gather(std::vector<Voxel> &raw_voxels, std::vector<float> &pfe_input) {
     size_t index = 0;
     assert(pfe_input.size() ==
            MAX_VOXELS * MAX_NUM_POINTS_PER_PILLAR * FEATURE_NUM);
@@ -247,6 +246,8 @@ void gather(std::vector<Voxel> &raw_voxels, std::vector<float> &pfe_input) {
 #ifdef _DEBUG
     std::cout << index << std::endl;
 #endif
+
+    return index / FEATURE_NUM;
 }
 
 // TODO: Implement here
@@ -265,7 +266,7 @@ void preprocess(const float *points, size_t points_buf_len,
     voxelization(bev_pillar, points, points_buf_len, point_stride);
     size_t num_pillars = point_decoration(bev_pillar, raw_voxels, points,
                                           points_buf_len, point_stride);
-    gather(raw_voxels, pfe_input);
+    size_t num_valid_voxels = gather(raw_voxels, pfe_input);
 }
 
 } // namespace vueron

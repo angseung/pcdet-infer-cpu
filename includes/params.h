@@ -5,7 +5,7 @@
 #define OFF 0
 #define ON 1
 #define _SHIFFLE OFF
-#define _DEBUG
+// #define _DEBUG
 
 #define PCD_PATH "./pcd/*.pcd"
 #define SNAPSHOT_PATH "./snapshots/pcd*"
