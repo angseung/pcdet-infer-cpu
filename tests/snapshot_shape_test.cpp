@@ -127,8 +127,8 @@ TEST(VoxelSnapshotTest, VoxelValueTest) {
 
         // check each pillars
         for (size_t j = 0; j < voxel_num_points.size(); j++) {
-            size_t grid_x = (size_t)voxel_coord[2 * j + 1];
-            size_t grid_y = (size_t)voxel_coord[2 * j];
+            size_t grid_x = (size_t)voxel_coord[2 * j + 1]; // cols
+            size_t grid_y = (size_t)voxel_coord[2 * j];     // rows
             size_t voxel_index = grid_y * GRID_X_SIZE + grid_x;
 
             // check num_points of current pillar
@@ -138,6 +138,8 @@ TEST(VoxelSnapshotTest, VoxelValueTest) {
             EXPECT_LT(voxel_index, GRID_Y_SIZE * GRID_X_SIZE);
             EXPECT_LT(grid_x, GRID_X_SIZE);
             EXPECT_LT(grid_y, GRID_Y_SIZE);
+            EXPECT_EQ(grid_x, curr_pillar.pillar_grid_x);
+            EXPECT_EQ(grid_y, curr_pillar.pillar_grid_y);
 
             // check each point values in current pillar
             for (size_t k = 0; k < MAX_NUM_POINTS_PER_PILLAR; k++) {
