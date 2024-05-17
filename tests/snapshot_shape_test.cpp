@@ -157,22 +157,22 @@ TEST(VoxelSnapshotTest, VoxelValueTest) {
                     offset + voxels_encoded.begin() + FEATURE_NUM);
                 float *curr_voxel_encoded_ref =
                     (float *)vec_curr_voxel_encoded_ref.data();
-                EXPECT_NEAR(curr_voxel_encoded_ref[0], curr_voxel.x, EPS);
-                EXPECT_NEAR(curr_voxel_encoded_ref[1], curr_voxel.y, EPS);
-                EXPECT_NEAR(curr_voxel_encoded_ref[2], curr_voxel.z, EPS);
-                EXPECT_NEAR(curr_voxel_encoded_ref[3], curr_voxel.w, EPS);
+                EXPECT_NEAR(curr_voxel_encoded_ref[0], curr_voxel.x, _EPSILON);
+                EXPECT_NEAR(curr_voxel_encoded_ref[1], curr_voxel.y, _EPSILON);
+                EXPECT_NEAR(curr_voxel_encoded_ref[2], curr_voxel.z, _EPSILON);
+                EXPECT_NEAR(curr_voxel_encoded_ref[3], curr_voxel.w, _EPSILON);
                 EXPECT_NEAR(curr_voxel_encoded_ref[4],
-                            curr_voxel.offset_from_mean_x, EPS);
+                            curr_voxel.offset_from_mean_x, _EPSILON);
                 EXPECT_NEAR(curr_voxel_encoded_ref[5],
-                            curr_voxel.offset_from_mean_y, EPS);
+                            curr_voxel.offset_from_mean_y, _EPSILON);
                 EXPECT_NEAR(curr_voxel_encoded_ref[6],
-                            curr_voxel.offset_from_mean_z, EPS);
+                            curr_voxel.offset_from_mean_z, _EPSILON);
                 EXPECT_NEAR(curr_voxel_encoded_ref[7],
-                            curr_voxel.offset_from_center_x, EPS);
+                            curr_voxel.offset_from_center_x, _EPSILON);
                 EXPECT_NEAR(curr_voxel_encoded_ref[8],
-                            curr_voxel.offset_from_center_y, EPS);
+                            curr_voxel.offset_from_center_y, _EPSILON);
                 EXPECT_NEAR(curr_voxel_encoded_ref[9],
-                            curr_voxel.offset_from_center_z, EPS);
+                            curr_voxel.offset_from_center_z, _EPSILON);
                 int a = 1;
             }
         }

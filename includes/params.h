@@ -1,7 +1,7 @@
 #include <iostream>
 
 // common
-#define EPS 1e-4
+#define _EPSILON 1e-4
 #define OFF 0
 #define ON 1
 #define _SHIFFLE OFF
