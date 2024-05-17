@@ -35,6 +35,9 @@ struct Voxel {
           offset_from_mean_z = 0;
     float offset_from_center_x = 0, offset_from_center_y = 0,
           offset_from_center_z = 0;
+    size_t grid_x = 0;
+    size_t grid_y = 0;
+    bool is_valid = false;
 };
 
 struct Pillar {
@@ -200,6 +203,9 @@ size_t point_decoration(std::vector<Pillar> &bev_pillar,
                 voxels[voxel_index].y - y_center;
             voxels[voxel_index].offset_from_center_z =
                 voxels[voxel_index].z - z_center;
+            voxels[voxel_index].grid_x = pillar.pillar_grid_x;
+            voxels[voxel_index].grid_y = pillar.pillar_grid_y;
+            voxels[voxel_index].is_valid = true;
         }
         num_pillars++;
     }
@@ -208,29 +214,23 @@ size_t point_decoration(std::vector<Pillar> &bev_pillar,
 }
 
 // TODO: Implement here
-void gather(std::vector<Pillar> &bev_pillar, std::vector<Voxel> &raw_voxels,
-            std::vector<Voxel> &new_voxels) {
-    for (Pillar pillar : bev_pillar) {
-        if (pillar.is_empty) {
-            continue;
-        }
-        Voxel voxel;
-        new_voxels.push_back(voxel);
-    }
+void gather(std::vector<Voxel> &raw_voxels, std::vector<float> &pfe_input) {
+    size_t a = 1;
 }
 
 // TODO: Implement here
-void scatter(std::vector<Pillar> bev_pillar, std::vector<Voxel> voxels,
-             float *bev_output) {
-    memset(bev_output, 0, sizeof(float) * 64 * GRID_X_SIZE * GRID_Y_SIZE);
-}
+// void scatter(std::vector<Pillar> bev_pillar, std::vector<Voxel> voxels,
+//              float *bev_output) {
+//     memset(bev_output, 0, sizeof(float) * 64 * GRID_X_SIZE * GRID_Y_SIZE);
+// }
 
 void preprocess(const float *points, size_t points_buf_len,
                 size_t point_stride) {
     std::vector<Pillar> bev_pillar(GRID_Y_SIZE * GRID_X_SIZE);
     std::vector<Voxel> raw_voxels(GRID_Y_SIZE * GRID_X_SIZE *
                                   MAX_NUM_POINTS_PER_PILLAR);
-    std::vector<Voxel> voxels;
+    std::vector<float> pfe_input(
+        MAX_VOXELS * MAX_NUM_POINTS_PER_PILLAR * FEATURE_NUM, 0.0f);
     voxelization(bev_pillar, points, points_buf_len, point_stride);
     size_t num_pillars = point_decoration(bev_pillar, raw_voxels, points,
                                           points_buf_len, point_stride);

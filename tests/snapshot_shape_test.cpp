@@ -149,6 +149,9 @@ TEST(VoxelSnapshotTest, VoxelValueTest) {
                 vueron::Voxel curr_voxel;
                 if (k < acture_points_num) {
                     curr_voxel = bev_voxels[in_voxel_index];
+                    EXPECT_TRUE(curr_voxel.is_valid);
+                    EXPECT_EQ(curr_voxel.grid_x, grid_x);
+                    EXPECT_EQ(curr_voxel.grid_y, grid_y);
                 }
                 EXPECT_LT(in_voxel_index, GRID_Y_SIZE * GRID_X_SIZE *
                                               MAX_NUM_POINTS_PER_PILLAR);
