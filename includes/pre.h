@@ -2,6 +2,7 @@
 #include <algorithm>
 #include <cassert>
 #include <iostream>
+#include <memory.h>
 #include <numeric> // std::iota
 #include <random>
 #include <vector>
@@ -34,6 +35,8 @@ struct Voxel {
           offset_from_mean_z = 0;
     float offset_from_center_x = 0, offset_from_center_y = 0,
           offset_from_center_z = 0;
+    size_t grid_x = 0;
+    size_t grid_y = 0;
 };
 
 struct Pillar {
@@ -126,9 +129,10 @@ void voxelization(std::vector<Pillar> &bev_pillar, const float *points,
 #endif
 }
 
-void point_decoration(std::vector<Pillar> &bev_pillar,
-                      std::vector<Voxel> &voxels, const float *points,
-                      size_t points_buf_len, size_t point_stride) {
+size_t point_decoration(std::vector<Pillar> &bev_pillar,
+                        std::vector<Voxel> &voxels, const float *points,
+                        size_t points_buf_len, size_t point_stride) {
+    size_t num_pillars = 0;
     for (Pillar pillar : bev_pillar) {
         if (pillar.is_empty) {
             continue;
@@ -194,16 +198,37 @@ void point_decoration(std::vector<Pillar> &bev_pillar,
             voxels[voxel_index].offset_from_center_z =
                 voxels[voxel_index].z - z_center;
         }
+        num_pillars++;
     }
+
+    return num_pillars;
+}
+
+void gather(std::vector<Pillar> &bev_pillar, std::vector<Voxel> &raw_voxels,
+            std::vector<Voxel> &new_voxels) {
+    for (Pillar pillar : bev_pillar) {
+        if (pillar.is_empty) {
+            continue;
+        }
+        Voxel voxel;
+        new_voxels.push_back(voxel);
+    }
+}
+
+void scatter(std::vector<Pillar> bev_pillar, std::vector<Voxel> voxels,
+             float *bev_output) {
+    memset(bev_output, 0, sizeof(float) * 64 * GRID_X_SIZE * GRID_Y_SIZE);
 }
 
 void preprocess(const float *points, size_t points_buf_len,
                 size_t point_stride) {
     std::vector<Pillar> bev_pillar(GRID_Y_SIZE * GRID_X_SIZE);
-    std::vector<Voxel> voxels(GRID_Y_SIZE * GRID_X_SIZE *
-                              MAX_NUM_POINTS_PER_PILLAR);
+    std::vector<Voxel> raw_voxels(GRID_Y_SIZE * GRID_X_SIZE *
+                                  MAX_NUM_POINTS_PER_PILLAR);
+    std::vector<Voxel> voxels;
     voxelization(bev_pillar, points, points_buf_len, point_stride);
-    point_decoration(bev_pillar, voxels, points, points_buf_len, point_stride);
+    size_t num_pillars = point_decoration(bev_pillar, raw_voxels, points,
+                                          points_buf_len, point_stride);
 }
 
 } // namespace vueron

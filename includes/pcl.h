@@ -10,7 +10,7 @@
 #include <pcl/io/pcd_io.h>
 #include <pcl/point_types.h>
 
-std::vector<std::string> getPcdFiles(const std::string &folder_path) {
+std::vector<std::string> getFiles(const std::string &folder_path) {
     std::vector<std::string> files;
     glob_t glob_result;
 
