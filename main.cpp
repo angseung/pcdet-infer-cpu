@@ -1,3 +1,4 @@
+#include "npy.h"
 #include "params.h"
 #include "pcl.h"
 #include "pre.h"
@@ -7,7 +8,7 @@
 
 int main(int argc, const char **argv) {
     std::string folder_path = PCD_PATH;
-    std::vector<std::string> pcd_files = getPcdFiles(folder_path);
+    std::vector<std::string> pcd_files = getFiles(folder_path);
     std::vector<float> points;
 
     for (const auto &file : pcd_files) {
@@ -17,11 +18,32 @@ int main(int argc, const char **argv) {
         std::cout << "Points Num of " << file << ": "
                   << points.size() / sizeof(float) << std::endl;
 #endif
-        std::vector<vueron::Pillar> bev_pillar(GRID_Y_SIZE * GRID_X_SIZE);
-        std::vector<vueron::Voxel> voxels(GRID_Y_SIZE * GRID_X_SIZE *
-                                          MAX_NUM_POINTS_PER_PILLAR);
         vueron::preprocess((float *)points.data(), points.size(),
                            sizeof(float));
+    }
+
+    // read snapshot
+    std::string snapshot_folder_path = SNAPSHOT_PATH;
+    std::vector<std::string> snapshot_files = getFiles(snapshot_folder_path);
+
+    for (std::string snapshot_dir : snapshot_files) {
+        const std::string voxels_path = snapshot_dir + "/voxels.npy";
+        const std::string voxel_coord_path = snapshot_dir + "/voxel_coord.npy";
+        const std::string voxel_num_points_path =
+            snapshot_dir + "/voxel_num_points.npy";
+        auto raw_voxels = npy::read_npy<float>(voxels_path);
+        auto raw_voxel_coord = npy::read_npy<uint32_t>(voxel_coord_path);
+        auto raw_voxel_num_points =
+            npy::read_npy<uint32_t>(voxel_num_points_path);
+
+        std::vector<float> voxels = raw_voxels.data;
+        std::vector<uint32_t> voxel_coord = raw_voxel_coord.data;
+        std::vector<uint32_t> voxel_num_points = raw_voxel_num_points.data;
+
+        std::vector<unsigned long> voxel_shape = raw_voxels.shape;
+        std::vector<unsigned long> voxel_coord_shape = raw_voxel_coord.shape;
+        std::vector<unsigned long> voxel_num_points_shape =
+            raw_voxel_num_points.shape;
     }
 
     return 0;

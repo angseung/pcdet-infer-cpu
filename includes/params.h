@@ -7,6 +7,7 @@
 // #define _DEBUG
 
 #define PCD_PATH "./pcd/*.pcd"
+#define SNAPSHOT_PATH "./snapshot/pcd*"
 #define RANDOM_SEED 123
 
 // Params for Point Cloud
