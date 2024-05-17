@@ -18,16 +18,16 @@ target_link_libraries(
 target_include_directories(hello_test PUBLIC ${PROJECT_SOURCE_DIR}/src ${PROJECT_SOURCE_DIR}/includes)
 
 add_executable(
-  voxel_shape_test
+  voxel_snapshot_test
   snapshot_shape_test.cpp
 )
 target_link_libraries(
-  voxel_shape_test
+  voxel_snapshot_test
   GTest::gtest_main
   ${PCL_LIBRARIES}
 )
-target_include_directories(voxel_shape_test PUBLIC ${PROJECT_SOURCE_DIR}/src ${PROJECT_SOURCE_DIR}/includes)
+target_include_directories(voxel_snapshot_test PUBLIC ${PROJECT_SOURCE_DIR}/src ${PROJECT_SOURCE_DIR}/includes)
 
 include(GoogleTest)
 gtest_discover_tests(hello_test)
-gtest_discover_tests(voxel_shape_test)
+gtest_discover_tests(voxel_snapshot_test)
