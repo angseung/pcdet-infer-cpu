@@ -215,7 +215,38 @@ size_t point_decoration(std::vector<Pillar> &bev_pillar,
 
 // TODO: Implement here
 void gather(std::vector<Voxel> &raw_voxels, std::vector<float> &pfe_input) {
-    size_t a = 1;
+    size_t index = 0;
+    assert(pfe_input.size() ==
+           MAX_VOXELS * MAX_NUM_POINTS_PER_PILLAR * FEATURE_NUM);
+    for (Voxel voxel : raw_voxels) {
+        if (voxel.is_valid) {
+            pfe_input[index] = voxel.x;
+            pfe_input[index + 1] = voxel.y;
+            pfe_input[index + 2] = voxel.z;
+#if NUM_POINT_VALUES >= 4
+            pfe_input[index + 3] = voxel.w;
+            pfe_input[index + 4] = voxel.offset_from_mean_x;
+            pfe_input[index + 5] = voxel.offset_from_mean_y;
+            pfe_input[index + 6] = voxel.offset_from_mean_z;
+            pfe_input[index + 7] = voxel.offset_from_center_x;
+            pfe_input[index + 8] = voxel.offset_from_center_y;
+            pfe_input[index + 9] = voxel.offset_from_center_z;
+            assert(FEATURE_NUM == 10);
+#else
+            pfe_input[index + 3] = voxel.offset_from_mean_x;
+            pfe_input[index + 4] = voxel.offset_from_mean_y;
+            pfe_input[index + 5] = voxel.offset_from_mean_z;
+            pfe_input[index + 6] = voxel.offset_from_center_x;
+            pfe_input[index + 7] = voxel.offset_from_center_y;
+            pfe_input[index + 8] = voxel.offset_from_center_z;
+            assert(FEATURE_NUM == 9)
+#endif
+            index += FEATURE_NUM;
+        }
+    }
+#ifdef _DEBUG
+    std::cout << index << std::endl;
+#endif
 }
 
 // TODO: Implement here
@@ -234,6 +265,7 @@ void preprocess(const float *points, size_t points_buf_len,
     voxelization(bev_pillar, points, points_buf_len, point_stride);
     size_t num_pillars = point_decoration(bev_pillar, raw_voxels, points,
                                           points_buf_len, point_stride);
+    gather(raw_voxels, pfe_input);
 }
 
 } // namespace vueron
