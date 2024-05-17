@@ -35,8 +35,8 @@ struct Voxel {
           offset_from_mean_z = 0;
     float offset_from_center_x = 0, offset_from_center_y = 0,
           offset_from_center_z = 0;
-    size_t grid_x = 0;
-    size_t grid_y = 0;
+    // size_t grid_x = 0;
+    // size_t grid_y = 0;
 };
 
 struct Pillar {

@@ -7,7 +7,7 @@
 // #define _DEBUG
 
 #define PCD_PATH "./pcd/*.pcd"
-#define SNAPSHOT_PATH "./snapshot/pcd*"
+#define SNAPSHOT_PATH "./snapshots/pcd*"
 #define RANDOM_SEED 123
 
 // Params for Point Cloud
@@ -20,6 +20,7 @@
 #define GRID_Y_SIZE 328
 #define MAX_NUM_POINTS_PER_PILLAR 20
 #define MAX_VOXELS 25000
+#define FEATURE_NUM 10
 
 #define MIN_X_RANGE 0.0f
 #define MAX_X_RANGE 71.68f
