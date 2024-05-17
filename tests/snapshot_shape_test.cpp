@@ -124,6 +124,13 @@ TEST(VoxelSnapshotTest, VoxelValueTest) {
 
         EXPECT_EQ(num_pillars,
                   voxels.size() / MAX_NUM_POINTS_PER_PILLAR / NUM_POINT_VALUES);
+        size_t num_valid_voxels = 0;
+        for (vueron::Voxel voxel : bev_voxels) {
+            if (voxel.is_valid) {
+                num_valid_voxels++;
+            }
+        }
+        EXPECT_EQ(num_valid_voxels, num_pillars);
 
         // check each pillars
         for (size_t j = 0; j < voxel_num_points.size(); j++) {
