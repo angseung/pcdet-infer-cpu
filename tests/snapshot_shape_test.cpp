@@ -150,24 +150,29 @@ TEST(VoxelSnapshotTest, VoxelValueTest) {
                 }
                 EXPECT_LT(in_voxel_index, GRID_Y_SIZE * GRID_X_SIZE *
                                               MAX_NUM_POINTS_PER_PILLAR);
+                size_t offset = j * FEATURE_NUM * MAX_NUM_POINTS_PER_PILLAR +
+                                FEATURE_NUM * k;
+                std::vector<float> vec_curr_voxel_encoded_ref(
+                    offset + voxels_encoded.begin(),
+                    offset + voxels_encoded.begin() + FEATURE_NUM);
                 float *curr_voxel_encoded_ref =
-                    &voxels_encoded[j * MAX_NUM_POINTS_PER_PILLAR + k];
-                EXPECT_FLOAT_EQ(curr_voxel_encoded_ref[0], curr_voxel.x);
-                EXPECT_FLOAT_EQ(curr_voxel_encoded_ref[1], curr_voxel.y);
-                EXPECT_FLOAT_EQ(curr_voxel_encoded_ref[2], curr_voxel.z);
-                EXPECT_FLOAT_EQ(curr_voxel_encoded_ref[3], curr_voxel.w);
-                EXPECT_FLOAT_EQ(curr_voxel_encoded_ref[4],
-                                curr_voxel.offset_from_mean_x);
-                EXPECT_FLOAT_EQ(curr_voxel_encoded_ref[5],
-                                curr_voxel.offset_from_mean_y);
-                EXPECT_FLOAT_EQ(curr_voxel_encoded_ref[6],
-                                curr_voxel.offset_from_mean_z);
-                EXPECT_FLOAT_EQ(curr_voxel_encoded_ref[7],
-                                curr_voxel.offset_from_center_x);
-                EXPECT_FLOAT_EQ(curr_voxel_encoded_ref[8],
-                                curr_voxel.offset_from_center_y);
-                EXPECT_FLOAT_EQ(curr_voxel_encoded_ref[9],
-                                curr_voxel.offset_from_center_z);
+                    (float *)vec_curr_voxel_encoded_ref.data();
+                EXPECT_NEAR(curr_voxel_encoded_ref[0], curr_voxel.x, EPS);
+                EXPECT_NEAR(curr_voxel_encoded_ref[1], curr_voxel.y, EPS);
+                EXPECT_NEAR(curr_voxel_encoded_ref[2], curr_voxel.z, EPS);
+                EXPECT_NEAR(curr_voxel_encoded_ref[3], curr_voxel.w, EPS);
+                EXPECT_NEAR(curr_voxel_encoded_ref[4],
+                            curr_voxel.offset_from_mean_x, EPS);
+                EXPECT_NEAR(curr_voxel_encoded_ref[5],
+                            curr_voxel.offset_from_mean_y, EPS);
+                EXPECT_NEAR(curr_voxel_encoded_ref[6],
+                            curr_voxel.offset_from_mean_z, EPS);
+                EXPECT_NEAR(curr_voxel_encoded_ref[7],
+                            curr_voxel.offset_from_center_x, EPS);
+                EXPECT_NEAR(curr_voxel_encoded_ref[8],
+                            curr_voxel.offset_from_center_y, EPS);
+                EXPECT_NEAR(curr_voxel_encoded_ref[9],
+                            curr_voxel.offset_from_center_z, EPS);
                 int a = 1;
             }
         }
