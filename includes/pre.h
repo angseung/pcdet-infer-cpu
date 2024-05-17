@@ -35,8 +35,6 @@ struct Voxel {
           offset_from_mean_z = 0;
     float offset_from_center_x = 0, offset_from_center_y = 0,
           offset_from_center_z = 0;
-    // size_t grid_x = 0;
-    // size_t grid_y = 0;
 };
 
 struct Pillar {
@@ -181,8 +179,14 @@ size_t point_decoration(std::vector<Pillar> &bev_pillar,
             voxels[voxel_index].x = points[point_stride * point_index];
             voxels[voxel_index].y = points[point_stride * point_index + 1];
             voxels[voxel_index].z = points[point_stride * point_index + 2];
+#if NUM_POINT_VALUES >= 4
+#ifdef ZERO_INTENSITY
+            voxels[voxel_index].w = 0.0f;
+#else
             voxels[voxel_index].w = points[point_stride * point_index + 3] /
                                     INTENSITY_NORMALIZE_DIV;
+#endif
+#endif
             voxels[voxel_index].offset_from_mean_x =
                 voxels[voxel_index].x - mean_x;
             voxels[voxel_index].offset_from_mean_y =

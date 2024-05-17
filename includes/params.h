@@ -22,6 +22,7 @@
 #define MAX_NUM_POINTS_PER_PILLAR 20
 #define MAX_VOXELS 25000
 #define FEATURE_NUM 10
+// #define ZERO_INTENSITY
 
 #define MIN_X_RANGE 0.0f
 #define MAX_X_RANGE 71.68f
