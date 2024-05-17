@@ -10,7 +10,7 @@
 
 TEST(VoxelSnapshotTest, VoxelShapeTest) {
     std::string folder_path = PCD_PATH;
-    std::vector<std::string> pcd_files = getFiles(folder_path);
+    std::vector<std::string> pcd_files = getFileList(folder_path);
     std::vector<float> points;
 
     for (const auto &file : pcd_files) {
@@ -21,7 +21,7 @@ TEST(VoxelSnapshotTest, VoxelShapeTest) {
 
     // read snapshot
     std::string snapshot_folder_path = SNAPSHOT_PATH;
-    std::vector<std::string> snapshot_files = getFiles(snapshot_folder_path);
+    std::vector<std::string> snapshot_files = getFileList(snapshot_folder_path);
 
     for (std::string snapshot_dir : snapshot_files) {
         const std::string voxels_path = snapshot_dir + "/voxels.npy";
@@ -72,9 +72,9 @@ TEST(VoxelSnapshotTest, VoxelShapeTest) {
 
 TEST(VoxelSnapshotTest, VoxelValueTest) {
     std::string folder_path = PCD_PATH;
-    std::vector<std::string> pcd_files = getFiles(folder_path);
+    std::vector<std::string> pcd_files = getFileList(folder_path);
     std::string snapshot_folder_path = SNAPSHOT_PATH;
-    std::vector<std::string> snapshot_files = getFiles(snapshot_folder_path);
+    std::vector<std::string> snapshot_files = getFileList(snapshot_folder_path);
     std::vector<float> points;
     size_t num_test_files = pcd_files.size();
 
@@ -209,9 +209,9 @@ TEST(VoxelSnapshotTest, VoxelValueTest) {
 
 TEST(VoxelSnapshotTest, VoxelGatherTest) {
     std::string folder_path = PCD_PATH;
-    std::vector<std::string> pcd_files = getFiles(folder_path);
+    std::vector<std::string> pcd_files = getFileList(folder_path);
     std::string snapshot_folder_path = SNAPSHOT_PATH;
-    std::vector<std::string> snapshot_files = getFiles(snapshot_folder_path);
+    std::vector<std::string> snapshot_files = getFileList(snapshot_folder_path);
     std::vector<float> points;
     size_t num_test_files = pcd_files.size();
 
