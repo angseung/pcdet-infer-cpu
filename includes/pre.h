@@ -251,10 +251,15 @@ size_t gather(std::vector<Voxel> &raw_voxels, std::vector<float> &pfe_input) {
 }
 
 // TODO: Implement here
-// void scatter(std::vector<Pillar> bev_pillar, std::vector<Voxel> voxels,
-//              float *bev_output) {
-//     memset(bev_output, 0, sizeof(float) * 64 * GRID_X_SIZE * GRID_Y_SIZE);
-// }
+void scatter(std::vector<Voxel> &raw_voxels, std::vector<float> &bev_image,
+             size_t num_valid_voxels) {
+    assert(std::accumulate(bev_image.begin(), bev_image.end(), 0.0f) == 0.0f);
+    for (Voxel voxel : raw_voxels) {
+        size_t grid_x = voxel.grid_x;
+        size_t grid_y = voxel.grid_y;
+        size_t in_bev_index = grid_y * GRID_X_SIZE + grid_x;
+    }
+}
 
 void preprocess(const float *points, size_t points_buf_len,
                 size_t point_stride) {
@@ -263,6 +268,8 @@ void preprocess(const float *points, size_t points_buf_len,
                                   MAX_NUM_POINTS_PER_PILLAR);
     std::vector<float> pfe_input(
         MAX_VOXELS * MAX_NUM_POINTS_PER_PILLAR * FEATURE_NUM, 0.0f);
+    std::vector<float> bev_image(
+        GRID_Y_SIZE * GRID_X_SIZE * RPN_INPUT_NUM_CHANNELS, 0.0f);
     voxelization(bev_pillar, points, points_buf_len, point_stride);
     size_t num_pillars = point_decoration(bev_pillar, raw_voxels, points,
                                           points_buf_len, point_stride);
