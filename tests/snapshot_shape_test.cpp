@@ -160,6 +160,7 @@ TEST(VoxelSnapshotTest, VoxelValueTest) {
                 EXPECT_NEAR(curr_voxel_encoded_ref[0], curr_voxel.x, _EPSILON);
                 EXPECT_NEAR(curr_voxel_encoded_ref[1], curr_voxel.y, _EPSILON);
                 EXPECT_NEAR(curr_voxel_encoded_ref[2], curr_voxel.z, _EPSILON);
+#if NUM_POINT_VALUES >= 4
                 EXPECT_NEAR(curr_voxel_encoded_ref[3] / INTENSITY_NORMALIZE_DIV,
                             curr_voxel.w, _EPSILON);
                 EXPECT_NEAR(curr_voxel_encoded_ref[4],
@@ -174,7 +175,20 @@ TEST(VoxelSnapshotTest, VoxelValueTest) {
                             curr_voxel.offset_from_center_y, _EPSILON);
                 EXPECT_NEAR(curr_voxel_encoded_ref[9],
                             curr_voxel.offset_from_center_z, _EPSILON);
-                int a = 1;
+#else
+                EXPECT_NEAR(curr_voxel_encoded_ref[3],
+                            curr_voxel.offset_from_mean_x, _EPSILON);
+                EXPECT_NEAR(curr_voxel_encoded_ref[4],
+                            curr_voxel.offset_from_mean_y, _EPSILON);
+                EXPECT_NEAR(curr_voxel_encoded_ref[5],
+                            curr_voxel.offset_from_mean_z, _EPSILON);
+                EXPECT_NEAR(curr_voxel_encoded_ref[6],
+                            curr_voxel.offset_from_center_x, _EPSILON);
+                EXPECT_NEAR(curr_voxel_encoded_ref[7],
+                            curr_voxel.offset_from_center_y, _EPSILON);
+                EXPECT_NEAR(curr_voxel_encoded_ref[8],
+                            curr_voxel.offset_from_center_z, _EPSILON);
+#endif
             }
         }
         std::cout << "Test Finish : " << pcd_file << std::endl;
