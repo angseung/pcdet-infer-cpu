@@ -65,6 +65,7 @@ void voxelization(std::vector<Pillar> &bev_pillar, const float *points,
     std::iota(indices.begin(), indices.end(), 0);
     size_t processed = 0;
 
+// TODO: Test with _SHIFFLE ON
 #if _SHIFFLE == ON
     std::shuffle(indices.begin(), indices.end(), rng);
 #endif
@@ -137,9 +138,6 @@ size_t point_decoration(std::vector<Pillar> &bev_pillar,
         if (pillar.is_empty) {
             continue;
         }
-        if (pillar.is_empty) {
-            continue;
-        }
         // calc mean values for all points in current pillar
         float mean_x = 0.0f;
         float mean_y = 0.0f;
@@ -183,7 +181,8 @@ size_t point_decoration(std::vector<Pillar> &bev_pillar,
             voxels[voxel_index].x = points[point_stride * point_index];
             voxels[voxel_index].y = points[point_stride * point_index + 1];
             voxels[voxel_index].z = points[point_stride * point_index + 2];
-            voxels[voxel_index].w = points[point_stride * point_index + 3];
+            voxels[voxel_index].w = points[point_stride * point_index + 3] /
+                                    INTENSITY_NORMALIZE_DIV;
             voxels[voxel_index].offset_from_mean_x =
                 voxels[voxel_index].x - mean_x;
             voxels[voxel_index].offset_from_mean_y =
@@ -204,6 +203,7 @@ size_t point_decoration(std::vector<Pillar> &bev_pillar,
     return num_pillars;
 }
 
+// TODO: Implement here
 void gather(std::vector<Pillar> &bev_pillar, std::vector<Voxel> &raw_voxels,
             std::vector<Voxel> &new_voxels) {
     for (Pillar pillar : bev_pillar) {
@@ -215,6 +215,7 @@ void gather(std::vector<Pillar> &bev_pillar, std::vector<Voxel> &raw_voxels,
     }
 }
 
+// TODO: Implement here
 void scatter(std::vector<Pillar> bev_pillar, std::vector<Voxel> voxels,
              float *bev_output) {
     memset(bev_output, 0, sizeof(float) * 64 * GRID_X_SIZE * GRID_Y_SIZE);

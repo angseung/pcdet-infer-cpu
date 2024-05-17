@@ -160,7 +160,8 @@ TEST(VoxelSnapshotTest, VoxelValueTest) {
                 EXPECT_NEAR(curr_voxel_encoded_ref[0], curr_voxel.x, _EPSILON);
                 EXPECT_NEAR(curr_voxel_encoded_ref[1], curr_voxel.y, _EPSILON);
                 EXPECT_NEAR(curr_voxel_encoded_ref[2], curr_voxel.z, _EPSILON);
-                EXPECT_NEAR(curr_voxel_encoded_ref[3], curr_voxel.w, _EPSILON);
+                EXPECT_NEAR(curr_voxel_encoded_ref[3] / INTENSITY_NORMALIZE_DIV,
+                            curr_voxel.w, _EPSILON);
                 EXPECT_NEAR(curr_voxel_encoded_ref[4],
                             curr_voxel.offset_from_mean_x, _EPSILON);
                 EXPECT_NEAR(curr_voxel_encoded_ref[5],
