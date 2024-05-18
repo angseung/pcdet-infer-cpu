@@ -8,13 +8,13 @@
 
 int main(int argc, const char **argv) {
     std::string folder_path = PCD_PATH;
-    std::vector<std::string> pcd_files = getFileList(folder_path);
+    std::vector<std::string> pcd_files = vueron::getFileList(folder_path);
     std::vector<float> points;
 
     while (1) {
 
         for (const auto &file : pcd_files) {
-            points = readPcdFile(file, MAX_POINTS_NUM);
+            points = vueron::readPcdFile(file, MAX_POINTS_NUM);
 #ifdef _DEBUG
             std::cout << file << std::endl;
             std::cout << "Points Num of " << file << ": "
@@ -27,7 +27,7 @@ int main(int argc, const char **argv) {
         // read snapshot
         std::string snapshot_folder_path = SNAPSHOT_PATH;
         std::vector<std::string> snapshot_files =
-            getFileList(snapshot_folder_path);
+            vueron::getFileList(snapshot_folder_path);
 
         for (std::string snapshot_dir : snapshot_files) {
             const std::string voxels_path = snapshot_dir + "/voxels.npy";

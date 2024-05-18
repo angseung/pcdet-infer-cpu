@@ -11,18 +11,19 @@
 
 TEST(VoxelSnapshotTest, VoxelShapeTest) {
     std::string folder_path = PCD_PATH;
-    std::vector<std::string> pcd_files = getFileList(folder_path);
+    std::vector<std::string> pcd_files = vueron::getFileList(folder_path);
     std::vector<float> points;
 
     for (const auto &file : pcd_files) {
-        points = readPcdFile(file, MAX_POINTS_NUM);
+        points = vueron::readPcdFile(file, MAX_POINTS_NUM);
         vueron::preprocess((float *)points.data(), points.size(),
                            sizeof(float));
     }
 
     // read snapshot
     std::string snapshot_folder_path = SNAPSHOT_PATH;
-    std::vector<std::string> snapshot_files = getFileList(snapshot_folder_path);
+    std::vector<std::string> snapshot_files =
+        vueron::getFileList(snapshot_folder_path);
 
     for (std::string snapshot_dir : snapshot_files) {
         const std::string voxels_path = snapshot_dir + "/voxels.npy";
@@ -73,9 +74,10 @@ TEST(VoxelSnapshotTest, VoxelShapeTest) {
 
 TEST(VoxelSnapshotTest, VoxelValueTest) {
     std::string folder_path = PCD_PATH;
-    std::vector<std::string> pcd_files = getFileList(folder_path);
+    std::vector<std::string> pcd_files = vueron::getFileList(folder_path);
     std::string snapshot_folder_path = SNAPSHOT_PATH;
-    std::vector<std::string> snapshot_files = getFileList(snapshot_folder_path);
+    std::vector<std::string> snapshot_files =
+        vueron::getFileList(snapshot_folder_path);
     std::vector<float> points;
     size_t num_test_files = pcd_files.size();
 
@@ -87,7 +89,7 @@ TEST(VoxelSnapshotTest, VoxelValueTest) {
         std::cout << "Testing : " << pcd_file << std::endl;
 
         // read point from pcd file
-        points = readPcdFile(pcd_file, MAX_POINTS_NUM);
+        points = vueron::readPcdFile(pcd_file, MAX_POINTS_NUM);
 
         // read voxels from snapshot file
         const std::string voxels_path = snapshot_dir + "/voxels.npy";
@@ -210,9 +212,10 @@ TEST(VoxelSnapshotTest, VoxelValueTest) {
 
 TEST(VoxelSnapshotTest, VoxelGatherTest) {
     std::string folder_path = PCD_PATH;
-    std::vector<std::string> pcd_files = getFileList(folder_path);
+    std::vector<std::string> pcd_files = vueron::getFileList(folder_path);
     std::string snapshot_folder_path = SNAPSHOT_PATH;
-    std::vector<std::string> snapshot_files = getFileList(snapshot_folder_path);
+    std::vector<std::string> snapshot_files =
+        vueron::getFileList(snapshot_folder_path);
     std::vector<float> points;
     size_t num_test_files = pcd_files.size();
 
@@ -224,7 +227,7 @@ TEST(VoxelSnapshotTest, VoxelGatherTest) {
         std::cout << "Testing : " << pcd_file << std::endl;
 
         // read point from pcd file
-        points = readPcdFile(pcd_file, MAX_POINTS_NUM);
+        points = vueron::readPcdFile(pcd_file, MAX_POINTS_NUM);
 
         // read voxels from snapshot file
         const std::string voxels_path = snapshot_dir + "/voxels.npy";
@@ -279,9 +282,10 @@ TEST(VoxelSnapshotTest, VoxelGatherTest) {
 
 TEST(VoxelSnapshotTest, GatheredVoxelValueTest) {
     std::string folder_path = PCD_PATH;
-    std::vector<std::string> pcd_files = getFileList(folder_path);
+    std::vector<std::string> pcd_files = vueron::getFileList(folder_path);
     std::string snapshot_folder_path = SNAPSHOT_PATH;
-    std::vector<std::string> snapshot_files = getFileList(snapshot_folder_path);
+    std::vector<std::string> snapshot_files =
+        vueron::getFileList(snapshot_folder_path);
     std::vector<float> points;
     size_t num_test_files = pcd_files.size();
 
@@ -293,7 +297,7 @@ TEST(VoxelSnapshotTest, GatheredVoxelValueTest) {
         std::cout << "Testing : " << pcd_file << std::endl;
 
         // read point from pcd file
-        points = readPcdFile(pcd_file, MAX_POINTS_NUM);
+        points = vueron::readPcdFile(pcd_file, MAX_POINTS_NUM);
 
         // read voxels from snapshot file
         const std::string voxels_path = snapshot_dir + "/voxels.npy";
@@ -380,9 +384,9 @@ TEST(VoxelSnapshotTest, GatheredVoxelValueTest) {
         }
 #if 0
         for (float x_value : pfe_x_values_snapshot_sorted) {
-            int voxel_index = find_index(pfe_x_values, x_value);
+            int voxel_index = vueron::find_index(pfe_x_values, x_value);
             int voxel_index_snapshot =
-                find_index(pfe_x_values_snapshot, x_value);
+                vueron::find_index(pfe_x_values_snapshot, x_value);
             int target_index =
                 voxel_index * MAX_VOXELS * MAX_NUM_POINTS_PER_PILLAR;
             int target_index_snapshot =
@@ -418,7 +422,7 @@ TEST(VoxelSnapshotTest, GatheredVoxelValueTest) {
         }
         EXPECT_EQ(pfe_x_values.size() * FEATURE_NUM, pfe_input.size());
         std::vector<size_t> voxels_sorted_index =
-            sort_and_get_indices(pfe_x_values);
+            vueron::sort_and_get_indices(pfe_x_values);
         EXPECT_EQ(voxels_sorted_index.size(), pfe_x_values.size());
         for (size_t idx_x = 0; idx_x < voxels_sorted_index.size(); idx_x++) {
             for (size_t feature_idx = 0; feature_idx < FEATURE_NUM;
@@ -442,7 +446,7 @@ TEST(VoxelSnapshotTest, GatheredVoxelValueTest) {
         EXPECT_EQ(pfe_x_values_snapshot.size() * FEATURE_NUM,
                   voxels_encoded.size());
         std::vector<size_t> voxels_sorted_index_snapshot =
-            sort_and_get_indices(pfe_x_values_snapshot);
+            vueron::sort_and_get_indices(pfe_x_values_snapshot);
         EXPECT_EQ(voxels_sorted_index_snapshot.size(),
                   pfe_x_values_snapshot.size());
         for (size_t idx_x = 0; idx_x < voxels_sorted_index_snapshot.size();

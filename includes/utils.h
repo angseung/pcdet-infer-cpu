@@ -3,6 +3,7 @@
 #include <iostream>
 #include <vector>
 
+namespace vueron {
 struct IndexedValue {
     float value;
     size_t index;
@@ -35,3 +36,4 @@ size_t find_index(const std::vector<float> &vec, float value) {
         return -1; // 값을 찾지 못한 경우 -1 반환
     }
 }
+} // namespace vueron
