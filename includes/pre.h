@@ -11,20 +11,10 @@
 #define PRE_H
 namespace vueron {
 
-struct VoxelCoord {
-    size_t _, __, y, x;
-};
-
 struct BaseVoxel {
-    float x, y, z;
+    float x = 0.0f, y = 0.0f, z = 0.0f;
 #if NUM_POINT_VALUES >= 4
-    float w;
-#endif
-
-#if NUM_POINT_VALUES >= 4
-    BaseVoxel() : x(0.0f), y(0.0f), z(0.0f), w(0.0f) {}
-#else
-    BaseVoxel() : x(0.0f), y(0.0f), z(0.0f) {}
+    float w = 0.0f;
 #endif
 };
 
