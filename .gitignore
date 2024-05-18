@@ -41,3 +41,4 @@ snapshots/
 build/
 onnxruntime*/
 *.onnx
+models

@@ -7,6 +7,8 @@
 #include <random>
 #include <vector>
 
+#ifndef PRE_H
+#define PRE_H
 namespace vueron {
 
 struct VoxelCoord {
@@ -277,3 +279,4 @@ void preprocess(const float *points, size_t points_buf_len,
 }
 
 } // namespace vueron
+#endif // PRE_H
