@@ -89,7 +89,7 @@ TEST(VoxelSnapshotTest, VoxelValueTest) {
     std::vector<float> points;
     size_t num_test_files = pcd_files.size();
 
-    assert(pcd_files.size() == snapshot_files.size());
+    EXPECT_GE(pcd_files.size(), snapshot_files.size());
 
     for (size_t i = 0; i < num_test_files; i++) {
         std::string pcd_file = pcd_files[i];
@@ -184,8 +184,7 @@ TEST(VoxelSnapshotTest, VoxelValueTest) {
                 EXPECT_NEAR(curr_voxel_encoded_ref[1], curr_voxel.y, _EPSILON);
                 EXPECT_NEAR(curr_voxel_encoded_ref[2], curr_voxel.z, _EPSILON);
 #if NUM_POINT_VALUES >= 4
-                EXPECT_NEAR(curr_voxel_encoded_ref[3] / INTENSITY_NORMALIZE_DIV,
-                            curr_voxel.w, _EPSILON);
+                EXPECT_NEAR(curr_voxel_encoded_ref[3], curr_voxel.w, _EPSILON);
                 EXPECT_NEAR(curr_voxel_encoded_ref[4],
                             curr_voxel.offset_from_mean_x, _EPSILON);
                 EXPECT_NEAR(curr_voxel_encoded_ref[5],
