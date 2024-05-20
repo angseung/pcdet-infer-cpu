@@ -20,6 +20,7 @@ target_link_libraries(
   voxel_snapshot_test
   GTest::gtest_main
   pcdet
+  shape
 )
 
 include(GoogleTest)
