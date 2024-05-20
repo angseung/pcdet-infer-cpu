@@ -32,16 +32,20 @@ TEST(VoxelSnapshotTest, VoxelShapeTest) {
         const std::string voxel_coord_path = snapshot_dir + "/voxel_coord.npy";
         const std::string voxel_num_points_path =
             snapshot_dir + "/voxel_num_points.npy";
+        const std::string bev_features_path =
+            snapshot_dir + "/bev_features.npy";
         auto raw_voxels = npy::read_npy<float>(voxels_path);
         auto raw_voxels_encoded = npy::read_npy<float>(voxels_encoded_path);
         auto raw_voxel_coord = npy::read_npy<uint32_t>(voxel_coord_path);
         auto raw_voxel_num_points =
             npy::read_npy<uint32_t>(voxel_num_points_path);
+        auto raw_bev_features = npy::read_npy<float>(bev_features_path);
 
         std::vector<float> voxels = raw_voxels.data;
         std::vector<float> voxels_encoded = raw_voxels_encoded.data;
         std::vector<uint32_t> voxel_coord = raw_voxel_coord.data;
         std::vector<uint32_t> voxel_num_points = raw_voxel_num_points.data;
+        std::vector<float> bev_features = raw_bev_features.data;
 
         std::vector<unsigned long> voxel_shape = raw_voxels.shape;
         std::vector<unsigned long> voxels_encoded_shape =
@@ -49,6 +53,7 @@ TEST(VoxelSnapshotTest, VoxelShapeTest) {
         std::vector<unsigned long> voxel_coord_shape = raw_voxel_coord.shape;
         std::vector<unsigned long> voxel_num_points_shape =
             raw_voxel_num_points.shape;
+        std::vector<unsigned long> bev_features_shape = raw_bev_features.shape;
 
         // check number of pillars
         EXPECT_EQ(voxel_num_points_shape[0], voxel_shape[0]);
@@ -69,6 +74,9 @@ TEST(VoxelSnapshotTest, VoxelShapeTest) {
                       FEATURE_NUM,
                   voxel_coord.size() / 2);
         EXPECT_EQ(voxel_num_points.size(), voxel_coord.size() / 2);
+        EXPECT_EQ(bev_features_shape.size(), 3);
+        EXPECT_EQ(bev_features.size(),
+                  GRID_X_SIZE * GRID_Y_SIZE * RPN_INPUT_NUM_CHANNELS);
     }
 }
 
