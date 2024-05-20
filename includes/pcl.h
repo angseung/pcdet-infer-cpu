@@ -1,3 +1,6 @@
+#ifndef PCL_H
+#define PCL_H
+
 #include <cstring>
 #include <fstream>
 #include <glob.h>
@@ -58,3 +61,5 @@ std::vector<float> readPcdFile(const std::string &file_path,
     return points;
 }
 } // namespace vueron
+
+#endif // PCL_H

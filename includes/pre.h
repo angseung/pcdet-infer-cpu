@@ -1,3 +1,6 @@
+#ifndef PRE_H
+#define PRE_H
+
 #include "config.h"
 #include "onnxruntime_cxx_api.h"
 #include "params.h"
@@ -9,8 +12,6 @@
 #include <random>
 #include <vector>
 
-#ifndef PRE_H
-#define PRE_H
 namespace vueron {
 
 struct BaseVoxel {

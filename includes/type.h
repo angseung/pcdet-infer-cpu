@@ -1,6 +1,6 @@
 // I avoided to use #pragma once for c
-#ifndef __PCDET_BOX_H__
-#define __PCDET_BOX_H__
+#ifndef BOX_H
+#define BOX_H
 
 namespace vueron {
 // TODO: float -> double or boosted int16_t value
@@ -9,4 +9,4 @@ struct BndBox {
     float x, y, z, dx, dy, dz, heading; // , _ /*pad*/;
 };
 } // namespace vueron
-#endif // __PCDET_BOX_H__
+#endif // BOX_H

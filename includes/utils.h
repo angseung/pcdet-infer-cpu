@@ -1,3 +1,6 @@
+#ifndef UTILS_H
+#define UTILS_H
+
 #include <algorithm>
 #include <assert.h>
 #include <iostream>
@@ -37,3 +40,5 @@ size_t find_index(const std::vector<float> &vec, float value) {
     }
 }
 } // namespace vueron
+
+#endif // UTILS_H

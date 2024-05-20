@@ -1,3 +1,6 @@
+#ifndef PARAMS_H
+#define PARAMS_H
+
 #include <iostream>
 
 // common
@@ -35,3 +38,5 @@
 #define VOXEL_X_SIZE 0.32f
 #define VOXEL_Y_SIZE 0.32f
 #define VOXEL_Z_SIZE 6.0f
+
+#endif // PARAMS_H
