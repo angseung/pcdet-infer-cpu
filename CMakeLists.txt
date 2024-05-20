@@ -19,6 +19,17 @@ FetchContent_Declare(
 set(gtest_force_shared_crt ON CACHE BOOL "" FORCE)
 FetchContent_MakeAvailable(googletest)
 
+set (PFE_PATH ${PROJECT_SOURCE_DIR}/models/gcm_resfpn_falcon_v4_zero_f71.68_r0_s52.48_pfe.onnx)
+set (RPN_PATH ${PROJECT_SOURCE_DIR}/models/gcm_resfpn_falcon_v4_zero_f71.68_r0_s52.48_rpn.onnx)
+
+# configure a header file to pass some of the CMake settings
+# to the source code
+configure_file (
+  "${PROJECT_SOURCE_DIR}/includes/config.in"
+  "${PROJECT_SOURCE_DIR}/includes/config.h"
+  @ONLY
+  )
+
 # Set the output directory for executable files
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin)
 

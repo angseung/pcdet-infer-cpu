@@ -1,0 +1,2 @@
+#define PFE_PATH "@PFE_PATH@"
+#define RPN_PATH "@RPN_PATH@"

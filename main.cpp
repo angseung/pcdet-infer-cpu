@@ -1,3 +1,4 @@
+#include "config.h"
 #include "npy.h"
 #include "params.h"
 #include "pcl.h"
@@ -12,7 +13,6 @@ int main(int argc, const char **argv) {
     std::vector<float> points;
 
     while (1) {
-
         for (const auto &file : pcd_files) {
             points = vueron::readPcdFile(file, MAX_POINTS_NUM);
 #ifdef _DEBUG
