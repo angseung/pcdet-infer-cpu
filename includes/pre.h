@@ -256,7 +256,7 @@ void scatter(const std::vector<Voxel> &raw_voxels,
     }
 }
 
-void run() {
+void run(const std::vector<float> &pfe_input) {
     Ort::Env env(ORT_LOGGING_LEVEL_WARNING, "test");
     Ort::SessionOptions session_options;
     Ort::Session session(env, PFE_PATH, session_options);
@@ -264,29 +264,17 @@ void run() {
     session_options.SetGraphOptimizationLevel(
         GraphOptimizationLevel::ORT_ENABLE_EXTENDED);
 
-    // print number of model input nodes
-    const size_t num_input_nodes = session.GetInputCount();
-    std::vector<Ort::AllocatedStringPtr> input_names_ptr;
-    // std::vector<const char *> input_node_names;
-    input_names_ptr.reserve(num_input_nodes);
-    // input_node_names.reserve(num_input_nodes);
+    // const size_t num_input_nodes = session.GetInputCount();
     std::vector<int64_t> input_node_dims = {
         MAX_VOXELS, MAX_NUM_POINTS_PER_PILLAR, FEATURE_NUM};
-
     size_t input_tensor_size =
         MAX_VOXELS * MAX_NUM_POINTS_PER_PILLAR * FEATURE_NUM;
-    std::cout << "Number of inputs = " << num_input_nodes << std::endl;
-    std::vector<float> input_tensor_values(input_tensor_size);
-
-    // initialize input data with values in [0.0, 1.0]
-    for (unsigned int i = 0; i < input_tensor_size; i++)
-        input_tensor_values[i] = (float)i / (input_tensor_size + 1);
 
     // create input tensor object from data values
     auto memory_info =
         Ort::MemoryInfo::CreateCpu(OrtArenaAllocator, OrtMemTypeDefault);
     auto input_tensor = Ort::Value::CreateTensor<float>(
-        memory_info, input_tensor_values.data(), input_tensor_size,
+        memory_info, (float *)pfe_input.data(), input_tensor_size,
         input_node_dims.data(), 3);
     assert(input_tensor.IsTensor());
 
@@ -312,6 +300,7 @@ void run() {
     // convert output to vector<float>
     std::vector<float> pfe_output{floatarr, floatarr + output_size};
     assert(pfe_output.size() == MAX_VOXELS * RPN_INPUT_NUM_CHANNELS);
+    std::cout << "INFERENCE DONE." << std::endl;
 }
 
 void preprocess(const float *points, size_t points_buf_len,
@@ -327,7 +316,7 @@ void preprocess(const float *points, size_t points_buf_len,
     size_t num_pillars = point_decoration(bev_pillar, raw_voxels, points,
                                           points_buf_len, point_stride);
     size_t num_valid_voxels = gather(raw_voxels, pfe_input);
-    run();
+    run(pfe_input);
 }
 
 } // namespace vueron
