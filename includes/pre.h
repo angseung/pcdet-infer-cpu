@@ -256,7 +256,7 @@ void scatter(const std::vector<Voxel> &raw_voxels,
     }
 }
 
-void run(const std::vector<float> &pfe_input) {
+void run(const std::vector<float> &pfe_input, std::vector<float> &pfe_output) {
     Ort::Env env(ORT_LOGGING_LEVEL_WARNING, "test");
     Ort::SessionOptions session_options;
     Ort::Session session(env, PFE_PATH, session_options);
@@ -297,9 +297,11 @@ void run(const std::vector<float> &pfe_input) {
     size_t output_size = output_tensor_info.GetElementCount();
     float *floatarr = output_tensor.GetTensorMutableData<float>();
 
-    // convert output to vector<float>
-    std::vector<float> pfe_output{floatarr, floatarr + output_size};
-    assert(pfe_output.size() == MAX_VOXELS * RPN_INPUT_NUM_CHANNELS);
+    // Resize the output vector to fit the output tensor data
+    pfe_output.resize(output_size);
+
+    // Copy the output tensor data to the output vector
+    std::copy(floatarr, floatarr + output_size, pfe_output.begin());
     std::cout << "INFERENCE DONE." << std::endl;
 }
 
@@ -312,11 +314,13 @@ void preprocess(const float *points, size_t points_buf_len,
         MAX_VOXELS * MAX_NUM_POINTS_PER_PILLAR * FEATURE_NUM, 0.0f);
     std::vector<float> bev_image(
         GRID_Y_SIZE * GRID_X_SIZE * RPN_INPUT_NUM_CHANNELS, 0.0f);
+    std::vector<float> pfe_output;
     voxelization(bev_pillar, points, points_buf_len, point_stride);
     size_t num_pillars = point_decoration(bev_pillar, raw_voxels, points,
                                           points_buf_len, point_stride);
     size_t num_valid_voxels = gather(raw_voxels, pfe_input);
-    run(pfe_input);
+    run(pfe_input, pfe_output);
+    assert(pfe_output.size() == MAX_VOXELS * RPN_INPUT_NUM_CHANNELS);
 }
 
 } // namespace vueron
