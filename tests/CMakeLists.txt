@@ -12,10 +12,11 @@ add_executable(
 )
 target_link_libraries(
   hello_test
+  pcdet
   GTest::gtest_main
   shape
 )
-target_include_directories(hello_test PUBLIC ${PROJECT_SOURCE_DIR}/src ${PROJECT_SOURCE_DIR}/includes)
+# target_include_directories(hello_test PUBLIC ${PROJECT_SOURCE_DIR}/src ${PROJECT_SOURCE_DIR}/includes)
 
 add_executable(
   voxel_snapshot_test
@@ -24,9 +25,10 @@ add_executable(
 target_link_libraries(
   voxel_snapshot_test
   GTest::gtest_main
+  pcdet
   ${PCL_LIBRARIES}
 )
-target_include_directories(voxel_snapshot_test PUBLIC ${PROJECT_SOURCE_DIR}/src ${PROJECT_SOURCE_DIR}/includes)
+# target_include_directories(voxel_snapshot_test PUBLIC ${PROJECT_SOURCE_DIR}/src ${PROJECT_SOURCE_DIR}/includes)
 
 include(GoogleTest)
 gtest_discover_tests(hello_test)

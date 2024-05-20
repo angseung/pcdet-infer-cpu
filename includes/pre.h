@@ -1,3 +1,4 @@
+#include "onnxruntime_cxx_api.h"
 #include "params.h"
 #include <algorithm>
 #include <cassert>

@@ -33,4 +33,4 @@ target_include_directories(pcdet PUBLIC
     ${ONNXRUNTIME_ROOTDIR}/include
 )
 # target_compile_options(pcdet PRIVATE -Wall -Werror)
-target_link_libraries(pcdet ${PCL_LIBRARIES} onnx::runtime)
+target_link_libraries(pcdet PUBLIC ${PCL_LIBRARIES} onnx::runtime)
