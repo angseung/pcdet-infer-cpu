@@ -285,9 +285,10 @@ TEST(VoxelSnapshotTest, VoxelGatherTest) {
         size_t num_valid_voxels_snapshot = std::accumulate(
             voxel_num_points.begin(), voxel_num_points.end(), 0);
         EXPECT_EQ(num_valid_voxels, num_valid_voxels_snapshot);
-        float sum_of_padded_voxels =
-            std::accumulate(pfe_input.begin() + num_valid_voxels * FEATURE_NUM,
-                            pfe_input.end(), 0.0f);
+        float sum_of_padded_voxels = std::accumulate(
+            pfe_input.begin() +
+                num_pillars * MAX_NUM_POINTS_PER_PILLAR * FEATURE_NUM,
+            pfe_input.end(), 0.0f);
         EXPECT_FLOAT_EQ(sum_of_padded_voxels, 0.0f);
         std::cout << "Test Finish : " << pcd_file << std::endl;
     }
@@ -436,6 +437,7 @@ TEST(VoxelSnapshotTest, PFEShapeTest) {
                                       0.0f); // input of scatter()
         vueron::run(pfe_input, pfe_output);
         EXPECT_EQ(pfe_output.size(), MAX_VOXELS * RPN_INPUT_NUM_CHANNELS);
+        std::cout << "Test Finish : " << pcd_file << std::endl;
     }
 }
 
@@ -507,5 +509,6 @@ TEST(VoxelSnapshotTest, VoxelCoordsValueTest) {
             EXPECT_EQ(voxel_coords_x[j], voxel_coords_snapshot_x[j]);
             EXPECT_EQ(voxel_coords_y[j], voxel_coords_snapshot_y[j]);
         }
+        std::cout << "Test Finish : " << pcd_file << std::endl;
     }
 }
