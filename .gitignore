@@ -44,3 +44,4 @@ onnxruntime*/
 models
 includes/config.h
 bak/
+zero_snapshots/
