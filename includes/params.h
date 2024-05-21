@@ -11,7 +11,8 @@
 // #define _DEBUG
 
 #define PCD_PATH "./pcd/*.pcd"
-#define SNAPSHOT_PATH "./snapshots/pcd*"
+// #define SNAPSHOT_PATH "./snapshots/pcd*"
+#define SNAPSHOT_PATH "./zero_snapshots/pcd*"
 #define RANDOM_SEED 123
 
 // Params for Point Cloud
@@ -26,7 +27,7 @@
 #define MAX_VOXELS 25000
 #define FEATURE_NUM 10
 #define RPN_INPUT_NUM_CHANNELS 64
-// #define ZERO_INTENSITY
+#define ZERO_INTENSITY
 
 #define MIN_X_RANGE 0.0f
 #define MAX_X_RANGE 71.68f

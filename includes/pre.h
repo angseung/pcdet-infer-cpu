@@ -13,19 +13,6 @@
 #include <vector>
 
 namespace vueron {
-struct Voxel {
-    float x = 0, y = 0, z = 0;
-#if NUM_POINT_VALUES >= 4
-    float w = 0;
-#endif
-    float offset_from_mean_x = 0, offset_from_mean_y = 0,
-          offset_from_mean_z = 0;
-    float offset_from_center_x = 0, offset_from_center_y = 0,
-          offset_from_center_z = 0;
-    size_t grid_x = 0;
-    size_t grid_y = 0;
-    bool is_valid = false;
-};
 
 struct Pillar {
     size_t point_index[MAX_NUM_POINTS_PER_PILLAR] = {0};
@@ -49,7 +36,6 @@ void voxelization(std::vector<Pillar> &bev_pillar, const float *points,
 
     size_t points_num = points_buf_len / point_stride;
     std::vector<size_t> indices(points_num, 0);
-    // std::vector<BaseVoxel> shuffled(points_num);
     std::iota(indices.begin(), indices.end(), 0);
     size_t processed = 0;
 
@@ -112,9 +98,11 @@ void voxelization(std::vector<Pillar> &bev_pillar, const float *points,
 size_t point_decoration(const std::vector<Pillar> &bev_pillar,
                         std::vector<size_t> &voxel_coords,
                         std::vector<size_t> &voxel_num_points,
-                        std::vector<Voxel> &voxels, const float *points,
+                        std::vector<float> &pfe_input, const float *points,
                         size_t points_buf_len, size_t point_stride) {
     size_t num_pillars = 0;
+    size_t index = 0;
+
     for (Pillar pillar : bev_pillar) {
         if (pillar.is_empty) {
             continue;
@@ -161,38 +149,41 @@ size_t point_decoration(const std::vector<Pillar> &bev_pillar,
         float z_center = (VOXEL_Z_SIZE / 2.0f) + MIN_Z_RANGE;
 
         // write encoded features into raw_voxels and pfe_input
-        for (size_t i = 0; i < pillar.point_num_in_pillar; i++) {
-            size_t point_index = pillar.point_index[i];
-            size_t voxel_index = i + MAX_NUM_POINTS_PER_PILLAR *
-                                         (pillar.pillar_grid_x +
-                                          pillar.pillar_grid_y * GRID_X_SIZE);
-            voxels[voxel_index].x = points[point_stride * point_index];
-            voxels[voxel_index].y = points[point_stride * point_index + 1];
-            voxels[voxel_index].z = points[point_stride * point_index + 2];
+        for (size_t i = 0; i < MAX_NUM_POINTS_PER_PILLAR; i++) {
+            if (i < pillar.point_num_in_pillar) {
+                size_t point_index = pillar.point_index[i];
+                size_t voxel_index =
+                    i + MAX_NUM_POINTS_PER_PILLAR *
+                            (pillar.pillar_grid_x +
+                             pillar.pillar_grid_y * GRID_X_SIZE);
+                pfe_input[index] = points[point_stride * point_index];
+                pfe_input[index + 1] = points[point_stride * point_index + 1];
+                pfe_input[index + 2] = points[point_stride * point_index + 2];
 #if NUM_POINT_VALUES >= 4
 #ifdef ZERO_INTENSITY
-            voxels[voxel_index].w = 0.0f;
+                pfe_input[index + 3] = 0.0f;
 #else
-            voxels[voxel_index].w = points[point_stride * point_index + 3] /
-                                    INTENSITY_NORMALIZE_DIV;
+                pfe_input[index + 3] = points[point_stride * point_index + 3] /
+                                       INTENSITY_NORMALIZE_DIV;
 #endif
-#endif
-            voxels[voxel_index].offset_from_mean_x =
-                voxels[voxel_index].x - mean_x;
-            voxels[voxel_index].offset_from_mean_y =
-                voxels[voxel_index].y - mean_y;
-            voxels[voxel_index].offset_from_mean_z =
-                voxels[voxel_index].z - mean_z;
+                pfe_input[index + 4] = pfe_input[index] - mean_x;
+                pfe_input[index + 5] = pfe_input[index + 1] - mean_y;
+                pfe_input[index + 6] = pfe_input[index + 2] - mean_z;
 
-            voxels[voxel_index].offset_from_center_x =
-                voxels[voxel_index].x - x_center;
-            voxels[voxel_index].offset_from_center_y =
-                voxels[voxel_index].y - y_center;
-            voxels[voxel_index].offset_from_center_z =
-                voxels[voxel_index].z - z_center;
-            voxels[voxel_index].grid_x = pillar.pillar_grid_x;
-            voxels[voxel_index].grid_y = pillar.pillar_grid_y;
-            voxels[voxel_index].is_valid = true;
+                pfe_input[index + 7] = pfe_input[index] - x_center;
+                pfe_input[index + 8] = pfe_input[index + 1] - y_center;
+                pfe_input[index + 9] = pfe_input[index + 2] - z_center;
+#else
+                pfe_input[index + 3] = pfe_input[index] - mean_x;
+                pfe_input[index + 4] = pfe_input[index + 1] - mean_y;
+                pfe_input[index + 5] = pfe_input[index + 2] - mean_z;
+
+                pfe_input[index + 6] = pfe_input[index] - x_center;
+                pfe_input[index + 7] = pfe_input[index + 1] - y_center;
+                pfe_input[index + 8] = pfe_input[index + 2] - z_center;
+#endif
+            }
+            index += FEATURE_NUM;
         }
         num_pillars++;
     }
@@ -200,72 +191,6 @@ size_t point_decoration(const std::vector<Pillar> &bev_pillar,
     assert(voxel_coords.size() / 2 == voxel_num_points.size());
 
     return num_pillars;
-}
-
-size_t gather(const std::vector<Pillar> &bev_pillars,
-              const std::vector<Voxel> &raw_voxels,
-              std::vector<float> &pfe_input) {
-    assert(pfe_input.size() ==
-           MAX_VOXELS * MAX_NUM_POINTS_PER_PILLAR * FEATURE_NUM);
-
-    size_t index = 0;
-    size_t total_points = 0;
-
-    for (Pillar pillar : bev_pillars) {
-        if (pillar.is_empty) {
-            continue;
-        }
-        assert(pillar.pillar_grid_x < GRID_X_SIZE);
-        assert(pillar.pillar_grid_y < GRID_Y_SIZE);
-        total_points += pillar.point_num_in_pillar;
-
-        for (size_t i = 0; i < MAX_NUM_POINTS_PER_PILLAR; i++) {
-            if (i < pillar.point_num_in_pillar) {
-
-                size_t voxel_index =
-                    i + MAX_NUM_POINTS_PER_PILLAR *
-                            (pillar.pillar_grid_x +
-                             pillar.pillar_grid_y * GRID_X_SIZE);
-
-                assert(voxel_index <
-                       GRID_Y_SIZE * GRID_X_SIZE * MAX_NUM_POINTS_PER_PILLAR);
-                assert(i < MAX_NUM_POINTS_PER_PILLAR);
-
-                Voxel voxel = raw_voxels[voxel_index];
-                assert(voxel.is_valid);
-
-                pfe_input[index] = voxel.x;
-                pfe_input[index + 1] = voxel.y;
-                pfe_input[index + 2] = voxel.z;
-#if NUM_POINT_VALUES >= 4
-                pfe_input[index + 3] = voxel.w;
-                pfe_input[index + 4] = voxel.offset_from_mean_x;
-                pfe_input[index + 5] = voxel.offset_from_mean_y;
-                pfe_input[index + 6] = voxel.offset_from_mean_z;
-                pfe_input[index + 7] = voxel.offset_from_center_x;
-                pfe_input[index + 8] = voxel.offset_from_center_y;
-                pfe_input[index + 9] = voxel.offset_from_center_z;
-                assert(FEATURE_NUM == 10);
-#else
-                pfe_input[index + 3] = voxel.offset_from_mean_x;
-                pfe_input[index + 4] = voxel.offset_from_mean_y;
-                pfe_input[index + 5] = voxel.offset_from_mean_z;
-                pfe_input[index + 6] = voxel.offset_from_center_x;
-                pfe_input[index + 7] = voxel.offset_from_center_y;
-                pfe_input[index + 8] = voxel.offset_from_center_z;
-                assert(FEATURE_NUM == 9)
-#endif
-            } else {
-                int a = 1;
-            }
-            index += FEATURE_NUM;
-        }
-    }
-#ifdef _DEBUG
-    std::cout << index << std::endl;
-#endif
-
-    return total_points;
 }
 
 void run(const std::vector<float> &pfe_input, std::vector<float> &pfe_output) {
@@ -357,9 +282,6 @@ void preprocess(const float *points, size_t points_buf_len,
     std::vector<Pillar> bev_pillar(GRID_Y_SIZE * GRID_X_SIZE);
     std::vector<size_t> voxel_coords; // (x, y)
     std::vector<size_t> voxel_num_points;
-    std::vector<Voxel> raw_voxels(
-        GRID_Y_SIZE * GRID_X_SIZE *
-        MAX_NUM_POINTS_PER_PILLAR); // input of gather()
     std::vector<float> pfe_input(MAX_VOXELS * MAX_NUM_POINTS_PER_PILLAR *
                                      FEATURE_NUM,
                                  0.0f); // input of run()
@@ -370,9 +292,8 @@ void preprocess(const float *points, size_t points_buf_len,
                                  0.0f); // input of RPN
     voxelization(bev_pillar, points, points_buf_len, point_stride);
     size_t num_pillars =
-        point_decoration(bev_pillar, voxel_coords, voxel_num_points, raw_voxels,
+        point_decoration(bev_pillar, voxel_coords, voxel_num_points, pfe_input,
                          points, points_buf_len, point_stride);
-    size_t num_valid_voxels = gather(bev_pillar, raw_voxels, pfe_input);
 
     run(pfe_input, pfe_output);
     assert(pfe_output.size() == MAX_VOXELS * RPN_INPUT_NUM_CHANNELS);

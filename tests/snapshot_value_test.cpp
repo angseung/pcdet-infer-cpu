@@ -102,9 +102,9 @@ TEST(VoxelValueTest, PFERunTest) {
         std::vector<vueron::Pillar> bev_pillar(GRID_Y_SIZE * GRID_X_SIZE);
         std::vector<size_t> voxel_coords; // (x, y)
         std::vector<size_t> voxel_num_points;
-        std::vector<vueron::Voxel> raw_voxels(
-            GRID_Y_SIZE * GRID_X_SIZE *
-            MAX_NUM_POINTS_PER_PILLAR); // input of gather()
+        std::vector<float> pfe_input(MAX_VOXELS * MAX_NUM_POINTS_PER_PILLAR *
+                                         FEATURE_NUM,
+                                     0.0f); // input of run()
         std::vector<float> bev_feature(GRID_Y_SIZE * GRID_X_SIZE *
                                            RPN_INPUT_NUM_CHANNELS,
                                        0.0f); // input of RPN
@@ -112,7 +112,7 @@ TEST(VoxelValueTest, PFERunTest) {
         voxelization(bev_pillar, (float *)points.data(), points_buf_len,
                      point_stride);
         size_t num_pillars = point_decoration(
-            bev_pillar, voxel_coords, voxel_num_points, raw_voxels,
+            bev_pillar, voxel_coords, voxel_num_points, pfe_input,
             (float *)points.data(), points_buf_len, point_stride);
 
         // read snapshot file
@@ -167,9 +167,6 @@ TEST(VoxelValueTest, BEVValueTest) {
         std::vector<vueron::Pillar> bev_pillar(GRID_Y_SIZE * GRID_X_SIZE);
         std::vector<size_t> voxel_coords; // (x, y)
         std::vector<size_t> voxel_num_points;
-        std::vector<vueron::Voxel> raw_voxels(
-            GRID_Y_SIZE * GRID_X_SIZE *
-            MAX_NUM_POINTS_PER_PILLAR); // input of gather()
         std::vector<float> pfe_input(MAX_VOXELS * MAX_NUM_POINTS_PER_PILLAR *
                                          FEATURE_NUM,
                                      0.0f); // input of run()
@@ -181,13 +178,10 @@ TEST(VoxelValueTest, BEVValueTest) {
         vueron::voxelization(bev_pillar, (float *)points.data(), points_buf_len,
                              point_stride);
         size_t num_pillars = vueron::point_decoration(
-            bev_pillar, voxel_coords, voxel_num_points, raw_voxels,
+            bev_pillar, voxel_coords, voxel_num_points, pfe_input,
             (float *)points.data(), points_buf_len, point_stride);
-        size_t num_valid_voxels =
-            vueron::gather(bev_pillar, raw_voxels, pfe_input);
         size_t num_voxels_manual = std::accumulate(voxel_num_points.begin(),
                                                    voxel_num_points.end(), 0);
-        EXPECT_EQ(num_voxels_manual, num_valid_voxels);
         EXPECT_EQ(num_pillars, voxel_num_points.size());
 
         // check remainder voxels is zero
