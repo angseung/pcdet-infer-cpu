@@ -298,7 +298,7 @@ void run(const std::vector<float> &pfe_input, std::vector<float> &pfe_output) {
     float *floatarr = output_tensor.GetTensorMutableData<float>();
 
     assert(output_size == MAX_VOXELS * RPN_INPUT_NUM_CHANNELS);
-    assert(output_dims.size() == output_dims_count);
+    assert(output_dims.size() == output_dims_count && output_dims_count == 2);
     assert(output_dims[0] == MAX_VOXELS);
     assert(output_dims[1] == RPN_INPUT_NUM_CHANNELS);
 
@@ -313,30 +313,29 @@ void run(const std::vector<float> &pfe_input, std::vector<float> &pfe_output) {
 // TODO: Implement here
 void scatter(const std::vector<float> &pfe_output,
              const std::vector<size_t> &voxel_coords,
-             const std::vector<size_t> &voxel_num_points,
+             //  const std::vector<size_t> &voxel_num_points,
              const size_t num_pillars, std::vector<float> &rpn_input) {
     assert(rpn_input.size() ==
            GRID_Y_SIZE * GRID_X_SIZE * RPN_INPUT_NUM_CHANNELS);
-    assert(pfe_output.size() == MAX_VOXELS * RPN_INPUT_NUM_CHANNELS);
-    assert(voxel_num_points.size() == num_pillars);
-    assert(voxel_num_points.size() == voxel_coords.size() / 2);
+    // assert(pfe_output.size() == num_pillars * RPN_INPUT_NUM_CHANNELS);
+    // assert(pfe_output.size() == MAX_VOXELS * RPN_INPUT_NUM_CHANNELS);
+    // assert(voxel_num_points.size() == num_pillars);
+    // assert(voxel_num_points.size() == voxel_coords.size() / 2);
 
     for (size_t i = 0; i < num_pillars; i++) {
         // voxel_coords : (x, y)
         size_t curr_grid_x = voxel_coords[2 * i];
         size_t curr_grid_y = voxel_coords[2 * i + 1];
         size_t source_voxel_index = RPN_INPUT_NUM_CHANNELS * i;
-        size_t target_voxel_index = RPN_INPUT_NUM_CHANNELS *
-                                    ((curr_grid_y * GRID_X_SIZE) + curr_grid_x);
-        // std::cout << "source_voxel_index: " << source_voxel_index <<
-        // std::endl;
         assert(source_voxel_index < MAX_VOXELS * RPN_INPUT_NUM_CHANNELS);
-        assert(target_voxel_index <
-               GRID_Y_SIZE * GRID_X_SIZE * RPN_INPUT_NUM_CHANNELS);
 
         for (size_t j = 0; j < RPN_INPUT_NUM_CHANNELS; j++) {
-            rpn_input[target_voxel_index + j] =
-                pfe_output[source_voxel_index + j];
+            size_t target_voxel_index = (j * GRID_Y_SIZE * GRID_X_SIZE) +
+                                        (curr_grid_y * GRID_X_SIZE) +
+                                        curr_grid_x;
+            assert(target_voxel_index <
+                   GRID_Y_SIZE * GRID_X_SIZE * RPN_INPUT_NUM_CHANNELS);
+            rpn_input[target_voxel_index] = pfe_output[source_voxel_index + j];
         }
     }
 }
@@ -365,7 +364,7 @@ void preprocess(const float *points, size_t points_buf_len,
 
     run(pfe_input, pfe_output);
     assert(pfe_output.size() == MAX_VOXELS * RPN_INPUT_NUM_CHANNELS);
-    scatter(pfe_output, voxel_coords, voxel_num_points, num_pillars, bev_image);
+    scatter(pfe_output, voxel_coords, num_pillars, bev_image);
 }
 
 } // namespace vueron
