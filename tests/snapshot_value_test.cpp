@@ -131,13 +131,8 @@ TEST(VoxelValueTest, PFERunTest) {
                                       0.0f};
 
         vueron::run(pfe_input_snapshot, pfe_output);
-
         for (size_t j = 0; j < num_pillars * RPN_INPUT_NUM_CHANNELS; j++) {
             EXPECT_NEAR(pfe_output[j], pfe_output_snapshot[j], _EPSILON);
-#ifdef _DEBUG
-            std::cout << pfe_output[j] << " " << pfe_output_snapshot[j]
-                      << std::endl;
-#endif
         }
         std::cout << "Test Finish : " << pcd_file << std::endl;
     }
