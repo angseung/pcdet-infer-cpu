@@ -74,6 +74,7 @@ TEST(VoxelValueTest, ScatterTest) {
         for (size_t j = 0; j < bev_feature.size(); j++) {
             EXPECT_FLOAT_EQ(rpn_input_snapshot[j], bev_feature[j]);
         }
+        std::cout << "Test Finish : " << pcd_file << std::endl;
     }
 }
 
@@ -138,6 +139,7 @@ TEST(VoxelValueTest, PFERunTest) {
                       << std::endl;
 #endif
         }
+        std::cout << "Test Finish : " << pcd_file << std::endl;
     }
 }
 
@@ -188,14 +190,21 @@ TEST(VoxelValueTest, BEVValueTest) {
         EXPECT_EQ(num_voxels_manual, num_valid_voxels);
         EXPECT_EQ(num_pillars, voxel_num_points.size());
 
+        // check remainder voxels is zero
+        float sum_of_pfe_input_remainder = std::accumulate(
+            pfe_input.begin() +
+                num_pillars * MAX_NUM_POINTS_PER_PILLAR * FEATURE_NUM,
+            pfe_input.end(), 0.0f);
+        EXPECT_FLOAT_EQ(sum_of_pfe_input_remainder, 0.0f);
+
+        float remainder_sum = std::accumulate(
+            pfe_input.begin() +
+                (num_pillars - 1) * MAX_NUM_POINTS_PER_PILLAR * FEATURE_NUM,
+            pfe_input.end(), 0.0f);
+        EXPECT_FALSE(remainder_sum == 0.0f);
+
         vueron::run(pfe_input, pfe_output);
         EXPECT_EQ(pfe_output.size(), MAX_VOXELS * RPN_INPUT_NUM_CHANNELS);
-
-        // check remainder voxels is zero
-        size_t padded_voxel_offset = num_valid_voxels * FEATURE_NUM;
-        float remainder_sum = std::accumulate(
-            pfe_input.begin() + padded_voxel_offset, pfe_input.end(), 0.0f);
-        assert(remainder_sum == 0.0f);
 
         vueron::scatter(pfe_output, voxel_coords, num_pillars, bev_image);
 
@@ -208,5 +217,6 @@ TEST(VoxelValueTest, BEVValueTest) {
         for (size_t elem = 0; elem < bev_image.size(); elem++) {
             EXPECT_NEAR(bev_image[elem], rpn_input_snapshot[elem], _EPSILON);
         }
+        std::cout << "Test Finish : " << pcd_file << std::endl;
     }
 }
