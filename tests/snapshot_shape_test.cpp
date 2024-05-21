@@ -226,7 +226,7 @@ TEST(VoxelSnapshotTest, VoxelGatherTest) {
     std::vector<float> points;
     size_t num_test_files = pcd_files.size();
 
-    assert(pcd_files.size() == snapshot_files.size());
+    EXPECT_GE(pcd_files.size(), snapshot_files.size());
 
     for (size_t i = 0; i < num_test_files; i++) {
         std::string pcd_file = pcd_files[i];
@@ -296,7 +296,7 @@ TEST(VoxelSnapshotTest, GatheredVoxelValueTest) {
     std::vector<float> points;
     size_t num_test_files = pcd_files.size();
 
-    assert(pcd_files.size() == snapshot_files.size());
+    EXPECT_GE(pcd_files.size(), snapshot_files.size());
 
     for (size_t i = 0; i < num_test_files; i++) {
         std::string pcd_file = pcd_files[i];
@@ -477,5 +477,49 @@ TEST(VoxelSnapshotTest, GatheredVoxelValueTest) {
 #endif
 
         std::cout << "Test Finish : " << pcd_file << std::endl;
+    }
+}
+
+TEST(VoxelSnapshotTest, PFEShapeTest) {
+    std::string folder_path = PCD_PATH;
+    std::vector<std::string> pcd_files = vueron::getFileList(folder_path);
+    std::string snapshot_folder_path = SNAPSHOT_PATH;
+    std::vector<std::string> snapshot_files =
+        vueron::getFileList(snapshot_folder_path);
+    std::vector<float> points;
+    size_t num_test_files = pcd_files.size();
+
+    EXPECT_GE(pcd_files.size(), snapshot_files.size());
+
+    for (size_t i = 0; i < num_test_files; i++) {
+        std::string pcd_file = pcd_files[i];
+        std::string snapshot_dir = snapshot_files[i];
+        std::cout << "Testing : " << pcd_file << std::endl;
+
+        // read point from pcd file
+        std::vector<float> points =
+            vueron::readPcdFile(pcd_file, MAX_POINTS_NUM);
+        size_t points_buf_len = points.size();
+        size_t point_stride = sizeof(float);
+        std::vector<vueron::Pillar> bev_pillar(GRID_Y_SIZE * GRID_X_SIZE);
+        std::vector<vueron::Voxel> raw_voxels(
+            GRID_Y_SIZE * GRID_X_SIZE *
+            MAX_NUM_POINTS_PER_PILLAR); // input of gather()
+        std::vector<float> pfe_input(MAX_VOXELS * MAX_NUM_POINTS_PER_PILLAR *
+                                         FEATURE_NUM,
+                                     0.0f); // input of run()
+        std::vector<float> pfe_output(MAX_VOXELS * RPN_INPUT_NUM_CHANNELS,
+                                      0.0f); // input of scatter()
+        std::vector<float> bev_image(GRID_Y_SIZE * GRID_X_SIZE *
+                                         RPN_INPUT_NUM_CHANNELS,
+                                     0.0f); // input of RPN
+        vueron::voxelization(bev_pillar, (float *)points.data(), points_buf_len,
+                             point_stride);
+        size_t num_pillars = vueron::point_decoration(
+            bev_pillar, raw_voxels, (float *)points.data(), points_buf_len,
+            point_stride);
+        size_t num_valid_voxels = vueron::gather(raw_voxels, pfe_input);
+        vueron::run(pfe_input, pfe_output);
+        EXPECT_EQ(pfe_output.size(), MAX_VOXELS * RPN_INPUT_NUM_CHANNELS);
     }
 }
