@@ -8,7 +8,7 @@
 #include <cassert>
 #include <iostream>
 #include <memory.h>
-#include <numeric> // std::iota
+#include <numeric>
 #include <random>
 #include <vector>
 
