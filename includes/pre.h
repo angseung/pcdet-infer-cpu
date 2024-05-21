@@ -293,10 +293,14 @@ void run(const std::vector<float> &pfe_input, std::vector<float> &pfe_output) {
     // Get the shape of the output tensor
     auto output_tensor_info = output_tensor.GetTensorTypeAndShapeInfo();
     auto output_dims = output_tensor_info.GetShape();
+    auto output_dims_count = output_tensor_info.GetDimensionsCount();
     size_t output_size = output_tensor_info.GetElementCount();
     float *floatarr = output_tensor.GetTensorMutableData<float>();
 
     assert(output_size == MAX_VOXELS * RPN_INPUT_NUM_CHANNELS);
+    assert(output_dims.size() == output_dims_count);
+    assert(output_dims[0] == MAX_VOXELS);
+    assert(output_dims[1] == RPN_INPUT_NUM_CHANNELS);
 
     // Resize the output vector to fit the output tensor data
     pfe_output.resize(output_size);
@@ -309,8 +313,8 @@ void run(const std::vector<float> &pfe_input, std::vector<float> &pfe_output) {
 // TODO: Implement here
 void scatter(const std::vector<float> &pfe_output,
              const std::vector<size_t> &voxel_coords,
-             const std::vector<size_t> &voxel_num_points, size_t num_pillars,
-             std::vector<float> &rpn_input) {
+             const std::vector<size_t> &voxel_num_points,
+             const size_t num_pillars, std::vector<float> &rpn_input) {
     assert(rpn_input.size() ==
            GRID_Y_SIZE * GRID_X_SIZE * RPN_INPUT_NUM_CHANNELS);
     assert(pfe_output.size() == MAX_VOXELS * RPN_INPUT_NUM_CHANNELS);
