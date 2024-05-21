@@ -307,7 +307,9 @@ void run(const std::vector<float> &pfe_input, std::vector<float> &pfe_output) {
 
     // Copy the output tensor data to the output vector
     std::copy(floatarr, floatarr + output_size, pfe_output.begin());
+#ifdef _DEBUG
     std::cout << "INFERENCE DONE." << std::endl;
+#endif
 }
 
 // TODO: Implement here
@@ -317,8 +319,8 @@ void scatter(const std::vector<float> &pfe_output,
              const size_t num_pillars, std::vector<float> &rpn_input) {
     assert(rpn_input.size() ==
            GRID_Y_SIZE * GRID_X_SIZE * RPN_INPUT_NUM_CHANNELS);
+    assert(pfe_output.size() == MAX_VOXELS * RPN_INPUT_NUM_CHANNELS);
     // assert(pfe_output.size() == num_pillars * RPN_INPUT_NUM_CHANNELS);
-    // assert(pfe_output.size() == MAX_VOXELS * RPN_INPUT_NUM_CHANNELS);
     // assert(voxel_num_points.size() == num_pillars);
     // assert(voxel_num_points.size() == voxel_coords.size() / 2);
 

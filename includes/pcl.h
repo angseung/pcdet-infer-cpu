@@ -6,12 +6,11 @@
 #include <glob.h>
 #include <iostream>
 #include <map>
+#include <pcl/io/pcd_io.h>
+#include <pcl/point_types.h>
 #include <sstream>
 #include <string>
 #include <vector>
-
-#include <pcl/io/pcd_io.h>
-#include <pcl/point_types.h>
 
 namespace vueron {
 

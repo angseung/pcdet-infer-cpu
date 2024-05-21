@@ -43,3 +43,4 @@ onnxruntime*/
 *.onnx
 models
 includes/config.h
+bak/
