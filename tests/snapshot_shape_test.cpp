@@ -140,7 +140,8 @@ TEST(VoxelSnapshotTest, VoxelValueTest) {
 
         EXPECT_EQ(num_pillars,
                   voxels.size() / MAX_NUM_POINTS_PER_PILLAR / NUM_POINT_VALUES);
-        size_t num_valid_voxels = vueron::gather(bev_voxels, pfe_input);
+        size_t num_valid_voxels =
+            vueron::gather(bev_pillar, bev_voxels, pfe_input);
         size_t num_valid_voxels_snapshot = std::accumulate(
             voxel_num_points.begin(), voxel_num_points.end(), 0);
         EXPECT_EQ(num_valid_voxels, num_valid_voxels_snapshot);
@@ -279,7 +280,8 @@ TEST(VoxelSnapshotTest, VoxelGatherTest) {
 
         EXPECT_EQ(num_pillars,
                   voxels.size() / MAX_NUM_POINTS_PER_PILLAR / NUM_POINT_VALUES);
-        size_t num_valid_voxels = vueron::gather(bev_voxels, pfe_input);
+        size_t num_valid_voxels =
+            vueron::gather(bev_pillar, bev_voxels, pfe_input);
         size_t num_valid_voxels_snapshot = std::accumulate(
             voxel_num_points.begin(), voxel_num_points.end(), 0);
         EXPECT_EQ(num_valid_voxels, num_valid_voxels_snapshot);
@@ -351,7 +353,8 @@ TEST(VoxelSnapshotTest, GatheredVoxelValueTest) {
 
         EXPECT_EQ(num_pillars,
                   voxels.size() / MAX_NUM_POINTS_PER_PILLAR / NUM_POINT_VALUES);
-        size_t num_valid_voxels = vueron::gather(bev_voxels, pfe_input);
+        size_t num_valid_voxels =
+            vueron::gather(bev_pillar, bev_voxels, pfe_input);
 
         // sort gathered encoded voxels
         std::vector<float> pfe_x_values;
@@ -518,15 +521,6 @@ TEST(VoxelSnapshotTest, PFEShapeTest) {
                                      0.0f); // input of run()
         std::vector<float> pfe_output(MAX_VOXELS * RPN_INPUT_NUM_CHANNELS,
                                       0.0f); // input of scatter()
-        std::vector<float> bev_image(GRID_Y_SIZE * GRID_X_SIZE *
-                                         RPN_INPUT_NUM_CHANNELS,
-                                     0.0f); // input of RPN
-        vueron::voxelization(bev_pillar, (float *)points.data(), points_buf_len,
-                             point_stride);
-        size_t num_pillars = vueron::point_decoration(
-            bev_pillar, voxel_coords, voxel_num_points, raw_voxels,
-            (float *)points.data(), points_buf_len, point_stride);
-        size_t num_valid_voxels = vueron::gather(raw_voxels, pfe_input);
         vueron::run(pfe_input, pfe_output);
         EXPECT_EQ(pfe_output.size(), MAX_VOXELS * RPN_INPUT_NUM_CHANNELS);
     }

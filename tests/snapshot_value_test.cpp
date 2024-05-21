@@ -36,12 +36,14 @@ TEST(VoxelValueTest, ScatterTest) {
 
         // read snapshot file
         // 1. pfe_output
-        const std::string pfe_output_path = snapshot_dir + "/pfe_output.npy";
+        const std::string pfe_output_path =
+            snapshot_dir + "/padded_pfe_output.npy";
         auto raw_pfe_output = npy::read_npy<float>(pfe_output_path);
         std::vector<float> pfe_output_snapshot = raw_pfe_output.data;
 
         // 2. voxel_coord
-        const std::string voxel_coord_path = snapshot_dir + "/voxel_coord.npy";
+        const std::string voxel_coord_path =
+            snapshot_dir + "/padded_voxel_coord.npy";
         auto raw_voxel_coord = npy::read_npy<uint32_t>(voxel_coord_path);
         std::vector<uint32_t> voxel_coord_snapshot = raw_voxel_coord.data;
         std::vector<size_t> voxel_coords;
@@ -55,7 +57,7 @@ TEST(VoxelValueTest, ScatterTest) {
 
         // 3. voxel_num_points
         const std::string voxel_num_points_path =
-            snapshot_dir + "/voxel_num_points.npy";
+            snapshot_dir + "/padded_voxel_num_points.npy";
         auto raw_voxel_num_points =
             npy::read_npy<uint32_t>(voxel_num_points_path);
         std::vector<uint32_t> voxel_num_points_snapshot =
@@ -68,11 +70,6 @@ TEST(VoxelValueTest, ScatterTest) {
 
         vueron::scatter(pfe_output_snapshot, voxel_coords,
                         voxel_num_points_snapshot.size(), bev_feature);
-
-        const std::vector<unsigned long> leshape12{RPN_INPUT_NUM_CHANNELS,
-                                                   GRID_Y_SIZE, GRID_X_SIZE};
-        const npy::npy_data<float> data12{bev_feature, leshape12, false};
-        write_npy(snapshot_dir + "/bev_feature_CXX.npy", data12);
 
         for (size_t j = 0; j < bev_feature.size(); j++) {
             EXPECT_FLOAT_EQ(rpn_input_snapshot[j], bev_feature[j]);
@@ -119,12 +116,14 @@ TEST(VoxelValueTest, PFERunTest) {
 
         // read snapshot file
         // 1. pfe_input
-        const std::string pfe_input_path = snapshot_dir + "/voxels_encoded.npy";
+        const std::string pfe_input_path =
+            snapshot_dir + "/padded_voxels_encoded.npy";
         auto raw_pfe_input = npy::read_npy<float>(pfe_input_path);
         std::vector<float> pfe_input_snapshot = raw_pfe_input.data;
 
         // 2. pfe_output
-        const std::string pfe_output_path = snapshot_dir + "/pfe_output.npy";
+        const std::string pfe_output_path =
+            snapshot_dir + "/padded_pfe_output.npy";
         auto raw_pfe_output = npy::read_npy<float>(pfe_output_path);
         std::vector<float> pfe_output_snapshot = raw_pfe_output.data;
         std::vector<float> pfe_output{MAX_VOXELS * RPN_INPUT_NUM_CHANNELS,
@@ -182,7 +181,8 @@ TEST(VoxelValueTest, BEVValueTest) {
         size_t num_pillars = vueron::point_decoration(
             bev_pillar, voxel_coords, voxel_num_points, raw_voxels,
             (float *)points.data(), points_buf_len, point_stride);
-        size_t num_valid_voxels = vueron::gather(raw_voxels, pfe_input);
+        size_t num_valid_voxels =
+            vueron::gather(bev_pillar, raw_voxels, pfe_input);
         size_t num_voxels_manual = std::accumulate(voxel_num_points.begin(),
                                                    voxel_num_points.end(), 0);
         EXPECT_EQ(num_voxels_manual, num_valid_voxels);
