@@ -9,7 +9,7 @@
 #include <iostream>
 #include <numeric>
 
-TEST(VoxelScatterTest, ScatterTest) {
+TEST(VoxelValueTest, ScatterTest) {
     std::string folder_path = PCD_PATH;
     std::vector<std::string> pcd_files = vueron::getFileList(folder_path);
     std::string snapshot_folder_path = SNAPSHOT_PATH;
@@ -76,6 +76,57 @@ TEST(VoxelScatterTest, ScatterTest) {
 
         for (size_t j = 0; j < bev_feature.size(); j++) {
             EXPECT_FLOAT_EQ(rpn_input_snapshot[j], bev_feature[j]);
+        }
+    }
+}
+
+TEST(VoxelValueTest, PFERunTest) {
+    std::string folder_path = PCD_PATH;
+    std::vector<std::string> pcd_files = vueron::getFileList(folder_path);
+    std::string snapshot_folder_path = SNAPSHOT_PATH;
+    std::vector<std::string> snapshot_files =
+        vueron::getFileList(snapshot_folder_path);
+    std::vector<float> points;
+    size_t num_test_files = pcd_files.size();
+
+    EXPECT_LE(pcd_files.size(), snapshot_files.size());
+
+    for (size_t i = 0; i < num_test_files; i++) {
+        std::string pcd_file = pcd_files[i];
+        std::string snapshot_dir = snapshot_files[i];
+        std::cout << "Testing : " << pcd_file << std::endl;
+
+        // read point from pcd file
+        std::vector<float> points =
+            vueron::readPcdFile(pcd_file, MAX_POINTS_NUM);
+        size_t points_buf_len = points.size();
+        size_t point_stride = sizeof(float);
+        std::vector<float> bev_feature(GRID_Y_SIZE * GRID_X_SIZE *
+                                           RPN_INPUT_NUM_CHANNELS,
+                                       0.0f); // input of RPN
+
+        // read snapshot file
+        // 1. pfe_input
+        const std::string pfe_input_path = snapshot_dir + "/voxels_encoded.npy";
+        auto raw_pfe_input = npy::read_npy<float>(pfe_input_path);
+        std::vector<float> pfe_input_snapshot = raw_pfe_input.data;
+
+        // 2. pfe_output
+        const std::string pfe_output_path = snapshot_dir + "/pfe_output.npy";
+        auto raw_pfe_output = npy::read_npy<float>(pfe_output_path);
+        std::vector<float> pfe_output_snapshot = raw_pfe_output.data;
+        std::vector<float> pfe_output{MAX_VOXELS * RPN_INPUT_NUM_CHANNELS,
+                                      0.0f};
+
+        vueron::run(pfe_input_snapshot, pfe_output);
+
+        const std::vector<unsigned long> leshape12{MAX_VOXELS *
+                                                   RPN_INPUT_NUM_CHANNELS};
+        const npy::npy_data<float> data12{pfe_output, leshape12, false};
+        write_npy(snapshot_dir + "/pfe_output_CXX.npy", data12);
+
+        for (size_t j = 0; j < pfe_output.size(); j++) {
+            EXPECT_FLOAT_EQ(pfe_output[j], pfe_output_snapshot[j]);
         }
     }
 }
