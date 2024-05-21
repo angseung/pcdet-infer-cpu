@@ -4,6 +4,7 @@
 #include "pre.h"
 #include "shape.h"
 #include "utils.h"
+#include <cmath>
 #include <glob.h>
 #include <gtest/gtest.h>
 #include <iostream>
@@ -204,6 +205,18 @@ TEST(VoxelValueTest, BEVValueTest) {
         EXPECT_EQ(rpn_input_snapshot.size(), bev_image.size());
 
         for (size_t elem = 0; elem < bev_image.size(); elem++) {
+            size_t grid_x = elem % GRID_X_SIZE;
+            size_t tmp = (elem - grid_x) / GRID_X_SIZE;
+            size_t grid_y = tmp % GRID_Y_SIZE;
+            size_t feat_idx = tmp / GRID_Y_SIZE;
+            if (std::abs(bev_image[elem] - rpn_input_snapshot[elem]) >=
+                _EPSILON * 0.1f) {
+#ifdef _DEBUG
+                std::cout << "idx: " << elem << "gX: " << grid_x << "gY"
+                          << grid_y << "feat: " << feat_idx << std::endl;
+#endif
+                int a = 1;
+            }
             EXPECT_NEAR(bev_image[elem], rpn_input_snapshot[elem], _EPSILON);
         }
         std::cout << "Test Finish : " << pcd_file << std::endl;
