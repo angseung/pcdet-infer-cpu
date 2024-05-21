@@ -36,3 +36,12 @@ Release/
 Testing/
 .vscode/
 pcd/
+snapshots/
+.DS_Store
+build/
+onnxruntime*/
+*.onnx
+models
+includes/config.h
+bak/
+zero_snapshots/

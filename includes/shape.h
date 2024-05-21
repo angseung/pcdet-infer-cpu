@@ -1,3 +1,6 @@
+#ifndef SHAPE_H
+#define SHAPE_H
+
 namespace vueron {
 class Rectangle {
     public:
@@ -11,3 +14,5 @@ class Rectangle {
     int width_, height_;
 };
 } // namespace vueron
+
+#endif // SHAPE_H

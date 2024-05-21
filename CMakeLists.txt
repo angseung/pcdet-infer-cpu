@@ -1,13 +1,13 @@
 cmake_minimum_required(VERSION 3.11)
 
 project(
-  pcdet-infer-onnx
+  pcdet-infer-cpu
   VERSION 0.1
   DESCRIPTION "cpu inference framework for pcdet models"
-  LANGUAGES C CXX)
+  LANGUAGES CXX)
 
 # GoogleTest requires at least C++14
-set(CMAKE_CXX_STANDARD 14)
+set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
 include(FetchContent)
@@ -19,13 +19,23 @@ FetchContent_Declare(
 set(gtest_force_shared_crt ON CACHE BOOL "" FORCE)
 FetchContent_MakeAvailable(googletest)
 
+set(PFE_PATH ${PROJECT_SOURCE_DIR}/models/gcm_resfpn_falcon_v4_residual_gelu_full_zero_f71.68_r0_s52.48_pfe.onnx)
+set(RPN_PATH ${PROJECT_SOURCE_DIR}/models/gcm_resfpn_falcon_v4_residual_gelu_full_zero_f71.68_r0_s52.48_rpn.onnx)
+
+# configure a header file to pass some of the CMake settings
+# to the source code
+configure_file (
+  "${PROJECT_SOURCE_DIR}/includes/config.in"
+  "${PROJECT_SOURCE_DIR}/includes/config.h"
+  @ONLY
+  )
+
 # Set the output directory for executable files
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin)
 
+add_subdirectory(src)
 add_executable(main main.cpp)
 add_subdirectory(tests)
 add_subdirectory(lib)
-add_subdirectory(src)
-target_include_directories(main PUBLIC ${CMAKE_SOURCE_DIR}/includes ${CMAKE_SOURCE_DIR}/src)
 # target_compile_options(main PUBLIC -Wall -Werror)
 target_link_libraries(main PUBLIC shape pcdet)

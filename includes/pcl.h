@@ -1,16 +1,20 @@
+#ifndef PCL_H
+#define PCL_H
+
 #include <cstring>
 #include <fstream>
 #include <glob.h>
 #include <iostream>
 #include <map>
+#include <pcl/io/pcd_io.h>
+#include <pcl/point_types.h>
 #include <sstream>
 #include <string>
 #include <vector>
 
-#include <pcl/io/pcd_io.h>
-#include <pcl/point_types.h>
+namespace vueron {
 
-std::vector<std::string> getPcdFiles(const std::string &folder_path) {
+std::vector<std::string> getFileList(const std::string &folder_path) {
     std::vector<std::string> files;
     glob_t glob_result;
 
@@ -55,3 +59,6 @@ std::vector<float> readPcdFile(const std::string &file_path,
 
     return points;
 }
+} // namespace vueron
+
+#endif // PCL_H

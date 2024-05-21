@@ -1,0 +1,7 @@
+#ifndef COMMON_H
+#define COMMON_H
+
+#define PFE_PATH "@PFE_PATH@"
+#define RPN_PATH "@RPN_PATH@"
+
+#endif // COMMON_H

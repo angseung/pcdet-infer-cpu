@@ -17,6 +17,14 @@
         "cwd": "${workspaceFolder}",
         "program": "${workspaceFolder}/Debug/bin/hello_test"
       },
+      {
+        "name": "voxel_snapshot_test",
+        "type": "cppdbg",
+        "request": "launch",
+        "args": [],
+        "cwd": "${workspaceFolder}",
+        "program": "${workspaceFolder}/Debug/bin/voxel_snapshot_test"
+      },
     ]
   }
   
