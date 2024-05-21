@@ -119,6 +119,9 @@ size_t point_decoration(const std::vector<Pillar> &bev_pillar,
         if (pillar.is_empty) {
             continue;
         }
+        assert(pillar.pillar_grid_x < GRID_X_SIZE);
+        assert(pillar.pillar_grid_y < GRID_Y_SIZE);
+
         // calc mean values for all points in current pillar
         float mean_x = 0.0f;
         float mean_y = 0.0f;
@@ -157,7 +160,7 @@ size_t point_decoration(const std::vector<Pillar> &bev_pillar,
                          (pillar.pillar_grid_y * VOXEL_Y_SIZE) + MIN_Y_RANGE;
         float z_center = (VOXEL_Z_SIZE / 2.0f) + MIN_Z_RANGE;
 
-        // write encoded features into Voxel
+        // write encoded features into raw_voxels and pfe_input
         for (size_t i = 0; i < pillar.point_num_in_pillar; i++) {
             size_t point_index = pillar.point_index[i];
             size_t voxel_index = i + MAX_NUM_POINTS_PER_PILLAR *
