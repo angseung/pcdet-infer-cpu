@@ -208,6 +208,8 @@ TEST(VoxelValueTest, BEVValueTest) {
             size_t tmp = (elem - grid_x) / GRID_X_SIZE;
             size_t grid_y = tmp % GRID_Y_SIZE;
             size_t feat_idx = tmp / GRID_Y_SIZE;
+            assert(elem == (feat_idx * GRID_X_SIZE * GRID_Y_SIZE) +
+                               (grid_y * GRID_X_SIZE) + grid_x);
             if (std::abs(bev_image[elem] - rpn_input_snapshot[elem]) >=
                 _EPSILON * 0.1f) {
 #ifdef _DEBUG
