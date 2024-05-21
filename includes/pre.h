@@ -319,8 +319,8 @@ void scatter(const std::vector<float> &pfe_output,
 
     for (size_t i = 0; i < num_pillars; i++) {
         // voxel_coords : (x, y)
-        size_t curr_grid_x = voxel_coords[2 * i + 1];
-        size_t curr_grid_y = voxel_coords[2 * i];
+        size_t curr_grid_x = voxel_coords[2 * i];
+        size_t curr_grid_y = voxel_coords[2 * i + 1];
         size_t source_voxel_index = RPN_INPUT_NUM_CHANNELS * i;
         size_t target_voxel_index = RPN_INPUT_NUM_CHANNELS *
                                     ((curr_grid_y * GRID_X_SIZE) + curr_grid_x);

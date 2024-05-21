@@ -554,6 +554,8 @@ TEST(VoxelSnapshotTest, VoxelCoordsValueTest) {
         // read voxels from snapshot file
         const std::string voxel_coord_path = snapshot_dir + "/voxel_coord.npy";
         auto raw_voxel_coord = npy::read_npy<uint32_t>(voxel_coord_path);
+
+        // voxel_coords_snapshot : (y, x)
         std::vector<uint32_t> voxel_coords_snapshot = raw_voxel_coord.data;
 
         // calc values from preprocessing functions
