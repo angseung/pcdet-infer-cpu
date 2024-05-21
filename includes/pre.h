@@ -13,14 +13,6 @@
 #include <vector>
 
 namespace vueron {
-
-struct BaseVoxel {
-    float x = 0.0f, y = 0.0f, z = 0.0f;
-#if NUM_POINT_VALUES >= 4
-    float w = 0.0f;
-#endif
-};
-
 struct Voxel {
     float x = 0, y = 0, z = 0;
 #if NUM_POINT_VALUES >= 4
@@ -57,7 +49,7 @@ void voxelization(std::vector<Pillar> &bev_pillar, const float *points,
 
     size_t points_num = points_buf_len / point_stride;
     std::vector<size_t> indices(points_num, 0);
-    std::vector<BaseVoxel> shuffled(points_num);
+    // std::vector<BaseVoxel> shuffled(points_num);
     std::iota(indices.begin(), indices.end(), 0);
     size_t processed = 0;
 
@@ -115,16 +107,6 @@ void voxelization(std::vector<Pillar> &bev_pillar, const float *points,
             bev_pillar[voxel_index].is_empty = false;
         }
     }
-
-#ifdef _DEBUG
-    size_t count_voxel = 0;
-    for (Pillar pillar : bev_pillar) {
-        if (!pillar.is_empty) {
-            count_voxel++;
-        }
-    }
-    std::cout << "Number of Voxel: " << count_voxel << std::endl;
-#endif
 }
 
 size_t point_decoration(const std::vector<Pillar> &bev_pillar,
