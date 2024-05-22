@@ -45,3 +45,6 @@ onnxruntime*/
 models
 includes/config.h
 bak/
+falcon/
+cepton/
+*.zip

@@ -1,7 +1,17 @@
 #ifndef COMMON_H
 #define COMMON_H
 
+#define _EPSILON 1e-4
+#define OFF 0
+#define ON 1
+#define _SHIFFLE OFF
+// #define _DEBUG
+
 #define PFE_PATH "@PFE_PATH@"
 #define RPN_PATH "@RPN_PATH@"
+#define PCD_PATH "@PCD_PATH@"
+#define SNAPSHOT_PATH "@SNAPSHOT_PATH@"
+
+#define RANDOM_SEED 123
 
 #endif // COMMON_H

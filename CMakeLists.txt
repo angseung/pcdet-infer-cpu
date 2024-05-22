@@ -21,6 +21,8 @@ FetchContent_MakeAvailable(googletest)
 
 set(PFE_PATH ${PROJECT_SOURCE_DIR}/models/gcm_resfpn_falcon_v4_residual_gelu_full_zero_f71.68_r0_s52.48_pfe.onnx)
 set(RPN_PATH ${PROJECT_SOURCE_DIR}/models/gcm_resfpn_falcon_v4_residual_gelu_full_zero_f71.68_r0_s52.48_rpn.onnx)
+set(PCD_PATH ${PROJECT_SOURCE_DIR}/pcd/*.pcd)
+set(SNAPSHOT_PATH ${PROJECT_SOURCE_DIR}/zero_snapshots/pcd*)
 
 # configure a header file to pass some of the CMake settings
 # to the source code
@@ -36,5 +38,4 @@ set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin)
 add_subdirectory(src)
 add_executable(main main.cpp)
 add_subdirectory(tests)
-# target_compile_options(main PUBLIC -Wall -Werror)
 target_link_libraries(main PUBLIC pcdet)
