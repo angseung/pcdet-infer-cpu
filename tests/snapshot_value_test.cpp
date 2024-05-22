@@ -210,14 +210,6 @@ TEST(VoxelValueTest, BEVValueTest) {
             size_t feat_idx = tmp / GRID_Y_SIZE;
             assert(elem == (feat_idx * GRID_X_SIZE * GRID_Y_SIZE) +
                                (grid_y * GRID_X_SIZE) + grid_x);
-            if (std::abs(bev_image[elem] - rpn_input_snapshot[elem]) >=
-                _EPSILON * 0.1f) {
-#ifdef _DEBUG
-                std::cout << "idx: " << elem << "gX: " << grid_x << "gY"
-                          << grid_y << "feat: " << feat_idx << std::endl;
-#endif
-                int a = 1;
-            }
             EXPECT_NEAR(bev_image[elem], rpn_input_snapshot[elem], _EPSILON);
         }
         std::cout << "Test Finish : " << pcd_file << std::endl;

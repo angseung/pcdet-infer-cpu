@@ -37,6 +37,7 @@ Testing/
 .vscode/
 pcd/
 snapshots/
+zero_snapshots/
 .DS_Store
 build/
 onnxruntime*/
@@ -44,4 +45,3 @@ onnxruntime*/
 models
 includes/config.h
 bak/
-zero_snapshots/

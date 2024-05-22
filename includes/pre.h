@@ -174,6 +174,7 @@ size_t point_decoration(const std::vector<Pillar> &bev_pillar,
                 pfe_input[index + 8] = pfe_input[index + 1] - y_center;
                 pfe_input[index + 9] = pfe_input[index + 2] - z_center;
 #else
+                // requires valiation here
                 pfe_input[index + 3] = pfe_input[index] - mean_x;
                 pfe_input[index + 4] = pfe_input[index + 1] - mean_y;
                 pfe_input[index + 5] = pfe_input[index + 2] - mean_z;
@@ -201,7 +202,6 @@ void run(const std::vector<float> &pfe_input, std::vector<float> &pfe_output) {
     session_options.SetGraphOptimizationLevel(
         GraphOptimizationLevel::ORT_ENABLE_EXTENDED);
 
-    // const size_t num_input_nodes = session.GetInputCount();
     std::vector<int64_t> input_node_dims = {
         MAX_VOXELS, MAX_NUM_POINTS_PER_PILLAR, FEATURE_NUM};
     size_t input_tensor_size =
