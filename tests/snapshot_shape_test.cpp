@@ -2,7 +2,6 @@
 #include "params.h"
 #include "pcl.h"
 #include "pre.h"
-#include "shape.h"
 #include "utils.h"
 #include <glob.h>
 #include <gtest/gtest.h>
