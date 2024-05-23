@@ -194,7 +194,8 @@ size_t point_decoration(const std::vector<Pillar> &bev_pillar,
     return num_pillars;
 }
 
-void run(const std::vector<float> &pfe_input, std::vector<float> &pfe_output) {
+void pfe_run(const std::vector<float> &pfe_input,
+             std::vector<float> &pfe_output) {
     Ort::Env env(ORT_LOGGING_LEVEL_WARNING, "test");
     Ort::SessionOptions session_options;
     Ort::Session session(env, PFE_PATH, session_options);
@@ -284,7 +285,7 @@ void preprocess(const float *points, size_t points_buf_len,
     std::vector<size_t> voxel_num_points;
     std::vector<float> pfe_input(MAX_VOXELS * MAX_NUM_POINTS_PER_PILLAR *
                                      FEATURE_NUM,
-                                 0.0f); // input of run()
+                                 0.0f); // input of pfe_run()
     std::vector<float> pfe_output(MAX_VOXELS * RPN_INPUT_NUM_CHANNELS,
                                   0.0f); // input of scatter()
     std::vector<float> bev_image(GRID_Y_SIZE * GRID_X_SIZE *
@@ -295,7 +296,7 @@ void preprocess(const float *points, size_t points_buf_len,
         point_decoration(bev_pillar, voxel_coords, voxel_num_points, pfe_input,
                          points, points_buf_len, point_stride);
 
-    run(pfe_input, pfe_output);
+    pfe_run(pfe_input, pfe_output);
     assert(pfe_output.size() == MAX_VOXELS * RPN_INPUT_NUM_CHANNELS);
     scatter(pfe_output, voxel_coords, num_pillars, bev_image);
 }
