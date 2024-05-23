@@ -2,6 +2,7 @@
 #include "params.h"
 #include "pcl.h"
 #include "pre.h"
+#include "rpn.h"
 #include "utils.h"
 #include <cmath>
 #include <glob.h>
@@ -212,6 +213,7 @@ TEST(VoxelValueTest, BEVValueTest) {
                                (grid_y * GRID_X_SIZE) + grid_x);
             EXPECT_NEAR(bev_image[elem], rpn_input_snapshot[elem], _EPSILON);
         }
+
         std::cout << "Test Finish : " << pcd_file << std::endl;
     }
 }

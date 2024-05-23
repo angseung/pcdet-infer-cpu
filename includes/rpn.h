@@ -14,8 +14,9 @@
 
 namespace vueron {
 
-void rpn_run(const std::vector<float> &rpn_input,
-             std::vector<float> &rpn_output) {
+void rpn_run(const std::vector<float> &rpn_input
+             //  std::vector<float> &rpn_output
+) {
     Ort::Env env(ORT_LOGGING_LEVEL_WARNING, "test");
     Ort::SessionOptions session_options;
     Ort::Session session(env, RPN_PATH, session_options);
@@ -38,21 +39,32 @@ void rpn_run(const std::vector<float> &rpn_input,
         input_node_dims.data(), 3);
     assert(input_tensor.IsTensor());
 
-    std::vector<const char *> input_node_names = {"voxels"};
+    std::vector<const char *> input_node_names;
     std::vector<const char *> output_node_names;
 
+    size_t num_input_nodes = session.GetInputCount();
+    // std::vector<std::string> inputNames;
+    for (size_t i = 0; i < num_input_nodes; ++i) {
+        Ort::AllocatedStringPtr name =
+            session.GetInputNameAllocated(i, allocator);
+        std::cout << "input: " << name << std::endl;
+        input_node_names.push_back(name.get());
+    }
+
     size_t num_output_nodes = session.GetOutputCount();
-    std::vector<std::string> outputNames;
+    // std::vector<std::string> outputNames;
     for (size_t i = 0; i < num_output_nodes; ++i) {
-        std::string name = session.GetOutputNameAllocated(i, allocator);
+        Ort::AllocatedStringPtr name =
+            session.GetOutputNameAllocated(i, allocator);
         std::cout << "output: " << name << std::endl;
-        outputNames.push_back(name);
+        output_node_names.push_back(name.get());
     }
 
     // score model & input tensor, get back output tensor
     auto output_tensors =
         session.Run(Ort::RunOptions{nullptr}, input_node_names.data(),
-                    &input_tensor, 1, output_node_names.data(), 1);
+                    &input_tensor, input_node_names.size(),
+                    output_node_names.data(), output_node_names.size());
     assert(output_tensors.size() == 1 && output_tensors.front().IsTensor());
 
     // Get pointer to output tensor float values
@@ -72,10 +84,10 @@ void rpn_run(const std::vector<float> &rpn_input,
     assert(output_dims[1] == RPN_INPUT_NUM_CHANNELS);
 
     // Resize the output vector to fit the output tensor data
-    rpn_output.resize(output_size);
+    // rpn_output.resize(output_size);
 
     // Copy the output tensor data to the output vector
-    std::copy(floatarr, floatarr + output_size, rpn_output.begin());
+    // std::copy(floatarr, floatarr + output_size, rpn_output.begin());
 #ifdef _DEBUG
     std::cout << "INFERENCE DONE." << std::endl;
 #endif
