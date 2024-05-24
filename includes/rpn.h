@@ -26,8 +26,8 @@ void rpn_run(const std::vector<float> &rpn_input
 
     Ort::AllocatorWithDefaultOptions allocator;
 
-    std::vector<int64_t> input_node_dims = {GRID_Y_SIZE, GRID_X_SIZE,
-                                            RPN_INPUT_NUM_CHANNELS};
+    std::vector<int64_t> input_node_dims = {1, RPN_INPUT_NUM_CHANNELS,
+                                            GRID_Y_SIZE, GRID_X_SIZE};
     size_t input_tensor_size =
         GRID_Y_SIZE * GRID_X_SIZE * RPN_INPUT_NUM_CHANNELS;
 
@@ -36,28 +36,25 @@ void rpn_run(const std::vector<float> &rpn_input
         Ort::MemoryInfo::CreateCpu(OrtArenaAllocator, OrtMemTypeDefault);
     auto input_tensor = Ort::Value::CreateTensor<float>(
         memory_info, (float *)rpn_input.data(), input_tensor_size,
-        input_node_dims.data(), 3);
+        input_node_dims.data(), input_node_dims.size());
     assert(input_tensor.IsTensor());
 
     std::vector<const char *> input_node_names;
     std::vector<const char *> output_node_names;
 
     size_t num_input_nodes = session.GetInputCount();
-    // std::vector<std::string> inputNames;
     for (size_t i = 0; i < num_input_nodes; ++i) {
-        Ort::AllocatedStringPtr name =
-            session.GetInputNameAllocated(i, allocator);
-        std::cout << "input: " << name << std::endl;
-        input_node_names.push_back(name.get());
+        auto name = session.GetInputNameAllocated(i, allocator);
+        std::cout << "input: " << name.get() << std::endl;
+        input_node_names.push_back(strdup(name.get()));
     }
+    assert(input_node_names.size() == 1);
 
     size_t num_output_nodes = session.GetOutputCount();
-    // std::vector<std::string> outputNames;
     for (size_t i = 0; i < num_output_nodes; ++i) {
-        Ort::AllocatedStringPtr name =
-            session.GetOutputNameAllocated(i, allocator);
-        std::cout << "output: " << name << std::endl;
-        output_node_names.push_back(name.get());
+        auto name = session.GetOutputNameAllocated(i, allocator);
+        std::cout << "output: " << name.get() << std::endl;
+        output_node_names.push_back(strdup(name.get()));
     }
 
     // score model & input tensor, get back output tensor
@@ -65,7 +62,29 @@ void rpn_run(const std::vector<float> &rpn_input
         session.Run(Ort::RunOptions{nullptr}, input_node_names.data(),
                     &input_tensor, input_node_names.size(),
                     output_node_names.data(), output_node_names.size());
-    assert(output_tensors.size() == 1 && output_tensors.front().IsTensor());
+    assert(output_tensors.front().IsTensor());
+
+    // Convert output tensors to std::vector
+    std::vector<std::vector<float>> output_data;
+    output_data.reserve(num_output_nodes);
+
+    for (size_t i = 0; i < num_output_nodes; ++i) {
+        float *float_array;
+        size_t num_elements;
+
+        // Get tensor shape and size
+        Ort::TypeInfo type_info = output_tensors[i].GetTensorTypeAndShapeInfo();
+        auto tensor_shape = type_info.GetShape();
+        num_elements = 1;
+        for (auto dim : tensor_shape) {
+            num_elements *= dim;
+        }
+
+        // Extract tensor data
+        float_array = output_tensors[i].GetTensorMutableData<float>();
+        std::vector<float> tensor_data(float_array, float_array + num_elements);
+        output_data.push_back(tensor_data);
+    }
 
     // Get pointer to output tensor float values
     // Get the first (and assumed to be only) output tensor
