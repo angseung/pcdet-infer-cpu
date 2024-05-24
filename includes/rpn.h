@@ -14,9 +14,8 @@
 
 namespace vueron {
 
-void rpn_run(const std::vector<float> &rpn_input
-             //  std::vector<float> &rpn_output
-) {
+void rpn_run(const std::vector<float> &rpn_input,
+             std::vector<std::vector<float>> &rpn_output) {
     Ort::Env env(ORT_LOGGING_LEVEL_WARNING, "test");
     Ort::SessionOptions session_options;
     Ort::Session session(env, RPN_PATH, session_options);
@@ -26,10 +25,9 @@ void rpn_run(const std::vector<float> &rpn_input
 
     Ort::AllocatorWithDefaultOptions allocator;
 
-    std::vector<int64_t> input_node_dims = {1, RPN_INPUT_NUM_CHANNELS,
-                                            GRID_Y_SIZE, GRID_X_SIZE};
-    size_t input_tensor_size =
-        GRID_Y_SIZE * GRID_X_SIZE * RPN_INPUT_NUM_CHANNELS;
+    std::vector<int64_t> input_node_dims = {1, NUM_FEATURE_SCATTER, GRID_Y_SIZE,
+                                            GRID_X_SIZE};
+    size_t input_tensor_size = GRID_Y_SIZE * GRID_X_SIZE * NUM_FEATURE_SCATTER;
 
     // create input tensor object from data values
     auto memory_info =
@@ -53,7 +51,9 @@ void rpn_run(const std::vector<float> &rpn_input
     size_t num_output_nodes = session.GetOutputCount();
     for (size_t i = 0; i < num_output_nodes; ++i) {
         auto name = session.GetOutputNameAllocated(i, allocator);
+#ifdef _DEBUG
         std::cout << "output: " << name.get() << std::endl;
+#endif
         output_node_names.push_back(strdup(name.get()));
     }
 
@@ -65,50 +65,30 @@ void rpn_run(const std::vector<float> &rpn_input
     assert(output_tensors.front().IsTensor());
 
     // Convert output tensors to std::vector
-    std::vector<std::vector<float>> output_data;
-    output_data.reserve(num_output_nodes);
+    rpn_output.reserve(num_output_nodes);
 
     for (size_t i = 0; i < num_output_nodes; ++i) {
         float *float_array;
         size_t num_elements;
 
         // Get tensor shape and size
-        Ort::TypeInfo type_info = output_tensors[i].GetTensorTypeAndShapeInfo();
+        auto type_info = output_tensors[i].GetTensorTypeAndShapeInfo();
         auto tensor_shape = type_info.GetShape();
         num_elements = 1;
+
+        // Get tensor data size
         for (auto dim : tensor_shape) {
             num_elements *= dim;
         }
+        assert(num_elements % (GRID_X_SIZE * GRID_Y_SIZE / 4) == 0);
 
         // Extract tensor data
         float_array = output_tensors[i].GetTensorMutableData<float>();
         std::vector<float> tensor_data(float_array, float_array + num_elements);
-        output_data.push_back(tensor_data);
+        rpn_output.push_back(tensor_data);
     }
-
-    // Get pointer to output tensor float values
-    // Get the first (and assumed to be only) output tensor
-    Ort::Value &output_tensor = output_tensors.front();
-
-    // Get the shape of the output tensor
-    auto output_tensor_info = output_tensor.GetTensorTypeAndShapeInfo();
-    auto output_dims = output_tensor_info.GetShape();
-    auto output_dims_count = output_tensor_info.GetDimensionsCount();
-    size_t output_size = output_tensor_info.GetElementCount();
-    float *floatarr = output_tensor.GetTensorMutableData<float>();
-
-    assert(output_size == MAX_VOXELS * RPN_INPUT_NUM_CHANNELS);
-    assert(output_dims.size() == output_dims_count && output_dims_count == 2);
-    assert(output_dims[0] == MAX_VOXELS);
-    assert(output_dims[1] == RPN_INPUT_NUM_CHANNELS);
-
-    // Resize the output vector to fit the output tensor data
-    // rpn_output.resize(output_size);
-
-    // Copy the output tensor data to the output vector
-    // std::copy(floatarr, floatarr + output_size, rpn_output.begin());
 #ifdef _DEBUG
-    std::cout << "INFERENCE DONE." << std::endl;
+    std::cout << "RPN INFERENCE DONE." << std::endl;
 #endif
 }
 } // namespace vueron

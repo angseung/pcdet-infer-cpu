@@ -37,11 +37,12 @@ TEST(RPNTest, RPNShapeTest) {
         std::vector<float> pfe_input(MAX_VOXELS * MAX_NUM_POINTS_PER_PILLAR *
                                          FEATURE_NUM,
                                      0.0f); // input of pfe_run()
-        std::vector<float> pfe_output(MAX_VOXELS * RPN_INPUT_NUM_CHANNELS,
+        std::vector<float> pfe_output(MAX_VOXELS * NUM_FEATURE_SCATTER,
                                       0.0f); // input of scatter()
         std::vector<float> bev_image(GRID_Y_SIZE * GRID_X_SIZE *
-                                         RPN_INPUT_NUM_CHANNELS,
+                                         NUM_FEATURE_SCATTER,
                                      0.0f); // input of RPN
+        std::vector<std::vector<float>> rpn_output;
         vueron::voxelization(bev_pillar, (float *)points.data(), points_buf_len,
                              point_stride);
         size_t num_pillars = vueron::point_decoration(
@@ -65,7 +66,7 @@ TEST(RPNTest, RPNShapeTest) {
         EXPECT_FALSE(remainder_sum == 0.0f);
 
         vueron::pfe_run(pfe_input, pfe_output);
-        EXPECT_EQ(pfe_output.size(), MAX_VOXELS * RPN_INPUT_NUM_CHANNELS);
+        EXPECT_EQ(pfe_output.size(), MAX_VOXELS * NUM_FEATURE_SCATTER);
 
         vueron::scatter(pfe_output, voxel_coords, num_pillars, bev_image);
 
@@ -75,16 +76,17 @@ TEST(RPNTest, RPNShapeTest) {
         std::vector<float> rpn_input_snapshot = raw_bev_features.data;
         EXPECT_EQ(rpn_input_snapshot.size(), bev_image.size());
 
-        for (size_t elem = 0; elem < bev_image.size(); elem++) {
-            size_t grid_x = elem % GRID_X_SIZE;
-            size_t tmp = (elem - grid_x) / GRID_X_SIZE;
-            size_t grid_y = tmp % GRID_Y_SIZE;
-            size_t feat_idx = tmp / GRID_Y_SIZE;
-            assert(elem == (feat_idx * GRID_X_SIZE * GRID_Y_SIZE) +
-                               (grid_y * GRID_X_SIZE) + grid_x);
-            EXPECT_NEAR(bev_image[elem], rpn_input_snapshot[elem], _EPSILON);
+        vueron::rpn_run(bev_image, rpn_output);
+        std::vector<size_t> head_output_channels = {
+            CLASS_NUM, 3, 2, 1, 2, 1}; // {hm, dim, center, center_z, rot, iou}
+        size_t head_dim = GRID_X_SIZE * GRID_Y_SIZE / 4;
+
+        for (size_t j = 0; j < rpn_output.size(); j++) {
+            size_t expected_size = head_dim * head_output_channels[j];
+            std::vector<float> curr_head_output = rpn_output[j];
+
+            EXPECT_EQ(expected_size, curr_head_output.size());
         }
-        vueron::rpn_run(bev_image);
 
         std::cout << "Test Finish : " << pcd_file << std::endl;
     }

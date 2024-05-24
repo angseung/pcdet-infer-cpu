@@ -12,7 +12,7 @@
 #define MAX_NUM_POINTS_PER_PILLAR 20
 #define MAX_VOXELS 25000
 #define FEATURE_NUM 10
-#define RPN_INPUT_NUM_CHANNELS 64
+#define NUM_FEATURE_SCATTER 64
 #define ZERO_INTENSITY
 
 #define MIN_X_RANGE 0.0f
@@ -25,5 +25,8 @@
 #define VOXEL_X_SIZE 0.32f
 #define VOXEL_Y_SIZE 0.32f
 #define VOXEL_Z_SIZE 6.0f
+
+// Params for Poseprocessing
+#define CLASS_NUM 3
 
 #endif // PARAMS_H
