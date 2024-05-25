@@ -65,7 +65,7 @@ TEST(VoxelSnapshotTest, VoxelShapeTest) {
         EXPECT_EQ(voxel_num_points.size(), voxel_coord.size() / 2);
         EXPECT_EQ(bev_features_shape.size(), 3);
         EXPECT_EQ(bev_features.size(),
-                  GRID_X_SIZE * GRID_Y_SIZE * RPN_INPUT_NUM_CHANNELS);
+                  GRID_X_SIZE * GRID_Y_SIZE * NUM_FEATURE_SCATTER);
     }
 }
 
@@ -95,11 +95,11 @@ TEST(VoxelSnapshotTest, PFEShapeTest) {
         std::vector<size_t> voxel_num_points;
         std::vector<float> pfe_input(MAX_VOXELS * MAX_NUM_POINTS_PER_PILLAR *
                                          FEATURE_NUM,
-                                     0.0f); // input of run()
-        std::vector<float> pfe_output(MAX_VOXELS * RPN_INPUT_NUM_CHANNELS,
+                                     0.0f); // input of pfe_run()
+        std::vector<float> pfe_output(MAX_VOXELS * NUM_FEATURE_SCATTER,
                                       0.0f); // input of scatter()
-        vueron::run(pfe_input, pfe_output);
-        EXPECT_EQ(pfe_output.size(), MAX_VOXELS * RPN_INPUT_NUM_CHANNELS);
+        vueron::pfe_run(pfe_input, pfe_output);
+        EXPECT_EQ(pfe_output.size(), MAX_VOXELS * NUM_FEATURE_SCATTER);
         std::cout << "Test Finish : " << pcd_file << std::endl;
     }
 }

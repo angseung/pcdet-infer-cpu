@@ -1,6 +1,6 @@
 # src/CMakeLists.txt
 
-add_library(pcdet STATIC pcl.cpp snapshot.cpp pre.cpp)
+add_library(pcdet STATIC pcl.cpp snapshot.cpp pre.cpp rpn.cpp)
 
 find_package(PCL 1.8 REQUIRED)
 include_directories(${PCL_INCLUDE_DIRS})

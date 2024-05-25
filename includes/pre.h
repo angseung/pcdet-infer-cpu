@@ -194,7 +194,8 @@ size_t point_decoration(const std::vector<Pillar> &bev_pillar,
     return num_pillars;
 }
 
-void run(const std::vector<float> &pfe_input, std::vector<float> &pfe_output) {
+void pfe_run(const std::vector<float> &pfe_input,
+             std::vector<float> &pfe_output) {
     Ort::Env env(ORT_LOGGING_LEVEL_WARNING, "test");
     Ort::SessionOptions session_options;
     Ort::Session session(env, PFE_PATH, session_options);
@@ -235,10 +236,10 @@ void run(const std::vector<float> &pfe_input, std::vector<float> &pfe_output) {
     size_t output_size = output_tensor_info.GetElementCount();
     float *floatarr = output_tensor.GetTensorMutableData<float>();
 
-    assert(output_size == MAX_VOXELS * RPN_INPUT_NUM_CHANNELS);
+    assert(output_size == MAX_VOXELS * NUM_FEATURE_SCATTER);
     assert(output_dims.size() == output_dims_count && output_dims_count == 2);
     assert(output_dims[0] == MAX_VOXELS);
-    assert(output_dims[1] == RPN_INPUT_NUM_CHANNELS);
+    assert(output_dims[1] == NUM_FEATURE_SCATTER);
 
     // Resize the output vector to fit the output tensor data
     pfe_output.resize(output_size);
@@ -246,7 +247,7 @@ void run(const std::vector<float> &pfe_input, std::vector<float> &pfe_output) {
     // Copy the output tensor data to the output vector
     std::copy(floatarr, floatarr + output_size, pfe_output.begin());
 #ifdef _DEBUG
-    std::cout << "INFERENCE DONE." << std::endl;
+    std::cout << " PFE INFERENCE DONE." << std::endl;
 #endif
 }
 
@@ -255,23 +256,22 @@ void scatter(const std::vector<float> &pfe_output,
              const std::vector<size_t> &voxel_coords,
              //  const std::vector<size_t> &voxel_num_points,
              const size_t num_pillars, std::vector<float> &rpn_input) {
-    assert(rpn_input.size() ==
-           GRID_Y_SIZE * GRID_X_SIZE * RPN_INPUT_NUM_CHANNELS);
-    assert(pfe_output.size() == MAX_VOXELS * RPN_INPUT_NUM_CHANNELS);
+    assert(rpn_input.size() == GRID_Y_SIZE * GRID_X_SIZE * NUM_FEATURE_SCATTER);
+    assert(pfe_output.size() == MAX_VOXELS * NUM_FEATURE_SCATTER);
 
     for (size_t i = 0; i < num_pillars; i++) {
         // voxel_coords : (x, y)
         size_t curr_grid_x = voxel_coords[2 * i];
         size_t curr_grid_y = voxel_coords[2 * i + 1];
-        size_t source_voxel_index = RPN_INPUT_NUM_CHANNELS * i;
-        assert(source_voxel_index < MAX_VOXELS * RPN_INPUT_NUM_CHANNELS);
+        size_t source_voxel_index = NUM_FEATURE_SCATTER * i;
+        assert(source_voxel_index < MAX_VOXELS * NUM_FEATURE_SCATTER);
 
-        for (size_t j = 0; j < RPN_INPUT_NUM_CHANNELS; j++) {
+        for (size_t j = 0; j < NUM_FEATURE_SCATTER; j++) {
             size_t target_voxel_index = (j * GRID_Y_SIZE * GRID_X_SIZE) +
                                         (curr_grid_y * GRID_X_SIZE) +
                                         curr_grid_x;
             assert(target_voxel_index <
-                   GRID_Y_SIZE * GRID_X_SIZE * RPN_INPUT_NUM_CHANNELS);
+                   GRID_Y_SIZE * GRID_X_SIZE * NUM_FEATURE_SCATTER);
             rpn_input[target_voxel_index] = pfe_output[source_voxel_index + j];
         }
     }
@@ -284,19 +284,19 @@ void preprocess(const float *points, size_t points_buf_len,
     std::vector<size_t> voxel_num_points;
     std::vector<float> pfe_input(MAX_VOXELS * MAX_NUM_POINTS_PER_PILLAR *
                                      FEATURE_NUM,
-                                 0.0f); // input of run()
-    std::vector<float> pfe_output(MAX_VOXELS * RPN_INPUT_NUM_CHANNELS,
+                                 0.0f); // input of pfe_run()
+    std::vector<float> pfe_output(MAX_VOXELS * NUM_FEATURE_SCATTER,
                                   0.0f); // input of scatter()
     std::vector<float> bev_image(GRID_Y_SIZE * GRID_X_SIZE *
-                                     RPN_INPUT_NUM_CHANNELS,
+                                     NUM_FEATURE_SCATTER,
                                  0.0f); // input of RPN
     voxelization(bev_pillar, points, points_buf_len, point_stride);
     size_t num_pillars =
         point_decoration(bev_pillar, voxel_coords, voxel_num_points, pfe_input,
                          points, points_buf_len, point_stride);
 
-    run(pfe_input, pfe_output);
-    assert(pfe_output.size() == MAX_VOXELS * RPN_INPUT_NUM_CHANNELS);
+    pfe_run(pfe_input, pfe_output);
+    assert(pfe_output.size() == MAX_VOXELS * NUM_FEATURE_SCATTER);
     scatter(pfe_output, voxel_coords, num_pillars, bev_image);
 }
 

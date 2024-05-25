@@ -2,6 +2,7 @@
 #include "params.h"
 #include "pcl.h"
 #include "pre.h"
+#include "rpn.h"
 #include "utils.h"
 #include <cmath>
 #include <glob.h>
@@ -31,7 +32,7 @@ TEST(VoxelValueTest, ScatterTest) {
         size_t points_buf_len = points.size();
         size_t point_stride = sizeof(float);
         std::vector<float> bev_feature(GRID_Y_SIZE * GRID_X_SIZE *
-                                           RPN_INPUT_NUM_CHANNELS,
+                                           NUM_FEATURE_SCATTER,
                                        0.0f); // input of RPN
 
         // read snapshot file
@@ -104,9 +105,9 @@ TEST(VoxelValueTest, PFERunTest) {
         std::vector<size_t> voxel_num_points;
         std::vector<float> pfe_input(MAX_VOXELS * MAX_NUM_POINTS_PER_PILLAR *
                                          FEATURE_NUM,
-                                     0.0f); // input of run()
+                                     0.0f); // input of pfe_run()
         std::vector<float> bev_feature(GRID_Y_SIZE * GRID_X_SIZE *
-                                           RPN_INPUT_NUM_CHANNELS,
+                                           NUM_FEATURE_SCATTER,
                                        0.0f); // input of RPN
 
         voxelization(bev_pillar, (float *)points.data(), points_buf_len,
@@ -127,11 +128,10 @@ TEST(VoxelValueTest, PFERunTest) {
             snapshot_dir + "/padded_pfe_output.npy";
         auto raw_pfe_output = npy::read_npy<float>(pfe_output_path);
         std::vector<float> pfe_output_snapshot = raw_pfe_output.data;
-        std::vector<float> pfe_output{MAX_VOXELS * RPN_INPUT_NUM_CHANNELS,
-                                      0.0f};
+        std::vector<float> pfe_output{MAX_VOXELS * NUM_FEATURE_SCATTER, 0.0f};
 
-        vueron::run(pfe_input_snapshot, pfe_output);
-        for (size_t j = 0; j < num_pillars * RPN_INPUT_NUM_CHANNELS; j++) {
+        vueron::pfe_run(pfe_input_snapshot, pfe_output);
+        for (size_t j = 0; j < num_pillars * NUM_FEATURE_SCATTER; j++) {
             EXPECT_NEAR(pfe_output[j], pfe_output_snapshot[j], _EPSILON);
         }
         std::cout << "Test Finish : " << pcd_file << std::endl;
@@ -164,11 +164,11 @@ TEST(VoxelValueTest, BEVValueTest) {
         std::vector<size_t> voxel_num_points;
         std::vector<float> pfe_input(MAX_VOXELS * MAX_NUM_POINTS_PER_PILLAR *
                                          FEATURE_NUM,
-                                     0.0f); // input of run()
-        std::vector<float> pfe_output(MAX_VOXELS * RPN_INPUT_NUM_CHANNELS,
+                                     0.0f); // input of pfe_run()
+        std::vector<float> pfe_output(MAX_VOXELS * NUM_FEATURE_SCATTER,
                                       0.0f); // input of scatter()
         std::vector<float> bev_image(GRID_Y_SIZE * GRID_X_SIZE *
-                                         RPN_INPUT_NUM_CHANNELS,
+                                         NUM_FEATURE_SCATTER,
                                      0.0f); // input of RPN
         vueron::voxelization(bev_pillar, (float *)points.data(), points_buf_len,
                              point_stride);
@@ -192,8 +192,8 @@ TEST(VoxelValueTest, BEVValueTest) {
             pfe_input.end(), 0.0f);
         EXPECT_FALSE(remainder_sum == 0.0f);
 
-        vueron::run(pfe_input, pfe_output);
-        EXPECT_EQ(pfe_output.size(), MAX_VOXELS * RPN_INPUT_NUM_CHANNELS);
+        vueron::pfe_run(pfe_input, pfe_output);
+        EXPECT_EQ(pfe_output.size(), MAX_VOXELS * NUM_FEATURE_SCATTER);
 
         vueron::scatter(pfe_output, voxel_coords, num_pillars, bev_image);
 
@@ -212,6 +212,7 @@ TEST(VoxelValueTest, BEVValueTest) {
                                (grid_y * GRID_X_SIZE) + grid_x);
             EXPECT_NEAR(bev_image[elem], rpn_input_snapshot[elem], _EPSILON);
         }
+
         std::cout << "Test Finish : " << pcd_file << std::endl;
     }
 }
