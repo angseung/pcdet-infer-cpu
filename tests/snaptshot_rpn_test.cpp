@@ -1,6 +1,7 @@
 #include "npy.h"
 #include "params.h"
 #include "pcl.h"
+#include "post.h"
 #include "pre.h"
 #include "rpn.h"
 #include "utils.h"
@@ -87,6 +88,8 @@ TEST(RPNTest, RPNShapeTest) {
 
             EXPECT_EQ(expected_size, curr_head_output.size());
         }
+
+        vueron::rectify_score(rpn_output[0], rpn_output[5]);
 
         std::cout << "Test Finish : " << pcd_file << std::endl;
     }
