@@ -90,6 +90,13 @@ TEST(RPNTest, RPNShapeTest) {
         }
 
         vueron::rectify_score(rpn_output[0], rpn_output[5]);
+        vueron::decode_to_boxes(rpn_output);
+
+        std::vector<float> rect_scores(IOU_RECTIFIER);
+        EXPECT_FLOAT_EQ(rect_scores[0], 0.68f);
+        EXPECT_FLOAT_EQ(rect_scores[1], 0.71f);
+        EXPECT_FLOAT_EQ(rect_scores[2], 0.65f);
+        EXPECT_EQ(rect_scores.size(), 3);
 
         std::cout << "Test Finish : " << pcd_file << std::endl;
     }
