@@ -52,17 +52,20 @@ void decode_to_boxes(const std::vector<std::vector<float>> &rpn_output,
         size_t grid_x = idx % FEATURE_X_SIZE;
         size_t grid_y = (idx / FEATURE_X_SIZE) % FEATURE_Y_SIZE;
         size_t label = idx / (FEATURE_Y_SIZE * FEATURE_X_SIZE);
+        assert(grid_x < FEATURE_X_SIZE);
+        assert(grid_y < FEATURE_Y_SIZE);
+        assert(label >= 0 && label < FEATURE_NUM);
 
         box.dx = exponential(rpn_output[1][idx]);
-        box.dy = exponential(
-            rpn_output[1][FEATURE_Y_SIZE * FEATURE_X_SIZE + idx]);
+        box.dy =
+            exponential(rpn_output[1][FEATURE_Y_SIZE * FEATURE_X_SIZE + idx]);
         box.dz = exponential(
             rpn_output[1][2 * FEATURE_Y_SIZE * FEATURE_X_SIZE + idx]);
 
         float cos_rad = rpn_output[4][idx];
-        float sin_rad =
-            rpn_output[4][FEATURE_Y_SIZE * FEATURE_X_SIZE + idx];
+        float sin_rad = rpn_output[4][FEATURE_Y_SIZE * FEATURE_X_SIZE + idx];
         box.heading = atan2(sin_rad, cos_rad);
+        assert(box.heading <= 180.0 / M_PI && box.heading >= -180.0 / M_PI);
 
         box.x = head_stride * VOXEL_X_SIZE * (grid_x + rpn_output[2][idx]) +
                 MIN_X_RANGE;
@@ -78,6 +81,7 @@ void decode_to_boxes(const std::vector<std::vector<float>> &rpn_output,
         scores[j] =
             rectify_score(sigmoid(hm[idx]), curr_iou, rect_scores[label]);
         labels[j] = label + 1;
+        int a = 1;
     }
 }
 
