@@ -50,21 +50,26 @@ void decode_to_boxes(const std::vector<std::vector<float>> &rpn_output,
 #endif
         BndBox box;
         size_t grid_x = idx % FEATURE_X_SIZE;
-        size_t grid_y = (idx / FEATURE_X_SIZE) * FEATURE_Y_SIZE;
+        size_t grid_y = (idx / FEATURE_X_SIZE) % FEATURE_Y_SIZE;
         size_t label = idx / (FEATURE_Y_SIZE * FEATURE_X_SIZE);
 
         box.dx = exponential(rpn_output[1][idx]);
-        box.dy = exponential(rpn_output[1][2 * idx]); // TODO: check index
-        box.dz = exponential(rpn_output[1][3 * idx]); // TODO: check index
+        box.dy = exponential(
+            rpn_output[1][2 * FEATURE_Y_SIZE * FEATURE_X_SIZE + idx]);
+        box.dz = exponential(
+            rpn_output[1][3 * FEATURE_Y_SIZE * FEATURE_X_SIZE + idx]);
 
         float cos_rad = rpn_output[4][idx];
-        float sin_rad = rpn_output[4][2 * idx]; // TODO: check index
+        float sin_rad =
+            rpn_output[4][2 * FEATURE_Y_SIZE * FEATURE_X_SIZE + idx];
         box.heading = atan2(cos_rad, sin_rad);
 
         box.x = head_stride * VOXEL_X_SIZE * (grid_x + rpn_output[2][idx]) +
-                MIN_X_RANGE; // TODO: check index
-        box.y = head_stride * VOXEL_Y_SIZE * (grid_y + rpn_output[2][2 * idx]) +
-                MIN_Y_RANGE; // TODO: check index
+                MIN_X_RANGE;
+        box.y = head_stride * VOXEL_Y_SIZE *
+                    (grid_y +
+                     rpn_output[2][FEATURE_Y_SIZE * FEATURE_X_SIZE + idx]) +
+                MIN_Y_RANGE;
         box.z = rpn_output[3][idx];
 
         float curr_iou = rpn_output[5][idx];
@@ -73,7 +78,6 @@ void decode_to_boxes(const std::vector<std::vector<float>> &rpn_output,
         scores[j] =
             rectify_score(sigmoid(hm[idx]), curr_iou, rect_scores[label]);
         labels[j] = label + 1;
-        int a = 1;
     }
 }
 
