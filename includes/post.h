@@ -77,15 +77,17 @@ void decode_to_boxes(const std::vector<std::vector<float>> &rpn_output,
                 MIN_Y_RANGE;
         box.z = rpn_output[3][idx];
 
-        // append decodes boxes, scores and labels
-        float curr_iou =
-            rpn_output[5][idx]; // rectifying score if model has iou head
+        /*
+        append decodes boxes, scores and labels
+        */
+        float curr_iou = rpn_output[5][idx];
+        // rectifying score if model has iou head
         scores[j] =
             rectify_score(sigmoid(hm[idx]), curr_iou, rect_scores[label]);
 
         boxes[j] = box;
         labels[j] = label + 1;
-        int a = 1;
+        int a = 1; // for break point
     }
 }
 
