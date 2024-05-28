@@ -4,6 +4,7 @@
 #include "post.h"
 #include "pre.h"
 #include "rpn.h"
+#include "type.h"
 #include <cmath>
 #include <glob.h>
 #include <gtest/gtest.h>
@@ -13,9 +14,6 @@
 #define _EPSILON_RPN 5e-3
 #define _EPSILON_HM 1e-4
 #define _EPSILON_DIM 1e-2
-
-float sigmoid(float x) { return 1.0f / (1.0f + log(-x)); }
-float exponential(float x) { return exp(x); }
 
 TEST(RPNTest, RPNShapeTest) {
     std::string folder_path = PCD_PATH;
@@ -33,57 +31,13 @@ TEST(RPNTest, RPNShapeTest) {
         std::string snapshot_dir = snapshot_files[i];
         std::cout << "Testing : " << pcd_file << std::endl;
 
-        // read point from pcd file
-        std::vector<float> points =
-            vueron::readPcdFile(pcd_file, MAX_POINTS_NUM);
-        size_t points_buf_len = points.size();
-        size_t point_stride = sizeof(float);
-        std::vector<vueron::Pillar> bev_pillar(GRID_Y_SIZE * GRID_X_SIZE);
-        std::vector<size_t> voxel_coords; // (x, y)
-        std::vector<size_t> voxel_num_points;
-        std::vector<float> pfe_input(MAX_VOXELS * MAX_NUM_POINTS_PER_PILLAR *
-                                         FEATURE_NUM,
-                                     0.0f); // input of pfe_run()
-        std::vector<float> pfe_output(MAX_VOXELS * NUM_FEATURE_SCATTER,
-                                      0.0f); // input of scatter()
-        std::vector<float> bev_image(GRID_Y_SIZE * GRID_X_SIZE *
-                                         NUM_FEATURE_SCATTER,
-                                     0.0f); // input of RPN
-        std::vector<std::vector<float>> rpn_output;
-        vueron::voxelization(bev_pillar, (float *)points.data(), points_buf_len,
-                             point_stride);
-        size_t num_pillars = vueron::point_decoration(
-            bev_pillar, voxel_coords, voxel_num_points, pfe_input,
-            (float *)points.data(), points_buf_len, point_stride);
-        size_t num_voxels_manual = std::accumulate(voxel_num_points.begin(),
-                                                   voxel_num_points.end(), 0);
-        EXPECT_EQ(num_pillars, voxel_num_points.size());
-
-        // check remainder voxels is zero
-        float sum_of_pfe_input_remainder = std::accumulate(
-            pfe_input.begin() +
-                num_pillars * MAX_NUM_POINTS_PER_PILLAR * FEATURE_NUM,
-            pfe_input.end(), 0.0f);
-        EXPECT_FLOAT_EQ(sum_of_pfe_input_remainder, 0.0f);
-
-        float remainder_sum = std::accumulate(
-            pfe_input.begin() +
-                (num_pillars - 1) * MAX_NUM_POINTS_PER_PILLAR * FEATURE_NUM,
-            pfe_input.end(), 0.0f);
-        EXPECT_FALSE(remainder_sum == 0.0f);
-
-        vueron::pfe_run(pfe_input, pfe_output);
-        EXPECT_EQ(pfe_output.size(), MAX_VOXELS * NUM_FEATURE_SCATTER);
-
-        vueron::scatter(pfe_output, voxel_coords, num_pillars, bev_image);
-
         // read bev_features from snapshot file
         const std::string rpn_input_path = snapshot_dir + "/bev_features.npy";
         auto raw_bev_features = npy::read_npy<float>(rpn_input_path);
         std::vector<float> rpn_input_snapshot = raw_bev_features.data;
-        EXPECT_EQ(rpn_input_snapshot.size(), bev_image.size());
 
-        vueron::rpn_run(bev_image, rpn_output);
+        std::vector<std::vector<float>> rpn_output;
+        vueron::rpn_run(rpn_input_snapshot, rpn_output);
         std::vector<size_t> head_output_channels = {
             CLASS_NUM, 3, 2, 1, 2, 1}; // {hm, dim, center, center_z, rot, iou}
         size_t head_dim = GRID_X_SIZE * GRID_Y_SIZE / 4;
@@ -94,9 +48,10 @@ TEST(RPNTest, RPNShapeTest) {
 
             EXPECT_EQ(expected_size, curr_head_output.size());
         }
-
-        vueron::rectify_score(rpn_output[0], rpn_output[5]);
-        vueron::decode_to_boxes(rpn_output);
+        std::vector<vueron::BndBox> boxes(MAX_BOX_NUM_BEFORE_NMS);
+        std::vector<size_t> labels(MAX_BOX_NUM_BEFORE_NMS);
+        std::vector<float> scores(MAX_BOX_NUM_BEFORE_NMS);
+        vueron::decode_to_boxes(rpn_output, boxes, labels, scores);
 
         std::vector<float> rect_scores(IOU_RECTIFIER);
         EXPECT_FLOAT_EQ(rect_scores[0], 0.68f);
@@ -207,8 +162,8 @@ TEST(RPNTest, RPNValueTest) {
         EXPECT_EQ(head_dim * 3, dim_snapshot.size());
 
         for (size_t j = 0; j < dim_snapshot.size(); j++) {
-            EXPECT_NEAR(exponential(dim_snapshot[j]),
-                        exponential(rpn_output[1][j]), _EPSILON_DIM);
+            EXPECT_NEAR(vueron::exponential(dim_snapshot[j]),
+                        vueron::exponential(rpn_output[1][j]), _EPSILON_DIM);
         }
 
         // 4. rot
@@ -238,8 +193,8 @@ TEST(RPNTest, RPNValueTest) {
         EXPECT_EQ(head_dim * CLASS_NUM, hm_snapshot.size());
 
         for (size_t j = 0; j < hm_snapshot.size(); j++) {
-            EXPECT_NEAR(sigmoid(hm_snapshot[j]), sigmoid(rpn_output[0][j]),
-                        _EPSILON_HM);
+            EXPECT_NEAR(vueron::sigmoid(hm_snapshot[j]),
+                        vueron::sigmoid(rpn_output[0][j]), _EPSILON_HM);
         }
 
         std::cout << "Test Finish : " << pcd_file << std::endl;
