@@ -21,11 +21,11 @@ target_link_libraries(
 )
 
 add_executable(
-  rpn_shape_test
+  rpn_test
   snaptshot_rpn_test.cpp
 )
 target_link_libraries(
-  rpn_shape_test
+  rpn_test
   GTest::gtest_main
   pcdet
 )
@@ -33,4 +33,4 @@ target_link_libraries(
 include(GoogleTest)
 gtest_discover_tests(voxel_snapshot_test)
 gtest_discover_tests(preprocess_value_test)
-gtest_discover_tests(rpn_shape_test)
+gtest_discover_tests(rpn_test)

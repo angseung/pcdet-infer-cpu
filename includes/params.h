@@ -28,5 +28,9 @@
 
 // Params for Poseprocessing
 #define CLASS_NUM 3
+#define IOU_RECTIFIER {0.68f, 0.71f, 0.65f}
+#define MAX_BOX_NUM_BEFORE_NMS 1000
+#define MAX_BOX_NUM_AFTER_NMS 83
+#define IOU_THRESH 0.2
 
 #endif // PARAMS_H
