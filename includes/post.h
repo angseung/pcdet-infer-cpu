@@ -12,11 +12,12 @@
 
 namespace vueron {
 
-float clip(float val, float min_val, float max_val) {
+inline float clip(float val, float min_val, float max_val) {
     return fminf(fmaxf(val, min_val), max_val);
 }
-float sigmoid(float x) { return 1.0f / (1.0f + log(-x)); }
-float exponential(float x) { return exp(x); }
+inline float sigmoid(float x) { return 1.0f / (1.0f + log(-x)); }
+
+inline float exponential(float x) { return exp(x); }
 
 inline float rectify_score(float score, float iou, float alpha) {
     float new_iou = (iou + 1.0f) * 0.5f;
