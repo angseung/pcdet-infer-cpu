@@ -55,9 +55,9 @@ void decode_to_boxes(const std::vector<std::vector<float>> &rpn_output,
 
         box.dx = exponential(rpn_output[1][idx]);
         box.dy = exponential(
-            rpn_output[1][2 * FEATURE_Y_SIZE * FEATURE_X_SIZE + idx]);
+            rpn_output[1][FEATURE_Y_SIZE * FEATURE_X_SIZE + idx]);
         box.dz = exponential(
-            rpn_output[1][3 * FEATURE_Y_SIZE * FEATURE_X_SIZE + idx]);
+            rpn_output[1][2 * FEATURE_Y_SIZE * FEATURE_X_SIZE + idx]);
 
         float cos_rad = rpn_output[4][idx];
         float sin_rad =
