@@ -61,8 +61,8 @@ void decode_to_boxes(const std::vector<std::vector<float>> &rpn_output,
 
         float cos_rad = rpn_output[4][idx];
         float sin_rad =
-            rpn_output[4][2 * FEATURE_Y_SIZE * FEATURE_X_SIZE + idx];
-        box.heading = atan2(cos_rad, sin_rad);
+            rpn_output[4][FEATURE_Y_SIZE * FEATURE_X_SIZE + idx];
+        box.heading = atan2(sin_rad, cos_rad);
 
         box.x = head_stride * VOXEL_X_SIZE * (grid_x + rpn_output[2][idx]) +
                 MIN_X_RANGE;
