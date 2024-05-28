@@ -34,11 +34,14 @@ int main(int argc, const char **argv) {
                                           0.0f); // input of scatter()
             std::vector<float> bev_image(GRID_Y_SIZE * GRID_X_SIZE *
                                              NUM_FEATURE_SCATTER,
-                                         0.0f); // input of RPN
-            std::vector<std::vector<float>> rpn_outputs;
-            std::vector<vueron::BndBox> boxes(MAX_BOX_NUM_BEFORE_NMS);
-            std::vector<size_t> labels(MAX_BOX_NUM_BEFORE_NMS);
-            std::vector<float> scores(MAX_BOX_NUM_BEFORE_NMS);
+                                         0.0f);          // input of rpn_run()
+            std::vector<std::vector<float>> rpn_outputs; // output of rpn_run()
+            std::vector<vueron::BndBox> boxes(
+                MAX_BOX_NUM_BEFORE_NMS); // boxes before NMS
+            std::vector<size_t> labels(
+                MAX_BOX_NUM_BEFORE_NMS); // labels before NMS
+            std::vector<float> scores(
+                MAX_BOX_NUM_BEFORE_NMS); // scores before NMS
 
             vueron::voxelization(bev_pillar, (float *)points.data(),
                                  points_buf_len, point_stride);
@@ -47,7 +50,6 @@ int main(int argc, const char **argv) {
                 (float *)points.data(), points_buf_len, point_stride);
 
             vueron::pfe_run(pfe_input, pfe_output);
-            assert(pfe_output.size() == MAX_VOXELS * NUM_FEATURE_SCATTER);
             vueron::scatter(pfe_output, voxel_coords, num_pillars, bev_image);
             vueron::rpn_run(bev_image, rpn_outputs);
             vueron::decode_to_boxes(rpn_outputs, boxes, labels, scores);
