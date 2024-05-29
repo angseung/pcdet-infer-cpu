@@ -15,9 +15,7 @@ namespace vueron {
 inline float clip(float val, float min_val, float max_val) {
     return fminf(fmaxf(val, min_val), max_val);
 }
-inline float sigmoid(float x) { return 1.0f / (1.0f + log(-x)); }
-
-inline float exponential(float x) { return exp(x); }
+inline float sigmoid(float x) { return 1.0f / (1.0f + exp(-x)); }
 
 inline float rectify_score(float score, float iou, float alpha) {
     float new_iou = (iou + 1.0f) * 0.5f;
@@ -55,7 +53,10 @@ void decode_to_boxes(const std::vector<std::vector<float>> &rpn_output,
 
     for (size_t j = 0; j < indices.size(); j++) {
         size_t channel_offset = FEATURE_X_SIZE * FEATURE_Y_SIZE;
-        size_t idx = indices[j] % channel_offset;
+        size_t idx = indices[j];
+        // size_t idx = indices[j] % channel_offset;
+        std::cout << indices[j] << " : " << sigmoid(hm[indices[j]])
+                  << std::endl;
 #ifdef _DEBUG
         std::cout << indices[j] << " : " << sigmoid(hm[indices[j]])
                   << std::endl;
@@ -69,9 +70,9 @@ void decode_to_boxes(const std::vector<std::vector<float>> &rpn_output,
         assert(label >= 0 && label < FEATURE_NUM);
 
         // calc box dimensions
-        box.dx = exponential(rpn_output[1][idx]);
-        box.dy = exponential(rpn_output[1][channel_offset + idx]);
-        box.dz = exponential(rpn_output[1][2 * channel_offset + idx]);
+        box.dx = exp(rpn_output[1][idx]);
+        box.dy = exp(rpn_output[1][channel_offset + idx]);
+        box.dz = exp(rpn_output[1][2 * channel_offset + idx]);
 
         // calc heading angle in radian
         float cos_rad = rpn_output[4][idx];

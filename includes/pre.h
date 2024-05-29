@@ -253,9 +253,8 @@ void pfe_run(const std::vector<float> &pfe_input,
 
 // TODO: Implement here
 void scatter(const std::vector<float> &pfe_output,
-             const std::vector<size_t> &voxel_coords,
-             //  const std::vector<size_t> &voxel_num_points,
-             const size_t num_pillars, std::vector<float> &rpn_input) {
+             const std::vector<size_t> &voxel_coords, const size_t num_pillars,
+             std::vector<float> &rpn_input) {
     assert(rpn_input.size() == GRID_Y_SIZE * GRID_X_SIZE * NUM_FEATURE_SCATTER);
     assert(pfe_output.size() == MAX_VOXELS * NUM_FEATURE_SCATTER);
 
