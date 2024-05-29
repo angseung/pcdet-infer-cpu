@@ -1,10 +1,8 @@
 #include "config.h"
+#include "model.h"
 #include "npy.h"
 #include "params.h"
 #include "pcl.h"
-#include "post.h"
-#include "pre.h"
-#include "rpn.h"
 #include <cstdlib>
 #include <draw/draw.h>
 #include <glob.h>
@@ -49,18 +47,6 @@ int main(int argc, const char **argv) {
         /*
             Buffers for inferece
         */
-        std::vector<vueron::Pillar> bev_pillar(GRID_Y_SIZE * GRID_X_SIZE);
-        std::vector<size_t> voxel_coords; // (x, y)
-        std::vector<size_t> voxel_num_points;
-        std::vector<float> pfe_input(MAX_VOXELS * MAX_NUM_POINTS_PER_PILLAR *
-                                         FEATURE_NUM,
-                                     0.0f); // input of pfe_run()
-        std::vector<float> pfe_output(MAX_VOXELS * NUM_FEATURE_SCATTER,
-                                      0.0f); // input of scatter()
-        std::vector<float> bev_image(GRID_Y_SIZE * GRID_X_SIZE *
-                                         NUM_FEATURE_SCATTER,
-                                     0.0f);          // input of rpn_run()
-        std::vector<std::vector<float>> rpn_outputs; // output of rpn_run()
         std::vector<vueron::BndBox> boxes(
             MAX_BOX_NUM_BEFORE_NMS);                        // boxes before NMS
         std::vector<size_t> labels(MAX_BOX_NUM_BEFORE_NMS); // labels before NMS
@@ -69,16 +55,8 @@ int main(int argc, const char **argv) {
         /*
             Do inference
         */
-        vueron::voxelization(bev_pillar, points_data, points_buf_len,
-                             point_stride);
-        size_t num_pillars = vueron::point_decoration(
-            bev_pillar, voxel_coords, voxel_num_points, pfe_input, points_data,
-            points_buf_len, point_stride);
-
-        vueron::pfe_run(pfe_input, pfe_output);
-        vueron::scatter(pfe_output, voxel_coords, num_pillars, bev_image);
-        vueron::rpn_run(bev_image, rpn_outputs);
-        vueron::decode_to_boxes(rpn_outputs, boxes, labels, scores);
+        vueron::run_model(points_data, points_buf_len, point_stride, boxes,
+                          labels, scores);
 
 #ifdef FROM_SNAPSHOT
         /*
