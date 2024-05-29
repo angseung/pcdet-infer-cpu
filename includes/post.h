@@ -55,14 +55,14 @@ void decode_to_boxes(const std::vector<std::vector<float>> &rpn_output,
         size_t channel_offset = FEATURE_X_SIZE * FEATURE_Y_SIZE;
         size_t idx = indices[j];
         // size_t idx = indices[j] % channel_offset;
-        std::cout << indices[j] << " : " << hm[idx] << std::endl;
 #ifdef _DEBUG
         std::cout << indices[j] << " : " << sigmoid(hm[idx]) << std::endl;
 #endif
         BndBox box;
+        size_t label = idx / channel_offset;
+        idx = idx % (FEATURE_X_SIZE * FEATURE_Y_SIZE);
         size_t grid_x = idx % FEATURE_X_SIZE;
         size_t grid_y = (idx / FEATURE_X_SIZE) % FEATURE_Y_SIZE;
-        size_t label = idx / channel_offset;
         assert(grid_x < FEATURE_X_SIZE);
         assert(grid_y < FEATURE_Y_SIZE);
         assert(label >= 0 && label < FEATURE_NUM);
@@ -76,6 +76,7 @@ void decode_to_boxes(const std::vector<std::vector<float>> &rpn_output,
         float cos_rad = rpn_output[4][idx];
         float sin_rad = rpn_output[4][channel_offset + idx];
         box.heading = atan2(sin_rad, cos_rad);
+        assert(idx < FEATURE_X_SIZE * FEATURE_Y_SIZE);
         assert(box.heading <= 180.0 / M_PI && box.heading >= -180.0 / M_PI);
 
         // calc center point
