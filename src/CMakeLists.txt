@@ -1,6 +1,6 @@
 # src/CMakeLists.txt
 
-add_library(pcdet STATIC pcl.cpp snapshot.cpp pre.cpp rpn.cpp post.cpp)
+add_library(pcdet STATIC pcl.cpp snapshot.cpp pre.cpp rpn.cpp post.cpp model.cpp)
 
 find_package(PCL 1.8 REQUIRED)
 include_directories(${PCL_INCLUDE_DIRS})
@@ -33,3 +33,13 @@ target_include_directories(pcdet PUBLIC
     ${ONNXRUNTIME_ROOTDIR}/include
 )
 target_link_libraries(pcdet PUBLIC ${PCL_LIBRARIES} onnx::runtime)
+
+add_subdirectory(draw)
+add_executable(demo demo.cpp)
+target_include_directories(demo PUBLIC ${PROJECT_SOURCE_DIR}/src ${PROJECT_SOURCE_DIR}/includes)
+target_link_libraries(
+    demo
+    pcdet
+    draw 
+    ${PCL_LIBRARIES}
+)

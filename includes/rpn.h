@@ -43,7 +43,9 @@ void rpn_run(const std::vector<float> &rpn_input,
     size_t num_input_nodes = session.GetInputCount();
     for (size_t i = 0; i < num_input_nodes; ++i) {
         auto name = session.GetInputNameAllocated(i, allocator);
+#ifdef _DEBUG
         std::cout << "input: " << name.get() << std::endl;
+#endif
         input_node_names.push_back(strdup(name.get()));
     }
     assert(input_node_names.size() == 1);

@@ -30,7 +30,18 @@ target_link_libraries(
   pcdet
 )
 
+add_executable(
+  integration_test
+  integration_test.cpp
+)
+target_link_libraries(
+  integration_test
+  GTest::gtest_main
+  pcdet
+)
+
 include(GoogleTest)
 gtest_discover_tests(voxel_snapshot_test)
 gtest_discover_tests(preprocess_value_test)
 gtest_discover_tests(rpn_test)
+gtest_discover_tests(integration_test)
