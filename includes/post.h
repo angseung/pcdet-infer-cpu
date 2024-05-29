@@ -38,6 +38,7 @@ void decode_to_boxes(const std::vector<std::vector<float>> &rpn_output,
 
     std::vector<size_t> indices(MAX_BOX_NUM_BEFORE_NMS);
     std::vector<float> rect_scores(IOU_RECTIFIER);
+    assert(rect_scores.size() == 3);
     std::iota(indices.begin(), indices.end(), 0);
     std::partial_sort(indices.begin(), indices.begin() + MAX_BOX_NUM_BEFORE_NMS,
                       indices.end(),
@@ -78,7 +79,7 @@ void decode_to_boxes(const std::vector<std::vector<float>> &rpn_output,
         box.z = rpn_output[3][idx];
 
         /*
-        append decodes boxes, scores and labels
+        append decoded boxes, scores, and labels
         */
         float curr_iou = rpn_output[5][idx];
         // rectifying score if model has iou head
