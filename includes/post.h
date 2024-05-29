@@ -51,10 +51,9 @@ void decode_to_boxes(const std::vector<std::vector<float>> &rpn_output,
                       indices.end(),
                       [&](size_t A, size_t B) { return hm[A] > hm[B]; });
 
-    for (size_t j = 0; j < indices.size(); j++) {
+    for (size_t j = 0; j < MAX_BOX_NUM_BEFORE_NMS; j++) {
         size_t channel_offset = FEATURE_X_SIZE * FEATURE_Y_SIZE;
         size_t idx = indices[j];
-        // size_t idx = indices[j] % channel_offset;
 #ifdef _DEBUG
         std::cout << indices[j] << " : " << sigmoid(hm[idx]) << std::endl;
 #endif
@@ -94,10 +93,9 @@ void decode_to_boxes(const std::vector<std::vector<float>> &rpn_output,
         // rectifying score if model has iou head
         scores[j] =
             rectify_score(sigmoid(hm[idx]), curr_iou, rect_scores[label]);
-
         boxes[j] = box;
         labels[j] = label + 1;
-        int a = 1; // for break point
+        // int a = 1; // for break point
     }
 }
 

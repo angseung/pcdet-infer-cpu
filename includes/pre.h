@@ -251,9 +251,8 @@ void pfe_run(const std::vector<float> &pfe_input,
 #endif
 }
 
-// TODO: Implement here
 void scatter(const std::vector<float> &pfe_output,
-             const std::vector<size_t> &voxel_coords, const size_t num_pillars,
+             const std::vector<size_t> &voxel_coords, size_t num_pillars,
              std::vector<float> &rpn_input) {
     assert(rpn_input.size() == GRID_Y_SIZE * GRID_X_SIZE * NUM_FEATURE_SCATTER);
     assert(pfe_output.size() == MAX_VOXELS * NUM_FEATURE_SCATTER);
@@ -274,29 +273,6 @@ void scatter(const std::vector<float> &pfe_output,
             rpn_input[target_voxel_index] = pfe_output[source_voxel_index + j];
         }
     }
-}
-
-void preprocess(const float *points, size_t points_buf_len,
-                size_t point_stride) {
-    std::vector<Pillar> bev_pillar(GRID_Y_SIZE * GRID_X_SIZE);
-    std::vector<size_t> voxel_coords; // (x, y)
-    std::vector<size_t> voxel_num_points;
-    std::vector<float> pfe_input(MAX_VOXELS * MAX_NUM_POINTS_PER_PILLAR *
-                                     FEATURE_NUM,
-                                 0.0f); // input of pfe_run()
-    std::vector<float> pfe_output(MAX_VOXELS * NUM_FEATURE_SCATTER,
-                                  0.0f); // input of scatter()
-    std::vector<float> bev_image(GRID_Y_SIZE * GRID_X_SIZE *
-                                     NUM_FEATURE_SCATTER,
-                                 0.0f); // input of RPN
-    voxelization(bev_pillar, points, points_buf_len, point_stride);
-    size_t num_pillars =
-        point_decoration(bev_pillar, voxel_coords, voxel_num_points, pfe_input,
-                         points, points_buf_len, point_stride);
-
-    pfe_run(pfe_input, pfe_output);
-    assert(pfe_output.size() == MAX_VOXELS * NUM_FEATURE_SCATTER);
-    scatter(pfe_output, voxel_coords, num_pillars, bev_image);
 }
 
 } // namespace vueron

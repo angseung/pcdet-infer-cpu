@@ -1,11 +1,8 @@
 #include "config.h"
-// #include "model.h"
+#include "model.h"
 #include "npy.h"
 #include "params.h"
 #include "pcl.h"
-#include "post.h"
-#include "pre.h"
-#include "rpn.h"
 #include <cstdlib>
 #include <draw/draw.h>
 #include <glob.h>
@@ -54,37 +51,18 @@ int main(int argc, const char **argv) {
         /*
             Buffers for inferece
         */
-        std::vector<vueron::Pillar> bev_pillar(GRID_Y_SIZE * GRID_X_SIZE);
-        std::vector<size_t> voxel_coords; // (x, y)
-        std::vector<size_t> voxel_num_points;
-        std::vector<float> pfe_input(MAX_VOXELS * MAX_NUM_POINTS_PER_PILLAR *
-                                         FEATURE_NUM,
-                                     0.0f); // input of pfe_run()
-        std::vector<float> pfe_output(MAX_VOXELS * NUM_FEATURE_SCATTER,
-                                      0.0f); // input of scatter()
-        std::vector<float> bev_image(GRID_Y_SIZE * GRID_X_SIZE *
-                                         NUM_FEATURE_SCATTER,
-                                     0.0f); // input of RPN
-        std::vector<std::vector<float>> rpn_outputs;
         std::vector<vueron::BndBox> boxes(
-            MAX_BOX_NUM_BEFORE_NMS);                        // boxes before NMS
-        std::vector<size_t> labels(MAX_BOX_NUM_BEFORE_NMS); // labels before NMS
-        std::vector<float> scores(MAX_BOX_NUM_BEFORE_NMS);  // scores before NMS
+            MAX_BOX_NUM_BEFORE_NMS); // boxes before NMS
+        std::vector<size_t> labels(MAX_BOX_NUM_BEFORE_NMS,
+                                   0); // labels before NMS
+        std::vector<float> scores(MAX_BOX_NUM_BEFORE_NMS,
+                                  0.0f); // scores before NMS
 
         /*
             Do inference
         */
-
-        vueron::voxelization(bev_pillar, points, point_buf_len, point_stride);
-        size_t num_pillars = vueron::point_decoration(
-            bev_pillar, voxel_coords, voxel_num_points, pfe_input, points,
-            point_buf_len, point_stride);
-        vueron::pfe_run(pfe_input, pfe_output);
-        vueron::scatter(pfe_output, voxel_coords, num_pillars, bev_image);
-        vueron::rpn_run(bev_image, rpn_outputs);
-        vueron::decode_to_boxes(rpn_outputs, boxes, labels, scores);
-        // vueron::run_model(points, num_points, point_stride, boxes,
-        //                   labels, scores);
+        vueron::run_model(points, point_buf_len, point_stride, boxes, labels,
+                          scores);
 
 #ifdef FROM_SNAPSHOT
         /*
@@ -124,7 +102,6 @@ int main(int argc, const char **argv) {
             s_boxes[j].heading = boxes_snapshot[7 * j + 6];
         }
 #endif
-
         /*
             Logging
         */
@@ -140,7 +117,7 @@ int main(int argc, const char **argv) {
                   << cyc_cnt << ")" << std::endl;
 
 #ifdef FROM_SNAPSHOT
-        auto image = drawBirdsEyeView(buffer.size() / point_stride, points_data,
+        auto image = drawBirdsEyeView(buffer.size() / point_stride, points,
                                       s_boxes, s_scores, s_labels);
 #else
         auto image = drawBirdsEyeView(buffer.size() / point_stride, points,

@@ -9,7 +9,7 @@
 
 namespace vueron {
 
-void run_model(const float *points, size_t num_points, size_t point_stride,
+void run_model(const float *points, size_t point_buf_len, size_t point_stride,
                std::vector<BndBox> &boxes, std::vector<size_t> &labels,
                std::vector<float> &scores) {
     std::vector<Pillar> bev_pillar(GRID_Y_SIZE * GRID_X_SIZE);
@@ -25,10 +25,10 @@ void run_model(const float *points, size_t num_points, size_t point_stride,
                                  0.0f); // input of RPN
     std::vector<std::vector<float>> rpn_outputs;
 
-    voxelization(bev_pillar, points, num_points, point_stride);
+    voxelization(bev_pillar, points, point_buf_len, point_stride);
     size_t num_pillars =
         point_decoration(bev_pillar, voxel_coords, voxel_num_points, pfe_input,
-                         points, num_points, point_stride);
+                         points, point_buf_len, point_stride);
     pfe_run(pfe_input, pfe_output);
     scatter(pfe_output, voxel_coords, num_pillars, bev_image);
     rpn_run(bev_image, rpn_outputs);
