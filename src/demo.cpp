@@ -124,7 +124,8 @@ int main(int argc, const char **argv) {
         cv::imshow("Bird's Eye View", image);
         cv::waitKey(1);
 #ifdef _DEBUG
-        std::string output_file_name = "outputs/" + std::to_string(i) + ".png";
+        std::string output_file_name =
+            "outputs/" + std::to_string(i + 1) + ".png";
         cv::imwrite(output_file_name, image);
 #endif
     }
