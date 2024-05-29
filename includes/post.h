@@ -60,8 +60,10 @@ void decode_to_boxes(const std::vector<std::vector<float>> &rpn_output,
     */
     for (size_t j = 0; j < MAX_BOX_NUM_BEFORE_NMS; j++) {
         size_t channel_offset = FEATURE_X_SIZE * FEATURE_Y_SIZE;
-        size_t idx = indices[j];
-        size_t s_idx = idx % (FEATURE_X_SIZE * FEATURE_Y_SIZE);
+        size_t idx = indices[j]; // index for hm ONLY
+        size_t s_idx =
+            idx % (FEATURE_X_SIZE *
+                   FEATURE_Y_SIZE); // per-channel index for the other heads
         assert(idx < CLASS_NUM * FEATURE_X_SIZE * FEATURE_Y_SIZE);
         assert(s_idx < FEATURE_X_SIZE * FEATURE_Y_SIZE);
 
@@ -96,10 +98,9 @@ void decode_to_boxes(const std::vector<std::vector<float>> &rpn_output,
         /*
             append decoded boxes, scores, and labels
         */
-        float curr_iou = rpn_output[5][s_idx];
         // rectifying score if model has iou head
-        scores[j] =
-            rectify_score(sigmoid(hm[idx]), curr_iou, rect_scores[label]);
+        scores[j] = rectify_score(sigmoid(hm[idx]), rpn_output[5][s_idx],
+                                  rect_scores[label]);
         boxes[j] = box;
         labels[j] = label + 1;
     }
