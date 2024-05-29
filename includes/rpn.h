@@ -1,5 +1,5 @@
-#ifndef RPN_H
-#define RPN_H
+#ifndef __RPN_H__
+#define __RPN_H__
 
 #include "config.h"
 #include "onnxruntime_cxx_api.h"
@@ -95,4 +95,4 @@ void rpn_run(const std::vector<float> &rpn_input,
 }
 } // namespace vueron
 
-#endif
+#endif // __RPN_H__

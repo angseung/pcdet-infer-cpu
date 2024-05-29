@@ -1,5 +1,5 @@
-#ifndef PRE_H
-#define PRE_H
+#ifndef __PRE_H__
+#define __PRE_H__
 
 #include "config.h"
 #include "onnxruntime_cxx_api.h"
@@ -276,4 +276,4 @@ void scatter(const std::vector<float> &pfe_output,
 }
 
 } // namespace vueron
-#endif // PRE_H
+#endif // __PRE_H__

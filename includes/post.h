@@ -1,5 +1,5 @@
-#ifndef POST_H
-#define POST_H
+#ifndef __POST_H__
+#define __POST_H__
 
 #include "params.h"
 #include "type.h"
@@ -392,4 +392,4 @@ void gather_boxes(const std::vector<BndBox> &boxes,
 
 } // namespace vueron
 
-#endif // POST_H
+#endif // __POST_H__

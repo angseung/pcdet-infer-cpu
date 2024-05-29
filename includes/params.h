@@ -1,5 +1,5 @@
-#ifndef PARAMS_H
-#define PARAMS_H
+#ifndef __PARAMS_H__
+#define __PARAMS_H__
 
 /*
     Params for Preprocessing
@@ -51,4 +51,4 @@
 #define SCORE_THRESH 0.1f
 #define CONF_THRESH 0.4f
 
-#endif // PARAMS_H
+#endif // __PARAMS_H__

@@ -1,5 +1,5 @@
-#ifndef PCL_H
-#define PCL_H
+#ifndef __PCL_H__
+#define __PCL_H__
 
 #include <cstring>
 #include <fstream>
@@ -61,4 +61,4 @@ std::vector<float> readPcdFile(const std::string &file_path,
 }
 } // namespace vueron
 
-#endif // PCL_H
+#endif // __PCL_H__

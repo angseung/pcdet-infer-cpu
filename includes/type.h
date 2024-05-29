@@ -1,9 +1,9 @@
-#ifndef BOX_H
-#define BOX_H
+#ifndef __TYPE_H__
+#define __TYPE_H__
 
 namespace vueron {
 struct BndBox {
     float x, y, z, dx, dy, dz, heading;
 };
 } // namespace vueron
-#endif // BOX_H
+#endif // __TYPE_H__
