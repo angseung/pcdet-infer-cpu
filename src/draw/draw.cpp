@@ -14,7 +14,7 @@ cv::Mat drawBirdsEyeView(size_t points_size, const float *points_data,
                          const std::vector<vueron::BndBox> &boxes,
                          const std::vector<float> &scores,
                          const std::vector<size_t> &labels) {
-    float scale = 8.0;
+    float scale = 12.0;
 
     int width = static_cast<int>((MAX_X_RANGE - MIN_X_RANGE) * scale);
     int height = static_cast<int>((MAX_Y_RANGE - MIN_Y_RANGE) * scale);

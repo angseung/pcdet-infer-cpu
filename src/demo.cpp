@@ -9,6 +9,7 @@
 #include <iomanip>
 #include <pcl/io/pcd_io.h>
 #include <pcl/point_types.h>
+#include <string>
 #include <vector>
 
 // #define FROM_SNAPSHOT
@@ -122,6 +123,8 @@ int main(int argc, const char **argv) {
 #endif
         cv::imshow("Bird's Eye View", image);
         cv::waitKey(1);
+        std::string output_file_name = "outputs/" + std::to_string(i) + ".png";
+        cv::imwrite(output_file_name, image);
     }
 
     return 0;
