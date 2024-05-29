@@ -20,8 +20,8 @@
    SOFTWARE.
 */
 
-#ifndef NPY_HPP_
-#define NPY_HPP_
+#ifndef __NPY_H__
+#define __NPY_H__
 
 #include <algorithm>
 #include <array>
@@ -644,4 +644,4 @@ inline void LoadArrayFromNumpy(const std::string &filename,
 
 } // namespace npy
 
-#endif // NPY_HPP_
+#endif // __NPY_H__

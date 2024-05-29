@@ -1,10 +1,8 @@
 #include "config.h"
+#include "model.h"
 #include "npy.h"
 #include "params.h"
 #include "pcl.h"
-#include "post.h"
-#include "pre.h"
-#include "rpn.h"
 #include "type.h"
 #include <glob.h>
 #include <iostream>
@@ -12,47 +10,46 @@
 int main(int argc, const char **argv) {
     std::string folder_path = PCD_PATH;
     std::vector<std::string> pcd_files = vueron::getFileList(folder_path);
-    std::vector<float> points;
+    size_t point_stride = NUM_POINT_VALUES;
 
     while (1) {
-        for (const auto &file : pcd_files) {
-            points = vueron::readPcdFile(file, MAX_POINTS_NUM);
+        for (const auto &pcd_file : pcd_files) {
+            std::vector<float> points =
+                vueron::readPcdFile(pcd_file, MAX_POINTS_NUM);
+            float *point_data = (float *)points.data();
+            size_t point_buf_len = points.size();
 #ifdef _DEBUG
             std::cout << file << std::endl;
             std::cout << "Points Num of " << file << ": "
                       << points.size() / sizeof(float) << std::endl;
 #endif
-            size_t points_buf_len = points.size();
-            size_t point_stride = sizeof(float);
-            std::vector<vueron::Pillar> bev_pillar(GRID_Y_SIZE * GRID_X_SIZE);
-            std::vector<size_t> voxel_coords; // (x, y)
-            std::vector<size_t> voxel_num_points;
-            std::vector<float> pfe_input(
-                MAX_VOXELS * MAX_NUM_POINTS_PER_PILLAR * FEATURE_NUM,
-                0.0f); // input of pfe_run()
-            std::vector<float> pfe_output(MAX_VOXELS * NUM_FEATURE_SCATTER,
-                                          0.0f); // input of scatter()
-            std::vector<float> bev_image(GRID_Y_SIZE * GRID_X_SIZE *
-                                             NUM_FEATURE_SCATTER,
-                                         0.0f);          // input of rpn_run()
-            std::vector<std::vector<float>> rpn_outputs; // output of rpn_run()
-            std::vector<vueron::BndBox> boxes;           // boxes before NMS
-            std::vector<size_t> labels;                  // labels before NMS
-            std::vector<float> scores;                   // scores before NMS
-            boxes.reserve(MAX_BOX_NUM_BEFORE_NMS);
-            labels.reserve(MAX_BOX_NUM_BEFORE_NMS);
-            scores.reserve(MAX_BOX_NUM_BEFORE_NMS);
+            /*
+                Buffers for inferece
+            */
+            std::vector<vueron::BndBox> nms_boxes;
+            std::vector<float> nms_scores;
+            std::vector<size_t> nms_labels;
 
-            vueron::voxelization(bev_pillar, (float *)points.data(),
-                                 points_buf_len, point_stride);
-            size_t num_pillars = vueron::point_decoration(
-                bev_pillar, voxel_coords, voxel_num_points, pfe_input,
-                (float *)points.data(), points_buf_len, point_stride);
+            /*
+                Do inference
+            */
+            vueron::run_model(point_data, point_buf_len, point_stride,
+                              nms_boxes, nms_scores, nms_labels);
 
-            vueron::pfe_run(pfe_input, pfe_output);
-            vueron::scatter(pfe_output, voxel_coords, num_pillars, bev_image);
-            vueron::rpn_run(bev_image, rpn_outputs);
-            vueron::decode_to_boxes(rpn_outputs, boxes, labels, scores);
+            /*
+                Logging
+            */
+            auto veh_cnt = std::count_if(nms_labels.begin(), nms_labels.end(),
+                                         [](int i) { return i == 1; });
+            auto ped_cnt = std::count_if(nms_labels.begin(), nms_labels.end(),
+                                         [](int i) { return i == 2; });
+            auto cyc_cnt = std::count_if(nms_labels.begin(), nms_labels.end(),
+                                         [](int i) { return i == 3; });
+            std::cout << "Input file: " << pcd_file << std::endl;
+            std::cout << "vehicle(" << std::setw(3) << veh_cnt
+                      << "), pedestrian(" << std::setw(3) << ped_cnt
+                      << "), cyclist(" << std::setw(3) << cyc_cnt << ")"
+                      << std::endl;
         }
     }
     return 0;

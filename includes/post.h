@@ -1,5 +1,5 @@
-#ifndef POST_H
-#define POST_H
+#ifndef __POST_H__
+#define __POST_H__
 
 #include "params.h"
 #include "type.h"
@@ -315,6 +315,15 @@ inline float box_overlap(const float *box_a, const float *box_b) {
 inline float calculateIOU(const float *box_a, const float *box_b) {
     // params: box_a (7) [x, y, z, dx, dy, dz, heading]
     // params: box_b (7) [x, y, z, dx, dy, dz, heading]
+
+    /*
+        skip if distance of two boxes are large enough
+    */
+    float dist = sqrt((box_a[0] - box_b[0]) * (box_a[0] - box_b[0]) +
+                      (box_a[1] - box_b[1]) * (box_a[1] - box_b[1]));
+    if (dist > 10.0f) {
+        return 0.0f;
+    }
     float sa = box_a[3] * box_a[4];
     float sb = box_b[3] * box_b[4];
     float s_overlap = box_overlap(box_a, box_b);
@@ -330,11 +339,18 @@ void nms(const std::vector<BndBox> &boxes, const std::vector<float> &scores,
     std::sort(indices.begin(), indices.end(),
               [&](size_t a, size_t b) { return scores[a] > scores[b]; });
 
+    size_t processed = 0;
+
     // Loop over each box index
     for (size_t i = 0; i < indices.size(); ++i) {
         size_t idx = indices[i];
         if (suppressed[idx]) {
             continue;
+        }
+
+        processed++;
+        if (processed >= MAX_BOX_NUM_AFTER_NMS) {
+            break;
         }
 
         // Compare this box to the rest of the boxes
@@ -376,4 +392,4 @@ void gather_boxes(const std::vector<BndBox> &boxes,
 
 } // namespace vueron
 
-#endif // POST_H
+#endif // __POST_H__

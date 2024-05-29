@@ -1,5 +1,5 @@
-#ifndef MODEL_H
-#define MODEL_H
+#ifndef __MODEL_H__
+#define __MODEL_H__
 
 #include "config.h"
 #include "params.h"
@@ -48,4 +48,4 @@ void run_model(const float *points, size_t point_buf_len, size_t point_stride,
 
 } // namespace vueron
 
-#endif // MODEL_H
+#endif // __MODEL_H__

@@ -66,7 +66,7 @@ cv::Mat drawBirdsEyeView(size_t points_size, const float *points_data,
         }
 
         for (int i = 0; i < 4; ++i) {
-            cv::line(image, vertices[i], vertices[(i + 1) % 4], color, 1);
+            cv::line(image, vertices[i], vertices[(i + 1) % 4], color, 2);
         }
     }
 
