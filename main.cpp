@@ -23,7 +23,7 @@ int main(int argc, const char **argv) {
                       << points.size() / sizeof(float) << std::endl;
 #endif
             size_t points_buf_len = points.size();
-            size_t point_stride = sizeof(float);
+            size_t point_stride = NUM_POINT_VALUES;
             std::vector<vueron::Pillar> bev_pillar(GRID_Y_SIZE * GRID_X_SIZE);
             std::vector<size_t> voxel_coords; // (x, y)
             std::vector<size_t> voxel_num_points;

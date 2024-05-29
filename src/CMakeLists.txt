@@ -1,6 +1,6 @@
 # src/CMakeLists.txt
 
-add_library(pcdet STATIC pcl.cpp snapshot.cpp pre.cpp rpn.cpp post.cpp model.cpp)
+add_library(pcdetfunc STATIC pcl.cpp snapshot.cpp pre.cpp rpn.cpp post.cpp model.cpp)
 
 find_package(PCL 1.8 REQUIRED)
 include_directories(${PCL_INCLUDE_DIRS})
@@ -27,12 +27,11 @@ endif()
 
 add_library(onnx::runtime ALIAS _onnxruntime)
 
-target_include_directories(pcdet PUBLIC
+target_include_directories(pcdetfunc PUBLIC
     ${PROJECT_SOURCE_DIR}/includes 
     ${ONNXRUNTIME_ROOTDIR}/include
 )
-target_link_libraries(pcdet PUBLIC ${PCL_LIBRARIES} onnx::runtime)
-
+target_link_libraries(pcdetfunc PUBLIC ${PCL_LIBRARIES} onnx::runtime)
 
 if(APPLE)
 add_subdirectory(draw)
@@ -40,7 +39,7 @@ add_executable(demo demo.cpp)
 target_include_directories(demo PUBLIC ${PROJECT_SOURCE_DIR}/src ${PROJECT_SOURCE_DIR}/includes)
 target_link_libraries(
     demo
-    pcdet
+    pcdetfunc
     draw 
     ${PCL_LIBRARIES}
 )
