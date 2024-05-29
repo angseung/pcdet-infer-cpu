@@ -13,7 +13,7 @@
 #include <pcl/point_types.h>
 #include <vector>
 
-#define FROM_SNAPSHOT
+// #define FROM_SNAPSHOT
 
 int main(int argc, const char **argv) {
     std::string folder_path;

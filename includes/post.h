@@ -32,6 +32,15 @@ void decode_to_boxes(const std::vector<std::vector<float>> &rpn_output,
     /*
     rpn_output order: hm, dim, center, center_z, rot, iou
     */
+    assert(rpn_output[0].size() ==
+           CLASS_NUM * FEATURE_Y_SIZE * FEATURE_X_SIZE);                 // hm
+    assert(rpn_output[1].size() == 3 * FEATURE_Y_SIZE * FEATURE_X_SIZE); // dim
+    assert(rpn_output[2].size() ==
+           2 * FEATURE_Y_SIZE * FEATURE_X_SIZE);                     // center
+    assert(rpn_output[3].size() == FEATURE_Y_SIZE * FEATURE_X_SIZE); // center_z
+    assert(rpn_output[4].size() == 2 * FEATURE_Y_SIZE * FEATURE_X_SIZE); // rot
+    assert(rpn_output[5].size() == FEATURE_Y_SIZE * FEATURE_X_SIZE);     // iou
+
     size_t head_stride = GRID_Y_SIZE / FEATURE_Y_SIZE;
     std::vector<float> hm = rpn_output[0];
     assert(hm.size() == CLASS_NUM * FEATURE_Y_SIZE * FEATURE_X_SIZE);

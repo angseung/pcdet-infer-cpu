@@ -38,4 +38,7 @@
 #define SCORE_THRESH 0.1
 #define NMS_THRESH 0.2
 
+// Params for Drawing
+#define CONF_THRESH 0.3
+
 #endif // PARAMS_H

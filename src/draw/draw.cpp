@@ -32,7 +32,7 @@ cv::Mat drawBirdsEyeView(size_t points_size, const float *points_data,
 
     // draw boxes
     for (size_t i = 0; i < scores.size(); ++i) {
-        if (scores[i] < 0.5)
+        if (scores[i] < CONF_THRESH)
             continue;
         cv::Scalar color;
         switch (labels[i]) {
