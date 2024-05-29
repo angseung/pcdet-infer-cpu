@@ -17,6 +17,7 @@ int main(int argc, const char **argv) {
             std::vector<float> points =
                 vueron::readPcdFile(pcd_file, MAX_POINTS_NUM);
             float *point_data = (float *)points.data();
+            size_t point_buf_len = points.size();
 #ifdef _DEBUG
             std::cout << file << std::endl;
             std::cout << "Points Num of " << file << ": "
@@ -25,7 +26,6 @@ int main(int argc, const char **argv) {
             /*
                 Buffers for inferece
             */
-            size_t point_buf_len = points.size();
             std::vector<vueron::BndBox> nms_boxes;
             std::vector<float> nms_scores;
             std::vector<size_t> nms_labels;
