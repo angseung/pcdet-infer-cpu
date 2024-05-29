@@ -12,8 +12,8 @@
 #include <numeric>
 
 #define _EPSILON_RPN 5e-3
-#define _EPSILON_HM 1e-4
-#define _EPSILON_DIM 1e-2
+#define _EPSILON_HM 1e-3
+#define _EPSILON_DIM 1e-3
 
 TEST(RPNTest, RPNShapeTest) {
     std::string folder_path = PCD_PATH;
@@ -162,8 +162,7 @@ TEST(RPNTest, RPNValueTest) {
         EXPECT_EQ(head_dim * 3, dim_snapshot.size());
 
         for (size_t j = 0; j < dim_snapshot.size(); j++) {
-            EXPECT_NEAR(vueron::exponential(dim_snapshot[j]),
-                        vueron::exponential(rpn_output[1][j]), _EPSILON_DIM);
+            EXPECT_NEAR(dim_snapshot[j], rpn_output[1][j], _EPSILON_DIM);
         }
 
         // 4. rot
@@ -193,8 +192,7 @@ TEST(RPNTest, RPNValueTest) {
         EXPECT_EQ(head_dim * CLASS_NUM, hm_snapshot.size());
 
         for (size_t j = 0; j < hm_snapshot.size(); j++) {
-            EXPECT_NEAR(vueron::sigmoid(hm_snapshot[j]),
-                        vueron::sigmoid(rpn_output[0][j]), _EPSILON_HM);
+            EXPECT_NEAR(hm_snapshot[j], rpn_output[0][j], _EPSILON_HM);
         }
 
         std::cout << "Test Finish : " << pcd_file << std::endl;
