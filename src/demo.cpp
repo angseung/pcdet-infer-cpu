@@ -48,42 +48,6 @@ int main(int argc, const char **argv) {
         float *points = (float *)buffer.data();
         size_t point_buf_len = buffer.size();
 
-        /*
-            Buffers for inferece
-        */
-        std::vector<vueron::BndBox> boxes; // boxes before NMS
-        std::vector<size_t> labels;        // labels before NMS
-        std::vector<float> scores;         // scores before NMS
-
-        boxes.reserve(MAX_BOX_NUM_BEFORE_NMS);
-        labels.reserve(MAX_BOX_NUM_BEFORE_NMS);
-        scores.reserve(MAX_BOX_NUM_BEFORE_NMS);
-
-        /*
-            Do inference
-        */
-        vueron::run_model(points, point_buf_len, point_stride, boxes, labels,
-                          scores);
-
-        std::vector<bool> suppressed(boxes.size(), false); // mask for nms
-        vueron::nms(boxes, scores, suppressed, IOU_THRESH);
-
-        std::vector<vueron::BndBox> nms_boxes;
-        std::vector<size_t> nms_labels;
-        std::vector<float> nms_scores;
-
-        for (size_t j = 0; j < boxes.size(); j++) {
-            if (!suppressed[j]) {
-                nms_boxes.push_back(boxes[j]);
-                nms_labels.push_back(labels[j]);
-                nms_scores.push_back(scores[j]);
-
-                if (nms_boxes.size() >= MAX_BOX_NUM_AFTER_NMS) {
-                    break;
-                }
-            }
-        }
-
 #ifdef FROM_SNAPSHOT
         /*
             Read bev_features from snapshot file
@@ -121,15 +85,28 @@ int main(int argc, const char **argv) {
             s_boxes[j].dz = boxes_snapshot[7 * j + 5];
             s_boxes[j].heading = boxes_snapshot[7 * j + 6];
         }
+#else
+        /*
+            Buffers for inferece
+        */
+        std::vector<vueron::BndBox> nms_boxes;
+        std::vector<float> nms_scores;
+        std::vector<size_t> nms_labels;
+
+        /*
+            Do inference
+        */
+        vueron::run_model(points, point_buf_len, point_stride, nms_boxes,
+                          nms_scores, nms_labels);
 #endif
         /*
             Logging
         */
-        auto veh_cnt = std::count_if(labels.begin(), labels.end(),
+        auto veh_cnt = std::count_if(nms_labels.begin(), nms_labels.end(),
                                      [](int i) { return i == 1; });
-        auto ped_cnt = std::count_if(labels.begin(), labels.end(),
+        auto ped_cnt = std::count_if(nms_labels.begin(), nms_labels.end(),
                                      [](int i) { return i == 2; });
-        auto cyc_cnt = std::count_if(labels.begin(), labels.end(),
+        auto cyc_cnt = std::count_if(nms_labels.begin(), nms_labels.end(),
                                      [](int i) { return i == 3; });
         std::cout << "Input file: " << pcd_file << std::endl;
         std::cout << "vehicle(" << std::setw(3) << veh_cnt << "), pedestrian("

@@ -10,8 +10,8 @@
 namespace vueron {
 
 void run_model(const float *points, size_t point_buf_len, size_t point_stride,
-               std::vector<BndBox> &boxes, std::vector<size_t> &labels,
-               std::vector<float> &scores) {
+               std::vector<BndBox> &boxes, std::vector<float> &scores,
+               std::vector<size_t> &labels) {
     std::vector<Pillar> bev_pillar(GRID_Y_SIZE * GRID_X_SIZE);
     std::vector<size_t> voxel_coords; // (x, y)
     std::vector<size_t> voxel_num_points;
@@ -24,6 +24,13 @@ void run_model(const float *points, size_t point_buf_len, size_t point_stride,
                                      NUM_FEATURE_SCATTER,
                                  0.0f); // input of RPN
     std::vector<std::vector<float>> rpn_outputs;
+    std::vector<vueron::BndBox> pre_boxes; // boxes before NMS
+    std::vector<size_t> pre_labels;        // labels before NMS
+    std::vector<float> pre_scores;         // scores before NMS
+
+    pre_boxes.reserve(MAX_BOX_NUM_BEFORE_NMS);
+    pre_labels.reserve(MAX_BOX_NUM_BEFORE_NMS);
+    pre_scores.reserve(MAX_BOX_NUM_BEFORE_NMS);
 
     voxelization(bev_pillar, points, point_buf_len, point_stride);
     size_t num_pillars =
@@ -32,7 +39,11 @@ void run_model(const float *points, size_t point_buf_len, size_t point_stride,
     pfe_run(pfe_input, pfe_output);
     scatter(pfe_output, voxel_coords, num_pillars, bev_image);
     rpn_run(bev_image, rpn_outputs);
-    decode_to_boxes(rpn_outputs, boxes, labels, scores);
+    decode_to_boxes(rpn_outputs, pre_boxes, pre_labels, pre_scores);
+    std::vector<bool> suppressed(pre_boxes.size(), false); // mask for nms
+    nms(pre_boxes, pre_scores, suppressed, IOU_THRESH);
+    gather_boxes(pre_boxes, pre_scores, pre_labels, boxes, scores, labels,
+                 suppressed);
 }
 
 } // namespace vueron

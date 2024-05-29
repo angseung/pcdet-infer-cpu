@@ -330,17 +330,12 @@ void nms(const std::vector<BndBox> &boxes, const std::vector<float> &scores,
     std::sort(indices.begin(), indices.end(),
               [&](size_t a, size_t b) { return scores[a] > scores[b]; });
 
-    std::vector<BndBox> result;
-    // std::vector<bool> suppressed(boxes.size(), false);
-
     // Loop over each box index
     for (size_t i = 0; i < indices.size(); ++i) {
         size_t idx = indices[i];
         if (suppressed[idx]) {
             continue;
         }
-
-        result.push_back(boxes[idx]);
 
         // Compare this box to the rest of the boxes
         for (size_t j = i + 1; j < indices.size(); ++j) {
@@ -353,6 +348,27 @@ void nms(const std::vector<BndBox> &boxes, const std::vector<float> &scores,
             if (calculateIOU((float *)&boxes[idx], (float *)&boxes[idx_j]) >
                 iou_threshold) {
                 suppressed[idx_j] = true;
+            }
+        }
+    }
+}
+
+void gather_boxes(const std::vector<BndBox> &boxes,
+                  const std::vector<float> &scores,
+                  const std::vector<size_t> &labels,
+                  std::vector<BndBox> &nms_boxes,
+                  std::vector<float> &nms_scores,
+                  std::vector<size_t> &nms_labels,
+                  const std::vector<bool> &suppressed) {
+
+    for (size_t j = 0; j < boxes.size(); j++) {
+        if (!suppressed[j]) {
+            nms_boxes.push_back(boxes[j]);
+            nms_labels.push_back(labels[j]);
+            nms_scores.push_back(scores[j]);
+
+            if (nms_boxes.size() >= MAX_BOX_NUM_AFTER_NMS) {
+                break;
             }
         }
     }
