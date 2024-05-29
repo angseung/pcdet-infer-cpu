@@ -23,8 +23,6 @@ int main(int argc, const char **argv) {
     } else {
         folder_path = argv[1];
     }
-    // bool do_memory_check = false;
-
     size_t point_stride = NUM_POINT_VALUES;
 
     std::vector<std::string> pcd_files = vueron::getFileList(folder_path);

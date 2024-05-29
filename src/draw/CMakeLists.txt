@@ -8,9 +8,3 @@ target_link_libraries(draw PUBLIC
   pcdet
   opencv_core opencv_imgproc opencv_highgui
 )
-
-# include(Coverage)
-# CleanCoverage(draw)
-#
-# include(CppCheck)
-# AddCppCheck(draw)
