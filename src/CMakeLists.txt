@@ -27,8 +27,7 @@ endif()
 
 add_library(onnx::runtime ALIAS _onnxruntime)
 
-target_include_directories(pcdet PUBLIC 
-    ${PROJECT_SOURCE_DIR}/src 
+target_include_directories(pcdet PUBLIC
     ${PROJECT_SOURCE_DIR}/includes 
     ${ONNXRUNTIME_ROOTDIR}/include
 )

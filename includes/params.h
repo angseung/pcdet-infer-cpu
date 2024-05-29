@@ -1,8 +1,6 @@
 #ifndef PARAMS_H
 #define PARAMS_H
 
-#include <iostream>
-
 // Params for Preprocessing
 #define MAX_POINTS_NUM 100000
 #define NUM_POINT_VALUES 4
