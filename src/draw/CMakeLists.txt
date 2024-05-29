@@ -1,3 +1,5 @@
+# src/draw/CMakeLists.txt
+
 find_package(OpenCV REQUIRED)
 
 add_library(draw STATIC

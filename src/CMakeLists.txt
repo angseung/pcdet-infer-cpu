@@ -33,6 +33,8 @@ target_include_directories(pcdet PUBLIC
 )
 target_link_libraries(pcdet PUBLIC ${PCL_LIBRARIES} onnx::runtime)
 
+
+if(APPLE)
 add_subdirectory(draw)
 add_executable(demo demo.cpp)
 target_include_directories(demo PUBLIC ${PROJECT_SOURCE_DIR}/src ${PROJECT_SOURCE_DIR}/includes)
@@ -42,3 +44,4 @@ target_link_libraries(
     draw 
     ${PCL_LIBRARIES}
 )
+endif()
