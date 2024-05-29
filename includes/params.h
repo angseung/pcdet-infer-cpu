@@ -32,13 +32,12 @@
     { 0.68f, 0.71f, 0.65f }
 #define MAX_BOX_NUM_BEFORE_NMS 500
 #define MAX_BOX_NUM_AFTER_NMS 83
-#define IOU_THRESH 0.2
+#define IOU_THRESH 0.2f
 #define FEATURE_X_SIZE 112
 #define FEATURE_Y_SIZE 164
-#define SCORE_THRESH 0.1
-#define NMS_THRESH 0.2
+#define SCORE_THRESH 0.1f
 
 // Params for Drawing
-#define CONF_THRESH 0.3
+#define CONF_THRESH 0.3f
 
 #endif // PARAMS_H

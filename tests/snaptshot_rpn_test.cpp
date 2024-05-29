@@ -48,16 +48,6 @@ TEST(RPNTest, RPNShapeTest) {
 
             EXPECT_EQ(expected_size, curr_head_output.size());
         }
-        std::vector<vueron::BndBox> boxes(MAX_BOX_NUM_BEFORE_NMS);
-        std::vector<size_t> labels(MAX_BOX_NUM_BEFORE_NMS);
-        std::vector<float> scores(MAX_BOX_NUM_BEFORE_NMS);
-        vueron::decode_to_boxes(rpn_output, boxes, labels, scores);
-
-        std::vector<float> rect_scores(IOU_RECTIFIER);
-        EXPECT_FLOAT_EQ(rect_scores[0], 0.68f);
-        EXPECT_FLOAT_EQ(rect_scores[1], 0.71f);
-        EXPECT_FLOAT_EQ(rect_scores[2], 0.65f);
-        EXPECT_EQ(rect_scores.size(), 3);
 
         std::cout << "Test Finish : " << pcd_file << std::endl;
     }

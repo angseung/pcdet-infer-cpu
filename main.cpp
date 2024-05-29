@@ -36,12 +36,12 @@ int main(int argc, const char **argv) {
                                              NUM_FEATURE_SCATTER,
                                          0.0f);          // input of rpn_run()
             std::vector<std::vector<float>> rpn_outputs; // output of rpn_run()
-            std::vector<vueron::BndBox> boxes(
-                MAX_BOX_NUM_BEFORE_NMS); // boxes before NMS
-            std::vector<size_t> labels(
-                MAX_BOX_NUM_BEFORE_NMS); // labels before NMS
-            std::vector<float> scores(
-                MAX_BOX_NUM_BEFORE_NMS); // scores before NMS
+            std::vector<vueron::BndBox> boxes;           // boxes before NMS
+            std::vector<size_t> labels;                  // labels before NMS
+            std::vector<float> scores;                   // scores before NMS
+            boxes.reserve(MAX_BOX_NUM_BEFORE_NMS);
+            labels.reserve(MAX_BOX_NUM_BEFORE_NMS);
+            scores.reserve(MAX_BOX_NUM_BEFORE_NMS);
 
             vueron::voxelization(bev_pillar, (float *)points.data(),
                                  points_buf_len, point_stride);

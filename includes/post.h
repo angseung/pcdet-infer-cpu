@@ -99,10 +99,13 @@ void decode_to_boxes(const std::vector<std::vector<float>> &rpn_output,
             append decoded boxes, scores, and labels
         */
         // rectifying score if model has iou head
-        scores[j] = rectify_score(sigmoid(hm[idx]), rpn_output[5][s_idx],
-                                  rect_scores[label]);
-        boxes[j] = box;
-        labels[j] = label + 1;
+        float rectified_score = rectify_score(
+            sigmoid(hm[idx]), rpn_output[5][s_idx], rect_scores[label]);
+        if (rectified_score > SCORE_THRESH) {
+            scores.push_back(rectified_score);
+            boxes.push_back(box);
+            labels.push_back(label + 1);
+        }
     }
 }
 

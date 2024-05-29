@@ -51,12 +51,13 @@ int main(int argc, const char **argv) {
         /*
             Buffers for inferece
         */
-        std::vector<vueron::BndBox> boxes(
-            MAX_BOX_NUM_BEFORE_NMS); // boxes before NMS
-        std::vector<size_t> labels(MAX_BOX_NUM_BEFORE_NMS,
-                                   0); // labels before NMS
-        std::vector<float> scores(MAX_BOX_NUM_BEFORE_NMS,
-                                  0.0f); // scores before NMS
+        std::vector<vueron::BndBox> boxes; // boxes before NMS
+        std::vector<size_t> labels;        // labels before NMS
+        std::vector<float> scores;         // scores before NMS
+
+        boxes.reserve(MAX_BOX_NUM_BEFORE_NMS);
+        labels.reserve(MAX_BOX_NUM_BEFORE_NMS);
+        scores.reserve(MAX_BOX_NUM_BEFORE_NMS);
 
         /*
             Do inference

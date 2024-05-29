@@ -36,4 +36,5 @@ void run_model(const float *points, size_t point_buf_len, size_t point_stride,
 }
 
 } // namespace vueron
-#endif
+
+#endif // MODEL_H
