@@ -43,7 +43,7 @@ void decode_to_boxes(const std::vector<std::vector<float>> &rpn_output,
     std::vector<float> hm = rpn_output[0];
     assert(hm.size() == CLASS_NUM * FEATURE_Y_SIZE * FEATURE_X_SIZE);
 
-    std::vector<size_t> indices(MAX_BOX_NUM_BEFORE_NMS);
+    std::vector<size_t> indices(hm.size());
     std::vector<float> rect_scores(IOU_RECTIFIER);
     assert(rect_scores.size() == 3);
     std::iota(indices.begin(), indices.end(), 0);
@@ -55,11 +55,9 @@ void decode_to_boxes(const std::vector<std::vector<float>> &rpn_output,
         size_t channel_offset = FEATURE_X_SIZE * FEATURE_Y_SIZE;
         size_t idx = indices[j];
         // size_t idx = indices[j] % channel_offset;
-        std::cout << indices[j] << " : " << sigmoid(hm[indices[j]])
-                  << std::endl;
+        std::cout << indices[j] << " : " << hm[idx] << std::endl;
 #ifdef _DEBUG
-        std::cout << indices[j] << " : " << sigmoid(hm[indices[j]])
-                  << std::endl;
+        std::cout << indices[j] << " : " << sigmoid(hm[idx]) << std::endl;
 #endif
         BndBox box;
         size_t grid_x = idx % FEATURE_X_SIZE;
