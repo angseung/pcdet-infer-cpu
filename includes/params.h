@@ -38,6 +38,6 @@
 #define SCORE_THRESH 0.1f
 
 // Params for Drawing
-#define CONF_THRESH 0.3f
+#define CONF_THRESH 0.4f
 
 #endif // PARAMS_H

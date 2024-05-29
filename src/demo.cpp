@@ -65,6 +65,25 @@ int main(int argc, const char **argv) {
         vueron::run_model(points, point_buf_len, point_stride, boxes, labels,
                           scores);
 
+        std::vector<bool> suppressed(boxes.size(), false); // mask for nms
+        vueron::nms(boxes, scores, suppressed, IOU_THRESH);
+
+        std::vector<vueron::BndBox> nms_boxes;
+        std::vector<size_t> nms_labels;
+        std::vector<float> nms_scores;
+
+        for (size_t j = 0; j < boxes.size(); j++) {
+            if (!suppressed[j]) {
+                nms_boxes.push_back(boxes[j]);
+                nms_labels.push_back(labels[j]);
+                nms_scores.push_back(scores[j]);
+
+                if (nms_boxes.size() >= MAX_BOX_NUM_AFTER_NMS) {
+                    break;
+                }
+            }
+        }
+
 #ifdef FROM_SNAPSHOT
         /*
             Read bev_features from snapshot file
@@ -122,7 +141,7 @@ int main(int argc, const char **argv) {
                                       s_boxes, s_scores, s_labels);
 #else
         auto image = drawBirdsEyeView(buffer.size() / point_stride, points,
-                                      boxes, scores, labels);
+                                      nms_boxes, nms_scores, nms_labels);
 #endif
         cv::imshow("Bird's Eye View", image);
         cv::waitKey(1);
