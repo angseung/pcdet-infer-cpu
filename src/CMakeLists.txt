@@ -40,7 +40,7 @@ target_include_directories(demo PUBLIC ${PROJECT_SOURCE_DIR}/src ${PROJECT_SOURC
 target_link_libraries(
     demo
     pcdetfunc
-    draw 
+    draw
     ${PCL_LIBRARIES}
 )
 endif()

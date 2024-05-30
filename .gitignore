@@ -49,3 +49,5 @@ falcon/
 cepton/
 *.zip
 outputs/
+cmake-build-debug/
+.idea/
