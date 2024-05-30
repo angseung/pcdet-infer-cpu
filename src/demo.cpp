@@ -28,18 +28,10 @@ int main(int argc, const char **argv) {
     size_t point_stride = NUM_POINT_VALUES;
 
     std::vector<std::string> pcd_files = vueron::getFileList(folder_path);
-#ifdef FROM_SNAPSHOT
-    std::string snapshot_folder_path = SNAPSHOT_PATH;
-    std::vector<std::string> snapshot_files =
-        vueron::getFileList(snapshot_folder_path);
-#endif
     size_t num_test_files = pcd_files.size();
 
     for (size_t i = 0; i < num_test_files; i++) {
         std::string pcd_file = pcd_files[i];
-#ifdef FROM_SNAPSHOT
-        std::string snapshot_dir = snapshot_files[i];
-#endif
 
         /*
             Read points from pcd files
@@ -49,44 +41,6 @@ int main(int argc, const char **argv) {
         float *points = (float *)buffer.data();
         size_t point_buf_len = buffer.size();
 
-#ifdef FROM_SNAPSHOT
-        /*
-            Read bev_features from snapshot file
-        */
-        // boxes
-        const std::string boxes_path = snapshot_dir + "/final_boxes.npy";
-        auto raw_boxes = npy::read_npy<float>(boxes_path);
-        std::vector<float> boxes_snapshot = raw_boxes.data;
-
-        // scores
-        const std::string scores_path = snapshot_dir + "/final_scores.npy";
-        auto raw_scores = npy::read_npy<float>(scores_path);
-        std::vector<float> scores_snapshot = raw_scores.data;
-
-        // labels
-        const std::string labels_path = snapshot_dir + "/final_labels.npy";
-        auto raw_labels = npy::read_npy<uint32_t>(labels_path);
-        std::vector<uint32_t> labels_snapshot = raw_labels.data;
-
-        std::vector<vueron::BndBox> s_boxes(scores_snapshot.size());
-        std::vector<float> s_scores(scores_snapshot.size());
-        std::vector<size_t> s_labels(labels_snapshot.size());
-
-        assert(boxes_snapshot.size() == 7 * labels_snapshot.size());
-        assert(scores_snapshot.size() == labels_snapshot.size());
-
-        for (size_t j = 0; j < labels_snapshot.size(); j++) {
-            s_scores[j] = scores_snapshot[j];
-            s_labels[j] = (size_t)labels_snapshot[j];
-            s_boxes[j].x = boxes_snapshot[7 * j];
-            s_boxes[j].y = boxes_snapshot[7 * j + 1];
-            s_boxes[j].z = boxes_snapshot[7 * j + 2];
-            s_boxes[j].dx = boxes_snapshot[7 * j + 3];
-            s_boxes[j].dy = boxes_snapshot[7 * j + 4];
-            s_boxes[j].dz = boxes_snapshot[7 * j + 5];
-            s_boxes[j].heading = boxes_snapshot[7 * j + 6];
-        }
-#else
         /*
             Buffers for inferece
         */
@@ -99,7 +53,7 @@ int main(int argc, const char **argv) {
         */
         vueron::run_model(points, point_buf_len, point_stride, nms_boxes,
                           nms_scores, nms_labels);
-#endif
+
         /*
             Logging
         */
@@ -114,13 +68,8 @@ int main(int argc, const char **argv) {
                   << std::setw(3) << ped_cnt << "), cyclist(" << std::setw(3)
                   << cyc_cnt << ")" << std::endl;
 
-#ifdef FROM_SNAPSHOT
-        auto image = drawBirdsEyeView(buffer.size() / point_stride, points,
-                                      s_boxes, s_scores, s_labels);
-#else
         auto image = drawBirdsEyeView(buffer.size() / point_stride, points,
                                       nms_boxes, nms_scores, nms_labels);
-#endif
         cv::imshow("Bird's Eye View", image);
         cv::waitKey(1);
 #ifdef _DEBUG

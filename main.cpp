@@ -21,7 +21,7 @@ int main(int argc, const char **argv) {
 #ifdef _DEBUG
             std::cout << file << std::endl;
             std::cout << "Points Num of " << file << ": "
-                      << points.size() / sizeof(float) << std::endl;
+                      << points.size() / NUM_POINT_VALUES << std::endl;
 #endif
             /*
                 Buffers for inferece
