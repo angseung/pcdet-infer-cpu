@@ -1,3 +1,4 @@
+#include "config.h"
 #include "params.h"
 #include "type.h"
 #include <cmath>
@@ -23,10 +24,10 @@ cv::Mat drawBirdsEyeView(size_t points_size, const float *points_data,
 
     // draw pcd
     for (size_t i = 0; i < points_size; ++i) {
-        int x = static_cast<int>(
-            (points_data[i * NUM_POINT_VALUES] - MIN_X_RANGE) * scale);
+        int x = static_cast<int>((points_data[i * POINT_STRIDE] - MIN_X_RANGE) *
+                                 scale);
         int y = static_cast<int>(
-            (MAX_Y_RANGE - points_data[i * NUM_POINT_VALUES + 1]) * scale);
+            (MAX_Y_RANGE - points_data[i * POINT_STRIDE + 1]) * scale);
         cv::circle(image, cv::Point(x, y), 0, cv::Scalar(255, 255, 255), 1);
     }
 

@@ -25,7 +25,7 @@ int main(int argc, const char **argv) {
     } else {
         folder_path = argv[1];
     }
-    size_t point_stride = NUM_POINT_VALUES;
+    size_t point_stride = POINT_STRIDE;
 
     std::vector<std::string> pcd_files = vueron::getFileList(folder_path);
     size_t num_test_files = pcd_files.size();

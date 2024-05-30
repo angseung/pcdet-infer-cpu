@@ -10,7 +10,7 @@
 int main(int argc, const char **argv) {
     std::string folder_path = PCD_PATH;
     std::vector<std::string> pcd_files = vueron::getFileList(folder_path);
-    size_t point_stride = NUM_POINT_VALUES;
+    size_t point_stride = POINT_STRIDE;
 
     while (1) {
         for (const auto &pcd_file : pcd_files) {
@@ -21,7 +21,7 @@ int main(int argc, const char **argv) {
 #ifdef _DEBUG
             std::cout << file << std::endl;
             std::cout << "Points Num of " << file << ": "
-                      << points.size() / NUM_POINT_VALUES << std::endl;
+                      << points.size() / POINT_STRIDE << std::endl;
 #endif
             /*
                 Buffers for inferece

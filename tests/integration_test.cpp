@@ -21,7 +21,7 @@ TEST(IntegrationTest, IntegrationTest) {
     size_t num_test_files = pcd_files.size();
 
     EXPECT_LE(pcd_files.size(), snapshot_files.size());
-    size_t point_stride = NUM_POINT_VALUES;
+    size_t point_stride = POINT_STRIDE;
 
     for (size_t i = 0; i < num_test_files; i++) {
         std::string pcd_file = pcd_files[i];
