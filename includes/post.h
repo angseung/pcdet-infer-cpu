@@ -12,26 +12,26 @@
 
 namespace vueron {
 
-const float EPS = 1e-8;
+constexpr float EPS = 1e-8;
 
 struct Point {
-    float x, y;
-    Point() {}
-    Point(double _x, double _y) { x = _x, y = _y; }
+    float x{}, y{};
+    Point() = default;
+    Point(const float _x, const float _y) { x = _x, y = _y; }
 
-    void set(float _x, float _y) {
+    void set(const float _x, const float _y) {
         x = _x;
         y = _y;
     }
 
-    Point operator+(const Point &b) const { return Point(x + b.x, y + b.y); }
+    Point operator+(const Point &b) const { return {x + b.x, y + b.y}; }
 
-    Point operator-(const Point &b) const { return Point(x - b.x, y - b.y); }
+    Point operator-(const Point &b) const { return {x - b.x, y - b.y}; }
 };
 
-inline float min(float a, float b) { return a > b ? b : a; }
+inline float min(const float a, const float b) { return a > b ? b : a; }
 
-inline float max(float a, float b) { return a > b ? a : b; }
+inline float max(const float a, const float b) { return a > b ? a : b; }
 
 inline float cross(const Point &a, const Point &b) {
     return a.x * b.y - a.y * b.x;
@@ -52,7 +52,7 @@ inline int check_rect_cross(const Point &p1, const Point &p2, const Point &q1,
 
 inline int check_in_box2d(const float *box, const Point &p) {
     // params: (7) [x, y, z, dx, dy, dz, heading]
-    const float MARGIN = 1e-2;
+    constexpr float MARGIN = 1e-2;
 
     float center_x = box[0], center_y = box[1];
     float angle_cos = cos(-box[6]),
@@ -115,12 +115,12 @@ inline int intersection(const Point &p1, const Point &p0, const Point &q1,
     return 1;
 }
 
-inline float clip(float val, float min_val, float max_val) {
+inline float clip(const float val, const float min_val, const float max_val) {
     return fminf(fmaxf(val, min_val), max_val);
 }
-inline float sigmoid(float x) { return 1.0f / (1.0f + exp(-x)); }
+inline float sigmoid(const float x) { return 1.0f / (1.0f + exp(-x)); }
 
-inline float rectify_score(float score, float iou, float alpha) {
+inline float rectify_score(const float score, const float iou, const float alpha) {
     float new_iou = (iou + 1.0f) * 0.5f;
     float new_score =
         powf(score, (1.0f - alpha)) * powf(clip(new_iou, 0.0f, 1.0f), alpha);
@@ -171,7 +171,7 @@ void decode_to_boxes(const std::vector<std::vector<float>> &rpn_output,
         assert(s_idx < FEATURE_X_SIZE * FEATURE_Y_SIZE);
 
         // calc grid index
-        BndBox box;
+        BndBox box{};
         size_t label = idx / channel_offset;
         size_t grid_x = idx % FEATURE_X_SIZE;
         size_t grid_y = (idx / FEATURE_X_SIZE) % FEATURE_Y_SIZE;
@@ -291,7 +291,7 @@ inline float box_overlap(const float *box_a, const float *box_b) {
     poly_center.y /= cnt;
 
     // sort the points of polygon
-    Point temp;
+    Point temp{};
     for (int j = 0; j < cnt - 1; j++) {
         for (int i = 0; i < cnt - j - 1; i++) {
             if (point_cmp(cross_points[i], cross_points[i + 1], poly_center)) {
@@ -331,7 +331,7 @@ inline float calculateIOU(const float *box_a, const float *box_b) {
 }
 
 void nms(const std::vector<BndBox> &boxes, const std::vector<float> &scores,
-         std::vector<bool> &suppressed, float iou_threshold) {
+         std::vector<bool> &suppressed, const float iou_threshold) {
     assert(boxes.size() == scores.size());
     // sort boxes based on their scores (descending order)
     std::vector<size_t> indices(boxes.size());

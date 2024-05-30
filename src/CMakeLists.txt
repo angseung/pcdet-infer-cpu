@@ -1,6 +1,6 @@
 # src/CMakeLists.txt
 
-add_library(pcdetfunc STATIC pcl.cpp pre.cpp rpn.cpp post.cpp model.cpp)
+add_library(pcdetfunc STATIC model.cpp)
 
 find_package(PCL 1.8 REQUIRED)
 include_directories(${PCL_INCLUDE_DIRS})
@@ -40,7 +40,7 @@ target_include_directories(demo PUBLIC ${PROJECT_SOURCE_DIR}/src ${PROJECT_SOURC
 target_link_libraries(
     demo
     pcdetfunc
-    draw 
+    draw
     ${PCL_LIBRARIES}
 )
 endif()
