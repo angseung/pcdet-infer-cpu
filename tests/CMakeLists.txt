@@ -1,45 +1,48 @@
 # tests/CMakeLists.txt
-
 enable_testing()
 
 add_executable(
-  voxel_snapshot_test
-  snapshot_shape_test.cpp
+	voxel_snapshot_test
+	snapshot_shape_test.cpp
 )
 target_link_libraries(
-  voxel_snapshot_test
-  GTest::gtest_main
-  pcdetfunc
+	voxel_snapshot_test
+	GTest::gtest_main
+	pcdetfunc
+	${PCL_LIBRARIES}
 )
 
 add_executable(
-  preprocess_value_test
-  snapshot_value_test.cpp
+	preprocess_value_test
+	snapshot_value_test.cpp
 )
 target_link_libraries(
-  preprocess_value_test
-  GTest::gtest_main
-  pcdetfunc
+	preprocess_value_test
+	GTest::gtest_main
+	pcdetfunc
+	${PCL_LIBRARIES}
 )
 
 add_executable(
-  rpn_test
-  snaptshot_rpn_test.cpp
+	rpn_test
+	snaptshot_rpn_test.cpp
 )
 target_link_libraries(
-  rpn_test
-  GTest::gtest_main
-  pcdetfunc
+	rpn_test
+	GTest::gtest_main
+	pcdetfunc
+	${PCL_LIBRARIES}
 )
 
 add_executable(
-  integration_test
-  integration_test.cpp
+	integration_test
+	integration_test.cpp
 )
 target_link_libraries(
-  integration_test
-  GTest::gtest_main
-  pcdetfunc
+	integration_test
+	GTest::gtest_main
+	pcdetfunc
+	${PCL_LIBRARIES}
 )
 
 include(GoogleTest)
