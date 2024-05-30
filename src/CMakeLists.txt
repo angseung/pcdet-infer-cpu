@@ -30,6 +30,7 @@ add_library(onnx::runtime ALIAS _onnxruntime)
 target_include_directories(pcdetfunc PUBLIC
     ${PROJECT_SOURCE_DIR}/includes 
     ${ONNXRUNTIME_ROOTDIR}/include
+    ${PROJECT_SOURCE_DIR}/src
 )
 target_link_libraries(pcdetfunc PUBLIC ${PCL_LIBRARIES} onnx::runtime)
 
