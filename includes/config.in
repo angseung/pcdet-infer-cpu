@@ -1,5 +1,5 @@
-#ifndef COMMON_H
-#define COMMON_H
+#ifndef __COMMON_H__
+#define __COMMON_H__
 
 #define _EPSILON 1e-4
 #define OFF 0
@@ -15,4 +15,4 @@
 #define RANDOM_SEED 123
 #define POINT_STRIDE 4
 
-#endif // COMMON_H
+#endif // __COMMON_H__
