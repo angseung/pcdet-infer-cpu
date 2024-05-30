@@ -2,11 +2,7 @@
 
 add_library(pcdetfunc STATIC model.cpp)
 
-find_package(PCL 1.8 REQUIRED)
-include_directories(${PCL_INCLUDE_DIRS})
-link_directories(${PCL_LIBRARY_DIRS})
-add_definitions(${PCL_DEFINITIONS})
-
+# onnxruntime
 if(APPLE)
 set(ONNXRUNTIME_ROOTDIR ${PROJECT_SOURCE_DIR}/onnxruntime-osx-arm64-1.16.3)
 add_library(_onnxruntime INTERFACE IMPORTED)
@@ -30,8 +26,9 @@ add_library(onnx::runtime ALIAS _onnxruntime)
 target_include_directories(pcdetfunc PUBLIC
     ${PROJECT_SOURCE_DIR}/includes 
     ${ONNXRUNTIME_ROOTDIR}/include
+    ${PROJECT_SOURCE_DIR}/src
 )
-target_link_libraries(pcdetfunc PUBLIC ${PCL_LIBRARIES} onnx::runtime)
+target_link_libraries(pcdetfunc PUBLIC onnx::runtime)
 
 if(UNIX)
 add_subdirectory(draw)

@@ -88,7 +88,7 @@ TEST(VoxelSnapshotTest, PFEShapeTest) {
         std::vector<float> points =
             vueron::readPcdFile(pcd_file, MAX_POINTS_NUM);
         size_t points_buf_len = points.size();
-        size_t point_stride = sizeof(float);
+        size_t point_stride = POINT_STRIDE;
         std::vector<vueron::Pillar> bev_pillar(GRID_Y_SIZE * GRID_X_SIZE);
         std::vector<size_t> voxel_coords; // (x, y)
         std::vector<size_t> voxel_num_points;
@@ -137,10 +137,10 @@ TEST(VoxelSnapshotTest, VoxelCoordsValueTest) {
             MAX_VOXELS * MAX_NUM_POINTS_PER_PILLAR * FEATURE_NUM, 0.0f);
 
         vueron::voxelization(bev_pillar, (float *)points.data(), points.size(),
-                             sizeof(float));
+                             POINT_STRIDE);
         size_t num_pillars = vueron::point_decoration(
             bev_pillar, voxel_coords, voxel_num_points, pfe_input,
-            (float *)points.data(), points.size(), sizeof(float));
+            (float *)points.data(), points.size(), POINT_STRIDE);
 
         EXPECT_EQ(voxel_coords.size() / 2, voxel_num_points.size());
         EXPECT_EQ(voxel_coords.size(), voxel_coords_snapshot.size());

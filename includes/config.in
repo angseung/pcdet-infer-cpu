@@ -13,5 +13,6 @@
 #define SNAPSHOT_PATH "@SNAPSHOT_PATH@"
 
 #define RANDOM_SEED 123
+#define POINT_STRIDE 4
 
 #endif // COMMON_H
