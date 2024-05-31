@@ -43,7 +43,6 @@ void voxelization(std::vector<Pillar> &bev_pillar, const float *points,
 #endif
     size_t num_points_to_voxelize =
         (points_num > MAX_POINTS_NUM) ? MAX_POINTS_NUM : points_num;
-
     for (size_t idx = 0; idx < num_points_to_voxelize; idx++) {
         size_t i = indices[idx];
         float point_x = points[point_stride * i];
@@ -69,7 +68,6 @@ void voxelization(std::vector<Pillar> &bev_pillar, const float *points,
         assert(voxel_id_x < GRID_X_SIZE && voxel_id_y < GRID_Y_SIZE);
 
         size_t voxel_index = voxel_id_y * GRID_X_SIZE + voxel_id_x;
-
         if (bev_pillar[voxel_index].point_num_in_pillar <
             MAX_NUM_POINTS_PER_PILLAR) {
             size_t voxel_index_in_pillar =
