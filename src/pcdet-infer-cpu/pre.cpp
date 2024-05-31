@@ -12,7 +12,7 @@ void vueron::voxelization(std::vector<Pillar> &bev_pillar, const float *points,
     // check grid size
     assert(GRID_X_SIZE == (float)((MAX_X_RANGE - MIN_X_RANGE) / VOXEL_X_SIZE));
     assert(GRID_Y_SIZE == (float)((MAX_Y_RANGE - MIN_Y_RANGE) / VOXEL_Y_SIZE));
-    assert(1 == (float)((MAX_Z_RANGE - MIN_Z_RANGE) / VOXEL_Z_SIZE));
+    assert(1.0f == (float)((MAX_Z_RANGE - MIN_Z_RANGE) / VOXEL_Z_SIZE));
 
     // check buffer size
     assert(points_buf_len % point_stride == 0);
