@@ -4,7 +4,7 @@
 #include "params.h"
 #include "pcl.h"
 #include <cstdlib>
-#include <draw/draw.h>
+#include <draw.h>
 #include <glob.h>
 #include <iomanip>
 #include <pcl/io/pcd_io.h>
