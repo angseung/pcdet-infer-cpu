@@ -1,13 +1,13 @@
 #include "npy.h"
 #include "params.h"
 #include "pcl.h"
-#include "pre.h"
-#include "rpn.h"
 #include <cmath>
 #include <glob.h>
 #include <gtest/gtest.h>
 #include <iostream>
 #include <numeric>
+#include <pcdet-infer-cpu/pre.h>
+#include <pcdet-infer-cpu/rpn.h>
 
 TEST(VoxelValueTest, ScatterTest) {
     std::string folder_path = PCD_PATH;

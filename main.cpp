@@ -1,7 +1,7 @@
 #include "config.h"
-#include "model.h"
 #include "npy.h"
 #include "params.h"
+#include "pcdet-infer-cpu/model.h"
 #include "pcl.h"
 #include "type.h"
 #include <glob.h>

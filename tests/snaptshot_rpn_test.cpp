@@ -1,15 +1,15 @@
 #include "npy.h"
 #include "params.h"
 #include "pcl.h"
-#include "post.h"
-#include "pre.h"
-#include "rpn.h"
 #include "type.h"
 #include <cmath>
 #include <glob.h>
 #include <gtest/gtest.h>
 #include <iostream>
 #include <numeric>
+#include <pcdet-infer-cpu/post.h>
+#include <pcdet-infer-cpu/pre.h>
+#include <pcdet-infer-cpu/rpn.h>
 
 #define _EPSILON_RPN 5e-3
 #define _EPSILON_HM 1e-3

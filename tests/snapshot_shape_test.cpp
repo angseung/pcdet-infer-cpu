@@ -1,11 +1,11 @@
 #include "npy.h"
 #include "params.h"
 #include "pcl.h"
-#include "pre.h"
 #include <glob.h>
 #include <gtest/gtest.h>
 #include <iostream>
 #include <numeric>
+#include <pcdet-infer-cpu/pre.h>
 
 TEST(VoxelSnapshotTest, VoxelShapeTest) {
     // read snapshot

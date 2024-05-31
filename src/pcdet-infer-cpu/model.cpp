@@ -1,9 +1,9 @@
-#include "model.h"
 #include "config.h"
 #include "params.h"
-#include "post.h"
-#include "pre.h"
-#include "rpn.h"
+#include <pcdet-infer-cpu/model.h>
+#include <pcdet-infer-cpu/post.h>
+#include <pcdet-infer-cpu/pre.h>
+#include <pcdet-infer-cpu/rpn.h>
 
 void vueron::run_model(const float *points, size_t point_buf_len,
                        size_t point_stride, std::vector<BndBox> &boxes,

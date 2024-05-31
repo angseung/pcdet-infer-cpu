@@ -31,8 +31,8 @@ set(SNAPSHOT_PATH ${PROJECT_SOURCE_DIR}/zero_snapshots/pcd*)
 
 # Configure config header
 configure_file (
-	"${PROJECT_SOURCE_DIR}/includes/config.in"
-	"${PROJECT_SOURCE_DIR}/includes/config.h"
+	"${PROJECT_SOURCE_DIR}/include/config.in"
+	"${PROJECT_SOURCE_DIR}/include/config.h"
 	@ONLY
 )
 
