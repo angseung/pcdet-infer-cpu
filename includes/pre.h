@@ -37,27 +37,17 @@ void voxelization(std::vector<Pillar> &bev_pillar, const float *points,
     size_t points_num = points_buf_len / point_stride;
     std::vector<size_t> indices(points_num, 0);
     std::iota(indices.begin(), indices.end(), 0);
-    size_t processed = 0;
 
-// TODO: Test with _SHIFFLE ON
 #if _SHIFFLE == ON
     std::shuffle(indices.begin(), indices.end(), rng);
 #endif
-
-    for (size_t i : indices) { // for point
-        // check max_point_num_per_frame
-        if (processed > MAX_POINTS_NUM)
-            // requires valiation here
-            break;
+    size_t num_points_to_voxelize =
+        (points_num > MAX_POINTS_NUM) ? MAX_POINTS_NUM : points_num;
+    for (size_t idx = 0; idx < num_points_to_voxelize; idx++) {
+        size_t i = indices[idx];
         float point_x = points[point_stride * i];
         float point_y = points[point_stride * i + 1];
         float point_z = points[point_stride * i + 2];
-
-#if NUM_POINT_VALUES >= 4
-        float point_i = points[point_stride * i + 3];
-#endif
-        processed++;
-        assert(processed <= MAX_POINTS_NUM);
 
         size_t voxel_id_x = floorf((point_x - MIN_X_RANGE) / VOXEL_X_SIZE);
         size_t voxel_id_y = floorf((point_y - MIN_Y_RANGE) / VOXEL_Y_SIZE);
@@ -78,8 +68,6 @@ void voxelization(std::vector<Pillar> &bev_pillar, const float *points,
         assert(voxel_id_x < GRID_X_SIZE && voxel_id_y < GRID_Y_SIZE);
 
         size_t voxel_index = voxel_id_y * GRID_X_SIZE + voxel_id_x;
-
-        // bev_pillar : GRID_Y_SIZE * GRID_X_SIZE vector<Pillar>
         if (bev_pillar[voxel_index].point_num_in_pillar <
             MAX_NUM_POINTS_PER_PILLAR) {
             size_t voxel_index_in_pillar =
