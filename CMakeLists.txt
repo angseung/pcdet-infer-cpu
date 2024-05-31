@@ -26,7 +26,7 @@ FetchContent_MakeAvailable(googletest)
 
 set(PFE_PATH ${PROJECT_SOURCE_DIR}/models/gcm_resfpn_falcon_v4_residual_gelu_full_zero_f71.68_r0_s52.48_pfe.onnx)
 set(RPN_PATH ${PROJECT_SOURCE_DIR}/models/gcm_resfpn_falcon_v4_residual_gelu_full_zero_f71.68_r0_s52.48_rpn.onnx)
-set(PCD_PATH ${PROJECT_SOURCE_DIR}/pcd/*.pcd)
+set(PCD_PATH ${PROJECT_SOURCE_DIR}/pcd/cepton/*.pcd)
 set(SNAPSHOT_PATH ${PROJECT_SOURCE_DIR}/zero_snapshots/pcd*)
 
 # Configure config header

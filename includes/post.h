@@ -120,7 +120,8 @@ inline float clip(const float val, const float min_val, const float max_val) {
 }
 inline float sigmoid(const float x) { return 1.0f / (1.0f + exp(-x)); }
 
-inline float rectify_score(const float score, const float iou, const float alpha) {
+inline float rectify_score(const float score, const float iou,
+                           const float alpha) {
     float new_iou = (iou + 1.0f) * 0.5f;
     float new_score =
         powf(score, (1.0f - alpha)) * powf(clip(new_iou, 0.0f, 1.0f), alpha);
@@ -133,6 +134,7 @@ void decode_to_boxes(const std::vector<std::vector<float>> &rpn_output,
     /*
         rpn_output order: hm, dim, center, center_z, rot, iou
     */
+    bool has_iou_head = (rpn_output.size() == 6); // last had is iou head
     assert(rpn_output[0].size() ==
            CLASS_NUM * FEATURE_Y_SIZE * FEATURE_X_SIZE);                 // hm
     assert(rpn_output[1].size() == 3 * FEATURE_Y_SIZE * FEATURE_X_SIZE); // dim
@@ -140,13 +142,16 @@ void decode_to_boxes(const std::vector<std::vector<float>> &rpn_output,
            2 * FEATURE_Y_SIZE * FEATURE_X_SIZE);                     // center
     assert(rpn_output[3].size() == FEATURE_Y_SIZE * FEATURE_X_SIZE); // center_z
     assert(rpn_output[4].size() == 2 * FEATURE_Y_SIZE * FEATURE_X_SIZE); // rot
-    assert(rpn_output[5].size() == FEATURE_Y_SIZE * FEATURE_X_SIZE);     // iou
+    if (has_iou_head) {
+        assert(rpn_output[5].size() == FEATURE_Y_SIZE * FEATURE_X_SIZE); // iou
+    }
 
     size_t head_stride = GRID_Y_SIZE / FEATURE_Y_SIZE;
     std::vector<float> hm = rpn_output[0];
     assert(hm.size() == CLASS_NUM * FEATURE_Y_SIZE * FEATURE_X_SIZE);
 
     std::vector<size_t> indices(hm.size());
+
     std::vector<float> rect_scores(IOU_RECTIFIER);
     assert(rect_scores.size() == 3);
 
@@ -202,8 +207,13 @@ void decode_to_boxes(const std::vector<std::vector<float>> &rpn_output,
             append decoded boxes, scores, and labels
         */
         // rectifying score if model has iou head
-        float rectified_score = rectify_score(
-            sigmoid(hm[idx]), rpn_output[5][s_idx], rect_scores[label]);
+        float rectified_score;
+        if (has_iou_head) {
+            rectified_score = rectify_score(
+                sigmoid(hm[idx]), rpn_output[5][s_idx], rect_scores[label]);
+        } else {
+            rectified_score = sigmoid(hm[idx]);
+        }
         if (rectified_score > SCORE_THRESH) {
             scores.push_back(rectified_score);
             boxes.push_back(box);
@@ -211,6 +221,7 @@ void decode_to_boxes(const std::vector<std::vector<float>> &rpn_output,
         }
     }
 }
+
 inline float box_overlap(const float *box_a, const float *box_b) {
     // params: box_a (7) [x, y, z, dx, dy, dz, heading]
     // params: box_b (7) [x, y, z, dx, dy, dz, heading]

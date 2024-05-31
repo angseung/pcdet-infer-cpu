@@ -57,7 +57,7 @@ void voxelization(std::vector<Pillar> &bev_pillar, const float *points,
         float point_i = points[point_stride * i + 3];
 #endif
         processed++;
-        assert(processed < MAX_POINTS_NUM);
+        assert(processed <= MAX_POINTS_NUM);
 
         size_t voxel_id_x = floorf((point_x - MIN_X_RANGE) / VOXEL_X_SIZE);
         size_t voxel_id_y = floorf((point_y - MIN_Y_RANGE) / VOXEL_Y_SIZE);
