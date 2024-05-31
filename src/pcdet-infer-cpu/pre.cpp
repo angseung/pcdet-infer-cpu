@@ -72,12 +72,12 @@ size_t vueron::point_decoration(const std::vector<Pillar> &bev_pillar,
                                 std::vector<size_t> &voxel_coords,
                                 std::vector<size_t> &voxel_num_points,
                                 std::vector<float> &pfe_input,
-                                const float *points, size_t points_buf_len,
-                                size_t point_stride) {
+                                const float *points,
+                                const size_t point_stride) {
     size_t num_pillars = 0;
     size_t index = 0;
 
-    for (Pillar pillar : bev_pillar) {
+    for (const Pillar pillar : bev_pillar) {
         if (pillar.is_empty) {
             continue;
         }
@@ -227,7 +227,7 @@ void vueron::pfe_run(const std::vector<float> &pfe_input,
 
 void vueron::scatter(const std::vector<float> &pfe_output,
                      const std::vector<size_t> &voxel_coords,
-                     size_t num_pillars, std::vector<float> &rpn_input) {
+                     const size_t num_pillars, std::vector<float> &rpn_input) {
     assert(rpn_input.size() == GRID_Y_SIZE * GRID_X_SIZE * NUM_FEATURE_SCATTER);
     assert(pfe_output.size() == MAX_VOXELS * NUM_FEATURE_SCATTER);
 

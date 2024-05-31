@@ -1,5 +1,4 @@
 #include "pcdet-infer-cpu/model.h"
-#include "config.h"
 #include "params.h"
 #include "pcdet-infer-cpu/post.h"
 #include "pcdet-infer-cpu/pre.h"
@@ -39,7 +38,7 @@ void vueron::run_model(const float *points, size_t point_buf_len,
     voxelization(bev_pillar, points, point_buf_len, point_stride);
     size_t num_pillars =
         point_decoration(bev_pillar, voxel_coords, voxel_num_points, pfe_input,
-                         points, point_buf_len, point_stride);
+                         points, point_stride);
 
     /*
         Pillar Feature Extraction

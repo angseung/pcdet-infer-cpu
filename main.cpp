@@ -23,7 +23,7 @@ int main(int argc, const char **argv) {
                       << points.size() / POINT_STRIDE << std::endl;
 #endif
             /*
-                Buffers for inferece
+                Buffers for inference
             */
             std::vector<vueron::BndBox> nms_boxes;
             std::vector<float> nms_scores;
