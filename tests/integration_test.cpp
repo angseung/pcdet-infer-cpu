@@ -1,3 +1,4 @@
+#include "config.h"
 #include "model.h"
 #include "npy.h"
 #include "params.h"

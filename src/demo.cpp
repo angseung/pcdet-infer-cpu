@@ -12,8 +12,6 @@
 #include <string>
 #include <vector>
 
-// #define FROM_SNAPSHOT
-
 int main(int argc, const char **argv) {
     std::string folder_path;
     if (argc < 2) {
