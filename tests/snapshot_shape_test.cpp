@@ -1,10 +1,10 @@
+#include "config.h"
 #include "npy.h"
 #include "params.h"
 #include "pcdet-infer-cpu/pre.h"
 #include "pcl.h"
 #include <glob.h>
 #include <gtest/gtest.h>
-#include <iostream>
 #include <numeric>
 
 TEST(VoxelSnapshotTest, VoxelShapeTest) {

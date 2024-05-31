@@ -5,7 +5,6 @@
 #include "pcl.h"
 #include "type.h"
 #include <glob.h>
-#include <iostream>
 
 int main(int argc, const char **argv) {
     std::string folder_path = PCD_PATH;

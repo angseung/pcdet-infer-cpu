@@ -2,7 +2,6 @@
 #define __MODEL_H__
 
 #include "type.h"
-#include <cstdlib>
 #include <vector>
 
 namespace vueron {

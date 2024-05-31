@@ -4,7 +4,6 @@
 #include <cstring>
 #include <fstream>
 #include <glob.h>
-#include <iostream>
 #include <map>
 #include <pcl/io/pcd_io.h>
 #include <pcl/point_types.h>

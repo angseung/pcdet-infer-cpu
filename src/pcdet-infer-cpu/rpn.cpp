@@ -1,4 +1,12 @@
 #include "pcdet-infer-cpu/rpn.h"
+#include "config.h"
+#include "onnxruntime_cxx_api.h"
+#include "params.h"
+#include <algorithm>
+#include <cassert>
+#include <memory.h>
+#include <numeric>
+#include <random>
 
 void vueron::rpn_run(const std::vector<float> &rpn_input,
                      std::vector<std::vector<float>> &rpn_output) {

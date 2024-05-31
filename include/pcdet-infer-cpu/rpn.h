@@ -1,15 +1,6 @@
 #ifndef __RPN_H__
 #define __RPN_H__
 
-#include "config.h"
-#include "onnxruntime_cxx_api.h"
-#include "params.h"
-#include <algorithm>
-#include <cassert>
-#include <iostream>
-#include <memory.h>
-#include <numeric>
-#include <random>
 #include <vector>
 
 namespace vueron {

@@ -1,3 +1,4 @@
+#include "config.h"
 #include "npy.h"
 #include "params.h"
 #include "pcdet-infer-cpu/post.h"
@@ -8,7 +9,6 @@
 #include <cmath>
 #include <glob.h>
 #include <gtest/gtest.h>
-#include <iostream>
 #include <numeric>
 
 #define _EPSILON_RPN 5e-3
