@@ -1,3 +1,4 @@
+#include "config.h"
 #include "npy.h"
 #include "params.h"
 #include "pcdet-infer-cpu/pre.h"
@@ -6,7 +7,6 @@
 #include <cmath>
 #include <glob.h>
 #include <gtest/gtest.h>
-#include <iostream>
 #include <numeric>
 
 TEST(VoxelValueTest, ScatterTest) {

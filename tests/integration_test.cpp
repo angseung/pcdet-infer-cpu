@@ -7,7 +7,6 @@
 #include <cmath>
 #include <glob.h>
 #include <gtest/gtest.h>
-#include <iostream>
 #include <numeric>
 
 #define _ERROR 1e-3

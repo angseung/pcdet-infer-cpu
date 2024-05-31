@@ -1,4 +1,8 @@
 #include "pcdet-infer-cpu/post.h"
+#include "params.h"
+#include <algorithm>
+#include <cassert>
+#include <numeric>
 
 void vueron::decode_to_boxes(const std::vector<std::vector<float>> &rpn_output,
                              std::vector<BndBox> &boxes,

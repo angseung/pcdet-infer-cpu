@@ -1,33 +1,13 @@
 #ifndef __POST_H__
 #define __POST_H__
 
-#include "params.h"
 #include "type.h"
-#include <algorithm>
-#include <cassert>
 #include <cmath>
-#include <iostream>
-#include <numeric>
 #include <vector>
 
 namespace vueron {
 
 constexpr float EPS = 1e-8;
-
-struct Point {
-    float x{}, y{};
-    Point() = default;
-    Point(const float _x, const float _y) { x = _x, y = _y; }
-
-    void set(const float _x, const float _y) {
-        x = _x;
-        y = _y;
-    }
-
-    Point operator+(const Point &b) const { return {x + b.x, y + b.y}; }
-
-    Point operator-(const Point &b) const { return {x - b.x, y - b.y}; }
-};
 
 inline float min(const float a, const float b) { return a > b ? b : a; }
 

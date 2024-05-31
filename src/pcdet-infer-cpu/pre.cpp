@@ -1,4 +1,11 @@
 #include "pcdet-infer-cpu/pre.h"
+#include "config.h"
+#include "onnxruntime_cxx_api.h"
+#include <algorithm>
+#include <cassert>
+#include <memory.h>
+#include <numeric>
+#include <random>
 
 void vueron::voxelization(std::vector<Pillar> &bev_pillar, const float *points,
                           size_t points_buf_len, size_t point_stride) {
