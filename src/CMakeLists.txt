@@ -1,6 +1,6 @@
 # src/CMakeLists.txt
 
-add_library(pcdetfunc STATIC model.cpp)
+add_library(pcdetfunc STATIC pre.cpp rpn.cpp post.cpp model.cpp)
 
 # onnxruntime
 if(APPLE)
