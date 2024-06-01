@@ -9,6 +9,10 @@ project(
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
+# Build Options
+set(BUILD_DEMO OFF)
+set(BUILD_TEST OFF)
+
 # Point cloud library
 find_package(PCL 1.8 REQUIRED)
 include_directories(${PCL_INCLUDE_DIRS})
@@ -16,6 +20,7 @@ link_directories(${PCL_LIBRARY_DIRS})
 add_definitions(${PCL_DEFINITIONS})
 
 # GoogleTest
+if(${BUILD_TEST})
 include(FetchContent)
 FetchContent_Declare(
 	googletest
@@ -23,6 +28,7 @@ FetchContent_Declare(
 )
 set(gtest_force_shared_crt ON CACHE BOOL "" FORCE)
 FetchContent_MakeAvailable(googletest)
+endif()
 
 set(PFE_PATH ${PROJECT_SOURCE_DIR}/models/gcm_resfpn_falcon_v4_residual_gelu_full_zero_f71.68_r0_s52.48_pfe.onnx)
 set(RPN_PATH ${PROJECT_SOURCE_DIR}/models/gcm_resfpn_falcon_v4_residual_gelu_full_zero_f71.68_r0_s52.48_rpn.onnx)
@@ -42,4 +48,9 @@ set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin)
 add_subdirectory(src)
 add_executable(main main.cpp)
 target_link_libraries(main PUBLIC pcdetfunc ${PCL_LIBRARIES})
+
+if(${BUILD_TEST})
 add_subdirectory(tests)
+else()
+message(STATUS "SKIP BUILD TESTS")
+endif()

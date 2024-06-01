@@ -2,7 +2,7 @@
 
 add_subdirectory(pcdet-infer-cpu)
 
-if(UNIX)
+if(${BUILD_DEMO})
 add_subdirectory(draw)
 add_executable(demo demo.cpp)
 target_link_libraries(
@@ -11,4 +11,6 @@ target_link_libraries(
     draw
     ${PCL_LIBRARIES}
 )
+else()
+message(STATUS "SKIP BUILD DEMO")
 endif()
