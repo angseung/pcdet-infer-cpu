@@ -21,9 +21,9 @@ void vueron::run_model(const float *points, size_t point_buf_len,
                                      NUM_FEATURE_SCATTER,
                                  0.0f); // input of RPN
     std::vector<std::vector<float>> rpn_outputs;
-    std::vector<vueron::BndBox> pre_boxes; // boxes before NMS
-    std::vector<size_t> pre_labels;        // labels before NMS
-    std::vector<float> pre_scores;         // scores before NMS
+    std::vector<BndBox> pre_boxes;  // boxes before NMS
+    std::vector<size_t> pre_labels; // labels before NMS
+    std::vector<float> pre_scores;  // scores before NMS
 
     /*
         Buffers for Final Predictions
