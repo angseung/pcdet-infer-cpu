@@ -30,8 +30,4 @@ target_include_directories(pcdetfunc PUBLIC
 target_link_libraries(pcdetfunc PUBLIC onnx::runtime)
 
 add_library(pcdet STATIC pcdet.cpp)
-target_include_directories(pcdet PUBLIC
-    ${PROJECT_SOURCE_DIR}/include
-    ${ONNXRUNTIME_ROOTDIR}/include
-)
-target_link_libraries(pcdet PUBLIC onnx::runtime)
+target_link_libraries(pcdet PUBLIC pcdetfunc)

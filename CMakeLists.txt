@@ -11,7 +11,7 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
 # Build Options
 set(BUILD_DEMO OFF)
-set(BUILD_TEST OFF)
+set(BUILD_TEST ON)
 
 # Point cloud library
 find_package(PCL 1.8 REQUIRED)
@@ -47,7 +47,7 @@ set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin)
 
 add_subdirectory(src)
 add_executable(main main.cpp)
-target_link_libraries(main PUBLIC pcdetfunc ${PCL_LIBRARIES})
+target_link_libraries(main PUBLIC pcdet ${PCL_LIBRARIES})
 
 if(${BUILD_TEST})
 add_subdirectory(tests)
