@@ -8,19 +8,19 @@
 namespace vueron {
 
 void voxelization(std::vector<Pillar> &bev_pillar, const float *points,
-                  size_t points_buf_len, size_t point_stride);
+                  const size_t &points_buf_len, const size_t &point_stride);
 
 size_t point_decoration(const std::vector<Pillar> &bev_pillar,
                         std::vector<size_t> &voxel_coords,
                         std::vector<size_t> &voxel_num_points,
                         std::vector<float> &pfe_input, const float *points,
-                        size_t point_stride);
+                        const size_t &point_stride);
 
 void pfe_run(const std::vector<float> &pfe_input,
              std::vector<float> &pfe_output);
 
 void scatter(const std::vector<float> &pfe_output,
-             const std::vector<size_t> &voxel_coords, size_t num_pillars,
+             const std::vector<size_t> &voxel_coords, const size_t &num_pillars,
              std::vector<float> &rpn_input);
 
 } // namespace vueron
