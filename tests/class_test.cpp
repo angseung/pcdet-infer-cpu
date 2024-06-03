@@ -57,7 +57,7 @@ TEST(IntegrationTest, IntegrationTest) {
 
         // Do inference with pcdetfunc
         vueron::run_model(points, point_buf_len, point_stride, nms_boxes,
-                          nms_scores, nms_labels);
+                          nms_labels, nms_scores);
 
         // Buffers for inferece for pcdet
         std::vector<vueron::PredBox> pcdet_nms_boxes;
