@@ -33,11 +33,11 @@ vueron::PCDet::PCDet(std::string pfe_path, std::string rpn_path)
       bev_image(GRID_Y_SIZE * GRID_X_SIZE * NUM_FEATURE_SCATTER, 0.0f),
       suppressed(MAX_BOX_NUM_BEFORE_NMS, false), num_pillars(0),
       pfe_path(pfe_path),
-      pfe_input_dim({MAX_VOXELS, MAX_NUM_POINTS_PER_PILLAR, FEATURE_NUM}),
+      pfe_input_dim{MAX_VOXELS, MAX_NUM_POINTS_PER_PILLAR, FEATURE_NUM},
       pfe(pfe_path, pfe_input_dim,
           MAX_VOXELS * MAX_NUM_POINTS_PER_PILLAR * FEATURE_NUM),
       rpn_path(rpn_path),
-      rpn_input_dim({1, NUM_FEATURE_SCATTER, GRID_Y_SIZE, GRID_X_SIZE}),
+      rpn_input_dim{1, NUM_FEATURE_SCATTER, GRID_Y_SIZE, GRID_X_SIZE},
       rpn(rpn_path, rpn_input_dim,
           GRID_Y_SIZE * GRID_X_SIZE * NUM_FEATURE_SCATTER) {
     std::cout << "PFE Model Initialized with " << PFE_PATH << std::endl;
@@ -63,8 +63,8 @@ void vueron::PCDet::postprocess(std::vector<vueron::BndBox> &final_boxes,
                                 std::vector<float> &final_scores) {
     vueron::decode_to_boxes(rpn_outputs, pre_boxes, pre_labels, pre_scores);
     vueron::nms(pre_boxes, pre_scores, suppressed, IOU_THRESH);
-    vueron::gather_boxes(pre_boxes, pre_scores, pre_labels, final_boxes,
-                         final_scores, final_labels, suppressed);
+    vueron::gather_boxes(pre_boxes, pre_labels, pre_scores, final_boxes,
+                         final_labels, final_scores, suppressed);
 }
 
 void vueron::PCDet::get_pred(std::vector<PredBox> &boxes) {
