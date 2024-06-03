@@ -1,5 +1,6 @@
 # src/pcdet-cpu/CMakeLists.txt
 
+# A library contains only inference codes
 add_library(pcdetfunc STATIC pre.cpp rpn.cpp post.cpp model.cpp)
 
 # onnxruntime
@@ -21,6 +22,7 @@ else()
 message(FATAL_ERROR "Unsupported OS")
 endif()
 
+# A library contains an inference model class and it wraps inference codes in pcdetfunc
 add_library(onnx::runtime ALIAS _onnxruntime)
 
 target_include_directories(pcdetfunc PUBLIC
