@@ -1,4 +1,5 @@
 #include "pcdet-infer-cpu/pcdet.h"
+#include "onnxruntime_cxx_api.h"
 #include "pcdet-infer-cpu/post.h"
 #include "pcdet-infer-cpu/pre.h"
 #include "pcdet-infer-cpu/rpn.h"

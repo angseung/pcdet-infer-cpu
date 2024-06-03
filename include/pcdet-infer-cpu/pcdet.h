@@ -1,7 +1,6 @@
 #ifndef __PCDET_H__
 #define __PCDET_H__
 
-#include "onnxruntime_cxx_api.h"
 #include "params.h"
 #include "type.h"
 #include <cstddef>

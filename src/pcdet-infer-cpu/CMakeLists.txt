@@ -31,5 +31,5 @@ target_include_directories(pcdetfunc PUBLIC
 )
 target_link_libraries(pcdetfunc PUBLIC onnx::runtime)
 
-add_library(pcdet STATIC pcdet.cpp)
+add_library(pcdet STATIC pcdet.cpp ort_model.cpp)
 target_link_libraries(pcdet PUBLIC pcdetfunc)
