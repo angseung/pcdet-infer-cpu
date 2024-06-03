@@ -140,7 +140,7 @@ TEST(VoxelSnapshotTest, VoxelCoordsValueTest) {
                              POINT_STRIDE);
         size_t num_pillars = vueron::point_decoration(
             bev_pillar, voxel_coords, voxel_num_points, pfe_input,
-            (float *)points.data(), points.size(), POINT_STRIDE);
+            (float *)points.data(), POINT_STRIDE);
 
         EXPECT_EQ(voxel_coords.size() / 2, voxel_num_points.size());
         EXPECT_EQ(voxel_coords.size(), voxel_coords_snapshot.size());

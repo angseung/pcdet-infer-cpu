@@ -1,5 +1,4 @@
 #include "pcdet-infer-cpu/model.h"
-#include "config.h"
 #include "params.h"
 #include "pcdet-infer-cpu/post.h"
 #include "pcdet-infer-cpu/pre.h"
@@ -22,9 +21,9 @@ void vueron::run_model(const float *points, size_t point_buf_len,
                                      NUM_FEATURE_SCATTER,
                                  0.0f); // input of RPN
     std::vector<std::vector<float>> rpn_outputs;
-    std::vector<vueron::BndBox> pre_boxes; // boxes before NMS
-    std::vector<size_t> pre_labels;        // labels before NMS
-    std::vector<float> pre_scores;         // scores before NMS
+    std::vector<BndBox> pre_boxes;  // boxes before NMS
+    std::vector<size_t> pre_labels; // labels before NMS
+    std::vector<float> pre_scores;  // scores before NMS
 
     /*
         Buffers for Final Predictions
@@ -39,7 +38,7 @@ void vueron::run_model(const float *points, size_t point_buf_len,
     voxelization(bev_pillar, points, point_buf_len, point_stride);
     size_t num_pillars =
         point_decoration(bev_pillar, voxel_coords, voxel_num_points, pfe_input,
-                         points, point_buf_len, point_stride);
+                         points, point_stride);
 
     /*
         Pillar Feature Extraction

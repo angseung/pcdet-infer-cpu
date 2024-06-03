@@ -2,7 +2,7 @@
 #include "draw/draw.h"
 #include "npy.h"
 #include "params.h"
-#include "pcdet-infer-cpu/model.h"
+#include "pcdet-infer-cpu/pcdet.h"
 #include "pcl.h"
 #include <cstdlib>
 #include <glob.h>
@@ -28,6 +28,8 @@ int main(int argc, const char **argv) {
     std::vector<std::string> pcd_files = vueron::getFileList(folder_path);
     size_t num_test_files = pcd_files.size();
 
+    vueron::PCDet pcdet;
+
     for (size_t i = 0; i < num_test_files; i++) {
         std::string pcd_file = pcd_files[i];
 
@@ -49,8 +51,8 @@ int main(int argc, const char **argv) {
         /*
             Do inference
         */
-        vueron::run_model(points, point_buf_len, point_stride, nms_boxes,
-                          nms_scores, nms_labels);
+        pcdet.do_infer(points, point_buf_len, point_stride, nms_boxes,
+                       nms_labels, nms_scores);
 
         /*
             Logging

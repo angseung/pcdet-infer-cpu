@@ -45,8 +45,20 @@ target_link_libraries(
 	${PCL_LIBRARIES}
 )
 
+add_executable(
+	class_test
+	class_test.cpp
+)
+target_link_libraries(
+	class_test
+	GTest::gtest_main
+	pcdet
+	${PCL_LIBRARIES}
+)
+
 include(GoogleTest)
 gtest_discover_tests(voxel_snapshot_test)
 gtest_discover_tests(preprocess_value_test)
 gtest_discover_tests(rpn_test)
 gtest_discover_tests(integration_test)
+gtest_discover_tests(class_test)

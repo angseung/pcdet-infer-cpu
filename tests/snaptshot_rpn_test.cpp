@@ -90,7 +90,7 @@ TEST(RPNTest, RPNValueTest) {
                              point_stride);
         size_t num_pillars = vueron::point_decoration(
             bev_pillar, voxel_coords, voxel_num_points, pfe_input,
-            (float *)points.data(), points_buf_len, point_stride);
+            (float *)points.data(), point_stride);
         size_t num_voxels_manual = std::accumulate(voxel_num_points.begin(),
                                                    voxel_num_points.end(), 0);
         EXPECT_EQ(num_pillars, voxel_num_points.size());

@@ -1,7 +1,7 @@
 #include "config.h"
 #include "npy.h"
 #include "params.h"
-#include "pcdet-infer-cpu/model.h"
+#include "pcdet-infer-cpu/pcdet.h"
 #include "pcl.h"
 #include "type.h"
 #include <glob.h>
@@ -10,6 +10,8 @@ int main(int argc, const char **argv) {
     std::string folder_path = PCD_PATH;
     std::vector<std::string> pcd_files = vueron::getFileList(folder_path);
     size_t point_stride = POINT_STRIDE;
+
+    vueron::PCDet pcdet;
 
     while (1) {
         for (const auto &pcd_file : pcd_files) {
@@ -23,7 +25,7 @@ int main(int argc, const char **argv) {
                       << points.size() / POINT_STRIDE << std::endl;
 #endif
             /*
-                Buffers for inferece
+                Buffers for inference
             */
             std::vector<vueron::BndBox> nms_boxes;
             std::vector<float> nms_scores;
@@ -32,8 +34,8 @@ int main(int argc, const char **argv) {
             /*
                 Do inference
             */
-            vueron::run_model(point_data, point_buf_len, point_stride,
-                              nms_boxes, nms_scores, nms_labels);
+            pcdet.do_infer(point_data, point_buf_len, point_stride, nms_boxes,
+                           nms_labels, nms_scores);
 
             /*
                 Logging
