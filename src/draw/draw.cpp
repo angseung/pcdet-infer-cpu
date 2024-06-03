@@ -11,7 +11,7 @@ cv::Point2f rotatePoint(const cv::Point2f &point, float angle) {
     return cv::Point2f(x, y);
 }
 
-cv::Mat drawBirdsEyeView(size_t points_size, const float *points_data,
+cv::Mat drawBirdsEyeView(const size_t &points_size, const float *points_data,
                          const std::vector<vueron::BndBox> &boxes,
                          const std::vector<float> &scores,
                          const std::vector<size_t> &labels) {
