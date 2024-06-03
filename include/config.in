@@ -5,7 +5,8 @@
 #define OFF 0
 #define ON 1
 #define _SHIFFLE ON
-// #define _DEBUG
+#cmakedefine _PROFILE
+#cmakedefine _DEBUG
 
 #define PFE_PATH "@PFE_PATH@"
 #define RPN_PATH "@RPN_PATH@"
