@@ -7,32 +7,31 @@ vueron::PCDet::PCDet()
     : bev_pillar(GRID_Y_SIZE * GRID_X_SIZE),
       pfe_input(MAX_VOXELS * MAX_NUM_POINTS_PER_PILLAR * FEATURE_NUM, 0.0f),
       pfe_output(MAX_VOXELS * NUM_FEATURE_SCATTER, 0.0f),
-      bev_image(GRID_Y_SIZE * GRID_X_SIZE * NUM_FEATURE_SCATTER, 0.0f){
+      bev_image(GRID_Y_SIZE * GRID_X_SIZE * NUM_FEATURE_SCATTER, 0.0f),
+      suppressed(MAX_BOX_NUM_BEFORE_NMS, false),
+      num_pillars(0){
           // TODO: Implement Onnxruntime Model Class
       };
 
 vueron::PCDet::~PCDet(){};
 
 void vueron::PCDet::preprocess(const float *points, const size_t point_buf_len,
-                               const size_t point_stride,
-                               std::vector<Pillar> &bev_pillar,
-                               std::vector<size_t> &voxel_coords,
-                               std::vector<size_t> &voxel_num_points,
-                               std::vector<float> &pfe_input) {
+                               const size_t point_stride) {
     vueron::voxelization(bev_pillar, points, point_buf_len, point_stride);
-    size_t num_voxels =
+    num_pillars =
         vueron::point_decoration(bev_pillar, voxel_coords, voxel_num_points,
                                  pfe_input, points, point_stride);
 }
 
-void vueron::PCDet::pfe_run(const std::vector<float> &pfe_input,
-                            std::vector<float> &pfe_output) {
-    vueron::pfe_run(pfe_input, pfe_output);
+void vueron::PCDet::pfe_run(void) { vueron::pfe_run(pfe_input, pfe_output); }
+
+void vueron::PCDet::scatter(void) {
+    vueron::scatter(pfe_output, voxel_coords, num_pillars, bev_image);
 }
 
-void vueron::PCDet::rpn_run() { vueron::rpn_run(bev_image, rpn_outputs); }
+void vueron::PCDet::rpn_run(void) { vueron::rpn_run(bev_image, rpn_outputs); }
 
-void vueron::PCDet::postprocess() {
+void vueron::PCDet::postprocess(void) {
     vueron::decode_to_boxes(rpn_outputs, pre_boxes, pre_labels, pre_scores);
     vueron::nms(pre_boxes, pre_scores, suppressed, IOU_THRESH);
     vueron::gather_boxes(pre_boxes, pre_scores, pre_labels, post_boxes,
@@ -59,9 +58,9 @@ void vueron::PCDet::get_pred(std::vector<PredBox> &boxes) {
 void vueron::PCDet::do_infer(const float *points, const size_t point_buf_len,
                              const size_t point_stride,
                              std::vector<PredBox> &boxes) {
-    vueron::PCDet::preprocess(points, point_buf_len, point_stride, bev_pillar,
-                              voxel_coords, voxel_num_points, pfe_input);
-    vueron::PCDet::pfe_run(pfe_input, pfe_output);
+    vueron::PCDet::preprocess(points, point_buf_len, point_stride);
+    vueron::PCDet::pfe_run();
+    vueron::PCDet::scatter();
     vueron::PCDet::rpn_run();
     vueron::PCDet::postprocess();
     vueron::PCDet::get_pred(boxes);
@@ -73,6 +72,8 @@ void vueron::PCDet::do_infer(const float *points, const size_t point_buf_len,
     std::fill(pfe_input.begin(), pfe_input.end(), 0.0f);
     std::fill(pfe_output.begin(), pfe_output.end(), 0.0f);
     std::fill(bev_image.begin(), bev_image.end(), 0.0f);
+    std::fill(suppressed.begin(), suppressed.end(), false);
+    num_pillars = 0;
 
     /*
         Clear buffers to have zero length

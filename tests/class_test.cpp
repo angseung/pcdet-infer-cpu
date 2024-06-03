@@ -48,21 +48,37 @@ TEST(IntegrationTest, IntegrationTest) {
         std::vector<size_t> pre_labels;        // labels before NMS
         std::vector<float> pre_scores;         // scores before NMS
 
-        /*
-            Inference with pcd file
-        */
-        // Buffers for inferece
+        // Buffers for inferece for pcdetfunc
         std::vector<vueron::BndBox> nms_boxes;
         std::vector<float> nms_scores;
         std::vector<size_t> nms_labels;
 
-        // Do inference
+        // Do inference with pcdetfunc
         vueron::run_model(points, point_buf_len, point_stride, nms_boxes,
                           nms_scores, nms_labels);
+
+        // Buffers for inferece for pcdet
+        std::vector<vueron::PredBox> pcdet_nms_boxes;
+
+        // Do inference with pcdet
+        pcdet.do_infer(points, point_buf_len, point_stride, pcdet_nms_boxes);
 
         EXPECT_EQ(nms_boxes.size(), MAX_BOX_NUM_AFTER_NMS);
         EXPECT_EQ(nms_scores.size(), MAX_BOX_NUM_AFTER_NMS);
         EXPECT_EQ(nms_labels.size(), MAX_BOX_NUM_AFTER_NMS);
+        EXPECT_EQ(pcdet_nms_boxes.size(), MAX_BOX_NUM_AFTER_NMS);
+
+        for (size_t j = 0; j < MAX_BOX_NUM_AFTER_NMS; j++) {
+            EXPECT_EQ(nms_labels[j], pcdet_nms_boxes[j].label);
+            EXPECT_FLOAT_EQ(nms_scores[j], pcdet_nms_boxes[j].score);
+            EXPECT_FLOAT_EQ(nms_boxes[j].x, pcdet_nms_boxes[j].x);
+            EXPECT_FLOAT_EQ(nms_boxes[j].y, pcdet_nms_boxes[j].y);
+            EXPECT_FLOAT_EQ(nms_boxes[j].z, pcdet_nms_boxes[j].z);
+            EXPECT_FLOAT_EQ(nms_boxes[j].dx, pcdet_nms_boxes[j].dx);
+            EXPECT_FLOAT_EQ(nms_boxes[j].dy, pcdet_nms_boxes[j].dy);
+            EXPECT_FLOAT_EQ(nms_boxes[j].dz, pcdet_nms_boxes[j].dz);
+            EXPECT_FLOAT_EQ(nms_boxes[j].heading, pcdet_nms_boxes[j].heading);
+        }
 
         std::cout << "Test Finish : " << pcd_file << std::endl;
     }

@@ -10,7 +10,7 @@ set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
 # Build Options
-set(BUILD_DEMO OFF)
+set(BUILD_DEMO ON)
 set(BUILD_TEST ON)
 
 # Point cloud library
