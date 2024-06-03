@@ -1,7 +1,6 @@
 #include "config.h"
 #include "npy.h"
 #include "params.h"
-#include "pcdet-infer-cpu/model.h"
 #include "pcdet-infer-cpu/pcdet.h"
 #include "pcl.h"
 #include "type.h"
@@ -31,14 +30,12 @@ int main(int argc, const char **argv) {
             std::vector<vueron::BndBox> nms_boxes;
             std::vector<float> nms_scores;
             std::vector<size_t> nms_labels;
-            std::vector<vueron::PredBox> preds;
 
             /*
                 Do inference
             */
-            vueron::run_model(point_data, point_buf_len, point_stride,
-                              nms_boxes, nms_scores, nms_labels);
-            pcdet.do_infer(point_data, point_buf_len, point_stride, preds);
+            pcdet.do_infer(point_data, point_buf_len, point_stride, nms_boxes,
+                           nms_labels, nms_scores);
 
             /*
                 Logging
