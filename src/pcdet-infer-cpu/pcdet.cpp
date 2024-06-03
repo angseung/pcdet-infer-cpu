@@ -14,14 +14,21 @@ vueron::PCDet::PCDet()
 vueron::PCDet::~PCDet(){};
 
 void vueron::PCDet::preprocess(const float *points, const size_t point_buf_len,
-                               const size_t point_stride) {
+                               const size_t point_stride,
+                               std::vector<Pillar> &bev_pillar,
+                               std::vector<size_t> &voxel_coords,
+                               std::vector<size_t> &voxel_num_points,
+                               std::vector<float> &pfe_input) {
     vueron::voxelization(bev_pillar, points, point_buf_len, point_stride);
     size_t num_voxels =
         vueron::point_decoration(bev_pillar, voxel_coords, voxel_num_points,
                                  pfe_input, points, point_stride);
 }
 
-void vueron::PCDet::pfe_run(void) { vueron::pfe_run(pfe_input, pfe_output); }
+void vueron::PCDet::pfe_run(const std::vector<float> &pfe_input,
+                            std::vector<float> &pfe_output) {
+    vueron::pfe_run(pfe_input, pfe_output);
+}
 
 void vueron::PCDet::rpn_run() { vueron::rpn_run(bev_image, rpn_outputs); }
 
@@ -52,8 +59,9 @@ void vueron::PCDet::get_pred(std::vector<PredBox> &boxes) {
 void vueron::PCDet::do_infer(const float *points, const size_t point_buf_len,
                              const size_t point_stride,
                              std::vector<PredBox> &boxes) {
-    vueron::PCDet::preprocess(points, point_buf_len, point_stride);
-    vueron::PCDet::pfe_run();
+    vueron::PCDet::preprocess(points, point_buf_len, point_stride, bev_pillar,
+                              voxel_coords, voxel_num_points, pfe_input);
+    vueron::PCDet::pfe_run(pfe_input, pfe_output);
     vueron::PCDet::rpn_run();
     vueron::PCDet::postprocess();
     vueron::PCDet::get_pred(boxes);

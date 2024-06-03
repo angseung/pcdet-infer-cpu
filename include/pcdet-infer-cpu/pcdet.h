@@ -34,8 +34,12 @@ class PCDet {
     ~PCDet(void);
 
     void preprocess(const float *points, const size_t point_buf_len,
-                    const size_t point_stride);
-    void pfe_run(void);
+                    const size_t point_stride, std::vector<Pillar> &bev_pillar,
+                    std::vector<size_t> &voxel_coords,
+                    std::vector<size_t> &voxel_num_points,
+                    std::vector<float> &pfe_input);
+    void pfe_run(const std::vector<float> &pfe_input,
+                 std::vector<float> &pfe_output);
     void rpn_run(void);
     void postprocess(void);
     void get_pred(std::vector<PredBox> &boxes);
