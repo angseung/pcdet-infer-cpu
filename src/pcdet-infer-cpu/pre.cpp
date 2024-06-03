@@ -176,6 +176,7 @@ void vueron::pfe_run(const std::vector<float> &pfe_input,
     session_options.SetIntraOpNumThreads(1);
     session_options.SetGraphOptimizationLevel(
         GraphOptimizationLevel::ORT_ENABLE_EXTENDED);
+    Ort::AllocatorWithDefaultOptions allocator;
 
     std::vector<int64_t> input_node_dims = {
         MAX_VOXELS, MAX_NUM_POINTS_PER_PILLAR, FEATURE_NUM};
@@ -190,8 +191,28 @@ void vueron::pfe_run(const std::vector<float> &pfe_input,
         input_node_dims.data(), 3);
     assert(input_tensor.IsTensor());
 
-    std::vector<const char *> input_node_names = {"voxels"};
-    std::vector<const char *> output_node_names = {"pfe_output"};
+    std::vector<const char *> input_node_names;
+    std::vector<const char *> output_node_names;
+
+    size_t num_input_nodes = session.GetInputCount();
+    for (size_t i = 0; i < num_input_nodes; ++i) {
+        auto name = session.GetInputNameAllocated(i, allocator);
+#ifdef _DEBUG
+        std::cout << "input: " << name.get() << std::endl;
+#endif
+        input_node_names.push_back(strdup(name.get()));
+    }
+    assert(input_node_names.size() == 1);
+
+    size_t num_output_nodes = session.GetOutputCount();
+    for (size_t i = 0; i < num_output_nodes; ++i) {
+        auto name = session.GetOutputNameAllocated(i, allocator);
+#ifdef _DEBUG
+        std::cout << "output: " << name.get() << std::endl;
+#endif
+        output_node_names.push_back(strdup(name.get()));
+    }
+    assert(output_node_names.size() == 1);
 
     // score model & input tensor, get back output tensor
     auto output_tensors =
