@@ -3,7 +3,6 @@
 #include "pcdet-infer-cpu/pre.h"
 #include <chrono>
 #include <config.h>
-#include <iomanip>
 #include <iostream>
 
 vueron::PCDet::PCDet()
@@ -14,12 +13,14 @@ vueron::PCDet::PCDet()
       suppressed(MAX_BOX_NUM_BEFORE_NMS, false), num_pillars(0),
       pfe_path(PFE_PATH),
       pfe_input_dim({MAX_VOXELS, MAX_NUM_POINTS_PER_PILLAR, FEATURE_NUM}),
-      pfe(pfe_path, pfe_input_dim,
-          MAX_VOXELS * MAX_NUM_POINTS_PER_PILLAR * FEATURE_NUM),
+      pfe(std::make_unique<OrtModel>(pfe_path, pfe_input_dim,
+                                     MAX_VOXELS * MAX_NUM_POINTS_PER_PILLAR *
+                                         FEATURE_NUM)),
       rpn_path(RPN_PATH),
       rpn_input_dim({1, NUM_FEATURE_SCATTER, GRID_Y_SIZE, GRID_X_SIZE}),
-      rpn(rpn_path, rpn_input_dim,
-          GRID_Y_SIZE * GRID_X_SIZE * NUM_FEATURE_SCATTER) {
+      rpn(std::make_unique<OrtModel>(rpn_path, rpn_input_dim,
+                                     GRID_Y_SIZE * GRID_X_SIZE *
+                                         NUM_FEATURE_SCATTER)) {
     std::cout << "PFE Model Initialized with default path, " << PFE_PATH
               << std::endl;
     std::cout << "RPN Model Initialized with default path, " << RPN_PATH
@@ -34,12 +35,14 @@ vueron::PCDet::PCDet(const std::string &pfe_path, const std::string &rpn_path)
       suppressed(MAX_BOX_NUM_BEFORE_NMS, false), num_pillars(0),
       pfe_path(pfe_path),
       pfe_input_dim{MAX_VOXELS, MAX_NUM_POINTS_PER_PILLAR, FEATURE_NUM},
-      pfe(pfe_path, pfe_input_dim,
-          MAX_VOXELS * MAX_NUM_POINTS_PER_PILLAR * FEATURE_NUM),
+      pfe(std::make_unique<OrtModel>(pfe_path, pfe_input_dim,
+                                     MAX_VOXELS * MAX_NUM_POINTS_PER_PILLAR *
+                                         FEATURE_NUM)),
       rpn_path(rpn_path),
       rpn_input_dim{1, NUM_FEATURE_SCATTER, GRID_Y_SIZE, GRID_X_SIZE},
-      rpn(rpn_path, rpn_input_dim,
-          GRID_Y_SIZE * GRID_X_SIZE * NUM_FEATURE_SCATTER) {
+      rpn(std::make_unique<OrtModel>(rpn_path, rpn_input_dim,
+                                     GRID_Y_SIZE * GRID_X_SIZE *
+                                         NUM_FEATURE_SCATTER)) {
     std::cout << "PFE Model Initialized with " << PFE_PATH << std::endl;
     std::cout << "RPN Model Initialized with " << RPN_PATH << std::endl;
 };
@@ -105,7 +108,7 @@ void vueron::PCDet::do_infer(const float *points, const size_t &point_buf_len,
 #ifdef _PROFILE
     auto pfe_startTime = std::chrono::system_clock::now();
 #endif
-    pfe.run(pfe_input, pfe_output);
+    pfe->run(pfe_input, pfe_output);
 #ifdef _PROFILE
     auto pfe_endTime = std::chrono::system_clock::now();
     auto pfe_millisec = std::chrono::duration_cast<std::chrono::milliseconds>(
@@ -126,7 +129,7 @@ void vueron::PCDet::do_infer(const float *points, const size_t &point_buf_len,
 #ifdef _PROFILE
     auto rpn_startTime = std::chrono::system_clock::now();
 #endif
-    rpn.run(bev_image, rpn_outputs);
+    rpn->run(bev_image, rpn_outputs);
 #ifdef _PROFILE
     auto rpn_endTime = std::chrono::system_clock::now();
     auto rpn_millisec = std::chrono::duration_cast<std::chrono::milliseconds>(
@@ -214,7 +217,7 @@ void vueron::PCDet::do_infer(const float *points, const size_t &point_buf_len,
 #ifdef _PROFILE
     auto pfe_startTime = std::chrono::system_clock::now();
 #endif
-    pfe.run(pfe_input, pfe_output);
+    pfe->run(pfe_input, pfe_output);
 #ifdef _PROFILE
     auto pfe_endTime = std::chrono::system_clock::now();
     auto pfe_millisec = std::chrono::duration_cast<std::chrono::milliseconds>(
@@ -235,7 +238,7 @@ void vueron::PCDet::do_infer(const float *points, const size_t &point_buf_len,
 #ifdef _PROFILE
     auto rpn_startTime = std::chrono::system_clock::now();
 #endif
-    rpn.run(bev_image, rpn_outputs);
+    rpn->run(bev_image, rpn_outputs);
 #ifdef _PROFILE
     auto rpn_endTime = std::chrono::system_clock::now();
     auto rpn_millisec = std::chrono::duration_cast<std::chrono::milliseconds>(

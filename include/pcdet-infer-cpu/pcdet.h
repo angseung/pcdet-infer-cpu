@@ -6,6 +6,7 @@
 #include "pcdet-infer-cpu/ort_model.h"
 #include "type.h"
 #include <cstddef>
+#include <memory> // for unique_ptr
 #include <vector>
 
 namespace vueron {
@@ -29,11 +30,11 @@ class PCDet {
 
     std::string pfe_path;
     std::vector<int64_t> pfe_input_dim;
-    OrtModel pfe;
+    std::unique_ptr<OrtModel> pfe;
 
     std::string rpn_path;
     std::vector<int64_t> rpn_input_dim;
-    OrtModel rpn;
+    std::unique_ptr<OrtModel> rpn;
 
     /*
         Buffers for Final Predictions
