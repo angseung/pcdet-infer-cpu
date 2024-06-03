@@ -46,20 +46,20 @@ void vueron::rpn_run(const std::vector<float> &rpn_input,
         output_node_names.push_back(strdup(name.get()));
     }
 
-    // make input tensor
+    // Make input tensor
     auto input_tensor = Ort::Value::CreateTensor<float>(
         memory_info, (float *)rpn_input.data(), input_tensor_size,
         input_node_dims.data(), input_node_dims.size());
     assert(input_tensor.IsTensor());
 
-    // score model & input tensor, get back output tensor
+    // Run ort session
     auto output_tensors =
         session.Run(Ort::RunOptions{nullptr}, input_node_names.data(),
                     &input_tensor, input_node_names.size(),
                     output_node_names.data(), output_node_names.size());
     assert(output_tensors.front().IsTensor());
 
-    // Convert output tensors to std::vector
+    // Convert output tensors into std::vector
     rpn_output.reserve(num_output_nodes);
 
     for (size_t i = 0; i < num_output_nodes; ++i) {
