@@ -70,6 +70,11 @@ void vueron::OrtModel::run(const std::vector<float> &model_input,
 
 void vueron::OrtModel::run(const std::vector<float> &model_input,
                            std::vector<float> &model_output) {
+    /*
+        This function supports only single output models
+    */
+    assert(output_node_names.size() == 1);
+
     // make input tensor
     auto input_tensor = Ort::Value::CreateTensor<float>(
         memory_info, (float *)model_input.data(), input_tensor_size,
@@ -77,9 +82,9 @@ void vueron::OrtModel::run(const std::vector<float> &model_input,
     assert(input_tensor.IsTensor());
 
     // score model & input tensor, get back output tensor
-    auto output_tensors =
-        session.Run(Ort::RunOptions{nullptr}, input_node_names.data(),
-                    &input_tensor, 1, output_node_names.data(), 1);
+    auto output_tensors = session.Run(
+        Ort::RunOptions{nullptr}, input_node_names.data(), &input_tensor, 1,
+        output_node_names.data(), output_node_names.size());
     assert(output_tensors.front().IsTensor());
 
     // Get pointer to output tensor float values

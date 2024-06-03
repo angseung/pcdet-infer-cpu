@@ -16,10 +16,8 @@ vueron::PCDet::PCDet()
           MAX_VOXELS * MAX_NUM_POINTS_PER_PILLAR * FEATURE_NUM),
       rpn_path(RPN_PATH),
       rpn_input_dim({1, NUM_FEATURE_SCATTER, GRID_Y_SIZE, GRID_X_SIZE}),
-      rpn(pfe_path, pfe_input_dim,
-          GRID_Y_SIZE * GRID_X_SIZE * NUM_FEATURE_SCATTER){
-          // TODO: Implement Onnxruntime Model Class
-      };
+      rpn(rpn_path, rpn_input_dim,
+          GRID_Y_SIZE * GRID_X_SIZE * NUM_FEATURE_SCATTER){};
 
 vueron::PCDet::~PCDet(){};
 
@@ -31,13 +29,9 @@ void vueron::PCDet::preprocess(const float *points, const size_t point_buf_len,
                                  pfe_input, points, point_stride);
 }
 
-void vueron::PCDet::pfe_run(void) { vueron::pfe_run(pfe_input, pfe_output); }
-
 void vueron::PCDet::scatter(void) {
     vueron::scatter(pfe_output, voxel_coords, num_pillars, bev_image);
 }
-
-void vueron::PCDet::rpn_run(void) { vueron::rpn_run(bev_image, rpn_outputs); }
 
 void vueron::PCDet::postprocess(std::vector<vueron::BndBox> &final_boxes,
                                 std::vector<size_t> &final_labels,
@@ -76,7 +70,7 @@ void vueron::PCDet::do_infer(const float *points, const size_t point_buf_len,
     vueron::PCDet::preprocess(points, point_buf_len, point_stride);
     pfe.run(pfe_input, pfe_output);
     vueron::PCDet::scatter();
-    pfe.run(bev_image, rpn_outputs);
+    rpn.run(bev_image, rpn_outputs);
     vueron::PCDet::postprocess(post_boxes, post_labels, post_scores);
     vueron::PCDet::get_pred(final_boxes);
 
@@ -110,9 +104,9 @@ void vueron::PCDet::do_infer(const float *points, const size_t point_buf_len,
                              std::vector<size_t> &final_labels,
                              std::vector<float> &final_scores) {
     vueron::PCDet::preprocess(points, point_buf_len, point_stride);
-    vueron::PCDet::pfe_run();
+    pfe.run(pfe_input, pfe_output);
     vueron::PCDet::scatter();
-    vueron::PCDet::rpn_run();
+    rpn.run(bev_image, rpn_outputs);
     vueron::PCDet::postprocess(final_boxes, final_labels, final_scores);
     /**
      * @brief
