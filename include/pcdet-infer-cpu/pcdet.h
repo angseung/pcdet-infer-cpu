@@ -1,7 +1,9 @@
 #ifndef __PCDET_H__
 #define __PCDET_H__
 
+#include "config.h"
 #include "params.h"
+#include "pcdet-infer-cpu/ort_model.h"
 #include "type.h"
 #include <cstddef>
 #include <vector>
@@ -24,6 +26,14 @@ class PCDet {
     std::vector<size_t> pre_labels;              // labels before NMS
     std::vector<float> pre_scores;               // scores before NMS
     std::vector<bool> suppressed;                // mask for nms
+
+    std::string pfe_path;
+    std::vector<int64_t> pfe_input_dim;
+    OrtModel pfe;
+
+    std::string rpn_path;
+    std::vector<int64_t> rpn_input_dim;
+    OrtModel rpn;
 
     /*
         Buffers for Final Predictions

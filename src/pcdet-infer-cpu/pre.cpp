@@ -186,10 +186,6 @@ void vueron::pfe_run(const std::vector<float> &pfe_input,
     // create input tensor object from data values
     auto memory_info =
         Ort::MemoryInfo::CreateCpu(OrtArenaAllocator, OrtMemTypeDefault);
-    auto input_tensor = Ort::Value::CreateTensor<float>(
-        memory_info, (float *)pfe_input.data(), input_tensor_size,
-        input_node_dims.data(), 3);
-    assert(input_tensor.IsTensor());
 
     std::vector<const char *> input_node_names;
     std::vector<const char *> output_node_names;
@@ -213,6 +209,12 @@ void vueron::pfe_run(const std::vector<float> &pfe_input,
         output_node_names.push_back(strdup(name.get()));
     }
     assert(output_node_names.size() == 1);
+
+    // make input tensor
+    auto input_tensor = Ort::Value::CreateTensor<float>(
+        memory_info, (float *)pfe_input.data(), input_tensor_size,
+        input_node_dims.data(), 3);
+    assert(input_tensor.IsTensor());
 
     // score model & input tensor, get back output tensor
     auto output_tensors =

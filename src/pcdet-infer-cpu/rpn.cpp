@@ -23,10 +23,6 @@ void vueron::rpn_run(const std::vector<float> &rpn_input,
     // create input tensor object from data values
     auto memory_info =
         Ort::MemoryInfo::CreateCpu(OrtArenaAllocator, OrtMemTypeDefault);
-    auto input_tensor = Ort::Value::CreateTensor<float>(
-        memory_info, (float *)rpn_input.data(), input_tensor_size,
-        input_node_dims.data(), input_node_dims.size());
-    assert(input_tensor.IsTensor());
 
     std::vector<const char *> input_node_names;
     std::vector<const char *> output_node_names;
@@ -49,6 +45,12 @@ void vueron::rpn_run(const std::vector<float> &rpn_input,
 #endif
         output_node_names.push_back(strdup(name.get()));
     }
+
+    // make input tensor
+    auto input_tensor = Ort::Value::CreateTensor<float>(
+        memory_info, (float *)rpn_input.data(), input_tensor_size,
+        input_node_dims.data(), input_node_dims.size());
+    assert(input_tensor.IsTensor());
 
     // score model & input tensor, get back output tensor
     auto output_tensors =

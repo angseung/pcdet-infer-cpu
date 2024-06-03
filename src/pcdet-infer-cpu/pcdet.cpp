@@ -9,8 +9,15 @@ vueron::PCDet::PCDet()
       pfe_input(MAX_VOXELS * MAX_NUM_POINTS_PER_PILLAR * FEATURE_NUM, 0.0f),
       pfe_output(MAX_VOXELS * NUM_FEATURE_SCATTER, 0.0f),
       bev_image(GRID_Y_SIZE * GRID_X_SIZE * NUM_FEATURE_SCATTER, 0.0f),
-      suppressed(MAX_BOX_NUM_BEFORE_NMS, false),
-      num_pillars(0){
+      suppressed(MAX_BOX_NUM_BEFORE_NMS, false), num_pillars(0),
+      pfe_path(PFE_PATH),
+      pfe_input_dim({MAX_VOXELS, MAX_NUM_POINTS_PER_PILLAR, FEATURE_NUM}),
+      pfe(pfe_path, pfe_input_dim,
+          MAX_VOXELS * MAX_NUM_POINTS_PER_PILLAR * FEATURE_NUM),
+      rpn_path(RPN_PATH),
+      rpn_input_dim({1, NUM_FEATURE_SCATTER, GRID_Y_SIZE, GRID_X_SIZE}),
+      rpn(pfe_path, pfe_input_dim,
+          GRID_Y_SIZE * GRID_X_SIZE * NUM_FEATURE_SCATTER){
           // TODO: Implement Onnxruntime Model Class
       };
 
@@ -67,9 +74,9 @@ void vueron::PCDet::do_infer(const float *points, const size_t point_buf_len,
      *
      */
     vueron::PCDet::preprocess(points, point_buf_len, point_stride);
-    vueron::PCDet::pfe_run();
+    pfe.run(pfe_input, pfe_output);
     vueron::PCDet::scatter();
-    vueron::PCDet::rpn_run();
+    pfe.run(bev_image, rpn_outputs);
     vueron::PCDet::postprocess(post_boxes, post_labels, post_scores);
     vueron::PCDet::get_pred(final_boxes);
 
