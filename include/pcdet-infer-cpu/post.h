@@ -235,11 +235,11 @@ void nms(const std::vector<BndBox> &boxes, const std::vector<float> &scores,
          std::vector<bool> &suppressed, const float iou_threshold);
 
 void gather_boxes(const std::vector<BndBox> &boxes,
-                  const std::vector<float> &scores,
                   const std::vector<size_t> &labels,
+                  const std::vector<float> &scores,
                   std::vector<BndBox> &nms_boxes,
-                  std::vector<float> &nms_scores,
                   std::vector<size_t> &nms_labels,
+                  std::vector<float> &nms_scores,
                   const std::vector<bool> &suppressed);
 
 } // namespace vueron

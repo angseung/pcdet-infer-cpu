@@ -45,8 +45,8 @@ int main(int argc, const char **argv) {
             Buffers for inferece
         */
         std::vector<vueron::BndBox> nms_boxes;
-        std::vector<float> nms_scores;
         std::vector<size_t> nms_labels;
+        std::vector<float> nms_scores;
 
         /*
             Do inference

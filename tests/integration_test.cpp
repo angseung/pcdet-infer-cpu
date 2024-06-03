@@ -67,7 +67,7 @@ TEST(IntegrationTest, IntegrationTest) {
 
         // Do inference
         vueron::run_model(points, point_buf_len, point_stride, nms_boxes,
-                          nms_scores, nms_labels);
+                          nms_labels, nms_scores);
 
         EXPECT_EQ(nms_boxes.size(), MAX_BOX_NUM_AFTER_NMS);
         EXPECT_EQ(nms_scores.size(), MAX_BOX_NUM_AFTER_NMS);
