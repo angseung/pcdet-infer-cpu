@@ -13,6 +13,10 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(BUILD_DEMO ON CACHE BOOL "Build Demo")
 set(BUILD_TEST ON CACHE BOOL "Build Tests")
 
+# Logging Options
+set(_PROFILE OFF CACHE BOOL "Logging Model Latency")
+set(_DEBUG OFF CACHE BOOL "Logging Debug Messages")
+
 # Point cloud library
 find_package(PCL 1.8 REQUIRED)
 include_directories(${PCL_INCLUDE_DIRS})
