@@ -39,10 +39,11 @@
 #define CLASS_NUM 3
 #define FEATURE_X_SIZE 112
 #define FEATURE_Y_SIZE 164
-#define IOU_RECTIFIER {0.68f, 0.71f, 0.65f}
+#define IOU_RECTIFIER                                                          \
+    { 0.68f, 0.71f, 0.65f }
 
 /*
-    User configurable Param
+    User Configurable Param
 */
 // post
 #define MAX_BOX_NUM_BEFORE_NMS 500
