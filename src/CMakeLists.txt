@@ -7,7 +7,7 @@ add_subdirectory(draw)
 add_executable(demo demo.cpp)
 target_link_libraries(
     demo
-    pcdetfunc
+    pcdet
     draw
     ${PCL_LIBRARIES}
 )

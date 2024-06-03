@@ -31,16 +31,18 @@ void vueron::PCDet::scatter(void) {
 
 void vueron::PCDet::rpn_run(void) { vueron::rpn_run(bev_image, rpn_outputs); }
 
-void vueron::PCDet::postprocess(void) {
+void vueron::PCDet::postprocess(std::vector<vueron::BndBox> &final_boxes,
+                                std::vector<size_t> &final_labels,
+                                std::vector<float> &final_scores) {
     vueron::decode_to_boxes(rpn_outputs, pre_boxes, pre_labels, pre_scores);
     vueron::nms(pre_boxes, pre_scores, suppressed, IOU_THRESH);
-    vueron::gather_boxes(pre_boxes, pre_scores, pre_labels, post_boxes,
-                         post_scores, post_labels, suppressed);
+    vueron::gather_boxes(pre_boxes, pre_scores, pre_labels, final_boxes,
+                         final_scores, final_labels, suppressed);
 }
 
 void vueron::PCDet::get_pred(std::vector<PredBox> &boxes) {
     for (size_t i = 0; i < post_boxes.size(); i++) {
-        PredBox box;
+        PredBox box{0.0f};
         box.x = post_boxes[i].x;
         box.y = post_boxes[i].y;
         box.z = post_boxes[i].z;
@@ -62,8 +64,43 @@ void vueron::PCDet::do_infer(const float *points, const size_t point_buf_len,
     vueron::PCDet::pfe_run();
     vueron::PCDet::scatter();
     vueron::PCDet::rpn_run();
-    vueron::PCDet::postprocess();
+    vueron::PCDet::postprocess(post_boxes, post_labels, post_scores);
     vueron::PCDet::get_pred(boxes);
+
+    /*
+        Reset buffers
+    */
+    std::fill(bev_pillar.begin(), bev_pillar.end(), Pillar());
+    std::fill(pfe_input.begin(), pfe_input.end(), 0.0f);
+    std::fill(pfe_output.begin(), pfe_output.end(), 0.0f);
+    std::fill(bev_image.begin(), bev_image.end(), 0.0f);
+    std::fill(suppressed.begin(), suppressed.end(), false);
+    num_pillars = 0;
+
+    /*
+        Clear buffers to have zero length
+    */
+    voxel_coords.clear();
+    voxel_num_points.clear();
+    rpn_outputs.clear();
+    pre_boxes.clear();
+    pre_labels.clear();
+    pre_scores.clear();
+    post_boxes.clear();
+    post_labels.clear();
+    post_scores.clear();
+};
+
+void vueron::PCDet::do_infer(const float *points, const size_t point_buf_len,
+                             const size_t point_stride,
+                             std::vector<vueron::BndBox> &final_boxes,
+                             std::vector<size_t> &final_labels,
+                             std::vector<float> &final_scores) {
+    vueron::PCDet::preprocess(points, point_buf_len, point_stride);
+    vueron::PCDet::pfe_run();
+    vueron::PCDet::scatter();
+    vueron::PCDet::rpn_run();
+    vueron::PCDet::postprocess(final_boxes, final_labels, final_scores);
 
     /*
         Reset buffers

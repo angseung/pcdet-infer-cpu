@@ -3,6 +3,7 @@
 #include "npy.h"
 #include "params.h"
 #include "pcdet-infer-cpu/model.h"
+#include "pcdet-infer-cpu/pcdet.h"
 #include "pcl.h"
 #include <cstdlib>
 #include <glob.h>
@@ -28,6 +29,8 @@ int main(int argc, const char **argv) {
     std::vector<std::string> pcd_files = vueron::getFileList(folder_path);
     size_t num_test_files = pcd_files.size();
 
+    vueron::PCDet pcdet;
+
     for (size_t i = 0; i < num_test_files; i++) {
         std::string pcd_file = pcd_files[i];
 
@@ -49,8 +52,10 @@ int main(int argc, const char **argv) {
         /*
             Do inference
         */
-        vueron::run_model(points, point_buf_len, point_stride, nms_boxes,
-                          nms_scores, nms_labels);
+        // vueron::run_model(points, point_buf_len, point_stride, nms_boxes,
+        //                   nms_scores, nms_labels);
+        pcdet.do_infer(points, point_buf_len, point_stride, nms_boxes,
+                       nms_labels, nms_scores);
 
         /*
             Logging
@@ -70,6 +75,9 @@ int main(int argc, const char **argv) {
                                       nms_boxes, nms_scores, nms_labels);
         cv::imshow("Bird's Eye View", image);
         cv::waitKey(1);
+        std::string output_file_name =
+            "outputs/" + std::to_string(i + 1) + ".png";
+        cv::imwrite(output_file_name, image);
 #ifdef _DEBUG
         std::string output_file_name =
             "outputs/" + std::to_string(i + 1) + ".png";
