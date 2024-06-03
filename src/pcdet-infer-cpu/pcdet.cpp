@@ -59,13 +59,18 @@ void vueron::PCDet::get_pred(std::vector<PredBox> &boxes) {
 
 void vueron::PCDet::do_infer(const float *points, const size_t point_buf_len,
                              const size_t point_stride,
-                             std::vector<PredBox> &boxes) {
+                             std::vector<PredBox> &final_boxes) {
+    /**
+     * @brief
+     * It writes predictions into a vector, boxes.
+     *
+     */
     vueron::PCDet::preprocess(points, point_buf_len, point_stride);
     vueron::PCDet::pfe_run();
     vueron::PCDet::scatter();
     vueron::PCDet::rpn_run();
     vueron::PCDet::postprocess(post_boxes, post_labels, post_scores);
-    vueron::PCDet::get_pred(boxes);
+    vueron::PCDet::get_pred(final_boxes);
 
     /*
         Reset buffers
@@ -101,6 +106,12 @@ void vueron::PCDet::do_infer(const float *points, const size_t point_buf_len,
     vueron::PCDet::scatter();
     vueron::PCDet::rpn_run();
     vueron::PCDet::postprocess(final_boxes, final_labels, final_scores);
+    /**
+     * @brief
+     * It writes predictions into three vectors, final_boxes, final_labels, and
+     * final_scores.
+     *
+     */
 
     /*
         Reset buffers

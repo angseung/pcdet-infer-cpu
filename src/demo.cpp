@@ -2,7 +2,6 @@
 #include "draw/draw.h"
 #include "npy.h"
 #include "params.h"
-#include "pcdet-infer-cpu/model.h"
 #include "pcdet-infer-cpu/pcdet.h"
 #include "pcl.h"
 #include <cstdlib>
@@ -52,8 +51,6 @@ int main(int argc, const char **argv) {
         /*
             Do inference
         */
-        // vueron::run_model(points, point_buf_len, point_stride, nms_boxes,
-        //                   nms_scores, nms_labels);
         pcdet.do_infer(points, point_buf_len, point_stride, nms_boxes,
                        nms_labels, nms_scores);
 
@@ -75,9 +72,6 @@ int main(int argc, const char **argv) {
                                       nms_boxes, nms_scores, nms_labels);
         cv::imshow("Bird's Eye View", image);
         cv::waitKey(1);
-        std::string output_file_name =
-            "outputs/" + std::to_string(i + 1) + ".png";
-        cv::imwrite(output_file_name, image);
 #ifdef _DEBUG
         std::string output_file_name =
             "outputs/" + std::to_string(i + 1) + ".png";
