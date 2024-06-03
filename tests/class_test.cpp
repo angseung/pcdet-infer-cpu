@@ -19,7 +19,9 @@ TEST(IntegrationTest, IntegrationTest) {
     size_t num_test_files = pcd_files.size();
 
     size_t point_stride = POINT_STRIDE;
-    vueron::PCDet pcdet;
+    std::string pfe_path(PFE_PATH);
+    std::string rpn_path(RPN_PATH);
+    vueron::PCDet pcdet(pfe_path, rpn_path);
 
     for (size_t i = 0; i < num_test_files; i++) {
         std::string pcd_file = pcd_files[i];

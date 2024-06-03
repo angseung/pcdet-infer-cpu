@@ -19,6 +19,21 @@ vueron::PCDet::PCDet()
       rpn(rpn_path, rpn_input_dim,
           GRID_Y_SIZE * GRID_X_SIZE * NUM_FEATURE_SCATTER){};
 
+vueron::PCDet::PCDet(std::string pfe_path, std::string rpn_path)
+    : bev_pillar(GRID_Y_SIZE * GRID_X_SIZE),
+      pfe_input(MAX_VOXELS * MAX_NUM_POINTS_PER_PILLAR * FEATURE_NUM, 0.0f),
+      pfe_output(MAX_VOXELS * NUM_FEATURE_SCATTER, 0.0f),
+      bev_image(GRID_Y_SIZE * GRID_X_SIZE * NUM_FEATURE_SCATTER, 0.0f),
+      suppressed(MAX_BOX_NUM_BEFORE_NMS, false), num_pillars(0),
+      pfe_path(pfe_path),
+      pfe_input_dim({MAX_VOXELS, MAX_NUM_POINTS_PER_PILLAR, FEATURE_NUM}),
+      pfe(pfe_path, pfe_input_dim,
+          MAX_VOXELS * MAX_NUM_POINTS_PER_PILLAR * FEATURE_NUM),
+      rpn_path(rpn_path),
+      rpn_input_dim({1, NUM_FEATURE_SCATTER, GRID_Y_SIZE, GRID_X_SIZE}),
+      rpn(rpn_path, rpn_input_dim,
+          GRID_Y_SIZE * GRID_X_SIZE * NUM_FEATURE_SCATTER){};
+
 vueron::PCDet::~PCDet(){};
 
 void vueron::PCDet::preprocess(const float *points, const size_t point_buf_len,

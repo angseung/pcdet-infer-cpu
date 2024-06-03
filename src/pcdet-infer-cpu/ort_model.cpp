@@ -30,6 +30,11 @@ vueron::OrtModel::~OrtModel(){};
 
 void vueron::OrtModel::run(const std::vector<float> &model_input,
                            std::vector<std::vector<float>> &model_output) {
+    /*
+        This function supports only single input & multiple output models
+    */
+    assert(input_node_names.size() == 1);
+    assert(output_node_names.size() != 1);
 
     // make input tensor
     auto input_tensor = Ort::Value::CreateTensor<float>(
@@ -71,8 +76,9 @@ void vueron::OrtModel::run(const std::vector<float> &model_input,
 void vueron::OrtModel::run(const std::vector<float> &model_input,
                            std::vector<float> &model_output) {
     /*
-        This function supports only single output models
+        This function supports only single input & single output models
     */
+    assert(input_node_names.size() == 1);
     assert(output_node_names.size() == 1);
 
     // make input tensor
