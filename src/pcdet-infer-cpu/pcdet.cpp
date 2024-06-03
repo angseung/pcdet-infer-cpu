@@ -1,8 +1,7 @@
 #include "pcdet-infer-cpu/pcdet.h"
-#include "onnxruntime_cxx_api.h"
 #include "pcdet-infer-cpu/post.h"
 #include "pcdet-infer-cpu/pre.h"
-#include "pcdet-infer-cpu/rpn.h"
+#include <iostream>
 
 vueron::PCDet::PCDet()
     : bev_pillar(GRID_Y_SIZE * GRID_X_SIZE),
@@ -17,7 +16,12 @@ vueron::PCDet::PCDet()
       rpn_path(RPN_PATH),
       rpn_input_dim({1, NUM_FEATURE_SCATTER, GRID_Y_SIZE, GRID_X_SIZE}),
       rpn(rpn_path, rpn_input_dim,
-          GRID_Y_SIZE * GRID_X_SIZE * NUM_FEATURE_SCATTER){};
+          GRID_Y_SIZE * GRID_X_SIZE * NUM_FEATURE_SCATTER) {
+    std::cout << "PFE Model Initialized with default path, " << PFE_PATH
+              << std::endl;
+    std::cout << "RPN Model Initialized with default path, " << RPN_PATH
+              << std::endl;
+};
 
 vueron::PCDet::PCDet(std::string pfe_path, std::string rpn_path)
     : bev_pillar(GRID_Y_SIZE * GRID_X_SIZE),
@@ -32,7 +36,10 @@ vueron::PCDet::PCDet(std::string pfe_path, std::string rpn_path)
       rpn_path(rpn_path),
       rpn_input_dim({1, NUM_FEATURE_SCATTER, GRID_Y_SIZE, GRID_X_SIZE}),
       rpn(rpn_path, rpn_input_dim,
-          GRID_Y_SIZE * GRID_X_SIZE * NUM_FEATURE_SCATTER){};
+          GRID_Y_SIZE * GRID_X_SIZE * NUM_FEATURE_SCATTER) {
+    std::cout << "PFE Model Initialized with " << PFE_PATH << std::endl;
+    std::cout << "RPN Model Initialized with " << RPN_PATH << std::endl;
+};
 
 vueron::PCDet::~PCDet(){};
 
@@ -118,17 +125,17 @@ void vueron::PCDet::do_infer(const float *points, const size_t point_buf_len,
                              std::vector<vueron::BndBox> &final_boxes,
                              std::vector<size_t> &final_labels,
                              std::vector<float> &final_scores) {
-    vueron::PCDet::preprocess(points, point_buf_len, point_stride);
-    pfe.run(pfe_input, pfe_output);
-    vueron::PCDet::scatter();
-    rpn.run(bev_image, rpn_outputs);
-    vueron::PCDet::postprocess(final_boxes, final_labels, final_scores);
     /**
      * @brief
      * It writes predictions into three vectors, final_boxes, final_labels, and
      * final_scores.
      *
      */
+    vueron::PCDet::preprocess(points, point_buf_len, point_stride);
+    pfe.run(pfe_input, pfe_output);
+    vueron::PCDet::scatter();
+    rpn.run(bev_image, rpn_outputs);
+    vueron::PCDet::postprocess(final_boxes, final_labels, final_scores);
 
     /*
         Reset buffers
