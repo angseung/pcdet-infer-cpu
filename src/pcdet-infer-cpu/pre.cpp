@@ -27,9 +27,10 @@ void vueron::voxelization(std::vector<Pillar> &bev_pillar, const float *points,
   std::vector<size_t> indices(points_num, 0);
   std::iota(indices.begin(), indices.end(), 0);
 
-#if SHUFFLE_ON
-  std::shuffle(indices.begin(), indices.end(), rng);
-#endif
+  if (SHUFFLE_ON) {
+    std::shuffle(indices.begin(), indices.end(), rng);
+  }
+
   size_t num_points_to_voxelize =
       (points_num > MAX_POINTS_NUM) ? MAX_POINTS_NUM : points_num;
   for (size_t idx = 0; idx < num_points_to_voxelize; idx++) {
