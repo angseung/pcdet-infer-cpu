@@ -1,9 +1,10 @@
 #ifndef __PRE_H__
 #define __PRE_H__
 
+#include <vector>
+
 #include "params.h"
 #include "type.h"
-#include <vector>
 
 namespace vueron {
 
@@ -23,5 +24,5 @@ void scatter(const std::vector<float> &pfe_output,
              const std::vector<size_t> &voxel_coords, const size_t &num_pillars,
              std::vector<float> &rpn_input);
 
-} // namespace vueron
-#endif // __PRE_H__
+}  // namespace vueron
+#endif  // __PRE_H__
