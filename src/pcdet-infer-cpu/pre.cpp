@@ -10,8 +10,8 @@
 #include "config.h"
 #include "onnxruntime_cxx_api.h"
 
-vueron::Pillar::Pillar(size_t point_num)
-    : point_index(point_num, 20),
+vueron::Pillar::Pillar(const size_t &point_num)
+    : point_index(point_num, 0),
       pillar_grid_x(0),
       pillar_grid_y(0),
       point_num_in_pillar(0),
