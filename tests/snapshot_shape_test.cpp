@@ -5,7 +5,9 @@
 
 #include "config.h"
 #include "npy.h"
-#include "params.h"
+// #include "params.h"
+#include "pcdet-infer-cpu/common/metadata.h"
+#include "pcdet-infer-cpu/common/runtimeconfig.h"
 #include "pcdet-infer-cpu/pre.h"
 #include "pcl.h"
 

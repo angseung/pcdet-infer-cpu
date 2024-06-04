@@ -1,18 +1,25 @@
 #include <glob.h>
 
+#include <filesystem>
+
 #include "config.h"
 #include "npy.h"
-#include "params.h"
+// #include "params.h"
+#include "pcdet-infer-cpu/common/metadata.h"
+#include "pcdet-infer-cpu/common/runtimeconfig.h"
 #include "pcdet-infer-cpu/pcdet.h"
 #include "pcl.h"
 #include "type.h"
 
 int main(int argc, const char **argv) {
+  std::string wd = std::filesystem::current_path().u8string();
+  std::string metadata_path = wd + "/models/gcm_v4_residual/metadata.json";
+  vueron::LoadMetadata(metadata_path);
   const std::string folder_path = PCD_PATH;
   std::vector<std::string> pcd_files = vueron::getFileList(folder_path);
   constexpr size_t point_stride = POINT_STRIDE;
 
-  const auto pcdet = std::make_unique<vueron::PCDet>();
+  const auto pcdet = std::make_unique<vueron::PCDet>(PFE_FILE, RPN_FILE);
 
   while (1) {
     for (const auto &pcd_file : pcd_files) {

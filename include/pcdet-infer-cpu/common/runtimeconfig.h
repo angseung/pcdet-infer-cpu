@@ -62,6 +62,8 @@ inline void SetRuntimeConfig(const RuntimeConfig& config) {
 #define NMS_THRESH vueron::GetRuntimeConfig().nms_iou_thd
 #define INTENSITY_NORMALIZE_DIV 255
 #define CONF_THRESH 0.4f
+#define RANDOM_SEED 123
+#define POINT_STRIDE 4
 
 #endif
 

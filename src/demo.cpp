@@ -10,7 +10,9 @@
 #include "config.h"
 #include "draw/draw.h"
 #include "npy.h"
-#include "params.h"
+// #include "params.h"
+#include "pcdet-infer-cpu/common/metadata.h"
+#include "pcdet-infer-cpu/common/runtimeconfig.h"
 #include "pcdet-infer-cpu/pcdet.h"
 #include "pcl.h"
 
