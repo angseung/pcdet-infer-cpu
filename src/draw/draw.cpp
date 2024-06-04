@@ -7,12 +7,6 @@
 #include "params.h"
 #include "type.h"
 
-cv::Point2f rotatePoint(const cv::Point2f &point, float angle) {
-  float x = point.x * std::cos(angle) - point.y * std::sin(angle);
-  float y = point.x * std::sin(angle) + point.y * std::cos(angle);
-  return cv::Point2f(x, y);
-}
-
 cv::Mat drawBirdsEyeView(const size_t &points_size, const float *points_data,
                          const std::vector<vueron::BndBox> &boxes,
                          const std::vector<float> &scores,

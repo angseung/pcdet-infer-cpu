@@ -207,9 +207,6 @@ void vueron::pfe_run(const std::vector<float> &pfe_input,
   size_t num_input_nodes = session.GetInputCount();
   for (size_t i = 0; i < num_input_nodes; ++i) {
     auto name = session.GetInputNameAllocated(i, allocator);
-#ifdef _DEBUG
-    std::cout << "input: " << name.get() << std::endl;
-#endif
     input_node_names.push_back(strdup(name.get()));
   }
   assert(input_node_names.size() == 1);
@@ -217,9 +214,6 @@ void vueron::pfe_run(const std::vector<float> &pfe_input,
   size_t num_output_nodes = session.GetOutputCount();
   for (size_t i = 0; i < num_output_nodes; ++i) {
     auto name = session.GetOutputNameAllocated(i, allocator);
-#ifdef _DEBUG
-    std::cout << "output: " << name.get() << std::endl;
-#endif
     output_node_names.push_back(strdup(name.get()));
   }
   assert(output_node_names.size() == 1);
@@ -257,9 +251,6 @@ void vueron::pfe_run(const std::vector<float> &pfe_input,
 
   // Copy the output tensor data to the output vector
   std::copy(floatarr, floatarr + output_size, pfe_output.begin());
-#ifdef _DEBUG
-  std::cout << " PFE INFERENCE DONE." << std::endl;
-#endif
 }
 
 void vueron::scatter(const std::vector<float> &pfe_output,

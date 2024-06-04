@@ -34,9 +34,6 @@ void vueron::rpn_run(const std::vector<float> &rpn_input,
   const size_t num_input_nodes = session.GetInputCount();
   for (size_t i = 0; i < num_input_nodes; ++i) {
     auto name = session.GetInputNameAllocated(i, allocator);
-#ifdef _DEBUG
-    std::cout << "input: " << name.get() << std::endl;
-#endif
     input_node_names.push_back(strdup(name.get()));
   }
   assert(input_node_names.size() == 1);
@@ -44,9 +41,6 @@ void vueron::rpn_run(const std::vector<float> &rpn_input,
   const size_t num_output_nodes = session.GetOutputCount();
   for (size_t i = 0; i < num_output_nodes; ++i) {
     auto name = session.GetOutputNameAllocated(i, allocator);
-#ifdef _DEBUG
-    std::cout << "output: " << name.get() << std::endl;
-#endif
     output_node_names.push_back(strdup(name.get()));
   }
 
@@ -83,7 +77,4 @@ void vueron::rpn_run(const std::vector<float> &rpn_input,
     std::vector<float> tensor_data(float_array, float_array + num_elements);
     rpn_output.push_back(tensor_data);
   }
-#ifdef _DEBUG
-  std::cout << "RPN INFERENCE DONE." << std::endl;
-#endif
 }
