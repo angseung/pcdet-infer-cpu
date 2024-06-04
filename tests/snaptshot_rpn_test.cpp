@@ -74,7 +74,8 @@ TEST(RPNTest, RPNValueTest) {
         vueron::readPcdFile(pcd_file, MAX_POINTS_NUM);
     const size_t points_buf_len = points.size();
     constexpr size_t point_stride = POINT_STRIDE;
-    std::vector<vueron::Pillar> bev_pillar(GRID_Y_SIZE * GRID_X_SIZE);
+    std::vector<vueron::Pillar> bev_pillar(GRID_Y_SIZE * GRID_X_SIZE,
+                                           MAX_NUM_POINTS_PER_PILLAR);
     std::vector<size_t> voxel_coords;  // (x, y)
     std::vector<size_t> voxel_num_points;
     std::vector<float> pfe_input(

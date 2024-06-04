@@ -34,7 +34,8 @@ TEST(IntegrationTest, IntegrationTest) {
     /*
         Buffers for Inference
     */
-    std::vector<vueron::Pillar> bev_pillar(GRID_Y_SIZE * GRID_X_SIZE);
+    std::vector<vueron::Pillar> bev_pillar(GRID_Y_SIZE * GRID_X_SIZE,
+                                           MAX_NUM_POINTS_PER_PILLAR);
     std::vector<size_t> voxel_coords;  // (x, y)
     std::vector<size_t> voxel_num_points;
     std::vector<float> pfe_input(

@@ -10,6 +10,13 @@
 #include "config.h"
 #include "onnxruntime_cxx_api.h"
 
+vueron::Pillar::Pillar(size_t point_num)
+    : point_index(point_num, 20),
+      pillar_grid_x(0),
+      pillar_grid_y(0),
+      point_num_in_pillar(0),
+      is_empty(true){};
+
 void vueron::voxelization(std::vector<Pillar> &bev_pillar, const float *points,
                           const size_t &points_buf_len,
                           const size_t &point_stride) {
