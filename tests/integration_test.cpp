@@ -14,24 +14,24 @@
 #define _ERROR 1e-3
 
 TEST(IntegrationTest, IntegrationTest) {
-  std::string folder_path = PCD_PATH;
+  const std::string folder_path = PCD_PATH;
   std::vector<std::string> pcd_files = vueron::getFileList(folder_path);
-  std::string snapshot_folder_path = SNAPSHOT_PATH;
+  const std::string snapshot_folder_path = SNAPSHOT_PATH;
   std::vector<std::string> snapshot_files =
       vueron::getFileList(snapshot_folder_path);
   std::vector<float> points;
-  size_t num_test_files = pcd_files.size();
-
+  const size_t num_test_files = pcd_files.size();
   EXPECT_LE(pcd_files.size(), snapshot_files.size());
-  size_t point_stride = POINT_STRIDE;
+  constexpr size_t point_stride = POINT_STRIDE;
 
   for (size_t i = 0; i < num_test_files; i++) {
-    std::string pcd_file = pcd_files[i];
-    std::string snapshot_dir = snapshot_files[i];
+    const std::string pcd_file = pcd_files[i];
+    const std::string snapshot_dir = snapshot_files[i];
     std::cout << "Testing : " << pcd_file << std::endl;
-    std::vector<float> buffer = vueron::readPcdFile(pcd_file, MAX_POINTS_NUM);
-    float *points = (float *)buffer.data();
-    size_t point_buf_len = buffer.size();
+    const std::vector<float> buffer =
+        vueron::readPcdFile(pcd_file, MAX_POINTS_NUM);
+    const float *points = (float *)buffer.data();
+    const size_t point_buf_len = buffer.size();
 
     /*
         Read bev_features from snapshot file
