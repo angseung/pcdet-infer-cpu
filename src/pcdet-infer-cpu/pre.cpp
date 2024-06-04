@@ -138,7 +138,7 @@ size_t vueron::point_decoration(const std::vector<Pillar> &bev_pillar,
         pfe_input[index + 2] = points[point_stride * point_index + 2];
 
         /*
-          for models used intensity features
+          for models use intensity features
         */
         if (NUM_POINT_VALUES >= 4) {
           // for zero intensity models
@@ -159,7 +159,7 @@ size_t vueron::point_decoration(const std::vector<Pillar> &bev_pillar,
           pfe_input[index + 9] = pfe_input[index + 2] - z_center;
         }
         /*
-          for models do not used intensity features
+          for models do not use intensity features
         */
         else {
           pfe_input[index + 3] = pfe_input[index] - mean_x;
