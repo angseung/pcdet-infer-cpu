@@ -60,6 +60,8 @@ inline void SetRuntimeConfig(const RuntimeConfig& config) {
 #define SCORE_THRESH vueron::GetRuntimeConfig().nms_score_thd
 #define PRE_NMS_DISTANCE_THD vueron::GetRuntimeConfig().pre_nms_distance_thd
 #define NMS_THRESH vueron::GetRuntimeConfig().nms_iou_thd
+#define INTENSITY_NORMALIZE_DIV 255
+#define CONF_THRESH 0.4f
 
 #endif
 
