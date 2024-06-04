@@ -1,5 +1,7 @@
 # src/pcdet-cpu/CMakeLists.txt
 
+add_subdirectory(common)
+
 # A library contains only inference codes
 add_library(pcdetfunc STATIC pre.cpp rpn.cpp post.cpp model.cpp)
 
@@ -32,4 +34,4 @@ target_include_directories(pcdetfunc PUBLIC
 target_link_libraries(pcdetfunc PUBLIC onnx::runtime)
 
 add_library(pcdet STATIC pcdet.cpp ort_model.cpp)
-target_link_libraries(pcdet PUBLIC pcdetfunc)
+target_link_libraries(pcdet PUBLIC pcdetfunc json_config)

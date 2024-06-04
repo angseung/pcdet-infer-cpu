@@ -23,13 +23,14 @@ void vueron::voxelization(std::vector<Pillar> &bev_pillar, const float *points,
 
   std::mt19937 rng(RANDOM_SEED);
 
-  size_t points_num = points_buf_len / point_stride;
+  const size_t points_num = points_buf_len / point_stride;
   std::vector<size_t> indices(points_num, 0);
   std::iota(indices.begin(), indices.end(), 0);
 
-#if _SHIFFLE == ON
-  std::shuffle(indices.begin(), indices.end(), rng);
-#endif
+  if (SHUFFLE_ON) {
+    std::shuffle(indices.begin(), indices.end(), rng);
+  }
+
   size_t num_points_to_voxelize =
       (points_num > MAX_POINTS_NUM) ? MAX_POINTS_NUM : points_num;
   for (size_t idx = 0; idx < num_points_to_voxelize; idx++) {
@@ -136,30 +137,40 @@ size_t vueron::point_decoration(const std::vector<Pillar> &bev_pillar,
         pfe_input[index] = points[point_stride * point_index];
         pfe_input[index + 1] = points[point_stride * point_index + 1];
         pfe_input[index + 2] = points[point_stride * point_index + 2];
-#if NUM_POINT_VALUES >= 4
-#ifdef ZERO_INTENSITY
-        pfe_input[index + 3] = 0.0f;
-#else
-        pfe_input[index + 3] =
-            points[point_stride * point_index + 3] / INTENSITY_NORMALIZE_DIV;
-#endif
-        pfe_input[index + 4] = pfe_input[index] - mean_x;
-        pfe_input[index + 5] = pfe_input[index + 1] - mean_y;
-        pfe_input[index + 6] = pfe_input[index + 2] - mean_z;
 
-        pfe_input[index + 7] = pfe_input[index] - x_center;
-        pfe_input[index + 8] = pfe_input[index + 1] - y_center;
-        pfe_input[index + 9] = pfe_input[index + 2] - z_center;
-#else
-        // requires valiation here
-        pfe_input[index + 3] = pfe_input[index] - mean_x;
-        pfe_input[index + 4] = pfe_input[index + 1] - mean_y;
-        pfe_input[index + 5] = pfe_input[index + 2] - mean_z;
+        /*
+          for models use intensity features
+        */
+        if (NUM_POINT_VALUES >= 4) {
+          // for zero intensity models
+          if (ZERO_INTENSITY) {
+            pfe_input[index + 3] = 0.0f;
+          }
+          // for normal intensity models
+          else {
+            pfe_input[index + 3] = points[point_stride * point_index + 3] /
+                                   INTENSITY_NORMALIZE_DIV;
+          }
+          pfe_input[index + 4] = pfe_input[index] - mean_x;
+          pfe_input[index + 5] = pfe_input[index + 1] - mean_y;
+          pfe_input[index + 6] = pfe_input[index + 2] - mean_z;
 
-        pfe_input[index + 6] = pfe_input[index] - x_center;
-        pfe_input[index + 7] = pfe_input[index + 1] - y_center;
-        pfe_input[index + 8] = pfe_input[index + 2] - z_center;
-#endif
+          pfe_input[index + 7] = pfe_input[index] - x_center;
+          pfe_input[index + 8] = pfe_input[index + 1] - y_center;
+          pfe_input[index + 9] = pfe_input[index + 2] - z_center;
+        }
+        /*
+          for models do not use intensity features
+        */
+        else {
+          pfe_input[index + 3] = pfe_input[index] - mean_x;
+          pfe_input[index + 4] = pfe_input[index + 1] - mean_y;
+          pfe_input[index + 5] = pfe_input[index + 2] - mean_z;
+
+          pfe_input[index + 6] = pfe_input[index] - x_center;
+          pfe_input[index + 7] = pfe_input[index + 1] - y_center;
+          pfe_input[index + 8] = pfe_input[index + 2] - z_center;
+        }
       }
       index += FEATURE_NUM;
     }

@@ -54,9 +54,9 @@ TEST(IntegrationTest, IntegrationTest) {
     EXPECT_EQ(boxes_snapshot.size(), 7 * labels_snapshot.size());
     EXPECT_EQ(scores_snapshot.size(), labels_snapshot.size());
 
-    EXPECT_EQ(boxes_snapshot.size(), MAX_BOX_NUM_AFTER_NMS);
-    EXPECT_EQ(scores_snapshot.size(), MAX_BOX_NUM_AFTER_NMS);
-    EXPECT_EQ(labels_snapshot.size(), MAX_BOX_NUM_AFTER_NMS);
+    EXPECT_EQ(boxes_snapshot.size(), MAX_OBJ_PER_SAMPLE);
+    EXPECT_EQ(scores_snapshot.size(), MAX_OBJ_PER_SAMPLE);
+    EXPECT_EQ(labels_snapshot.size(), MAX_OBJ_PER_SAMPLE);
 
     /*
         Inference with pcd file
@@ -70,9 +70,9 @@ TEST(IntegrationTest, IntegrationTest) {
     vueron::run_model(points, point_buf_len, point_stride, nms_boxes,
                       nms_labels, nms_scores);
 
-    EXPECT_EQ(nms_boxes.size(), MAX_BOX_NUM_AFTER_NMS);
-    EXPECT_EQ(nms_scores.size(), MAX_BOX_NUM_AFTER_NMS);
-    EXPECT_EQ(nms_labels.size(), MAX_BOX_NUM_AFTER_NMS);
+    EXPECT_EQ(nms_boxes.size(), MAX_OBJ_PER_SAMPLE);
+    EXPECT_EQ(nms_scores.size(), MAX_OBJ_PER_SAMPLE);
+    EXPECT_EQ(nms_labels.size(), MAX_OBJ_PER_SAMPLE);
 
     for (size_t j = 0; j < labels_snapshot.size(); j++) {
       EXPECT_NEAR(nms_boxes[j].x, boxes_snapshot[7 * j], _ERROR);

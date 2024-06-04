@@ -1,6 +1,8 @@
 #ifndef __PARAMS_H__
 #define __PARAMS_H__
 
+#include <vector>
+
 /*
     Params for Preprocessing
 */
@@ -17,7 +19,7 @@
 #define VOXEL_Z_SIZE 6.0f
 
 #define NUM_POINT_VALUES 4
-#define ZERO_INTENSITY
+#define ZERO_INTENSITY true
 
 // encode
 #define MAX_NUM_POINTS_PER_PILLAR 20
@@ -29,9 +31,6 @@
 #define GRID_X_SIZE 224
 #define GRID_Y_SIZE 328
 
-#define MAX_POINTS_NUM 100000
-#define INTENSITY_NORMALIZE_DIV 255
-
 /*
     Params for Postprocessing
 */
@@ -40,16 +39,34 @@
 #define FEATURE_X_SIZE 112
 #define FEATURE_Y_SIZE 164
 #define IOU_RECTIFIER \
-  { 0.68f, 0.71f, 0.65f }
+  std::vector<float> { 0.68f, 0.71f, 0.65f }
 
 /*
     User Configurable Param
 */
+// pre
+#define SHUFFLE_ON false
+#define MAX_POINTS_NUM 1000000
+#define INTENSITY_NORMALIZE_DIV 255
+
 // post
-#define MAX_BOX_NUM_BEFORE_NMS 500
-#define MAX_BOX_NUM_AFTER_NMS 83
-#define IOU_THRESH 0.2f
+#define NMS_PRE_MAXSIZE 500
+#define MAX_OBJ_PER_SAMPLE 83
+#define NMS_THRESH 0.2f
 #define SCORE_THRESH 0.1f
 #define CONF_THRESH 0.4f
+#define PRE_NMS_DISTANCE_THD 10.0f
+
+/*
+    for Compatibility
+*/
+#ifndef ZERO_INTENSITY
+#define ZERO_INTENSITY false
+#endif
+
+#ifndef IOU_RECTIFIER
+#define IOU_RECTIFIER \
+  std::vector<float> { 0.68f, 0.71f, 0.65f }
+#endif
 
 #endif  // __PARAMS_H__

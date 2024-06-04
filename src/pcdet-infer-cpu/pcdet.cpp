@@ -1,19 +1,16 @@
 #include "pcdet-infer-cpu/pcdet.h"
 
-#include <config.h>
-
 #include <chrono>
 #include <iostream>
 
-#include "pcdet-infer-cpu/post.h"
-#include "pcdet-infer-cpu/pre.h"
+#include "config.h"
 
 vueron::PCDet::PCDet()
     : bev_pillar(GRID_Y_SIZE * GRID_X_SIZE),
       pfe_input(MAX_VOXELS * MAX_NUM_POINTS_PER_PILLAR * FEATURE_NUM, 0.0f),
       pfe_output(MAX_VOXELS * NUM_FEATURE_SCATTER, 0.0f),
       bev_image(GRID_Y_SIZE * GRID_X_SIZE * NUM_FEATURE_SCATTER, 0.0f),
-      suppressed(MAX_BOX_NUM_BEFORE_NMS, false),
+      suppressed(NMS_PRE_MAXSIZE, false),
       num_pillars(0),
       pfe_path(PFE_PATH),
       pfe_input_dim({MAX_VOXELS, MAX_NUM_POINTS_PER_PILLAR, FEATURE_NUM}),
@@ -36,7 +33,7 @@ vueron::PCDet::PCDet(const std::string &pfe_path, const std::string &rpn_path)
       pfe_input(MAX_VOXELS * MAX_NUM_POINTS_PER_PILLAR * FEATURE_NUM, 0.0f),
       pfe_output(MAX_VOXELS * NUM_FEATURE_SCATTER, 0.0f),
       bev_image(GRID_Y_SIZE * GRID_X_SIZE * NUM_FEATURE_SCATTER, 0.0f),
-      suppressed(MAX_BOX_NUM_BEFORE_NMS, false),
+      suppressed(NMS_PRE_MAXSIZE, false),
       num_pillars(0),
       pfe_path(pfe_path),
       pfe_input_dim{MAX_VOXELS, MAX_NUM_POINTS_PER_PILLAR, FEATURE_NUM},
@@ -52,7 +49,7 @@ vueron::PCDet::PCDet(const std::string &pfe_path, const std::string &rpn_path)
   std::cout << "RPN Model Initialized with " << RPN_PATH << std::endl;
 };
 
-vueron::PCDet::~PCDet(){};
+vueron::PCDet::~PCDet() = default;
 
 void vueron::PCDet::preprocess(const float *points, const size_t &point_buf_len,
                                const size_t &point_stride) {
@@ -62,7 +59,7 @@ void vueron::PCDet::preprocess(const float *points, const size_t &point_buf_len,
                                pfe_input, points, point_stride);
 }
 
-void vueron::PCDet::scatter(void) {
+void vueron::PCDet::scatter() {
   vueron::scatter(pfe_output, voxel_coords, num_pillars, bev_image);
 }
 
@@ -70,7 +67,7 @@ void vueron::PCDet::postprocess(std::vector<vueron::BndBox> &final_boxes,
                                 std::vector<size_t> &final_labels,
                                 std::vector<float> &final_scores) {
   vueron::decode_to_boxes(rpn_outputs, pre_boxes, pre_labels, pre_scores);
-  vueron::nms(pre_boxes, pre_scores, suppressed, IOU_THRESH);
+  vueron::nms(pre_boxes, pre_scores, suppressed, NMS_THRESH);
   vueron::gather_boxes(pre_boxes, pre_labels, pre_scores, final_boxes,
                        final_labels, final_scores, suppressed);
 }

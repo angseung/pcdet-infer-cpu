@@ -4,9 +4,25 @@
 #include <cmath>
 #include <vector>
 
+#include "params.h"
 #include "type.h"
 
 namespace vueron {
+
+struct Point {
+  float x{}, y{};
+  Point() = default;
+  Point(const float _x, const float _y) { x = _x, y = _y; }
+
+  void set(const float _x, const float _y) {
+    x = _x;
+    y = _y;
+  }
+
+  Point operator+(const Point &b) const { return {x + b.x, y + b.y}; }
+
+  Point operator-(const Point &b) const { return {x - b.x, y - b.y}; }
+};
 
 constexpr float EPS = 1e-8;
 
@@ -216,7 +232,7 @@ inline float calculateIOU(const float *box_a, const float *box_b) {
   */
   float dist = sqrt((box_a[0] - box_b[0]) * (box_a[0] - box_b[0]) +
                     (box_a[1] - box_b[1]) * (box_a[1] - box_b[1]));
-  if (dist > 10.0f) {
+  if (dist > PRE_NMS_DISTANCE_THD) {
     return 0.0f;
   }
   float sa = box_a[3] * box_a[4];

@@ -30,22 +30,20 @@ void vueron::decode_to_boxes(const std::vector<std::vector<float>> &rpn_output,
   assert(hm.size() == CLASS_NUM * FEATURE_Y_SIZE * FEATURE_X_SIZE);
 
   std::vector<size_t> indices(hm.size());
-
-  std::vector<float> rect_scores(IOU_RECTIFIER);
-  assert(rect_scores.size() == 3);
+  assert(IOU_RECTIFIER.size() == 3);
 
   /*
       get topk scores and their indices
   */
   std::iota(indices.begin(), indices.end(), 0);
-  std::partial_sort(indices.begin(), indices.begin() + MAX_BOX_NUM_BEFORE_NMS,
+  std::partial_sort(indices.begin(), indices.begin() + NMS_PRE_MAXSIZE,
                     indices.end(),
                     [&](size_t A, size_t B) { return hm[A] > hm[B]; });
 
   /*
       decode into boxes
   */
-  for (size_t j = 0; j < MAX_BOX_NUM_BEFORE_NMS; j++) {
+  for (size_t j = 0; j < NMS_PRE_MAXSIZE; j++) {
     size_t channel_offset = FEATURE_X_SIZE * FEATURE_Y_SIZE;
     size_t idx = indices[j];  // index for hm ONLY
     size_t s_idx =
@@ -89,7 +87,7 @@ void vueron::decode_to_boxes(const std::vector<std::vector<float>> &rpn_output,
     float rectified_score;
     if (has_iou_head) {
       rectified_score = rectify_score(sigmoid(hm[idx]), rpn_output[5][s_idx],
-                                      rect_scores[label]);
+                                      IOU_RECTIFIER[label]);
     } else {
       rectified_score = sigmoid(hm[idx]);
     }
@@ -121,7 +119,7 @@ void vueron::nms(const std::vector<BndBox> &boxes,
     }
 
     processed++;
-    if (processed >= MAX_BOX_NUM_AFTER_NMS) {
+    if (processed >= MAX_OBJ_PER_SAMPLE) {
       break;
     }
 
@@ -154,7 +152,7 @@ void vueron::gather_boxes(const std::vector<BndBox> &boxes,
       nms_labels.push_back(labels[j]);
       nms_scores.push_back(scores[j]);
 
-      if (nms_boxes.size() >= MAX_BOX_NUM_AFTER_NMS) {
+      if (nms_boxes.size() >= MAX_OBJ_PER_SAMPLE) {
         break;
       }
     }

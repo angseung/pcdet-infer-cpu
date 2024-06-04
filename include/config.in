@@ -2,9 +2,6 @@
 #define __COMMON_H__
 
 #define _EPSILON 1e-4
-#define OFF 0
-#define ON 1
-#define _SHIFFLE ON
 #cmakedefine _PROFILE
 #cmakedefine _DEBUG
 

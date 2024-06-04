@@ -18,9 +18,9 @@ TEST(IntegrationTest, IntegrationTest) {
   std::string folder_path = PCD_PATH;
   std::vector<std::string> pcd_files = vueron::getFileList(folder_path);
   std::vector<float> points;
-  size_t num_test_files = pcd_files.size();
+  const size_t num_test_files = pcd_files.size();
 
-  size_t point_stride = POINT_STRIDE;
+  const size_t point_stride = POINT_STRIDE;
   std::string pfe_path(PFE_PATH);
   std::string rpn_path(RPN_PATH);
   std::unique_ptr<vueron::PCDet> pcdet =
@@ -67,12 +67,12 @@ TEST(IntegrationTest, IntegrationTest) {
     // Do inference with pcdet
     pcdet->do_infer(points, point_buf_len, point_stride, pcdet_nms_boxes);
 
-    EXPECT_EQ(nms_boxes.size(), MAX_BOX_NUM_AFTER_NMS);
-    EXPECT_EQ(nms_scores.size(), MAX_BOX_NUM_AFTER_NMS);
-    EXPECT_EQ(nms_labels.size(), MAX_BOX_NUM_AFTER_NMS);
-    EXPECT_EQ(pcdet_nms_boxes.size(), MAX_BOX_NUM_AFTER_NMS);
+    EXPECT_EQ(nms_boxes.size(), MAX_OBJ_PER_SAMPLE);
+    EXPECT_EQ(nms_scores.size(), MAX_OBJ_PER_SAMPLE);
+    EXPECT_EQ(nms_labels.size(), MAX_OBJ_PER_SAMPLE);
+    EXPECT_EQ(pcdet_nms_boxes.size(), MAX_OBJ_PER_SAMPLE);
 
-    for (size_t j = 0; j < MAX_BOX_NUM_AFTER_NMS; j++) {
+    for (size_t j = 0; j < MAX_OBJ_PER_SAMPLE; j++) {
       EXPECT_EQ(nms_labels[j], pcdet_nms_boxes[j].label);
       EXPECT_FLOAT_EQ(nms_scores[j], pcdet_nms_boxes[j].score);
       EXPECT_FLOAT_EQ(nms_boxes[j].x, pcdet_nms_boxes[j].x);
