@@ -6,7 +6,8 @@
 #include <vector>
 
 #include "pcdet-infer-cpu/ort_model.h"
-#include "type.h"
+#include "pcdet-infer-cpu/post.h"
+#include "pcdet-infer-cpu/pre.h"
 
 namespace vueron {
 class PCDet {

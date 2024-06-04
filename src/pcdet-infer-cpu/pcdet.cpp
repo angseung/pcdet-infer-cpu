@@ -4,8 +4,6 @@
 #include <iostream>
 
 #include "config.h"
-#include "pcdet-infer-cpu/post.h"
-#include "pcdet-infer-cpu/pre.h"
 
 vueron::PCDet::PCDet()
     : bev_pillar(GRID_Y_SIZE * GRID_X_SIZE),
