@@ -31,9 +31,6 @@
 #define GRID_X_SIZE 224
 #define GRID_Y_SIZE 328
 
-#define MAX_POINTS_NUM 100000
-#define INTENSITY_NORMALIZE_DIV 255
-
 /*
     Params for Postprocessing
 */
@@ -47,6 +44,11 @@
 /*
     User Configurable Param
 */
+// pre
+#define SHUFFLE_ON false
+#define MAX_POINTS_NUM 1000000
+#define INTENSITY_NORMALIZE_DIV 255
+
 // post
 #define NMS_PRE_MAXSIZE 500
 #define MAX_OBJ_PER_SAMPLE 83
@@ -54,6 +56,5 @@
 #define SCORE_THRESH 0.1f
 #define CONF_THRESH 0.4f
 #define PRE_NMS_DISTANCE_THD 10.0f
-#define SHUFFLE_ON false
 
 #endif  // __PARAMS_H__

@@ -23,14 +23,14 @@ namespace vueron {
 
 struct RuntimeConfigSingleton {
   RuntimeConfig config{
-      150000,  // int max_points;
-      true,    // bool shuffle_on;
-      false,   // bool use_cpu;
-      1000,    // int pre_nms_max_preds;
-      83,      // int max_preds;
-      0.1f,    // float nms_score_thd;
-      10.0f,   // float pre_nms_distance_thd;
-      0.2f,    // float nms_iou_thd;
+      1000000,  // int max_points;
+      true,     // bool shuffle_on;
+      false,    // bool use_cpu;
+      500,      // int pre_nms_max_preds;
+      83,       // int max_preds;
+      0.1f,     // float nms_score_thd;
+      10.0f,    // float pre_nms_distance_thd;
+      0.2f,     // float nms_iou_thd;
   };
 
   static RuntimeConfigSingleton& Instance() {
