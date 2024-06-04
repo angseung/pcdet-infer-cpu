@@ -6,9 +6,6 @@
 #include <pcl/point_types.h>
 
 #include <cstring>
-#include <fstream>
-#include <map>
-#include <sstream>
 #include <string>
 #include <vector>
 
@@ -37,7 +34,7 @@ std::vector<std::string> getFileList(const std::string &folder_path) {
 }
 
 std::vector<float> readPcdFile(const std::string &file_path,
-                               size_t max_points) {
+                               const size_t &max_points) {
   std::vector<float> points;
   pcl::PointCloud<pcl::PointXYZI>::Ptr cloud(
       new pcl::PointCloud<pcl::PointXYZI>);

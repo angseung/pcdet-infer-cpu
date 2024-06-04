@@ -52,7 +52,7 @@ vueron::PCDet::PCDet(const std::string &pfe_path, const std::string &rpn_path)
   std::cout << "RPN Model Initialized with " << RPN_PATH << std::endl;
 };
 
-vueron::PCDet::~PCDet(){};
+vueron::PCDet::~PCDet()= default;
 
 void vueron::PCDet::preprocess(const float *points, const size_t &point_buf_len,
                                const size_t &point_stride) {
@@ -62,7 +62,7 @@ void vueron::PCDet::preprocess(const float *points, const size_t &point_buf_len,
                                pfe_input, points, point_stride);
 }
 
-void vueron::PCDet::scatter(void) {
+void vueron::PCDet::scatter() {
   vueron::scatter(pfe_output, voxel_coords, num_pillars, bev_image);
 }
 

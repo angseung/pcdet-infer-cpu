@@ -19,9 +19,10 @@ void vueron::rpn_run(const std::vector<float> &rpn_input,
 
   Ort::AllocatorWithDefaultOptions allocator;
 
-  std::vector<int64_t> input_node_dims = {1, NUM_FEATURE_SCATTER, GRID_Y_SIZE,
-                                          GRID_X_SIZE};
-  size_t input_tensor_size = GRID_Y_SIZE * GRID_X_SIZE * NUM_FEATURE_SCATTER;
+  const std::vector<int64_t> input_node_dims = {1, NUM_FEATURE_SCATTER,
+                                                GRID_Y_SIZE, GRID_X_SIZE};
+  const size_t input_tensor_size =
+      GRID_Y_SIZE * GRID_X_SIZE * NUM_FEATURE_SCATTER;
 
   // create input tensor object from data values
   auto memory_info =
@@ -30,7 +31,7 @@ void vueron::rpn_run(const std::vector<float> &rpn_input,
   std::vector<const char *> input_node_names;
   std::vector<const char *> output_node_names;
 
-  size_t num_input_nodes = session.GetInputCount();
+  const size_t num_input_nodes = session.GetInputCount();
   for (size_t i = 0; i < num_input_nodes; ++i) {
     auto name = session.GetInputNameAllocated(i, allocator);
 #ifdef _DEBUG
@@ -40,7 +41,7 @@ void vueron::rpn_run(const std::vector<float> &rpn_input,
   }
   assert(input_node_names.size() == 1);
 
-  size_t num_output_nodes = session.GetOutputCount();
+  const size_t num_output_nodes = session.GetOutputCount();
   for (size_t i = 0; i < num_output_nodes; ++i) {
     auto name = session.GetOutputNameAllocated(i, allocator);
 #ifdef _DEBUG
@@ -66,22 +67,19 @@ void vueron::rpn_run(const std::vector<float> &rpn_input,
   rpn_output.reserve(num_output_nodes);
 
   for (size_t i = 0; i < num_output_nodes; ++i) {
-    float *float_array;
-    size_t num_elements;
-
     // Get tensor shape and size
     auto type_info = output_tensors[i].GetTensorTypeAndShapeInfo();
     auto tensor_shape = type_info.GetShape();
-    num_elements = 1;
+    size_t num_elements = 1;
 
     // Get tensor data size
-    for (auto dim : tensor_shape) {
+    for (const auto dim : tensor_shape) {
       num_elements *= dim;
     }
     assert(num_elements % (GRID_X_SIZE * GRID_Y_SIZE / 4) == 0);
 
     // Extract tensor data
-    float_array = output_tensors[i].GetTensorMutableData<float>();
+    auto *float_array = output_tensors[i].GetTensorMutableData<float>();
     std::vector<float> tensor_data(float_array, float_array + num_elements);
     rpn_output.push_back(tensor_data);
   }

@@ -3,7 +3,6 @@
 
 #include <vector>
 
-#include "params.h"
 #include "type.h"
 
 namespace vueron {

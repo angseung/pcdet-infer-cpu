@@ -23,7 +23,7 @@ void vueron::voxelization(std::vector<Pillar> &bev_pillar, const float *points,
 
   std::mt19937 rng(RANDOM_SEED);
 
-  size_t points_num = points_buf_len / point_stride;
+  const size_t points_num = points_buf_len / point_stride;
   std::vector<size_t> indices(points_num, 0);
   std::iota(indices.begin(), indices.end(), 0);
 

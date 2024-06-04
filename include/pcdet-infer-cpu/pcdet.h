@@ -5,8 +5,6 @@
 #include <memory>  // for unique_ptr
 #include <vector>
 
-#include "config.h"
-#include "params.h"
 #include "pcdet-infer-cpu/ort_model.h"
 #include "type.h"
 
@@ -46,16 +44,16 @@ class PCDet {
 
   void preprocess(const float *points, const size_t &point_buf_len,
                   const size_t &point_stride);
-  void scatter(void);
+  void scatter();
   void postprocess(std::vector<vueron::BndBox> &post_boxes,
                    std::vector<size_t> &post_labels,
                    std::vector<float> &post_scores);
   void get_pred(std::vector<PredBox> &boxes);
 
  public:
-  PCDet(void);
+  PCDet();
   PCDet(const std::string &pfe_path, const std::string &rpn_path);
-  ~PCDet(void);
+  ~PCDet();
   void do_infer(const float *points, const size_t &point_buf_len,
                 const size_t &point_stride, std::vector<PredBox> &boxes);
   void do_infer(const float *points, const size_t &point_buf_len,
