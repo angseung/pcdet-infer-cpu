@@ -30,9 +30,7 @@ void vueron::decode_to_boxes(const std::vector<std::vector<float>> &rpn_output,
   assert(hm.size() == CLASS_NUM * FEATURE_Y_SIZE * FEATURE_X_SIZE);
 
   std::vector<size_t> indices(hm.size());
-
-  std::vector<float> rect_scores(IOU_RECTIFIER);
-  assert(rect_scores.size() == 3);
+  assert(IOU_RECTIFIER.size() == 3);
 
   /*
       get topk scores and their indices
@@ -89,7 +87,7 @@ void vueron::decode_to_boxes(const std::vector<std::vector<float>> &rpn_output,
     float rectified_score;
     if (has_iou_head) {
       rectified_score = rectify_score(sigmoid(hm[idx]), rpn_output[5][s_idx],
-                                      rect_scores[label]);
+                                      IOU_RECTIFIER[label]);
     } else {
       rectified_score = sigmoid(hm[idx]);
     }

@@ -1,6 +1,8 @@
 #ifndef __PARAMS_H__
 #define __PARAMS_H__
 
+#include <vector>
+
 /*
     Params for Preprocessing
 */
@@ -40,7 +42,7 @@
 #define FEATURE_X_SIZE 112
 #define FEATURE_Y_SIZE 164
 #define IOU_RECTIFIER \
-  { 0.68f, 0.71f, 0.65f }
+  std::vector<float> { 0.68f, 0.71f, 0.65f }
 
 /*
     User Configurable Param
