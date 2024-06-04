@@ -9,6 +9,21 @@
 
 namespace vueron {
 
+struct Point {
+  float x{}, y{};
+  Point() = default;
+  Point(const float _x, const float _y) { x = _x, y = _y; }
+
+  void set(const float _x, const float _y) {
+    x = _x;
+    y = _y;
+  }
+
+  Point operator+(const Point &b) const { return {x + b.x, y + b.y}; }
+
+  Point operator-(const Point &b) const { return {x - b.x, y - b.y}; }
+};
+
 constexpr float EPS = 1e-8;
 
 inline float min(const float a, const float b) { return a > b ? b : a; }
