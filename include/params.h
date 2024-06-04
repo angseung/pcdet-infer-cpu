@@ -57,4 +57,16 @@
 #define CONF_THRESH 0.4f
 #define PRE_NMS_DISTANCE_THD 10.0f
 
+/*
+    for Compatibility
+*/
+#ifndef ZERO_INTENSITY
+#define ZERO_INTENSITY false
+#endif
+
+#ifndef IOU_RECTIFIER
+#define IOU_RECTIFIER \
+  std::vector<float> { 0.68f, 0.71f, 0.65f }
+#endif
+
 #endif  // __PARAMS_H__
