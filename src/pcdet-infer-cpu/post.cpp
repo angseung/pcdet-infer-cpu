@@ -36,14 +36,14 @@ void vueron::decode_to_boxes(const std::vector<std::vector<float>> &rpn_output,
       get topk scores and their indices
   */
   std::iota(indices.begin(), indices.end(), 0);
-  std::partial_sort(indices.begin(), indices.begin() + MAX_BOX_NUM_BEFORE_NMS,
+  std::partial_sort(indices.begin(), indices.begin() + NMS_PRE_MAXSIZE,
                     indices.end(),
                     [&](size_t A, size_t B) { return hm[A] > hm[B]; });
 
   /*
       decode into boxes
   */
-  for (size_t j = 0; j < MAX_BOX_NUM_BEFORE_NMS; j++) {
+  for (size_t j = 0; j < NMS_PRE_MAXSIZE; j++) {
     size_t channel_offset = FEATURE_X_SIZE * FEATURE_Y_SIZE;
     size_t idx = indices[j];  // index for hm ONLY
     size_t s_idx =
@@ -119,7 +119,7 @@ void vueron::nms(const std::vector<BndBox> &boxes,
     }
 
     processed++;
-    if (processed >= MAX_BOX_NUM_AFTER_NMS) {
+    if (processed >= MAX_OBJ_PER_SAMPLE) {
       break;
     }
 
@@ -152,7 +152,7 @@ void vueron::gather_boxes(const std::vector<BndBox> &boxes,
       nms_labels.push_back(labels[j]);
       nms_scores.push_back(scores[j]);
 
-      if (nms_boxes.size() >= MAX_BOX_NUM_AFTER_NMS) {
+      if (nms_boxes.size() >= MAX_OBJ_PER_SAMPLE) {
         break;
       }
     }

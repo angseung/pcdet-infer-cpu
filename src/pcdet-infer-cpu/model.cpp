@@ -27,9 +27,9 @@ void vueron::run_model(const float *points, const size_t &point_buf_len,
   /*
       Buffers for Final Predictions
   */
-  pre_boxes.reserve(MAX_BOX_NUM_BEFORE_NMS);
-  pre_labels.reserve(MAX_BOX_NUM_BEFORE_NMS);
-  pre_scores.reserve(MAX_BOX_NUM_BEFORE_NMS);
+  pre_boxes.reserve(NMS_PRE_MAXSIZE);
+  pre_labels.reserve(NMS_PRE_MAXSIZE);
+  pre_scores.reserve(NMS_PRE_MAXSIZE);
 
   /*
       Preprocessing
@@ -59,7 +59,7 @@ void vueron::run_model(const float *points, const size_t &point_buf_len,
   */
   decode_to_boxes(rpn_outputs, pre_boxes, pre_labels, pre_scores);
   std::vector<bool> suppressed(pre_boxes.size(), false);  // mask for nms
-  nms(pre_boxes, pre_scores, suppressed, IOU_THRESH);
+  nms(pre_boxes, pre_scores, suppressed, NMS_THRESH);
   gather_boxes(pre_boxes, pre_labels, pre_scores, boxes, labels, scores,
                suppressed);
 }

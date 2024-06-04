@@ -48,10 +48,11 @@
     User Configurable Param
 */
 // post
-#define MAX_BOX_NUM_BEFORE_NMS 500
-#define MAX_BOX_NUM_AFTER_NMS 83
-#define IOU_THRESH 0.2f
+#define NMS_PRE_MAXSIZE 500
+#define MAX_OBJ_PER_SAMPLE 83
+#define NMS_THRESH 0.2f
 #define SCORE_THRESH 0.1f
 #define CONF_THRESH 0.4f
+#define PRE_NMS_DISTANCE_THD 10.0f
 
 #endif  // __PARAMS_H__

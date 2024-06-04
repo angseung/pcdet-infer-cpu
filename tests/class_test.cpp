@@ -67,12 +67,12 @@ TEST(IntegrationTest, IntegrationTest) {
     // Do inference with pcdet
     pcdet->do_infer(points, point_buf_len, point_stride, pcdet_nms_boxes);
 
-    EXPECT_EQ(nms_boxes.size(), MAX_BOX_NUM_AFTER_NMS);
-    EXPECT_EQ(nms_scores.size(), MAX_BOX_NUM_AFTER_NMS);
-    EXPECT_EQ(nms_labels.size(), MAX_BOX_NUM_AFTER_NMS);
-    EXPECT_EQ(pcdet_nms_boxes.size(), MAX_BOX_NUM_AFTER_NMS);
+    EXPECT_EQ(nms_boxes.size(), MAX_OBJ_PER_SAMPLE);
+    EXPECT_EQ(nms_scores.size(), MAX_OBJ_PER_SAMPLE);
+    EXPECT_EQ(nms_labels.size(), MAX_OBJ_PER_SAMPLE);
+    EXPECT_EQ(pcdet_nms_boxes.size(), MAX_OBJ_PER_SAMPLE);
 
-    for (size_t j = 0; j < MAX_BOX_NUM_AFTER_NMS; j++) {
+    for (size_t j = 0; j < MAX_OBJ_PER_SAMPLE; j++) {
       EXPECT_EQ(nms_labels[j], pcdet_nms_boxes[j].label);
       EXPECT_FLOAT_EQ(nms_scores[j], pcdet_nms_boxes[j].score);
       EXPECT_FLOAT_EQ(nms_boxes[j].x, pcdet_nms_boxes[j].x);

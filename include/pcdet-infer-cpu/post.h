@@ -216,7 +216,7 @@ inline float calculateIOU(const float *box_a, const float *box_b) {
   */
   float dist = sqrt((box_a[0] - box_b[0]) * (box_a[0] - box_b[0]) +
                     (box_a[1] - box_b[1]) * (box_a[1] - box_b[1]));
-  if (dist > 10.0f) {
+  if (dist > PRE_NMS_DISTANCE_THD) {
     return 0.0f;
   }
   float sa = box_a[3] * box_a[4];
