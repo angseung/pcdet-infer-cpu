@@ -1,10 +1,9 @@
 #include "pcdet-infer-cpu/pcdet.h"
 
-#include <config.h>
-
 #include <chrono>
 #include <iostream>
 
+#include "config.h"
 #include "pcdet-infer-cpu/post.h"
 #include "pcdet-infer-cpu/pre.h"
 
@@ -52,7 +51,7 @@ vueron::PCDet::PCDet(const std::string &pfe_path, const std::string &rpn_path)
   std::cout << "RPN Model Initialized with " << RPN_PATH << std::endl;
 };
 
-vueron::PCDet::~PCDet()= default;
+vueron::PCDet::~PCDet() = default;
 
 void vueron::PCDet::preprocess(const float *points, const size_t &point_buf_len,
                                const size_t &point_stride) {
