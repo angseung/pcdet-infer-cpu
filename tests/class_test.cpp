@@ -19,15 +19,15 @@ TEST(IntegrationTest, IntegrationTest) {
   std::vector<std::string> pcd_files = vueron::getFileList(folder_path);
   const size_t num_test_files = pcd_files.size();
   constexpr size_t point_stride = POINT_STRIDE;
-  std::string pfe_path(PFE_PATH);
-  std::string rpn_path(RPN_PATH);
+  std::string pfe_path(PFE_FILE);
+  std::string rpn_path(RPN_FILE);
   const auto pcdet = std::make_unique<vueron::PCDet>(pfe_path, rpn_path);
 
   for (size_t i = 0; i < num_test_files; i++) {
     const std::string pcd_file = pcd_files[i];
     std::cout << "Testing : " << pcd_file << std::endl;
     const std::vector<float> buffer =
-        vueron::readPcdFile(pcd_file, MAX_POINTS_NUM);
+        vueron::readPcdFile(pcd_file, MAX_POINT_NUM);
     const float *points = (float *)buffer.data();
     size_t point_buf_len = buffer.size();
 

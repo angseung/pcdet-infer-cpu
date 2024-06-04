@@ -21,9 +21,9 @@ void vueron::voxelization(std::vector<Pillar> &bev_pillar, const float *points,
                           const size_t &points_buf_len,
                           const size_t &point_stride) {
   // check grid size
-  assert(GRID_X_SIZE == (float)((MAX_X_RANGE - MIN_X_RANGE) / VOXEL_X_SIZE));
-  assert(GRID_Y_SIZE == (float)((MAX_Y_RANGE - MIN_Y_RANGE) / VOXEL_Y_SIZE));
-  assert(1.0f == (float)((MAX_Z_RANGE - MIN_Z_RANGE) / VOXEL_Z_SIZE));
+  assert(GRID_X_SIZE == (float)((MAX_X_RANGE - MIN_X_RANGE) / PILLAR_X_SIZE));
+  assert(GRID_Y_SIZE == (float)((MAX_Y_RANGE - MIN_Y_RANGE) / PILLAR_Y_SIZE));
+  assert(1.0f == (float)((MAX_Z_RANGE - MIN_Z_RANGE) / PILLAR_Z_SIZE));
 
   // check buffer size
   assert(points_buf_len % point_stride == 0);
@@ -39,15 +39,15 @@ void vueron::voxelization(std::vector<Pillar> &bev_pillar, const float *points,
   }
 
   size_t num_points_to_voxelize =
-      (points_num > MAX_POINTS_NUM) ? MAX_POINTS_NUM : points_num;
+      (points_num > MAX_POINT_NUM) ? MAX_POINT_NUM : points_num;
   for (size_t idx = 0; idx < num_points_to_voxelize; idx++) {
     size_t i = indices[idx];
     float point_x = points[point_stride * i];
     float point_y = points[point_stride * i + 1];
     float point_z = points[point_stride * i + 2];
 
-    size_t voxel_index_x = floorf((point_x - MIN_X_RANGE) / VOXEL_X_SIZE);
-    size_t voxel_index_y = floorf((point_y - MIN_Y_RANGE) / VOXEL_Y_SIZE);
+    size_t voxel_index_x = floorf((point_x - MIN_X_RANGE) / PILLAR_X_SIZE);
+    size_t voxel_index_y = floorf((point_y - MIN_Y_RANGE) / PILLAR_Y_SIZE);
 
     // skip if out-of-range point
     if (point_x < MIN_X_RANGE || point_x > MAX_X_RANGE ||
@@ -128,11 +128,11 @@ size_t vueron::point_decoration(const std::vector<Pillar> &bev_pillar,
     mean_z /= pillar.point_num_in_pillar;
 
     // calc centeral values of current pillar
-    float x_center = (VOXEL_X_SIZE / 2.0f) +
-                     (pillar.pillar_grid_x * VOXEL_X_SIZE) + MIN_X_RANGE;
-    float y_center = (VOXEL_Y_SIZE / 2.0f) +
-                     (pillar.pillar_grid_y * VOXEL_Y_SIZE) + MIN_Y_RANGE;
-    float z_center = (VOXEL_Z_SIZE / 2.0f) + MIN_Z_RANGE;
+    float x_center = (PILLAR_X_SIZE / 2.0f) +
+                     (pillar.pillar_grid_x * PILLAR_X_SIZE) + MIN_X_RANGE;
+    float y_center = (PILLAR_Y_SIZE / 2.0f) +
+                     (pillar.pillar_grid_y * PILLAR_Y_SIZE) + MIN_Y_RANGE;
+    float z_center = (PILLAR_Z_SIZE / 2.0f) + MIN_Z_RANGE;
 
     // write encoded features into raw_voxels and pfe_input
     for (size_t i = 0; i < MAX_NUM_POINTS_PER_PILLAR; i++) {
@@ -193,7 +193,7 @@ void vueron::pfe_run(const std::vector<float> &pfe_input,
                      std::vector<float> &pfe_output) {
   Ort::Env env(ORT_LOGGING_LEVEL_WARNING, "test");
   Ort::SessionOptions session_options;
-  Ort::Session session(env, PFE_PATH, session_options);
+  Ort::Session session(env, PFE_FILE, session_options);
   session_options.SetIntraOpNumThreads(1);
   session_options.SetGraphOptimizationLevel(
       GraphOptimizationLevel::ORT_ENABLE_EXTENDED);

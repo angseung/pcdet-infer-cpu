@@ -14,9 +14,9 @@
 #define MIN_Z_RANGE -2.0f
 #define MAX_Z_RANGE 4.0f
 
-#define VOXEL_X_SIZE 0.32f
-#define VOXEL_Y_SIZE 0.32f
-#define VOXEL_Z_SIZE 6.0f
+#define PILLAR_X_SIZE 0.32f
+#define PILLAR_Y_SIZE 0.32f
+#define PILLAR_Z_SIZE 6.0f
 
 #define NUM_POINT_VALUES 4
 #define ZERO_INTENSITY true
@@ -30,6 +30,7 @@
 #define NUM_FEATURE_SCATTER 64
 #define GRID_X_SIZE 224
 #define GRID_Y_SIZE 328
+#define GRID_Z_SIZE 1
 
 /*
     Params for Postprocessing
@@ -46,7 +47,7 @@
 */
 // pre
 #define SHUFFLE_ON false
-#define MAX_POINTS_NUM 1000000
+#define MAX_POINT_NUM 1000000
 #define INTENSITY_NORMALIZE_DIV 255
 
 // post

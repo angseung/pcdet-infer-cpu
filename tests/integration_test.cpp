@@ -29,7 +29,7 @@ TEST(IntegrationTest, IntegrationTest) {
     const std::string snapshot_dir = snapshot_files[i];
     std::cout << "Testing : " << pcd_file << std::endl;
     const std::vector<float> buffer =
-        vueron::readPcdFile(pcd_file, MAX_POINTS_NUM);
+        vueron::readPcdFile(pcd_file, MAX_POINT_NUM);
     const float *points = (float *)buffer.data();
     const size_t point_buf_len = buffer.size();
 
