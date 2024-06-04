@@ -54,5 +54,6 @@
 #define SCORE_THRESH 0.1f
 #define CONF_THRESH 0.4f
 #define PRE_NMS_DISTANCE_THD 10.0f
+#define SHUFFLE_ON false
 
 #endif  // __PARAMS_H__
