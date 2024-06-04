@@ -5,8 +5,8 @@
 #cmakedefine _PROFILE
 #cmakedefine _DEBUG
 
-#define PFE_PATH "@PFE_PATH@"
-#define RPN_PATH "@RPN_PATH@"
+#define PFE_FILE "@PFE_FILE@"
+#define RPN_FILE "@RPN_FILE@"
 #define PCD_PATH "@PCD_PATH@"
 #define SNAPSHOT_PATH "@SNAPSHOT_PATH@"
 

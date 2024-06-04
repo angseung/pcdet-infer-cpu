@@ -29,7 +29,7 @@ TEST(VoxelValueTest, ScatterTest) {
 
     // read point from pcd file
     const std::vector<float> points =
-        vueron::readPcdFile(pcd_file, MAX_POINTS_NUM);
+        vueron::readPcdFile(pcd_file, MAX_POINT_NUM);
     const size_t points_buf_len = points.size();
     constexpr size_t point_stride = POINT_STRIDE;
     std::vector<float> bev_feature(
@@ -94,7 +94,7 @@ TEST(VoxelValueTest, PFERunTest) {
 
     // read point from pcd file
     const std::vector<float> points =
-        vueron::readPcdFile(pcd_file, MAX_POINTS_NUM);
+        vueron::readPcdFile(pcd_file, MAX_POINT_NUM);
     const size_t points_buf_len = points.size();
     constexpr size_t point_stride = POINT_STRIDE;
     std::vector<vueron::Pillar> bev_pillar(GRID_Y_SIZE * GRID_X_SIZE,
@@ -152,7 +152,7 @@ TEST(VoxelValueTest, BEVValueTest) {
 
     // read point from pcd file
     const std::vector<float> points =
-        vueron::readPcdFile(pcd_file, MAX_POINTS_NUM);
+        vueron::readPcdFile(pcd_file, MAX_POINT_NUM);
     const size_t points_buf_len = points.size();
     constexpr size_t point_stride = POINT_STRIDE;
     std::vector<vueron::Pillar> bev_pillar(GRID_Y_SIZE * GRID_X_SIZE,

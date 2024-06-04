@@ -84,7 +84,7 @@ TEST(VoxelSnapshotTest, PFEShapeTest) {
 
     // read point from pcd file
     const std::vector<float> points =
-        vueron::readPcdFile(pcd_file, MAX_POINTS_NUM);
+        vueron::readPcdFile(pcd_file, MAX_POINT_NUM);
     const size_t points_buf_len = points.size();
     constexpr size_t point_stride = POINT_STRIDE;
     std::vector<vueron::Pillar> bev_pillar(GRID_Y_SIZE * GRID_X_SIZE,
@@ -119,7 +119,7 @@ TEST(VoxelSnapshotTest, VoxelCoordsValueTest) {
     std::cout << "Testing : " << pcd_file << std::endl;
 
     // read point from pcd file
-    points = vueron::readPcdFile(pcd_file, MAX_POINTS_NUM);
+    points = vueron::readPcdFile(pcd_file, MAX_POINT_NUM);
 
     // read voxels from snapshot file
     const std::string voxel_coord_path = snapshot_dir + "/voxel_coord.npy";

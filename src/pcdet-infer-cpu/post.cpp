@@ -73,9 +73,9 @@ void vueron::decode_to_boxes(const std::vector<std::vector<float>> &rpn_output,
     assert(box.heading <= 180.0 / M_PI && box.heading >= -180.0 / M_PI);
 
     // calc center point
-    box.x = head_stride * VOXEL_X_SIZE * (grid_x + rpn_output[2][s_idx]) +
+    box.x = head_stride * PILLAR_X_SIZE * (grid_x + rpn_output[2][s_idx]) +
             MIN_X_RANGE;
-    box.y = head_stride * VOXEL_Y_SIZE *
+    box.y = head_stride * PILLAR_Y_SIZE *
                 (grid_y + rpn_output[2][channel_offset + s_idx]) +
             MIN_Y_RANGE;
     box.z = rpn_output[3][s_idx];
