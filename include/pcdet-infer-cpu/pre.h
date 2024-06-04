@@ -8,11 +8,14 @@
 namespace vueron {
 
 struct Pillar {
-  size_t point_index[MAX_NUM_POINTS_PER_PILLAR] = {0};
-  size_t pillar_grid_x = 0;
-  size_t pillar_grid_y = 0;
-  size_t point_num_in_pillar = 0;
-  bool is_empty = true;
+  std::vector<size_t> point_index;
+  size_t pillar_grid_x;
+  size_t pillar_grid_y;
+  size_t point_num_in_pillar;
+  bool is_empty;
+
+  Pillar() = delete;
+  Pillar(const size_t &point_num);
 };
 
 void voxelization(std::vector<Pillar> &bev_pillar, const float *points,

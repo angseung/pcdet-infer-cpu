@@ -10,6 +10,13 @@
 #include "config.h"
 #include "onnxruntime_cxx_api.h"
 
+vueron::Pillar::Pillar(const size_t &point_num)
+    : point_index(point_num, 0),
+      pillar_grid_x(0),
+      pillar_grid_y(0),
+      point_num_in_pillar(0),
+      is_empty(true){};
+
 void vueron::voxelization(std::vector<Pillar> &bev_pillar, const float *points,
                           const size_t &points_buf_len,
                           const size_t &point_stride) {
@@ -39,8 +46,8 @@ void vueron::voxelization(std::vector<Pillar> &bev_pillar, const float *points,
     float point_y = points[point_stride * i + 1];
     float point_z = points[point_stride * i + 2];
 
-    size_t voxel_id_x = floorf((point_x - MIN_X_RANGE) / VOXEL_X_SIZE);
-    size_t voxel_id_y = floorf((point_y - MIN_Y_RANGE) / VOXEL_Y_SIZE);
+    size_t voxel_index_x = floorf((point_x - MIN_X_RANGE) / VOXEL_X_SIZE);
+    size_t voxel_index_y = floorf((point_y - MIN_Y_RANGE) / VOXEL_Y_SIZE);
 
     // skip if out-of-range point
     if (point_x < MIN_X_RANGE || point_x > MAX_X_RANGE ||
@@ -55,15 +62,15 @@ void vueron::voxelization(std::vector<Pillar> &bev_pillar, const float *points,
            point_z >= MIN_Z_RANGE && point_z <= MAX_Z_RANGE);
 
     // check out-of-range grid
-    assert(voxel_id_x < GRID_X_SIZE && voxel_id_y < GRID_Y_SIZE);
+    assert(voxel_index_x < GRID_X_SIZE && voxel_index_y < GRID_Y_SIZE);
 
-    size_t voxel_index = voxel_id_y * GRID_X_SIZE + voxel_id_x;
+    size_t voxel_index = voxel_index_y * GRID_X_SIZE + voxel_index_x;
     if (bev_pillar[voxel_index].point_num_in_pillar <
         MAX_NUM_POINTS_PER_PILLAR) {
       size_t voxel_index_in_pillar =
           bev_pillar[voxel_index].point_num_in_pillar;
-      bev_pillar[voxel_index].pillar_grid_x = voxel_id_x;
-      bev_pillar[voxel_index].pillar_grid_y = voxel_id_y;
+      bev_pillar[voxel_index].pillar_grid_x = voxel_index_x;
+      bev_pillar[voxel_index].pillar_grid_y = voxel_index_y;
       bev_pillar[voxel_index].point_index[voxel_index_in_pillar] = i;
       bev_pillar[voxel_index].point_num_in_pillar++;
       assert(bev_pillar[voxel_index].point_num_in_pillar <=

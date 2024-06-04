@@ -28,9 +28,10 @@ TEST(VoxelValueTest, ScatterTest) {
     std::cout << "Testing : " << pcd_file << std::endl;
 
     // read point from pcd file
-    std::vector<float> points = vueron::readPcdFile(pcd_file, MAX_POINTS_NUM);
-    size_t points_buf_len = points.size();
-    size_t point_stride = POINT_STRIDE;
+    const std::vector<float> points =
+        vueron::readPcdFile(pcd_file, MAX_POINTS_NUM);
+    const size_t points_buf_len = points.size();
+    constexpr size_t point_stride = POINT_STRIDE;
     std::vector<float> bev_feature(
         GRID_Y_SIZE * GRID_X_SIZE * NUM_FEATURE_SCATTER,
         0.0f);  // input of RPN
@@ -82,7 +83,6 @@ TEST(VoxelValueTest, PFERunTest) {
   std::string snapshot_folder_path = SNAPSHOT_PATH;
   std::vector<std::string> snapshot_files =
       vueron::getFileList(snapshot_folder_path);
-  std::vector<float> points;
   size_t num_test_files = pcd_files.size();
 
   EXPECT_LE(pcd_files.size(), snapshot_files.size());
@@ -93,10 +93,12 @@ TEST(VoxelValueTest, PFERunTest) {
     std::cout << "Testing : " << pcd_file << std::endl;
 
     // read point from pcd file
-    std::vector<float> points = vueron::readPcdFile(pcd_file, MAX_POINTS_NUM);
-    size_t points_buf_len = points.size();
-    size_t point_stride = POINT_STRIDE;
-    std::vector<vueron::Pillar> bev_pillar(GRID_Y_SIZE * GRID_X_SIZE);
+    const std::vector<float> points =
+        vueron::readPcdFile(pcd_file, MAX_POINTS_NUM);
+    const size_t points_buf_len = points.size();
+    constexpr size_t point_stride = POINT_STRIDE;
+    std::vector<vueron::Pillar> bev_pillar(GRID_Y_SIZE * GRID_X_SIZE,
+                                           MAX_NUM_POINTS_PER_PILLAR);
     std::vector<size_t> voxel_coords;  // (x, y)
     std::vector<size_t> voxel_num_points;
     std::vector<float> pfe_input(
@@ -139,7 +141,6 @@ TEST(VoxelValueTest, BEVValueTest) {
   std::string snapshot_folder_path = SNAPSHOT_PATH;
   std::vector<std::string> snapshot_files =
       vueron::getFileList(snapshot_folder_path);
-  std::vector<float> points;
   size_t num_test_files = pcd_files.size();
 
   EXPECT_LE(pcd_files.size(), snapshot_files.size());
@@ -150,10 +151,12 @@ TEST(VoxelValueTest, BEVValueTest) {
     std::cout << "Testing : " << pcd_file << std::endl;
 
     // read point from pcd file
-    std::vector<float> points = vueron::readPcdFile(pcd_file, MAX_POINTS_NUM);
-    size_t points_buf_len = points.size();
-    size_t point_stride = POINT_STRIDE;
-    std::vector<vueron::Pillar> bev_pillar(GRID_Y_SIZE * GRID_X_SIZE);
+    const std::vector<float> points =
+        vueron::readPcdFile(pcd_file, MAX_POINTS_NUM);
+    const size_t points_buf_len = points.size();
+    constexpr size_t point_stride = POINT_STRIDE;
+    std::vector<vueron::Pillar> bev_pillar(GRID_Y_SIZE * GRID_X_SIZE,
+                                           MAX_NUM_POINTS_PER_PILLAR);
     std::vector<size_t> voxel_coords;  // (x, y)
     std::vector<size_t> voxel_num_points;
     std::vector<float> pfe_input(

@@ -83,10 +83,12 @@ TEST(VoxelSnapshotTest, PFEShapeTest) {
     std::cout << "Testing : " << pcd_file << std::endl;
 
     // read point from pcd file
-    std::vector<float> points = vueron::readPcdFile(pcd_file, MAX_POINTS_NUM);
-    size_t points_buf_len = points.size();
-    size_t point_stride = POINT_STRIDE;
-    std::vector<vueron::Pillar> bev_pillar(GRID_Y_SIZE * GRID_X_SIZE);
+    const std::vector<float> points =
+        vueron::readPcdFile(pcd_file, MAX_POINTS_NUM);
+    const size_t points_buf_len = points.size();
+    constexpr size_t point_stride = POINT_STRIDE;
+    std::vector<vueron::Pillar> bev_pillar(GRID_Y_SIZE * GRID_X_SIZE,
+                                           MAX_NUM_POINTS_PER_PILLAR);
     std::vector<size_t> voxel_coords;  // (x, y)
     std::vector<size_t> voxel_num_points;
     std::vector<float> pfe_input(
@@ -127,7 +129,8 @@ TEST(VoxelSnapshotTest, VoxelCoordsValueTest) {
     std::vector<uint32_t> voxel_coords_snapshot = raw_voxel_coord.data;
 
     // calc values from preprocessing functions
-    std::vector<vueron::Pillar> bev_pillar(GRID_Y_SIZE * GRID_X_SIZE);
+    std::vector<vueron::Pillar> bev_pillar(GRID_Y_SIZE * GRID_X_SIZE,
+                                           MAX_NUM_POINTS_PER_PILLAR);
     std::vector<size_t> voxel_coords;  // (x, y)
     std::vector<size_t> voxel_num_points;
     std::vector<float> pfe_input(
