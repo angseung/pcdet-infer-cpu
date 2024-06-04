@@ -39,8 +39,8 @@
 #define CLASS_NUM 3
 #define FEATURE_X_SIZE 112
 #define FEATURE_Y_SIZE 164
-#define IOU_RECTIFIER                                                          \
-    { 0.68f, 0.71f, 0.65f }
+#define IOU_RECTIFIER \
+  { 0.68f, 0.71f, 0.65f }
 
 /*
     User Configurable Param
@@ -52,4 +52,4 @@
 #define SCORE_THRESH 0.1f
 #define CONF_THRESH 0.4f
 
-#endif // __PARAMS_H__
+#endif  // __PARAMS_H__

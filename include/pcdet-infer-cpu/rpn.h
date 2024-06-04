@@ -7,6 +7,6 @@ namespace vueron {
 
 void rpn_run(const std::vector<float> &rpn_input,
              std::vector<std::vector<float>> &rpn_output);
-} // namespace vueron
+}  // namespace vueron
 
-#endif // __RPN_H__
+#endif  // __RPN_H__
