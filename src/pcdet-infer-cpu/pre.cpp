@@ -136,30 +136,31 @@ size_t vueron::point_decoration(const std::vector<Pillar> &bev_pillar,
         pfe_input[index] = points[point_stride * point_index];
         pfe_input[index + 1] = points[point_stride * point_index + 1];
         pfe_input[index + 2] = points[point_stride * point_index + 2];
-#if NUM_POINT_VALUES >= 4
-#ifdef ZERO_INTENSITY
-        pfe_input[index + 3] = 0.0f;
-#else
-        pfe_input[index + 3] =
-            points[point_stride * point_index + 3] / INTENSITY_NORMALIZE_DIV;
-#endif
-        pfe_input[index + 4] = pfe_input[index] - mean_x;
-        pfe_input[index + 5] = pfe_input[index + 1] - mean_y;
-        pfe_input[index + 6] = pfe_input[index + 2] - mean_z;
+        if (NUM_POINT_VALUES >= 4) {
+          if (ZERO_INTENSITY) {
+            pfe_input[index + 3] = 0.0f;
+          } else {
+            pfe_input[index + 3] = points[point_stride * point_index + 3] /
+                                   INTENSITY_NORMALIZE_DIV;
+          }
+          pfe_input[index + 4] = pfe_input[index] - mean_x;
+          pfe_input[index + 5] = pfe_input[index + 1] - mean_y;
+          pfe_input[index + 6] = pfe_input[index + 2] - mean_z;
 
-        pfe_input[index + 7] = pfe_input[index] - x_center;
-        pfe_input[index + 8] = pfe_input[index + 1] - y_center;
-        pfe_input[index + 9] = pfe_input[index + 2] - z_center;
-#else
-        // requires valiation here
-        pfe_input[index + 3] = pfe_input[index] - mean_x;
-        pfe_input[index + 4] = pfe_input[index + 1] - mean_y;
-        pfe_input[index + 5] = pfe_input[index + 2] - mean_z;
+          pfe_input[index + 7] = pfe_input[index] - x_center;
+          pfe_input[index + 8] = pfe_input[index + 1] - y_center;
+          pfe_input[index + 9] = pfe_input[index + 2] - z_center;
+        } else {
+          // requires valiation here
+          pfe_input[index + 3] = pfe_input[index] - mean_x;
+          pfe_input[index + 4] = pfe_input[index + 1] - mean_y;
+          pfe_input[index + 5] = pfe_input[index + 2] - mean_z;
 
-        pfe_input[index + 6] = pfe_input[index] - x_center;
-        pfe_input[index + 7] = pfe_input[index + 1] - y_center;
-        pfe_input[index + 8] = pfe_input[index + 2] - z_center;
-#endif
+          pfe_input[index + 6] = pfe_input[index] - x_center;
+          pfe_input[index + 7] = pfe_input[index + 1] - y_center;
+          pfe_input[index + 8] = pfe_input[index + 2] - z_center;
+        }
+        // #endif
       }
       index += FEATURE_NUM;
     }

@@ -17,7 +17,7 @@
 #define VOXEL_Z_SIZE 6.0f
 
 #define NUM_POINT_VALUES 4
-#define ZERO_INTENSITY
+#define ZERO_INTENSITY true
 
 // encode
 #define MAX_NUM_POINTS_PER_PILLAR 20
