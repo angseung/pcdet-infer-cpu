@@ -16,6 +16,8 @@ struct RuntimeConfig {
   float nms_score_thd;
   float pre_nms_distance_thd;
   float nms_iou_thd;
+
+  ~RuntimeConfig();
 };
 
 #ifdef __cplusplus
