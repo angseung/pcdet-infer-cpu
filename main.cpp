@@ -8,11 +8,11 @@
 #include "type.h"
 
 int main(int argc, const char **argv) {
-  std::string folder_path = PCD_PATH;
+  const std::string folder_path = PCD_PATH;
   std::vector<std::string> pcd_files = vueron::getFileList(folder_path);
-  size_t point_stride = POINT_STRIDE;
+  constexpr size_t point_stride = POINT_STRIDE;
 
-  std::unique_ptr<vueron::PCDet> pcdet = std::make_unique<vueron::PCDet>();
+  const auto pcdet = std::make_unique<vueron::PCDet>();
 
   while (1) {
     for (const auto &pcd_file : pcd_files) {

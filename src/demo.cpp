@@ -25,12 +25,12 @@ int main(int argc, const char **argv) {
   } else {
     folder_path = argv[1];
   }
-  size_t point_stride = POINT_STRIDE;
+  constexpr size_t point_stride = POINT_STRIDE;
 
   std::vector<std::string> pcd_files = vueron::getFileList(folder_path);
   size_t num_test_files = pcd_files.size();
 
-  vueron::PCDet pcdet;
+  const auto pcdet = std::make_unique<vueron::PCDet>();
 
   for (size_t i = 0; i < num_test_files; i++) {
     std::string pcd_file = pcd_files[i];
@@ -52,8 +52,8 @@ int main(int argc, const char **argv) {
     /*
         Do inference
     */
-    pcdet.do_infer(points, point_buf_len, point_stride, nms_boxes, nms_labels,
-                   nms_scores);
+    pcdet->do_infer(points, point_buf_len, point_stride, nms_boxes, nms_labels,
+                    nms_scores);
 
     /*
         Logging
@@ -72,7 +72,7 @@ int main(int argc, const char **argv) {
     auto image = drawBirdsEyeView(buffer.size() / point_stride, points,
                                   nms_boxes, nms_scores, nms_labels);
     cv::imshow("Bird's Eye View", image);
-    cv::waitKey(1);
+    cv::waitKey(0);
 #ifdef _DEBUG
     std::string output_file_name = "outputs/" + std::to_string(i + 1) + ".png";
     cv::imwrite(output_file_name, image);
