@@ -17,6 +17,11 @@ struct RuntimeConfig {
   float pre_nms_distance_thd;
   float nms_iou_thd;
 
+  RuntimeConfig(int max_points = 1000000, unsigned char shuffle_on = false,
+                unsigned char use_cpu = true, int pre_nms_max_preds = 500,
+                int max_preds = 83, float nms_score_thd = 0.1f,
+                float pre_nms_distance_thd = 10.0f, float nms_iou_thd = 0.2f);
+  RuntimeConfig();
   ~RuntimeConfig();
 };
 

@@ -5,6 +5,7 @@
 #include <memory>  // for unique_ptr
 #include <vector>
 
+#include "pcdet-infer-cpu/common/runtimeconfig.h"
 #include "pcdet-infer-cpu/ort_model.h"
 #include "pcdet-infer-cpu/post.h"
 #include "pcdet-infer-cpu/pre.h"
@@ -35,6 +36,7 @@ class PCDet {
   std::string rpn_path;
   std::vector<int64_t> rpn_input_dim;
   std::unique_ptr<OrtModel> rpn;
+  RuntimeConfig *runtimeconfig;
 
   /*
       Buffers for Final Predictions
@@ -53,7 +55,8 @@ class PCDet {
 
  public:
   PCDet();
-  PCDet(const std::string &pfe_path, const std::string &rpn_path);
+  PCDet(const std::string &pfe_path, const std::string &rpn_path,
+        RuntimeConfig *runtimeconfig = nullptr);
   ~PCDet();
   void do_infer(const float *points, const size_t &point_buf_len,
                 const size_t &point_stride, std::vector<PredBox> &boxes);
