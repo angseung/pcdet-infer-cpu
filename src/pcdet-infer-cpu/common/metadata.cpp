@@ -10,6 +10,8 @@ namespace fs = std::filesystem;
 
 namespace vueron {
 
+// ModelConfig::ModelConfig(){};
+
 inline json ReadFile(std::string filename) {
   std::ifstream file(filename);
 
@@ -128,5 +130,35 @@ std::vector<float> Metadata::iou_rectifier() {
 }
 
 int Metadata::out_size_factor() { return (feature_x_size() / grid_x_size()); }
+
+void Metadata::Copy() {
+  modelconfig.min_x_range = Metadata::min_x_range();
+  modelconfig.max_x_range = Metadata::max_x_range();
+  modelconfig.min_y_range = Metadata::min_y_range();
+  modelconfig.max_y_range = Metadata::max_y_range();
+  modelconfig.min_z_range = Metadata::min_z_range();
+  modelconfig.max_z_range = Metadata::max_z_range();
+
+  modelconfig.pillar_x_size = Metadata::pillar_x_size();
+  modelconfig.pillar_y_size = Metadata::pillar_y_size();
+  modelconfig.pillar_z_size = Metadata::pillar_z_size();
+
+  modelconfig.num_point_values = Metadata::num_point_values();
+  modelconfig.zero_intensity = Metadata::zero_intensity();
+
+  modelconfig.max_num_points_per_pillar = Metadata::max_num_points_per_pillar();
+  modelconfig.max_voxels = Metadata::max_voxels();
+  modelconfig.feature_num = Metadata::feature_num();
+
+  modelconfig.num_feature_scatter = Metadata::num_feature_scatter();
+  modelconfig.grid_x_size = Metadata::grid_x_size();
+  modelconfig.grid_y_size = Metadata::grid_y_size();
+  modelconfig.grid_z_size = Metadata::grid_z_size();
+
+  modelconfig.num_classes = Metadata::num_classes();
+  modelconfig.feature_x_size = Metadata::feature_x_size();
+  modelconfig.feature_y_size = Metadata::feature_y_size();
+  modelconfig.iou_rectifier = Metadata::iou_rectifier();
+};
 
 }  // namespace vueron

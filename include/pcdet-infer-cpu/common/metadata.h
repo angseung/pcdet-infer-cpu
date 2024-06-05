@@ -7,11 +7,51 @@
 
 namespace vueron {
 
+struct ModelConfig {
+  /*
+      Params for Preprocessing
+  */
+  float min_x_range;
+  float max_x_range;
+  float min_y_range;
+  float max_y_range;
+  float min_z_range;
+  float max_z_range;
+
+  float pillar_x_size;
+  float pillar_y_size;
+  float pillar_z_size;
+
+  int num_point_values;
+  bool zero_intensity;
+
+  // encode
+  int max_num_points_per_pillar;
+  int max_voxels;
+  int feature_num;
+
+  // scatter
+  int num_feature_scatter;
+  int grid_x_size;
+  int grid_y_size;
+  int grid_z_size;
+
+  /*
+      Params for Postprocessing
+  */
+  // post
+  int num_classes;
+  int feature_x_size;
+  int feature_y_size;
+  std::vector<float> iou_rectifier;
+};
+
 class Metadata {
  private:
   class Impl;
   std::unique_ptr<Impl> pimpl;
   void Setup(std::string& filename);
+  void Copy();
 
  public:
   Metadata();
@@ -24,6 +64,7 @@ class Metadata {
     auto& instance = Instance();
     instance.Setup(filename);
   }
+  static ModelConfig modelconfig;
 
   std::string pfe_file();
   std::string rpn_file();
@@ -60,16 +101,12 @@ class Metadata {
 };
 
 inline auto& GetMetadata() { return Metadata::Instance(); }
-inline void LoadMetadata(std::string filename) { Metadata::Load(filename); }
+inline void LoadMetadata(std::string& filename) { Metadata::Load(filename); }
 
 }  // namespace vueron
 
 #define PFE_FILE vueron::GetMetadata().pfe_file()
 #define RPN_FILE vueron::GetMetadata().rpn_file()
-
-#define PILLAR_X_SIZE vueron::GetMetadata().pillar_x_size()
-#define PILLAR_Y_SIZE vueron::GetMetadata().pillar_y_size()
-#define PILLAR_Z_SIZE vueron::GetMetadata().pillar_z_size()
 
 #define MIN_X_RANGE vueron::GetMetadata().min_x_range()
 #define MAX_X_RANGE vueron::GetMetadata().max_x_range()
@@ -77,6 +114,10 @@ inline void LoadMetadata(std::string filename) { Metadata::Load(filename); }
 #define MAX_Y_RANGE vueron::GetMetadata().max_y_range()
 #define MIN_Z_RANGE vueron::GetMetadata().min_z_range()
 #define MAX_Z_RANGE vueron::GetMetadata().max_z_range()
+
+#define PILLAR_X_SIZE vueron::GetMetadata().pillar_x_size()
+#define PILLAR_Y_SIZE vueron::GetMetadata().pillar_y_size()
+#define PILLAR_Z_SIZE vueron::GetMetadata().pillar_z_size()
 
 #define NUM_POINT_VALUES vueron::GetMetadata().num_point_values()
 #define ZERO_INTENSITY vueron::GetMetadata().zero_intensity()
