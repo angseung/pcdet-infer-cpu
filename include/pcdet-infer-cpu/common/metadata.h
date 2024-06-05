@@ -11,7 +11,7 @@ class Metadata {
  private:
   class Impl;
   std::unique_ptr<Impl> pimpl;
-  void Setup(std::string filename);
+  void Setup(std::string& filename);
 
  public:
   Metadata();
@@ -20,7 +20,7 @@ class Metadata {
     static Metadata metadata;
     return metadata;
   }
-  static void Load(std::string filename) {
+  static void Load(std::string& filename) {
     auto& instance = Instance();
     instance.Setup(filename);
   }

@@ -6,10 +6,28 @@
 #include <pcl/point_types.h>
 
 #include <cstring>
+#include <filesystem>  // For std::filesystem
 #include <string>
 #include <vector>
 
+namespace fs = std::filesystem;
+
 namespace vueron {
+
+std::vector<std::string> getPCDFileList(const std::string &folder_path) {
+  std::vector<std::string> file_list;
+  for (const auto &entry : fs::directory_iterator(folder_path)) {
+    const std::string curr_pcd_file_name = entry.path().string();
+    if (curr_pcd_file_name.find(".pcd") == std::string::npos) {
+      continue;
+    }
+    file_list.push_back(entry.path().string());
+  }
+  // Sort the file list in ascending order
+  std::sort(file_list.begin(), file_list.end(), std::less<std::string>());
+
+  return file_list;
+}
 
 std::vector<std::string> getFileList(const std::string &folder_path) {
   std::vector<std::string> files;

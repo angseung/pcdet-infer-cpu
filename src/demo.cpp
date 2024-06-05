@@ -29,7 +29,8 @@ int main(int argc, const char **argv) {
   }
   constexpr size_t point_stride = POINT_STRIDE;
 
-  const std::vector<std::string> pcd_files = vueron::getFileList(folder_path);
+  const std::vector<std::string> pcd_files =
+      vueron::getPCDFileList(folder_path);
   const size_t num_test_files = pcd_files.size();
 
   /*
@@ -47,7 +48,8 @@ int main(int argc, const char **argv) {
     /*
         Read points from pcd files
     */
-    const std::vector<float> buffer = vueron::readPcdFile(pcd_file, MAX_POINT_NUM);
+    const std::vector<float> buffer =
+        vueron::readPcdFile(pcd_file, MAX_POINT_NUM);
     const float *points = (float *)buffer.data();
     const size_t point_buf_len = buffer.size();
 
