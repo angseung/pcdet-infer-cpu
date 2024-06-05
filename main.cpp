@@ -12,11 +12,12 @@
 #include "type.h"
 
 int main(int argc, const char **argv) {
-  std::string wd = std::filesystem::current_path().u8string();
-  std::string metadata_path = wd + "/models/gcm_v4_residual/metadata.json";
+  const std::string wd = std::filesystem::current_path().u8string();
+  const std::string metadata_path =
+      wd + "/models/gcm_v4_residual/metadata.json";
   vueron::LoadMetadata(metadata_path);
   const std::string folder_path = PCD_PATH;
-  std::vector<std::string> pcd_files = vueron::getFileList(folder_path);
+  const std::vector<std::string> pcd_files = vueron::getFileList(folder_path);
   constexpr size_t point_stride = POINT_STRIDE;
 
   const auto pcdet = std::make_unique<vueron::PCDet>(PFE_FILE, RPN_FILE);
