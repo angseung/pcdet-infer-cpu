@@ -9,7 +9,7 @@
 
 int main(int argc, const char **argv) {
   const std::string folder_path = PCD_PATH;
-  std::vector<std::string> pcd_files = vueron::getFileList(folder_path);
+  const std::vector<std::string> pcd_files = vueron::getFileList(folder_path);
   constexpr size_t point_stride = POINT_STRIDE;
 
   const auto pcdet = std::make_unique<vueron::PCDet>();
@@ -18,8 +18,8 @@ int main(int argc, const char **argv) {
     for (const auto &pcd_file : pcd_files) {
       const std::vector<float> points =
           vueron::readPcdFile(pcd_file, MAX_POINT_NUM);
-      float *point_data = (float *)points.data();
-      size_t point_buf_len = points.size();
+      const float *point_data = (float *)points.data();
+      const size_t point_buf_len = points.size();
       /*
           Buffers for inference
       */
