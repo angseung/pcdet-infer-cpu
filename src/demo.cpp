@@ -16,19 +16,31 @@
 #include "pcdet-infer-cpu/pcdet.h"
 #include "pcl.h"
 
+namespace fs = std::filesystem;
+
 int main(int argc, const char **argv) {
+  const std::string wd = fs::current_path().u8string();
   std::string folder_path;
+  std::string metadata_path;
   if (argc < 2) {
     std::cout << "Usage: " << argv[0] << " <path_to_your_pcd_files_directory>"
               << std::endl;
     folder_path = PCD_PATH;
+    metadata_path = wd + "/models/gcm_v4_residual/metadata.json";
     std::cout << "It will run with default pcd path: " << folder_path
+              << std::endl;
+    std::cout << "It will run with default metadata file: " << metadata_path
+              << std::endl;
+  } else if (argc == 2) {
+    folder_path = argv[1];
+    metadata_path = wd + "/models/gcm_v4_residual/metadata.json";
+    std::cout << "It will run with default metadata file: " << metadata_path
               << std::endl;
   } else {
     folder_path = argv[1];
+    metadata_path = argv[2];
   }
   constexpr size_t point_stride = POINT_STRIDE;
-
   const std::vector<std::string> pcd_files =
       vueron::getPCDFileList(folder_path);
   const size_t num_test_files = pcd_files.size();
@@ -36,9 +48,6 @@ int main(int argc, const char **argv) {
   /*
     Set Metadata Path
   */
-  const std::string wd = std::filesystem::current_path().u8string();
-  const std::string metadata_path =
-      wd + "/models/gcm_v4_residual/metadata.json";
   vueron::LoadMetadata(metadata_path);
   const auto pcdet = std::make_unique<vueron::PCDet>(PFE_FILE, RPN_FILE);
 
