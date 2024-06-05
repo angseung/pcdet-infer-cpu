@@ -4,7 +4,8 @@
 #include <cassert>
 #include <numeric>
 
-#include "params.h"
+#include "pcdet-infer-cpu/common/metadata.h"
+#include "pcdet-infer-cpu/common/runtimeconfig.h"
 
 void vueron::decode_to_boxes(const std::vector<std::vector<float>> &rpn_output,
                              std::vector<BndBox> &boxes,

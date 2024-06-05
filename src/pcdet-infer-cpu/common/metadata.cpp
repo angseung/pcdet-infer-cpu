@@ -33,7 +33,7 @@ Metadata::Metadata() : pimpl(std::make_unique<Impl>()) {}
 
 Metadata::~Metadata() = default;
 
-void Metadata::Setup(std::string &filename) {
+void Metadata::Setup(std::string filename) {
   pimpl->data = ReadFile(filename);
   auto filepath = fs::path(filename);
   auto directory = filepath.parent_path();
@@ -42,6 +42,7 @@ void Metadata::Setup(std::string &filename) {
   if (pimpl->data.contains("metadata_file")) {
     pimpl->data["metadata"] =
         ReadFile(directory / pimpl->data["metadata_file"]);
+    std::cout << directory / pimpl->data["metadata_file"] << std::endl;
   }
   if (pimpl->data.contains("model_files")) {
     for (auto &[key, model] : pimpl->data["model_files"].items()) {

@@ -26,8 +26,8 @@ namespace vueron {
 struct RuntimeConfigSingleton {
   RuntimeConfig config{
       1000000,  // int max_points;
-      true,     // bool shuffle_on;
-      false,    // bool use_cpu;
+      false,    // bool shuffle_on;
+      true,     // bool use_cpu;
       500,      // int pre_nms_max_preds;
       83,       // int max_preds;
       0.1f,     // float nms_score_thd;
@@ -64,6 +64,8 @@ inline void SetRuntimeConfig(const RuntimeConfig& config) {
 #define NMS_THRESH vueron::GetRuntimeConfig().nms_iou_thd
 #define INTENSITY_NORMALIZE_DIV 255
 #define CONF_THRESH 0.4f
+#define RANDOM_SEED 123
+#define POINT_STRIDE 4
 
 #endif
 

@@ -193,7 +193,7 @@ void vueron::pfe_run(const std::vector<float> &pfe_input,
                      std::vector<float> &pfe_output) {
   Ort::Env env(ORT_LOGGING_LEVEL_WARNING, "test");
   Ort::SessionOptions session_options;
-  Ort::Session session(env, PFE_FILE, session_options);
+  Ort::Session session(env, PFE_FILE.c_str(), session_options);
   session_options.SetIntraOpNumThreads(1);
   session_options.SetGraphOptimizationLevel(
       GraphOptimizationLevel::ORT_ENABLE_EXTENDED);

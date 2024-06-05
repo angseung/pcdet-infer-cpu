@@ -3,6 +3,7 @@
 #include <pcl/point_types.h>
 
 #include <cstdlib>
+#include <filesystem>
 #include <iomanip>
 #include <string>
 #include <vector>
@@ -10,7 +11,8 @@
 #include "config.h"
 #include "draw/draw.h"
 #include "npy.h"
-#include "params.h"
+#include "pcdet-infer-cpu/common/metadata.h"
+#include "pcdet-infer-cpu/common/runtimeconfig.h"
 #include "pcdet-infer-cpu/pcdet.h"
 #include "pcl.h"
 
@@ -27,13 +29,20 @@ int main(int argc, const char **argv) {
   }
   constexpr size_t point_stride = POINT_STRIDE;
 
-  std::vector<std::string> pcd_files = vueron::getFileList(folder_path);
-  size_t num_test_files = pcd_files.size();
+  const std::vector<std::string> pcd_files = vueron::getFileList(folder_path);
+  const size_t num_test_files = pcd_files.size();
 
-  const auto pcdet = std::make_unique<vueron::PCDet>();
+  /*
+    Set Metadata Path
+  */
+  const std::string wd = std::filesystem::current_path().u8string();
+  const std::string metadata_path =
+      wd + "/models/gcm_v4_residual/metadata.json";
+  vueron::LoadMetadata(metadata_path);
+  const auto pcdet = std::make_unique<vueron::PCDet>(PFE_FILE, RPN_FILE);
 
   for (size_t i = 0; i < num_test_files; i++) {
-    std::string pcd_file = pcd_files[i];
+    const std::string pcd_file = pcd_files[i];
 
     /*
         Read points from pcd files

@@ -1,5 +1,5 @@
-#ifndef __COMMON_H__
-#define __COMMON_H__
+#ifndef __METADATA_H__
+#define __METADATA_H__
 
 #include <memory>
 #include <string>
@@ -11,7 +11,7 @@ class Metadata {
  private:
   class Impl;
   std::unique_ptr<Impl> pimpl;
-  void Setup(std::string& filename);
+  void Setup(std::string filename);
 
  public:
   Metadata();
@@ -20,7 +20,7 @@ class Metadata {
     static Metadata metadata;
     return metadata;
   }
-  static void Load(std::string& filename) {
+  static void Load(std::string filename) {
     auto& instance = Instance();
     instance.Setup(filename);
   }
@@ -60,7 +60,7 @@ class Metadata {
 };
 
 inline auto& GetMetadata() { return Metadata::Instance(); }
-inline void LoadMetadata(std::string& filename) { Metadata::Load(filename); }
+inline void LoadMetadata(std::string filename) { Metadata::Load(filename); }
 
 }  // namespace vueron
 
@@ -105,4 +105,4 @@ inline void LoadMetadata(std::string& filename) { Metadata::Load(filename); }
 #define CONF_THRESH 0.4f
 #define INTENSITY_NORMALIZE_DIV 255
 
-#endif  // __COMMON_H__
+#endif  // __METADATA_H__

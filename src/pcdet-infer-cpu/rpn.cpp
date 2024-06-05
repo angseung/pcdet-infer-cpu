@@ -6,13 +6,14 @@
 
 #include "config.h"
 #include "onnxruntime_cxx_api.h"
-#include "params.h"
+#include "pcdet-infer-cpu/common/metadata.h"
+#include "pcdet-infer-cpu/common/runtimeconfig.h"
 
 void vueron::rpn_run(const std::vector<float> &rpn_input,
                      std::vector<std::vector<float>> &rpn_output) {
   Ort::Env env(ORT_LOGGING_LEVEL_WARNING, "test");
   Ort::SessionOptions session_options;
-  Ort::Session session(env, RPN_FILE, session_options);
+  Ort::Session session(env, RPN_FILE.c_str(), session_options);
   session_options.SetIntraOpNumThreads(1);
   session_options.SetGraphOptimizationLevel(
       GraphOptimizationLevel::ORT_ENABLE_EXTENDED);

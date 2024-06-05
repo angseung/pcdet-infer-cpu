@@ -5,12 +5,12 @@
 #cmakedefine _PROFILE
 #cmakedefine _DEBUG
 
-#define PFE_FILE "@PFE_FILE@"
-#define RPN_FILE "@RPN_FILE@"
+// #define PFE_FILE "@PFE_FILE@"
+// #define RPN_FILE "@RPN_FILE@"
 #define PCD_PATH "@PCD_PATH@"
 #define SNAPSHOT_PATH "@SNAPSHOT_PATH@"
 
-#define RANDOM_SEED 123
-#define POINT_STRIDE 4
+// #define RANDOM_SEED 123
+// #define POINT_STRIDE 4
 
 #endif // __COMMON_H__
