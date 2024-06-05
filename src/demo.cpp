@@ -47,9 +47,9 @@ int main(int argc, const char **argv) {
     /*
         Read points from pcd files
     */
-    std::vector<float> buffer = vueron::readPcdFile(pcd_file, MAX_POINT_NUM);
+    const std::vector<float> buffer = vueron::readPcdFile(pcd_file, MAX_POINT_NUM);
     const float *points = (float *)buffer.data();
-    size_t point_buf_len = buffer.size();
+    const size_t point_buf_len = buffer.size();
 
     /*
         Buffers for inferece

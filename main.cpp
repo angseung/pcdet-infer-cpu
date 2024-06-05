@@ -21,12 +21,12 @@ int main(int argc, const char **argv) {
 
   const auto pcdet = std::make_unique<vueron::PCDet>(PFE_FILE, RPN_FILE);
 
-  while (1) {
+  while (true) {
     for (const auto &pcd_file : pcd_files) {
       const std::vector<float> points =
           vueron::readPcdFile(pcd_file, MAX_POINT_NUM);
-      float *point_data = (float *)points.data();
-      size_t point_buf_len = points.size();
+      const float *point_data = (float *)points.data();
+      const size_t point_buf_len = points.size();
       /*
           Buffers for inference
       */
