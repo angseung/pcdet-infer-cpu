@@ -17,7 +17,7 @@
 
 TEST(IntegrationTest, IntegrationTest) {
   std::string folder_path = PCD_PATH;
-  std::vector<std::string> pcd_files = vueron::getFileList(folder_path);
+  std::vector<std::string> pcd_files = vueron::getPCDFileList(folder_path);
   const size_t num_test_files = pcd_files.size();
   constexpr size_t point_stride = POINT_STRIDE;
   std::string pfe_path(PFE_FILE);

@@ -16,7 +16,8 @@ int main(int argc, const char **argv) {
       wd + "/models/gcm_v4_residual/metadata.json";
   vueron::LoadMetadata(metadata_path);
   const std::string folder_path = PCD_PATH;
-  const std::vector<std::string> pcd_files = vueron::getFileList(folder_path);
+  const std::vector<std::string> pcd_files =
+      vueron::getPCDFileList(folder_path);
   constexpr size_t point_stride = POINT_STRIDE;
 
   const auto pcdet = std::make_unique<vueron::PCDet>(PFE_FILE, RPN_FILE);
