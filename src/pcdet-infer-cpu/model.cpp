@@ -1,6 +1,5 @@
 #include "pcdet-infer-cpu/model.h"
 
-// #include "params.h"
 #include "pcdet-infer-cpu/common/metadata.h"
 #include "pcdet-infer-cpu/common/runtimeconfig.h"
 #include "pcdet-infer-cpu/post.h"

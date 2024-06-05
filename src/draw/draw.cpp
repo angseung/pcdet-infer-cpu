@@ -4,7 +4,6 @@
 #include <vector>
 
 #include "config.h"
-// #include "params.h"
 #include "pcdet-infer-cpu/common/metadata.h"
 #include "pcdet-infer-cpu/common/runtimeconfig.h"
 #include "type.h"

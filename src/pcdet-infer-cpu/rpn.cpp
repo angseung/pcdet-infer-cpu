@@ -1,5 +1,5 @@
 #include "pcdet-infer-cpu/rpn.h"
-// #include "params.h"
+
 #include <memory.h>
 
 #include <cassert>
