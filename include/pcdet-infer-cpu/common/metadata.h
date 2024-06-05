@@ -1,5 +1,5 @@
-#ifndef __COMMON_H__
-#define __COMMON_H__
+#ifndef __METADATA_H__
+#define __METADATA_H__
 
 #include <memory>
 #include <string>
@@ -105,4 +105,4 @@ inline void LoadMetadata(std::string& filename) { Metadata::Load(filename); }
 #define CONF_THRESH 0.4f
 #define INTENSITY_NORMALIZE_DIV 255
 
-#endif  // __COMMON_H__
+#endif  // __METADATA_H__
