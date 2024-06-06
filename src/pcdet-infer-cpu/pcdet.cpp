@@ -45,8 +45,7 @@ vueron::PCDet::PCDet(const std::string &pfe_path, const std::string &rpn_path,
       rpn_input_dim{1, NUM_FEATURE_SCATTER, GRID_Y_SIZE, GRID_X_SIZE},
       rpn(std::make_unique<OrtModel>(
           rpn_path, rpn_input_dim,
-          GRID_Y_SIZE * GRID_X_SIZE * NUM_FEATURE_SCATTER)),
-      runtimeconfig(runtimeconfig) {
+          GRID_Y_SIZE * GRID_X_SIZE * NUM_FEATURE_SCATTER)) {
   std::cout << "PFE Model Initialized with " << PFE_FILE << std::endl;
   std::cout << "RPN Model Initialized with " << RPN_FILE << std::endl;
 

@@ -36,7 +36,6 @@ class PCDet {
   std::string rpn_path;
   std::vector<int64_t> rpn_input_dim;
   std::unique_ptr<OrtModel> rpn;
-  RuntimeConfig *runtimeconfig;
 
   /*
       Buffers for Final Predictions
