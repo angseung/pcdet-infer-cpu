@@ -49,6 +49,10 @@ vueron::PCDet::PCDet(const std::string &pfe_path, const std::string &rpn_path,
       runtimeconfig(runtimeconfig) {
   std::cout << "PFE Model Initialized with " << PFE_FILE << std::endl;
   std::cout << "RPN Model Initialized with " << RPN_FILE << std::endl;
+
+  if (runtimeconfig != nullptr) {
+    vueron::SetRuntimeConfig(*runtimeconfig);
+  }
 };
 
 vueron::PCDet::~PCDet() = default;
