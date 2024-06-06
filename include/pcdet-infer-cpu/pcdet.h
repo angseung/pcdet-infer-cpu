@@ -29,12 +29,7 @@ class PCDet {
   std::vector<float> pre_scores;                // scores before NMS
   std::vector<bool> suppressed;                 // mask for nms
 
-  std::string pfe_path;
-  std::vector<int64_t> pfe_input_dim;
   std::unique_ptr<OrtModel> pfe;
-
-  std::string rpn_path;
-  std::vector<int64_t> rpn_input_dim;
   std::unique_ptr<OrtModel> rpn;
 
   /*
