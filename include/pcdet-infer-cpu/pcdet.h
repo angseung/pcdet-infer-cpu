@@ -52,7 +52,7 @@ class PCDet {
   PCDet(const PCDet &copy) = delete;
   PCDet &operator=(const PCDet &copy) = delete;
   PCDet(const std::string &pfe_path, const std::string &rpn_path,
-        RuntimeConfig *runtimeconfig = nullptr);
+        const RuntimeConfig *runtimeconfig = nullptr);
   ~PCDet() = default;
   void do_infer(const float *points, const size_t &point_buf_len,
                 const size_t &point_stride, std::vector<PredBox> &boxes);

@@ -8,7 +8,7 @@
 #include "config.h"
 
 vueron::PCDet::PCDet(const std::string &pfe_path, const std::string &rpn_path,
-                     RuntimeConfig *runtimeconfig)
+                     const RuntimeConfig *runtimeconfig)
     : bev_pillar(GRID_Y_SIZE * GRID_X_SIZE, MAX_NUM_POINTS_PER_PILLAR),
       pfe_input(MAX_VOXELS * MAX_NUM_POINTS_PER_PILLAR * FEATURE_NUM, 0.0f),
       pfe_output(MAX_VOXELS * NUM_FEATURE_SCATTER, 0.0f),
