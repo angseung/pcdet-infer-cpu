@@ -7,51 +7,11 @@
 
 namespace vueron {
 
-struct ModelConfig {
-  /*
-      Params for Preprocessing
-  */
-  float min_x_range;
-  float max_x_range;
-  float min_y_range;
-  float max_y_range;
-  float min_z_range;
-  float max_z_range;
-
-  float pillar_x_size;
-  float pillar_y_size;
-  float pillar_z_size;
-
-  int num_point_values;
-  bool zero_intensity;
-
-  // encode
-  int max_num_points_per_pillar;
-  int max_voxels;
-  int feature_num;
-
-  // scatter
-  int num_feature_scatter;
-  int grid_x_size;
-  int grid_y_size;
-  int grid_z_size;
-
-  /*
-      Params for Postprocessing
-  */
-  // post
-  int num_classes;
-  int feature_x_size;
-  int feature_y_size;
-  std::vector<float> iou_rectifier;
-};
-
 class Metadata {
  private:
   class Impl;
   std::unique_ptr<Impl> pimpl;
   void Setup(std::string& filename);
-  void Copy();
 
  public:
   Metadata();
@@ -64,7 +24,6 @@ class Metadata {
     auto& instance = Instance();
     instance.Setup(filename);
   }
-  static ModelConfig modelconfig;
 
   std::string pfe_file();
   std::string rpn_file();
