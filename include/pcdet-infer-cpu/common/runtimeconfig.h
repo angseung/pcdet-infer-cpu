@@ -24,7 +24,7 @@ struct RuntimeConfig {
                          float nms_score_thd = 0.1f,
                          float pre_nms_distance_thd = 10.0f,
                          float nms_iou_thd = 0.2f);
-  RuntimeConfig();
+  RuntimeConfig() = default;
   ~RuntimeConfig();
 };
 
