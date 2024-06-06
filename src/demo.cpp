@@ -27,20 +27,21 @@ int main(int argc, const char **argv) {
   }
   constexpr size_t point_stride = POINT_STRIDE;
 
-  std::vector<std::string> pcd_files = vueron::getFileList(folder_path);
-  size_t num_test_files = pcd_files.size();
+  const std::vector<std::string> pcd_files = vueron::getFileList(folder_path);
+  const size_t num_test_files = pcd_files.size();
 
   const auto pcdet = std::make_unique<vueron::PCDet>();
 
   for (size_t i = 0; i < num_test_files; i++) {
-    std::string pcd_file = pcd_files[i];
+    const std::string pcd_file = pcd_files[i];
 
     /*
         Read points from pcd files
     */
-    std::vector<float> buffer = vueron::readPcdFile(pcd_file, MAX_POINT_NUM);
+    const std::vector<float> buffer =
+        vueron::readPcdFile(pcd_file, MAX_POINT_NUM);
     const float *points = (float *)buffer.data();
-    size_t point_buf_len = buffer.size();
+    const size_t point_buf_len = buffer.size();
 
     /*
         Buffers for inferece
@@ -69,8 +70,8 @@ int main(int argc, const char **argv) {
               << std::setw(3) << ped_cnt << "), cyclist(" << std::setw(3)
               << cyc_cnt << ")" << std::endl;
 
-    auto image = drawBirdsEyeView(buffer.size() / point_stride, points,
-                                  nms_boxes, nms_scores, nms_labels);
+    const auto image = drawBirdsEyeView(buffer.size() / point_stride, points,
+                                        nms_boxes, nms_scores, nms_labels);
     cv::imshow("Bird's Eye View", image);
     cv::waitKey(0);
 #ifdef _DEBUG
