@@ -64,21 +64,19 @@ void vueron::OrtModel::run(const std::vector<float> &model_input,
   model_output.reserve(num_output_nodes);
 
   for (size_t i = 0; i < num_output_nodes; ++i) {
-    float *float_array;
-    size_t num_elements;
+    size_t num_elements = 1;
 
     // Get shape and size of output tensors
     auto type_info = output_tensors[i].GetTensorTypeAndShapeInfo();
     auto tensor_shape = type_info.GetShape();
-    num_elements = 1;
 
     // Get data size of output tensors
-    for (auto dim : tensor_shape) {
+    for (const auto dim : tensor_shape) {
       num_elements *= dim;
     }
 
     // Extract data of output tensors
-    float_array = output_tensors[i].GetTensorMutableData<float>();
+    const float *float_array = output_tensors[i].GetTensorMutableData<float>();
     std::vector<float> tensor_data(float_array, float_array + num_elements);
     model_output.push_back(tensor_data);
   }
