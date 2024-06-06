@@ -40,8 +40,13 @@ TEST(RPNTest, RPNShapeTest) {
 
     std::vector<std::vector<float>> rpn_output;
     vueron::rpn_run(rpn_input_snapshot, rpn_output);
-    std::vector<size_t> head_output_channels = {
-        CLASS_NUM, 3, 2, 1, 2, 1};  // {hm, dim, center, center_z, rot, iou}
+    std::vector<size_t> head_output_channels{
+        (size_t)CLASS_NUM,
+        3,
+        2,
+        1,
+        2,
+        1};  // {hm, dim, center, center_z, rot, iou}
     size_t head_dim = GRID_X_SIZE * GRID_Y_SIZE / 4;
 
     for (size_t j = 0; j < rpn_output.size(); j++) {
@@ -123,7 +128,12 @@ TEST(RPNTest, RPNValueTest) {
 
     vueron::rpn_run(bev_image, rpn_output);
     std::vector<size_t> head_output_channels = {
-        CLASS_NUM, 3, 2, 1, 2, 1};  // {hm, dim, center, center_z, rot, iou}
+        (size_t)CLASS_NUM,
+        3,
+        2,
+        1,
+        2,
+        1};  // {hm, dim, center, center_z, rot, iou}
     size_t head_dim = GRID_X_SIZE * GRID_Y_SIZE / 4;
 
     // read snapshot file

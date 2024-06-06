@@ -126,7 +126,7 @@ TEST(VoxelValueTest, PFERunTest) {
     const std::string pfe_output_path = snapshot_dir + "/padded_pfe_output.npy";
     auto raw_pfe_output = npy::read_npy<float>(pfe_output_path);
     std::vector<float> pfe_output_snapshot = raw_pfe_output.data;
-    std::vector<float> pfe_output{MAX_VOXELS * NUM_FEATURE_SCATTER, 0.0f};
+    std::vector<float> pfe_output(MAX_VOXELS * NUM_FEATURE_SCATTER, 0.0f);
 
     vueron::pfe_run(pfe_input_snapshot, pfe_output);
     for (size_t j = 0; j < num_pillars * NUM_FEATURE_SCATTER; j++) {
