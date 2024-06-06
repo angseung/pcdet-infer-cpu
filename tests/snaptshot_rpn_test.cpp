@@ -127,7 +127,7 @@ TEST(RPNTest, RPNValueTest) {
     EXPECT_EQ(rpn_input_snapshot.size(), bev_image.size());
 
     vueron::rpn_run(bev_image, rpn_output);
-    std::vector<size_t> head_output_channels = {
+    std::vector<size_t> head_output_channels{
         (size_t)CLASS_NUM,
         3,
         2,
