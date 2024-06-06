@@ -191,6 +191,9 @@ size_t vueron::point_decoration(const std::vector<Pillar> &bev_pillar,
 
 void vueron::pfe_run(const std::vector<float> &pfe_input,
                      std::vector<float> &pfe_output) {
+  /*
+    Deprecated
+  */
   Ort::Env env(ORT_LOGGING_LEVEL_WARNING, "test");
   Ort::SessionOptions session_options;
   Ort::Session session(env, PFE_FILE.c_str(), session_options);

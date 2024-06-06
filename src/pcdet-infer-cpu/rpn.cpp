@@ -11,6 +11,9 @@
 
 void vueron::rpn_run(const std::vector<float> &rpn_input,
                      std::vector<std::vector<float>> &rpn_output) {
+  /*
+    Deprecated
+  */
   Ort::Env env(ORT_LOGGING_LEVEL_WARNING, "test");
   Ort::SessionOptions session_options;
   Ort::Session session(env, RPN_FILE.c_str(), session_options);
