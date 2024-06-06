@@ -41,7 +41,6 @@ int main(int argc, const char **argv) {
     folder_path = argv[1];
     metadata_path = argv[2];
   }
-  constexpr size_t point_stride = POINT_STRIDE;
   const std::vector<std::string> pcd_files =
       vueron::getPCDFileList(folder_path);
 
@@ -80,7 +79,7 @@ int main(int argc, const char **argv) {
       /*
           Do inference
       */
-      pcdet->do_infer(point_data, point_buf_len, point_stride, nms_boxes,
+      pcdet->do_infer(point_data, point_buf_len, POINT_STRIDE, nms_boxes,
                       nms_labels, nms_scores);
 
       /*

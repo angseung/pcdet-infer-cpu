@@ -20,7 +20,6 @@ TEST(IntegrationTest, IntegrationTest) {
   const std::string snapshot_folder_path = SNAPSHOT_PATH;
   std::vector<std::string> snapshot_files =
       vueron::getFileList(snapshot_folder_path);
-  std::vector<float> points;
   const size_t num_test_files = pcd_files.size();
   EXPECT_LE(pcd_files.size(), snapshot_files.size());
   constexpr size_t point_stride = POINT_STRIDE;

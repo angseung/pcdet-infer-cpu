@@ -18,7 +18,6 @@ TEST(VoxelValueTest, ScatterTest) {
   std::string snapshot_folder_path = SNAPSHOT_PATH;
   std::vector<std::string> snapshot_files =
       vueron::getFileList(snapshot_folder_path);
-  std::vector<float> points;
   size_t num_test_files = pcd_files.size();
 
   EXPECT_LE(pcd_files.size(), snapshot_files.size());

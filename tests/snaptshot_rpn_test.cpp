@@ -41,7 +41,7 @@ TEST(RPNTest, RPNShapeTest) {
     std::vector<std::vector<float>> rpn_output;
     vueron::rpn_run(rpn_input_snapshot, rpn_output);
     std::vector<size_t> head_output_channels{
-        (size_t)CLASS_NUM,
+        static_cast<size_t>(CLASS_NUM),
         3,
         2,
         1,
@@ -128,7 +128,7 @@ TEST(RPNTest, RPNValueTest) {
 
     vueron::rpn_run(bev_image, rpn_output);
     std::vector<size_t> head_output_channels{
-        (size_t)CLASS_NUM,
+        static_cast<size_t>(CLASS_NUM),
         3,
         2,
         1,

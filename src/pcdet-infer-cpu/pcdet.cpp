@@ -45,16 +45,16 @@ void vueron::PCDet::scatter() {
   vueron::scatter(pfe_output, voxel_coords, num_pillars, bev_image);
 }
 
-void vueron::PCDet::postprocess(std::vector<vueron::BndBox> &final_boxes,
-                                std::vector<size_t> &final_labels,
-                                std::vector<float> &final_scores) {
+void vueron::PCDet::postprocess(std::vector<vueron::BndBox> &post_boxes,
+                                std::vector<size_t> &post_labels,
+                                std::vector<float> &post_scores) {
   vueron::decode_to_boxes(rpn_outputs, pre_boxes, pre_labels, pre_scores);
   vueron::nms(pre_boxes, pre_scores, suppressed, NMS_THRESH);
-  vueron::gather_boxes(pre_boxes, pre_labels, pre_scores, final_boxes,
-                       final_labels, final_scores, suppressed);
+  vueron::gather_boxes(pre_boxes, pre_labels, pre_scores, post_boxes,
+                       post_labels, post_scores, suppressed);
 }
 
-void vueron::PCDet::get_pred(std::vector<PredBox> &boxes) {
+void vueron::PCDet::get_pred(std::vector<PredBox> &boxes) const {
   for (size_t i = 0; i < post_boxes.size(); i++) {
     PredBox box{0.0f};
     box.x = post_boxes[i].x;
@@ -65,7 +65,7 @@ void vueron::PCDet::get_pred(std::vector<PredBox> &boxes) {
     box.dz = post_boxes[i].dz;
     box.heading = post_boxes[i].heading;
     box.score = post_scores[i];
-    box.label = post_labels[i];
+    box.label = static_cast<float>(post_labels[i]);
 
     boxes.push_back(box);
   }
@@ -73,7 +73,7 @@ void vueron::PCDet::get_pred(std::vector<PredBox> &boxes) {
 
 void vueron::PCDet::do_infer(const float *points, const size_t &point_buf_len,
                              const size_t &point_stride,
-                             std::vector<PredBox> &final_boxes) {
+                             std::vector<PredBox> &boxes) {
   /**
    * @brief
    * It writes predictions into a vector, boxes.
@@ -132,7 +132,7 @@ void vueron::PCDet::do_infer(const float *points, const size_t &point_buf_len,
 #ifdef _PROFILE
   auto gather_boxes_startTime = std::chrono::system_clock::now();
 #endif
-  vueron::PCDet::get_pred(final_boxes);
+  vueron::PCDet::get_pred(boxes);
 #ifdef _PROFILE
   auto gather_boxes_endTime = std::chrono::system_clock::now();
   auto gather_boxes_millisec =

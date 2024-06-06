@@ -45,7 +45,7 @@ class PCDet {
   void postprocess(std::vector<vueron::BndBox> &post_boxes,
                    std::vector<size_t> &post_labels,
                    std::vector<float> &post_scores);
-  void get_pred(std::vector<PredBox> &boxes);
+  void get_pred(std::vector<PredBox> &boxes) const;
 
  public:
   PCDet() = delete;
