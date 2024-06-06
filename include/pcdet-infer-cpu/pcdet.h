@@ -55,7 +55,8 @@ class PCDet {
 
  public:
   PCDet();
-  PCDet(PCDet &copy) = delete;
+  PCDet(const PCDet &copy) = delete;
+  PCDet &operator=(const PCDet &copy) = delete;
   PCDet(const std::string &pfe_path, const std::string &rpn_path,
         RuntimeConfig *runtimeconfig = nullptr);
   ~PCDet();
