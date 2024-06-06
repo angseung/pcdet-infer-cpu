@@ -14,6 +14,7 @@ struct Point {
   float x{}, y{};
   Point() = default;
   Point(const float _x, const float _y) { x = _x, y = _y; }
+  ~Point() = default;
 
   void set(const float _x, const float _y) {
     x = _x;

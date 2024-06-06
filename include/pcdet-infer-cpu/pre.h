@@ -17,6 +17,7 @@ struct Pillar {
 
   Pillar() = delete;
   Pillar(const size_t &point_num);
+  ~Pillar() = default;
 };
 
 void voxelization(std::vector<Pillar> &bev_pillar, const float *points,
