@@ -10,9 +10,7 @@ namespace fs = std::filesystem;
 
 namespace vueron {
 
-// ModelConfig::ModelConfig(){};
-
-inline json ReadFile(std::string filename) {
+inline json ReadFile(const std::string& filename) {
   std::ifstream file(filename);
 
   if (!file.is_open()) {
@@ -28,14 +26,14 @@ class Metadata::Impl {
  public:
   json data;
 
-  Impl() {}
+  Impl() = default;
 };
 
 Metadata::Metadata() : pimpl(std::make_unique<Impl>()) {}
 
 Metadata::~Metadata() = default;
 
-void Metadata::Setup(std::string &filename) {
+void Metadata::Setup(const std::string &filename) {
   pimpl->data = ReadFile(filename);
   auto filepath = fs::path(filename);
   auto directory = filepath.parent_path();

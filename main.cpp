@@ -1,5 +1,3 @@
-#include <glob.h>
-
 #include <filesystem>
 
 #include "config.h"

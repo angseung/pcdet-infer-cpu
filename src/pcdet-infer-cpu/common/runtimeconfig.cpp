@@ -1,6 +1,6 @@
 #include "pcdet-infer-cpu/common/runtimeconfig.h"
 
-RuntimeConfig::RuntimeConfig(){};
+RuntimeConfig::RuntimeConfig()= default;
 
 RuntimeConfig::RuntimeConfig(int max_points, unsigned char shuffle_on,
                              unsigned char use_cpu, int pre_nms_max_preds,
@@ -15,4 +15,4 @@ RuntimeConfig::RuntimeConfig(int max_points, unsigned char shuffle_on,
       pre_nms_distance_thd(pre_nms_distance_thd),
       nms_iou_thd(nms_iou_thd){};
 
-RuntimeConfig::~RuntimeConfig(){};
+RuntimeConfig::~RuntimeConfig()= default;
