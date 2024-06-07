@@ -45,7 +45,7 @@ cv::Mat drawBirdsEyeView(const size_t &points_size, const float *points_data,
         color = cv::Scalar(0, 255, 255);  // yellow (defalut)
         break;
     }
-    vueron::BndBox box(boxes[i]);
+    vueron::BndBox box{boxes[i]};
     const cv::Point2f center((box.x - MIN_X_RANGE) * scale,
                              (MAX_Y_RANGE - box.y) * scale);
     cv::Point2f vertices[4];

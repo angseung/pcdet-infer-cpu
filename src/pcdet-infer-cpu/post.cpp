@@ -45,9 +45,9 @@ void vueron::decode_to_boxes(const std::vector<std::vector<float>> &rpn_output,
       decode into boxes
   */
   for (size_t j = 0; j < NMS_PRE_MAXSIZE; j++) {
-    size_t channel_offset = FEATURE_X_SIZE * FEATURE_Y_SIZE;
-    size_t idx = indices[j];  // index for hm ONLY
-    size_t s_idx =
+    const size_t channel_offset = FEATURE_X_SIZE * FEATURE_Y_SIZE;
+    const size_t idx = indices[j];  // index for hm ONLY
+    const size_t s_idx =
         idx % (FEATURE_X_SIZE *
                FEATURE_Y_SIZE);  // per-channel index for the other heads
     assert(idx < CLASS_NUM * FEATURE_X_SIZE * FEATURE_Y_SIZE);

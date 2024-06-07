@@ -53,7 +53,7 @@ void vueron::PCDet::postprocess(std::vector<vueron::BndBox> &post_boxes,
 
 void vueron::PCDet::get_pred(std::vector<PredBox> &boxes) const {
   for (size_t i = 0; i < post_boxes.size(); i++) {
-    PredBox box{0.0f};
+    PredBox box{};
     box.x = post_boxes[i].x;
     box.y = post_boxes[i].y;
     box.z = post_boxes[i].z;
