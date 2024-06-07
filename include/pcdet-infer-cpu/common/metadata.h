@@ -11,7 +11,7 @@ class Metadata {
  private:
   class Impl;
   std::unique_ptr<Impl> pimpl;
-  void Setup(const std::string& filename);
+  void Setup(const std::string& filename) const;
 
  public:
   Metadata();
