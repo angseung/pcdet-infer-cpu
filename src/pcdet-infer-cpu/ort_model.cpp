@@ -106,7 +106,6 @@ void vueron::OrtModel::run(const std::vector<float> &model_input,
   // Get shape and size of an output tensor
   auto output_tensor_info = output_tensor.GetTensorTypeAndShapeInfo();
   auto output_dims = output_tensor_info.GetShape();
-  auto output_dims_count = output_tensor_info.GetDimensionsCount();
   size_t output_size = output_tensor_info.GetElementCount();
   float *floatarr = output_tensor.GetTensorMutableData<float>();
 

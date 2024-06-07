@@ -5,8 +5,6 @@
 #include <chrono>
 #endif
 
-#include "config.h"
-
 vueron::PCDet::PCDet(const std::string &pfe_path, const std::string &rpn_path,
                      const RuntimeConfig *runtimeconfig)
     : bev_pillar(GRID_Y_SIZE * GRID_X_SIZE, MAX_NUM_POINTS_PER_PILLAR),
@@ -29,16 +27,15 @@ vueron::PCDet::PCDet(const std::string &pfe_path, const std::string &rpn_path,
       rpn_path, rpn_input_dim, GRID_Y_SIZE * GRID_X_SIZE * NUM_FEATURE_SCATTER);
 
   if (runtimeconfig != nullptr) {
-    vueron::SetRuntimeConfig(*runtimeconfig);
+    SetRuntimeConfig(*runtimeconfig);
   }
 };
 
 void vueron::PCDet::preprocess(const float *points, const size_t &point_buf_len,
                                const size_t &point_stride) {
-  vueron::voxelization(bev_pillar, points, point_buf_len, point_stride);
-  num_pillars =
-      vueron::point_decoration(bev_pillar, voxel_coords, voxel_num_points,
-                               pfe_input, points, point_stride);
+  voxelization(bev_pillar, points, point_buf_len, point_stride);
+  num_pillars = point_decoration(bev_pillar, voxel_coords, voxel_num_points,
+                                 pfe_input, points, point_stride);
 }
 
 void vueron::PCDet::scatter() {
@@ -48,10 +45,10 @@ void vueron::PCDet::scatter() {
 void vueron::PCDet::postprocess(std::vector<vueron::BndBox> &post_boxes,
                                 std::vector<size_t> &post_labels,
                                 std::vector<float> &post_scores) {
-  vueron::decode_to_boxes(rpn_outputs, pre_boxes, pre_labels, pre_scores);
-  vueron::nms(pre_boxes, pre_scores, suppressed, NMS_THRESH);
-  vueron::gather_boxes(pre_boxes, pre_labels, pre_scores, post_boxes,
-                       post_labels, post_scores, suppressed);
+  decode_to_boxes(rpn_outputs, pre_boxes, pre_labels, pre_scores);
+  nms(pre_boxes, pre_scores, suppressed, NMS_THRESH);
+  gather_boxes(pre_boxes, pre_labels, pre_scores, post_boxes, post_labels,
+               post_scores, suppressed);
 }
 
 void vueron::PCDet::get_pred(std::vector<PredBox> &boxes) const {
