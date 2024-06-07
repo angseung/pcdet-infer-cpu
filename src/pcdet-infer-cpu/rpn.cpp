@@ -29,7 +29,7 @@ void vueron::rpn_run(const std::vector<float> &rpn_input,
       GRID_Y_SIZE * GRID_X_SIZE * NUM_FEATURE_SCATTER;
 
   // create input tensor object from data values
-  auto memory_info =
+  const auto memory_info =
       Ort::MemoryInfo::CreateCpu(OrtArenaAllocator, OrtMemTypeDefault);
 
   std::vector<const char *> input_node_names;

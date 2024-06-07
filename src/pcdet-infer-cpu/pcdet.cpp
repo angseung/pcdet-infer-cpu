@@ -8,11 +8,11 @@
 vueron::PCDet::PCDet(const std::string &pfe_path, const std::string &rpn_path,
                      const RuntimeConfig *runtimeconfig)
     : bev_pillar(GRID_Y_SIZE * GRID_X_SIZE, MAX_NUM_POINTS_PER_PILLAR),
+      num_pillars(0),
       pfe_input(MAX_VOXELS * MAX_NUM_POINTS_PER_PILLAR * FEATURE_NUM, 0.0f),
       pfe_output(MAX_VOXELS * NUM_FEATURE_SCATTER, 0.0f),
       bev_image(GRID_Y_SIZE * GRID_X_SIZE * NUM_FEATURE_SCATTER, 0.0f),
-      suppressed(NMS_PRE_MAXSIZE, false),
-      num_pillars(0) {
+      suppressed(NMS_PRE_MAXSIZE, false) {
   std::cout << "PFE Model Initialized with " << PFE_FILE << std::endl;
   std::cout << "RPN Model Initialized with " << RPN_FILE << std::endl;
   std::vector<int64_t> pfe_input_dim{MAX_VOXELS, MAX_NUM_POINTS_PER_PILLAR,
