@@ -16,7 +16,7 @@ struct Pillar {
   bool is_empty;
 
   Pillar() = delete;
-  Pillar(const size_t &point_num);
+  explicit Pillar(const size_t &point_num);
   ~Pillar() = default;
 };
 
