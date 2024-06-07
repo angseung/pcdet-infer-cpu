@@ -22,8 +22,8 @@ cv::Mat drawBirdsEyeView(const size_t &points_size, const float *points_data,
   for (size_t i = 0; i < points_size; ++i) {
     const int x =
         static_cast<int>((points_data[i * POINT_STRIDE] - MIN_X_RANGE) * scale);
-    const int y = static_cast<int>((MAX_Y_RANGE - points_data[i * POINT_STRIDE + 1]) *
-                             scale);
+    const int y = static_cast<int>(
+        (MAX_Y_RANGE - points_data[i * POINT_STRIDE + 1]) * scale);
     cv::circle(image, cv::Point(x, y), 0, cv::Scalar(255, 255, 255), 1);
   }
 
@@ -45,9 +45,9 @@ cv::Mat drawBirdsEyeView(const size_t &points_size, const float *points_data,
         color = cv::Scalar(0, 255, 255);  // yellow (defalut)
         break;
     }
-    vueron::BndBox box = boxes[i];
-    cv::Point2f center((box.x - MIN_X_RANGE) * scale,
-                       (MAX_Y_RANGE - box.y) * scale);
+    vueron::BndBox box(boxes[i]);
+    const cv::Point2f center((box.x - MIN_X_RANGE) * scale,
+                             (MAX_Y_RANGE - box.y) * scale);
     cv::Point2f vertices[4];
     vertices[0] = cv::Point2f(box.dx / 2, box.dy / 2);
     vertices[1] = cv::Point2f(box.dx / 2, -box.dy / 2);
