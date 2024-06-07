@@ -110,7 +110,7 @@ int main(int argc, const char **argv) {
               << std::setw(3) << ped_cnt << "), cyclist(" << std::setw(3)
               << cyc_cnt << ")" << std::endl;
 
-    auto image = drawBirdsEyeView(buffer.size() / point_stride, points,
+    auto image = drawBirdsEyeView(buffer.size() / POINT_STRIDE, points,
                                   nms_boxes, nms_scores, nms_labels);
     cv::imshow("Bird's Eye View", image);
     cv::waitKey(0);

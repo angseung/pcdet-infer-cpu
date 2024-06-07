@@ -10,7 +10,7 @@ namespace fs = std::filesystem;
 
 namespace vueron {
 
-inline json ReadFile(const std::string& filename) {
+inline json ReadFile(const std::string &filename) {
   std::ifstream file(filename);
 
   if (!file.is_open()) {
