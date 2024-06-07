@@ -3,7 +3,6 @@
 #include <cmath>
 #include <vector>
 
-#include "config.h"
 #include "pcdet-infer-cpu/common/metadata.h"
 #include "pcdet-infer-cpu/common/runtimeconfig.h"
 #include "type.h"
@@ -12,18 +11,18 @@ cv::Mat drawBirdsEyeView(const size_t &points_size, const float *points_data,
                          const std::vector<vueron::BndBox> &boxes,
                          const std::vector<float> &scores,
                          const std::vector<size_t> &labels) {
-  float scale = 12.0;
+  constexpr float scale = 12.0;
 
-  int width = static_cast<int>((MAX_X_RANGE - MIN_X_RANGE) * scale);
-  int height = static_cast<int>((MAX_Y_RANGE - MIN_Y_RANGE) * scale);
+  const int width = static_cast<int>((MAX_X_RANGE - MIN_X_RANGE) * scale);
+  const int height = static_cast<int>((MAX_Y_RANGE - MIN_Y_RANGE) * scale);
 
   cv::Mat image(height, width, CV_8UC3, cv::Scalar(0, 0, 0));
 
   // draw pcd
   for (size_t i = 0; i < points_size; ++i) {
-    int x =
+    const int x =
         static_cast<int>((points_data[i * POINT_STRIDE] - MIN_X_RANGE) * scale);
-    int y = static_cast<int>((MAX_Y_RANGE - points_data[i * POINT_STRIDE + 1]) *
+    const int y = static_cast<int>((MAX_Y_RANGE - points_data[i * POINT_STRIDE + 1]) *
                              scale);
     cv::circle(image, cv::Point(x, y), 0, cv::Scalar(255, 255, 255), 1);
   }
