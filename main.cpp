@@ -51,7 +51,7 @@ int main(int argc, const char **argv) {
 
   RuntimeConfig config{
       1000000,  // int max_points;
-      false,    // bool shuffle_on;
+      true,     // bool shuffle_on;
       true,     // bool use_cpu;
       500,      // int pre_nms_max_preds;
       83,       // int max_preds;
@@ -63,39 +63,38 @@ int main(int argc, const char **argv) {
   const auto pcdet =
       std::make_unique<vueron::PCDet>(PFE_FILE, RPN_FILE, &config);
 
-  while (true) {
-    for (const auto &pcd_file : pcd_files) {
-      const std::vector<float> points =
-          vueron::readPcdFile(pcd_file, MAX_POINT_NUM);
-      const float *point_data = (float *)points.data();
-      const size_t point_buf_len = points.size();
-      /*
-          Buffers for inference
-      */
-      std::vector<vueron::BndBox> nms_boxes;
-      std::vector<size_t> nms_labels;
-      std::vector<float> nms_scores;
+  for (const auto &pcd_file : pcd_files) {
+    const std::vector<float> points =
+        vueron::readPcdFile(pcd_file, MAX_POINT_NUM);
+    const float *point_data = (float *)points.data();
+    const size_t point_buf_len = points.size();
+    /*
+        Buffers for inference
+    */
+    std::vector<vueron::BndBox> nms_boxes;
+    std::vector<size_t> nms_labels;
+    std::vector<float> nms_scores;
 
-      /*
-          Do inference
-      */
-      pcdet->do_infer(point_data, point_buf_len, POINT_STRIDE, nms_boxes,
-                      nms_labels, nms_scores);
+    /*
+        Do inference
+    */
+    pcdet->do_infer(point_data, point_buf_len, POINT_STRIDE, nms_boxes,
+                    nms_labels, nms_scores);
 
-      /*
-          Logging
-      */
-      auto veh_cnt = std::count_if(nms_labels.begin(), nms_labels.end(),
-                                   [](int i) { return i == 1; });
-      auto ped_cnt = std::count_if(nms_labels.begin(), nms_labels.end(),
-                                   [](int i) { return i == 2; });
-      auto cyc_cnt = std::count_if(nms_labels.begin(), nms_labels.end(),
-                                   [](int i) { return i == 3; });
-      std::cout << "Input file: " << pcd_file << std::endl;
-      std::cout << "vehicle(" << std::setw(3) << veh_cnt << "), pedestrian("
-                << std::setw(3) << ped_cnt << "), cyclist(" << std::setw(3)
-                << cyc_cnt << ")" << std::endl;
-    }
+    /*
+        Logging
+    */
+    auto veh_cnt = std::count_if(nms_labels.begin(), nms_labels.end(),
+                                 [](int i) { return i == 1; });
+    auto ped_cnt = std::count_if(nms_labels.begin(), nms_labels.end(),
+                                 [](int i) { return i == 2; });
+    auto cyc_cnt = std::count_if(nms_labels.begin(), nms_labels.end(),
+                                 [](int i) { return i == 3; });
+    std::cout << "Input file: " << pcd_file << std::endl;
+    std::cout << "vehicle(" << std::setw(3) << veh_cnt << "), pedestrian("
+              << std::setw(3) << ped_cnt << "), cyclist(" << std::setw(3)
+              << cyc_cnt << ")" << std::endl;
   }
+
   return 0;
 }

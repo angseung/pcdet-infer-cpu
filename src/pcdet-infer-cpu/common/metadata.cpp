@@ -52,7 +52,7 @@ void Metadata::Setup(const std::string &filename) {
   }
 
   /*
-    Copy Json file contents into Metadata::metastruct for speed issue
+    Copy Json contents into each field of Metadata::metastruct for speed issue
   */
   metastruct.pfe_file = pimpl->data["model_files"]["pfe"];
   metastruct.rpn_file = pimpl->data["model_files"]["rpn"];

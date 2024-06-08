@@ -112,13 +112,16 @@ inline void LoadMetadata(const std::string& filename) {
 #define FEATURE_Y_SIZE vueron::GetMetadata().feature_y_size
 #define IOU_RECTIFIER vueron::GetMetadata().iou_rectifier
 
+#define POINT_STRIDE 4
+#define INTENSITY_NORMALIZE_DIV 255
+
+/*
+  for compatibility
+ */
 #define CLASS_NUM NUM_CLASSES
 #define STRIDE_FOR_PILLARS MAX_NUM_POINTS_PER_PILLAR
 #define MAX_NUM_PILLARS MAX_VOXELS
 #define PILLARPOINTS_BEV (MAX_NUM_POINTS_PER_PILLAR * MAX_NUM_PILLARS)
 #define OUT_SIZE_FACTOR (GRID_X_SIZE / FEATURE_X_SIZE)
-
-#define POINT_STRIDE 4
-#define INTENSITY_NORMALIZE_DIV 255
 
 #endif  // __METADATA_H__
