@@ -5,7 +5,6 @@
 #include <pcl/io/pcd_io.h>
 #include <pcl/point_types.h>
 
-#include <cstring>
 #include <filesystem>  // For std::filesystem
 #include <string>
 #include <vector>
