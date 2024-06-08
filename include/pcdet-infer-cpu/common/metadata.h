@@ -7,6 +7,9 @@
 
 namespace vueron {
 struct MetaStruct {
+  std::string pfe_name;
+  std::string rpn_file;
+
   float min_x_range;
   float max_x_range;
   float min_y_range;
@@ -34,9 +37,6 @@ struct MetaStruct {
   int feature_x_size;
   int feature_y_size;
   std::vector<float> iou_rectifier;
-
-  std::string pfe_name;
-  std::string rpn_file;
 };
 
 class Metadata {
@@ -44,7 +44,6 @@ class Metadata {
   class Impl;
   std::unique_ptr<Impl> pimpl;
   void Setup(const std::string& filename) const;
-  // void Copy();
 
  public:
   Metadata();
@@ -59,38 +58,36 @@ class Metadata {
     instance.Setup(filename);
   }
 
-  std::string pfe_file();
-  std::string rpn_file();
+  std::string pfe_file() const;
+  std::string rpn_file() const;
 
-  float min_x_range();
-  float max_x_range();
-  float min_y_range();
-  float max_y_range();
-  float min_z_range();
-  float max_z_range();
+  float min_x_range() const;
+  float max_x_range() const;
+  float min_y_range() const;
+  float max_y_range() const;
+  float min_z_range() const;
+  float max_z_range() const;
 
-  float pillar_x_size();
-  float pillar_y_size();
-  float pillar_z_size();
+  float pillar_x_size() const;
+  float pillar_y_size() const;
+  float pillar_z_size() const;
 
-  int num_point_values();
-  bool zero_intensity();
+  int num_point_values() const;
+  bool zero_intensity() const;
 
-  int max_num_points_per_pillar();
-  int max_voxels();
-  int feature_num();
+  int max_num_points_per_pillar() const;
+  int max_voxels() const;
+  int feature_num() const;
 
-  int num_feature_scatter();
-  int grid_x_size();
-  int grid_y_size();
-  int grid_z_size();
+  int num_feature_scatter() const;
+  int grid_x_size() const;
+  int grid_y_size() const;
+  int grid_z_size() const;
 
-  int num_classes();
-  int feature_x_size();
-  int feature_y_size();
-  std::vector<float> iou_rectifier();
-
-  int out_size_factor();
+  int num_classes() const;
+  int feature_x_size() const;
+  int feature_y_size() const;
+  std::vector<float> iou_rectifier() const;
 };
 
 inline auto& GetMetadata() { return Metadata::Instance(); }
