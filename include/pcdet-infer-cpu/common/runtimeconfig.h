@@ -42,7 +42,6 @@ struct RuntimeConfigSingleton {
       10.0f,    // float pre_nms_distance_thd;
       0.2f,     // float nms_iou_thd;
   };
-
   static RuntimeConfigSingleton& Instance() {
     static RuntimeConfigSingleton config;
     return config;
@@ -70,10 +69,8 @@ inline void SetRuntimeConfig(const RuntimeConfig& config) {
 #define SCORE_THRESH vueron::GetRuntimeConfig().nms_score_thd
 #define PRE_NMS_DISTANCE_THD vueron::GetRuntimeConfig().pre_nms_distance_thd
 #define NMS_THRESH vueron::GetRuntimeConfig().nms_iou_thd
-#define INTENSITY_NORMALIZE_DIV 255
 #define CONF_THRESH 0.4f
 #define RANDOM_SEED 123
-#define POINT_STRIDE 4
 
 #endif
 

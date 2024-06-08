@@ -138,7 +138,7 @@ inline void LoadMetadata(std::string& filename) { Metadata::Load(filename); }
 #define PILLARPOINTS_BEV (MAX_NUM_POINTS_PER_PILLAR * MAX_NUM_PILLARS)
 #define OUT_SIZE_FACTOR (GRID_X_SIZE / FEATURE_X_SIZE)
 
-#define CONF_THRESH 0.4f
+#define POINT_STRIDE 4
 #define INTENSITY_NORMALIZE_DIV 255
 
 #endif  // __METADATA_H__
