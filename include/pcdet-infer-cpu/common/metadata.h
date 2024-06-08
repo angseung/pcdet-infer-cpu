@@ -33,7 +33,7 @@ struct MetaStruct {
   int grid_y_size;
   int grid_z_size;
 
-  int num_classes;
+  int class_num;
   int feature_x_size;
   int feature_y_size;
   std::vector<float> iou_rectifier;
@@ -107,21 +107,12 @@ inline void LoadMetadata(const std::string& filename) {
 #define GRID_Y_SIZE vueron::GetMetadata().grid_y_size
 #define GRID_Z_SIZE vueron::GetMetadata().grid_z_size
 
-#define NUM_CLASSES vueron::GetMetadata().num_classes
+#define CLASS_NUM vueron::GetMetadata().class_num
 #define FEATURE_X_SIZE vueron::GetMetadata().feature_x_size
 #define FEATURE_Y_SIZE vueron::GetMetadata().feature_y_size
 #define IOU_RECTIFIER vueron::GetMetadata().iou_rectifier
 
 #define POINT_STRIDE 4
 #define INTENSITY_NORMALIZE_DIV 255
-
-/*
-  for compatibility
- */
-#define CLASS_NUM NUM_CLASSES
-#define STRIDE_FOR_PILLARS MAX_NUM_POINTS_PER_PILLAR
-#define MAX_NUM_PILLARS MAX_VOXELS
-#define PILLARPOINTS_BEV (MAX_NUM_POINTS_PER_PILLAR * MAX_NUM_PILLARS)
-#define OUT_SIZE_FACTOR (GRID_X_SIZE / FEATURE_X_SIZE)
 
 #endif  // __METADATA_H__

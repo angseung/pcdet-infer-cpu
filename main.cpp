@@ -51,7 +51,7 @@ int main(int argc, const char **argv) {
 
   RuntimeConfig config{
       1000000,  // int max_points;
-      true,     // bool shuffle_on;
+      false,    // bool shuffle_on;
       true,     // bool use_cpu;
       500,      // int pre_nms_max_preds;
       83,       // int max_preds;

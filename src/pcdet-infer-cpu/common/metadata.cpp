@@ -93,7 +93,7 @@ void Metadata::Setup(const std::string &filename) {
   metastruct.grid_y_size = pimpl->data["metadata"]["scatter"]["GRID_Y_SIZE"];
   metastruct.grid_z_size = 1;
 
-  metastruct.num_classes = pimpl->data["metadata"]["post"]["CLASS_NUM"];
+  metastruct.class_num = pimpl->data["metadata"]["post"]["CLASS_NUM"];
   metastruct.feature_x_size = pimpl->data["metadata"]["post"]["FEATURE_X_SIZE"];
   metastruct.feature_y_size = pimpl->data["metadata"]["post"]["FEATURE_Y_SIZE"];
   metastruct.iou_rectifier = static_cast<std::vector<float>>(
