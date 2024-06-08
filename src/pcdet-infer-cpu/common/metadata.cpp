@@ -50,81 +50,86 @@ void Metadata::Setup(const std::string &filename) const {
       std::cout << model << std::endl;
     }
   }
+  metastruct.min_x_range =
+      pimpl->data["metadata"]["voxelize"]["range"]["X"]["MIN"];
+  metastruct.max_x_range =
+      pimpl->data["metadata"]["voxelize"]["range"]["X"]["MAX"];
+  metastruct.min_y_range =
+      pimpl->data["metadata"]["voxelize"]["range"]["Y"]["MIN"];
+  metastruct.max_y_range =
+      pimpl->data["metadata"]["voxelize"]["range"]["Y"]["MAX"];
+  metastruct.min_z_range =
+      pimpl->data["metadata"]["voxelize"]["range"]["Z"]["MIN"];
+  metastruct.max_z_range =
+      pimpl->data["metadata"]["voxelize"]["range"]["Z"]["MAX"];
+
+  metastruct.pillar_x_size =
+      pimpl->data["metadata"]["voxelize"]["pillar_size"]["X"];
+  metastruct.pillar_y_size =
+      pimpl->data["metadata"]["voxelize"]["pillar_size"]["Y"];
+  metastruct.pillar_z_size =
+      pimpl->data["metadata"]["voxelize"]["pillar_size"]["Z"];
+
+  metastruct.num_point_values =
+      pimpl->data["metadata"]["voxelize"]["NUM_POINT_VALUES"];
+  metastruct.zero_intensity =
+      pimpl->data["metadata"]["voxelize"]["ZERO_INTENSITY"];
+
+  metastruct.max_num_points_per_pillar =
+      pimpl->data["metadata"]["encode"]["MAX_NUM_POINTS_PER_PILLAR"];
+  metastruct.max_voxels = pimpl->data["metadata"]["encode"]["MAX_VOXELS"];
+  metastruct.feature_num = pimpl->data["metadata"]["encode"]["FEATURE_NUM"];
+
+  metastruct.num_feature_scatter =
+      pimpl->data["metadata"]["scatter"]["NUM_FEATURE_SCATTER"];
+  metastruct.grid_x_size = pimpl->data["metadata"]["scatter"]["GRID_X_SIZE"];
+  metastruct.grid_y_size = pimpl->data["metadata"]["scatter"]["GRID_Y_SIZE"];
+  metastruct.grid_z_size = 1;
+
+  metastruct.num_classes = pimpl->data["metadata"]["post"]["CLASS_NUM"];
+  metastruct.feature_x_size = pimpl->data["metadata"]["post"]["FEATURE_X_SIZE"];
+  metastruct.feature_y_size = pimpl->data["metadata"]["post"]["FEATURE_Y_SIZE"];
+  metastruct.iou_rectifier = static_cast<std::vector<float>>(
+      pimpl->data["metadata"]["post"]["IOU_RECTIFIER"]);
+
+  metastruct.pfe_name = pimpl->data["model_files"]["pfe"];
+  metastruct.rpn_file = pimpl->data["model_files"]["rpn"];
 }
 
-std::string Metadata::pfe_file() { return pimpl->data["model_files"]["pfe"]; }
-std::string Metadata::rpn_file() { return pimpl->data["model_files"]["rpn"]; }
+MetaStruct Metadata::metastruct = {0.0f};
+std::string Metadata::pfe_file() { return metastruct.pfe_name; }
+std::string Metadata::rpn_file() { return metastruct.rpn_file; }
 
-float Metadata::pillar_x_size() {
-  return pimpl->data["metadata"]["voxelize"]["pillar_size"]["X"];
-}
-float Metadata::pillar_y_size() {
-  return pimpl->data["metadata"]["voxelize"]["pillar_size"]["Y"];
-}
-float Metadata::pillar_z_size() {
-  return pimpl->data["metadata"]["voxelize"]["pillar_size"]["Z"];
-}
+float Metadata::min_x_range() { return metastruct.min_x_range; }
+float Metadata::max_x_range() { return metastruct.max_x_range; }
+float Metadata::min_y_range() { return metastruct.min_y_range; }
+float Metadata::max_y_range() { return metastruct.max_y_range; }
+float Metadata::min_z_range() { return metastruct.min_z_range; }
+float Metadata::max_z_range() { return metastruct.max_z_range; }
 
-float Metadata::min_x_range() {
-  return pimpl->data["metadata"]["voxelize"]["range"]["X"]["MIN"];
-}
-float Metadata::max_x_range() {
-  return pimpl->data["metadata"]["voxelize"]["range"]["X"]["MAX"];
-}
-float Metadata::min_y_range() {
-  return pimpl->data["metadata"]["voxelize"]["range"]["Y"]["MIN"];
-}
-float Metadata::max_y_range() {
-  return pimpl->data["metadata"]["voxelize"]["range"]["Y"]["MAX"];
-}
-float Metadata::min_z_range() {
-  return pimpl->data["metadata"]["voxelize"]["range"]["Z"]["MIN"];
-}
-float Metadata::max_z_range() {
-  return pimpl->data["metadata"]["voxelize"]["range"]["Z"]["MAX"];
-}
+float Metadata::pillar_x_size() { return metastruct.pillar_x_size; }
+float Metadata::pillar_y_size() { return metastruct.pillar_y_size; }
+float Metadata::pillar_z_size() { return metastruct.pillar_z_size; }
 
-int Metadata::num_point_values() {
-  return pimpl->data["metadata"]["voxelize"]["NUM_POINT_VALUES"];
-}
-
-bool Metadata::zero_intensity() {
-  return pimpl->data["metadata"]["voxelize"]["ZERO_INTENSITY"];
-}
+int Metadata::num_point_values() { return metastruct.num_point_values; }
+bool Metadata::zero_intensity() { return metastruct.zero_intensity; }
 
 int Metadata::max_num_points_per_pillar() {
-  return pimpl->data["metadata"]["encode"]["MAX_NUM_POINTS_PER_PILLAR"];
+  return metastruct.max_num_points_per_pillar;
 }
-int Metadata::max_voxels() {
-  return pimpl->data["metadata"]["encode"]["MAX_VOXELS"];
-}
-int Metadata::feature_num() {
-  return pimpl->data["metadata"]["encode"]["FEATURE_NUM"];
-}
+int Metadata::max_voxels() { return metastruct.max_voxels; }
+int Metadata::feature_num() { return metastruct.feature_num; }
 
-int Metadata::num_feature_scatter() {
-  return pimpl->data["metadata"]["scatter"]["NUM_FEATURE_SCATTER"];
-}
-int Metadata::grid_x_size() {
-  return pimpl->data["metadata"]["scatter"]["GRID_X_SIZE"];
-}
-int Metadata::grid_y_size() {
-  return pimpl->data["metadata"]["scatter"]["GRID_Y_SIZE"];
-}
-int Metadata::grid_z_size() { return 1; }
+int Metadata::num_feature_scatter() { return metastruct.num_feature_scatter; }
+int Metadata::grid_x_size() { return metastruct.grid_x_size; }
+int Metadata::grid_y_size() { return metastruct.grid_y_size; }
+int Metadata::grid_z_size() { return metastruct.grid_z_size; }
 
-int Metadata::num_classes() {
-  return pimpl->data["metadata"]["post"]["CLASS_NUM"];
-}
-int Metadata::feature_x_size() {
-  return pimpl->data["metadata"]["post"]["FEATURE_X_SIZE"];
-}
-int Metadata::feature_y_size() {
-  return pimpl->data["metadata"]["post"]["FEATURE_Y_SIZE"];
-}
-
+int Metadata::num_classes() { return metastruct.num_classes; }
+int Metadata::feature_x_size() { return metastruct.feature_x_size; }
+int Metadata::feature_y_size() { return metastruct.feature_y_size; }
 std::vector<float> Metadata::iou_rectifier() {
-  return pimpl->data["metadata"]["post"]["IOU_RECTIFIER"];
+  return metastruct.iou_rectifier;
 }
 
 int Metadata::out_size_factor() { return (feature_x_size() / grid_x_size()); }

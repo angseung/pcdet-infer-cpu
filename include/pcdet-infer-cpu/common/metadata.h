@@ -6,16 +6,50 @@
 #include <vector>
 
 namespace vueron {
+struct MetaStruct {
+  float min_x_range;
+  float max_x_range;
+  float min_y_range;
+  float max_y_range;
+  float min_z_range;
+  float max_z_range;
+
+  float pillar_x_size;
+  float pillar_y_size;
+  float pillar_z_size;
+
+  int num_point_values;
+  bool zero_intensity;
+
+  int max_num_points_per_pillar;
+  int max_voxels;
+  int feature_num;
+
+  int num_feature_scatter;
+  int grid_x_size;
+  int grid_y_size;
+  int grid_z_size;
+
+  int num_classes;
+  int feature_x_size;
+  int feature_y_size;
+  std::vector<float> iou_rectifier;
+
+  std::string pfe_name;
+  std::string rpn_file;
+};
 
 class Metadata {
  private:
   class Impl;
   std::unique_ptr<Impl> pimpl;
   void Setup(const std::string& filename) const;
+  // void Copy();
 
  public:
   Metadata();
   ~Metadata();
+  static MetaStruct metastruct;
   static Metadata& Instance() {
     static Metadata metadata;
     return metadata;
@@ -28,16 +62,16 @@ class Metadata {
   std::string pfe_file();
   std::string rpn_file();
 
-  float pillar_x_size();
-  float pillar_y_size();
-  float pillar_z_size();
-
   float min_x_range();
   float max_x_range();
   float min_y_range();
   float max_y_range();
   float min_z_range();
   float max_z_range();
+
+  float pillar_x_size();
+  float pillar_y_size();
+  float pillar_z_size();
 
   int num_point_values();
   bool zero_intensity();
@@ -90,6 +124,11 @@ inline void LoadMetadata(std::string& filename) { Metadata::Load(filename); }
 #define GRID_X_SIZE vueron::GetMetadata().grid_x_size()
 #define GRID_Y_SIZE vueron::GetMetadata().grid_y_size()
 #define GRID_Z_SIZE vueron::GetMetadata().grid_z_size()
+
+#define NUM_CLASSES vueron::GetMetadata().num_classes()
+#define FEATURE_X_SIZE vueron::GetMetadata().feature_x_size()
+#define FEATURE_Y_SIZE vueron::GetMetadata().feature_y_size()
+#define IOU_RECTIFIER vueron::GetMetadata().iou_rectifier()
 
 #define NUM_CLASSES vueron::GetMetadata().num_classes()
 #define FEATURE_X_SIZE vueron::GetMetadata().feature_x_size()
