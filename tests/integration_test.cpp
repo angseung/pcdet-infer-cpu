@@ -6,7 +6,8 @@
 
 #include "config.h"
 #include "npy.h"
-#include "params.h"
+#include "pcdet-infer-cpu/common/metadata.h"
+#include "pcdet-infer-cpu/common/runtimeconfig.h"
 #include "pcdet-infer-cpu/model.h"
 #include "pcl.h"
 #include "type.h"
@@ -15,11 +16,10 @@
 
 TEST(IntegrationTest, IntegrationTest) {
   const std::string folder_path = PCD_PATH;
-  std::vector<std::string> pcd_files = vueron::getFileList(folder_path);
+  std::vector<std::string> pcd_files = vueron::getPCDFileList(folder_path);
   const std::string snapshot_folder_path = SNAPSHOT_PATH;
   std::vector<std::string> snapshot_files =
       vueron::getFileList(snapshot_folder_path);
-  std::vector<float> points;
   const size_t num_test_files = pcd_files.size();
   EXPECT_LE(pcd_files.size(), snapshot_files.size());
   constexpr size_t point_stride = POINT_STRIDE;

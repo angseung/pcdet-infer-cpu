@@ -8,15 +8,23 @@
 #endif
 
 struct RuntimeConfig {
-  int max_points;
-  unsigned char shuffle_on;
-  unsigned char use_cpu;
-  int pre_nms_max_preds;
-  int max_preds;
-  float nms_score_thd;
-  float pre_nms_distance_thd;
-  float nms_iou_thd;
+  int max_points{};
+  unsigned char shuffle_on{};
+  unsigned char use_cpu{};
+  int pre_nms_max_preds{};
+  int max_preds{};
+  float nms_score_thd{};
+  float pre_nms_distance_thd{};
+  float nms_iou_thd{};
 
+  explicit RuntimeConfig(int max_points = 1000000,
+                         unsigned char shuffle_on = true,
+                         unsigned char use_cpu = true,
+                         int pre_nms_max_preds = 500, int max_preds = 83,
+                         float nms_score_thd = 0.1f,
+                         float pre_nms_distance_thd = 10.0f,
+                         float nms_iou_thd = 0.2f);
+  RuntimeConfig() = delete;
   ~RuntimeConfig();
 };
 
@@ -34,7 +42,6 @@ struct RuntimeConfigSingleton {
       10.0f,    // float pre_nms_distance_thd;
       0.2f,     // float nms_iou_thd;
   };
-
   static RuntimeConfigSingleton& Instance() {
     static RuntimeConfigSingleton config;
     return config;
@@ -62,8 +69,8 @@ inline void SetRuntimeConfig(const RuntimeConfig& config) {
 #define SCORE_THRESH vueron::GetRuntimeConfig().nms_score_thd
 #define PRE_NMS_DISTANCE_THD vueron::GetRuntimeConfig().pre_nms_distance_thd
 #define NMS_THRESH vueron::GetRuntimeConfig().nms_iou_thd
-#define INTENSITY_NORMALIZE_DIV 255
 #define CONF_THRESH 0.4f
+#define RANDOM_SEED 123
 
 #endif
 

@@ -6,7 +6,8 @@
 
 #include "config.h"
 #include "npy.h"
-#include "params.h"
+#include "pcdet-infer-cpu/common/metadata.h"
+#include "pcdet-infer-cpu/common/runtimeconfig.h"
 #include "pcdet-infer-cpu/model.h"
 #include "pcdet-infer-cpu/pcdet.h"
 #include "pcl.h"
@@ -16,7 +17,7 @@
 
 TEST(IntegrationTest, IntegrationTest) {
   std::string folder_path = PCD_PATH;
-  std::vector<std::string> pcd_files = vueron::getFileList(folder_path);
+  std::vector<std::string> pcd_files = vueron::getPCDFileList(folder_path);
   const size_t num_test_files = pcd_files.size();
   constexpr size_t point_stride = POINT_STRIDE;
   std::string pfe_path(PFE_FILE);
@@ -34,8 +35,8 @@ TEST(IntegrationTest, IntegrationTest) {
     /*
         Buffers for Inference
     */
-    std::vector<vueron::Pillar> bev_pillar(GRID_Y_SIZE * GRID_X_SIZE,
-                                           MAX_NUM_POINTS_PER_PILLAR);
+    std::vector<vueron::Pillar> bev_pillar(
+        GRID_Y_SIZE * GRID_X_SIZE, vueron::Pillar(MAX_NUM_POINTS_PER_PILLAR));
     std::vector<size_t> voxel_coords;  // (x, y)
     std::vector<size_t> voxel_num_points;
     std::vector<float> pfe_input(

@@ -38,16 +38,18 @@ void vueron::voxelization(std::vector<Pillar> &bev_pillar, const float *points,
     std::shuffle(indices.begin(), indices.end(), rng);
   }
 
-  size_t num_points_to_voxelize =
+  const size_t num_points_to_voxelize =
       (points_num > MAX_POINT_NUM) ? MAX_POINT_NUM : points_num;
   for (size_t idx = 0; idx < num_points_to_voxelize; idx++) {
-    size_t i = indices[idx];
-    float point_x = points[point_stride * i];
-    float point_y = points[point_stride * i + 1];
-    float point_z = points[point_stride * i + 2];
+    const size_t i = indices[idx];
+    const float point_x = points[point_stride * i];
+    const float point_y = points[point_stride * i + 1];
+    const float point_z = points[point_stride * i + 2];
 
-    size_t voxel_index_x = floorf((point_x - MIN_X_RANGE) / PILLAR_X_SIZE);
-    size_t voxel_index_y = floorf((point_y - MIN_Y_RANGE) / PILLAR_Y_SIZE);
+    const size_t voxel_index_x =
+        floorf((point_x - MIN_X_RANGE) / PILLAR_X_SIZE);
+    const size_t voxel_index_y =
+        floorf((point_y - MIN_Y_RANGE) / PILLAR_Y_SIZE);
 
     // skip if out-of-range point
     if (point_x < MIN_X_RANGE || point_x > MAX_X_RANGE ||
@@ -64,10 +66,10 @@ void vueron::voxelization(std::vector<Pillar> &bev_pillar, const float *points,
     // check out-of-range grid
     assert(voxel_index_x < GRID_X_SIZE && voxel_index_y < GRID_Y_SIZE);
 
-    size_t voxel_index = voxel_index_y * GRID_X_SIZE + voxel_index_x;
+    const size_t voxel_index = voxel_index_y * GRID_X_SIZE + voxel_index_x;
     if (bev_pillar[voxel_index].point_num_in_pillar <
         MAX_NUM_POINTS_PER_PILLAR) {
-      size_t voxel_index_in_pillar =
+      const size_t voxel_index_in_pillar =
           bev_pillar[voxel_index].point_num_in_pillar;
       bev_pillar[voxel_index].pillar_grid_x = voxel_index_x;
       bev_pillar[voxel_index].pillar_grid_y = voxel_index_y;
@@ -89,7 +91,7 @@ size_t vueron::point_decoration(const std::vector<Pillar> &bev_pillar,
   size_t num_pillars = 0;
   size_t index = 0;
 
-  for (const Pillar pillar : bev_pillar) {
+  for (const Pillar &pillar : bev_pillar) {
     if (pillar.is_empty) {
       continue;
     }
@@ -110,10 +112,10 @@ size_t vueron::point_decoration(const std::vector<Pillar> &bev_pillar,
     voxel_num_points.push_back(pillar.point_num_in_pillar);
 
     for (size_t i = 0; i < pillar.point_num_in_pillar; i++) {
-      size_t point_index = pillar.point_index[i];
-      float curr_x = points[point_stride * point_index];
-      float curr_y = points[point_stride * point_index + 1];
-      float curr_z = points[point_stride * point_index + 2];
+      const size_t point_index = pillar.point_index[i];
+      const float curr_x = points[point_stride * point_index];
+      const float curr_y = points[point_stride * point_index + 1];
+      const float curr_z = points[point_stride * point_index + 2];
       mean_x += curr_x;
       mean_y += curr_y;
       mean_z += curr_z;
@@ -123,24 +125,25 @@ size_t vueron::point_decoration(const std::vector<Pillar> &bev_pillar,
              curr_y >= MIN_Y_RANGE && curr_y <= MAX_Y_RANGE &&
              curr_z >= MIN_Z_RANGE && curr_z <= MAX_Z_RANGE);
     }
-    mean_x /= pillar.point_num_in_pillar;
-    mean_y /= pillar.point_num_in_pillar;
-    mean_z /= pillar.point_num_in_pillar;
+    mean_x /= static_cast<float>(pillar.point_num_in_pillar);
+    mean_y /= static_cast<float>(pillar.point_num_in_pillar);
+    mean_z /= static_cast<float>(pillar.point_num_in_pillar);
 
     // calc centeral values of current pillar
-    float x_center = (PILLAR_X_SIZE / 2.0f) +
-                     (pillar.pillar_grid_x * PILLAR_X_SIZE) + MIN_X_RANGE;
-    float y_center = (PILLAR_Y_SIZE / 2.0f) +
-                     (pillar.pillar_grid_y * PILLAR_Y_SIZE) + MIN_Y_RANGE;
-    float z_center = (PILLAR_Z_SIZE / 2.0f) + MIN_Z_RANGE;
+    const float x_center =
+        (PILLAR_X_SIZE / 2.0f) +
+        (static_cast<float>(pillar.pillar_grid_x) * PILLAR_X_SIZE) +
+        MIN_X_RANGE;
+    const float y_center =
+        (PILLAR_Y_SIZE / 2.0f) +
+        (static_cast<float>(pillar.pillar_grid_y) * PILLAR_Y_SIZE) +
+        MIN_Y_RANGE;
+    const float z_center = (PILLAR_Z_SIZE / 2.0f) + MIN_Z_RANGE;
 
     // write encoded features into raw_voxels and pfe_input
     for (size_t i = 0; i < MAX_NUM_POINTS_PER_PILLAR; i++) {
       if (i < pillar.point_num_in_pillar) {
-        size_t point_index = pillar.point_index[i];
-        size_t voxel_index =
-            i + MAX_NUM_POINTS_PER_PILLAR *
-                    (pillar.pillar_grid_x + pillar.pillar_grid_y * GRID_X_SIZE);
+        const size_t point_index = pillar.point_index[i];
         pfe_input[index] = points[point_stride * point_index];
         pfe_input[index + 1] = points[point_stride * point_index + 1];
         pfe_input[index + 2] = points[point_stride * point_index + 2];
@@ -191,17 +194,20 @@ size_t vueron::point_decoration(const std::vector<Pillar> &bev_pillar,
 
 void vueron::pfe_run(const std::vector<float> &pfe_input,
                      std::vector<float> &pfe_output) {
+  /*
+    Deprecated
+  */
   Ort::Env env(ORT_LOGGING_LEVEL_WARNING, "test");
   Ort::SessionOptions session_options;
-  Ort::Session session(env, PFE_FILE, session_options);
+  Ort::Session session(env, PFE_FILE.c_str(), session_options);
   session_options.SetIntraOpNumThreads(1);
   session_options.SetGraphOptimizationLevel(
       GraphOptimizationLevel::ORT_ENABLE_EXTENDED);
   Ort::AllocatorWithDefaultOptions allocator;
 
-  std::vector<int64_t> input_node_dims = {MAX_VOXELS, MAX_NUM_POINTS_PER_PILLAR,
-                                          FEATURE_NUM};
-  size_t input_tensor_size =
+  const std::vector<int64_t> input_node_dims = {
+      MAX_VOXELS, MAX_NUM_POINTS_PER_PILLAR, FEATURE_NUM};
+  const size_t input_tensor_size =
       MAX_VOXELS * MAX_NUM_POINTS_PER_PILLAR * FEATURE_NUM;
 
   // create input tensor object from data values
@@ -211,14 +217,14 @@ void vueron::pfe_run(const std::vector<float> &pfe_input,
   std::vector<const char *> input_node_names;
   std::vector<const char *> output_node_names;
 
-  size_t num_input_nodes = session.GetInputCount();
+  const size_t num_input_nodes = session.GetInputCount();
   for (size_t i = 0; i < num_input_nodes; ++i) {
     auto name = session.GetInputNameAllocated(i, allocator);
     input_node_names.push_back(strdup(name.get()));
   }
   assert(input_node_names.size() == 1);
 
-  size_t num_output_nodes = session.GetOutputCount();
+  const size_t num_output_nodes = session.GetOutputCount();
   for (size_t i = 0; i < num_output_nodes; ++i) {
     auto name = session.GetOutputNameAllocated(i, allocator);
     output_node_names.push_back(strdup(name.get()));
@@ -227,7 +233,7 @@ void vueron::pfe_run(const std::vector<float> &pfe_input,
 
   // Make input tensor
   auto input_tensor = Ort::Value::CreateTensor<float>(
-      memory_info, (float *)pfe_input.data(), input_tensor_size,
+      memory_info, (float *)(pfe_input.data()), input_tensor_size,
       input_node_dims.data(), 3);
   assert(input_tensor.IsTensor());
 
@@ -268,14 +274,15 @@ void vueron::scatter(const std::vector<float> &pfe_output,
 
   for (size_t i = 0; i < num_pillars; i++) {
     // voxel_coords : (x, y)
-    size_t curr_grid_x = voxel_coords[2 * i];
-    size_t curr_grid_y = voxel_coords[2 * i + 1];
-    size_t source_voxel_index = NUM_FEATURE_SCATTER * i;
+    const size_t curr_grid_x = voxel_coords[2 * i];
+    const size_t curr_grid_y = voxel_coords[2 * i + 1];
+    const size_t source_voxel_index = NUM_FEATURE_SCATTER * i;
     assert(source_voxel_index < MAX_VOXELS * NUM_FEATURE_SCATTER);
 
     for (size_t j = 0; j < NUM_FEATURE_SCATTER; j++) {
-      size_t target_voxel_index = (j * GRID_Y_SIZE * GRID_X_SIZE) +
-                                  (curr_grid_y * GRID_X_SIZE) + curr_grid_x;
+      const size_t target_voxel_index = (j * GRID_Y_SIZE * GRID_X_SIZE) +
+                                        (curr_grid_y * GRID_X_SIZE) +
+                                        curr_grid_x;
       assert(target_voxel_index <
              GRID_Y_SIZE * GRID_X_SIZE * NUM_FEATURE_SCATTER);
       rpn_input[target_voxel_index] = pfe_output[source_voxel_index + j];

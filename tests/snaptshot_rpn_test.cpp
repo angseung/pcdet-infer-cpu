@@ -6,7 +6,8 @@
 
 #include "config.h"
 #include "npy.h"
-#include "params.h"
+#include "pcdet-infer-cpu/common/metadata.h"
+#include "pcdet-infer-cpu/common/runtimeconfig.h"
 #include "pcdet-infer-cpu/post.h"
 #include "pcdet-infer-cpu/pre.h"
 #include "pcdet-infer-cpu/rpn.h"
@@ -19,7 +20,7 @@
 
 TEST(RPNTest, RPNShapeTest) {
   std::string folder_path = PCD_PATH;
-  std::vector<std::string> pcd_files = vueron::getFileList(folder_path);
+  std::vector<std::string> pcd_files = vueron::getPCDFileList(folder_path);
   std::string snapshot_folder_path = SNAPSHOT_PATH;
   std::vector<std::string> snapshot_files =
       vueron::getFileList(snapshot_folder_path);
@@ -39,8 +40,13 @@ TEST(RPNTest, RPNShapeTest) {
 
     std::vector<std::vector<float>> rpn_output;
     vueron::rpn_run(rpn_input_snapshot, rpn_output);
-    std::vector<size_t> head_output_channels = {
-        CLASS_NUM, 3, 2, 1, 2, 1};  // {hm, dim, center, center_z, rot, iou}
+    std::vector<size_t> head_output_channels{
+        static_cast<size_t>(CLASS_NUM),
+        3,
+        2,
+        1,
+        2,
+        1};  // {hm, dim, center, center_z, rot, iou}
     size_t head_dim = GRID_X_SIZE * GRID_Y_SIZE / 4;
 
     for (size_t j = 0; j < rpn_output.size(); j++) {
@@ -56,7 +62,7 @@ TEST(RPNTest, RPNShapeTest) {
 
 TEST(RPNTest, RPNValueTest) {
   std::string folder_path = PCD_PATH;
-  std::vector<std::string> pcd_files = vueron::getFileList(folder_path);
+  std::vector<std::string> pcd_files = vueron::getPCDFileList(folder_path);
   std::string snapshot_folder_path = SNAPSHOT_PATH;
   std::vector<std::string> snapshot_files =
       vueron::getFileList(snapshot_folder_path);
@@ -74,8 +80,8 @@ TEST(RPNTest, RPNValueTest) {
         vueron::readPcdFile(pcd_file, MAX_POINT_NUM);
     const size_t points_buf_len = points.size();
     constexpr size_t point_stride = POINT_STRIDE;
-    std::vector<vueron::Pillar> bev_pillar(GRID_Y_SIZE * GRID_X_SIZE,
-                                           MAX_NUM_POINTS_PER_PILLAR);
+    std::vector<vueron::Pillar> bev_pillar(
+        GRID_Y_SIZE * GRID_X_SIZE, vueron::Pillar(MAX_NUM_POINTS_PER_PILLAR));
     std::vector<size_t> voxel_coords;  // (x, y)
     std::vector<size_t> voxel_num_points;
     std::vector<float> pfe_input(
@@ -121,8 +127,13 @@ TEST(RPNTest, RPNValueTest) {
     EXPECT_EQ(rpn_input_snapshot.size(), bev_image.size());
 
     vueron::rpn_run(bev_image, rpn_output);
-    std::vector<size_t> head_output_channels = {
-        CLASS_NUM, 3, 2, 1, 2, 1};  // {hm, dim, center, center_z, rot, iou}
+    std::vector<size_t> head_output_channels{
+        static_cast<size_t>(CLASS_NUM),
+        3,
+        2,
+        1,
+        2,
+        1};  // {hm, dim, center, center_z, rot, iou}
     size_t head_dim = GRID_X_SIZE * GRID_Y_SIZE / 4;
 
     // read snapshot file

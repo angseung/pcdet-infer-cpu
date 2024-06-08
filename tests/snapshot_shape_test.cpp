@@ -5,7 +5,8 @@
 
 #include "config.h"
 #include "npy.h"
-#include "params.h"
+#include "pcdet-infer-cpu/common/metadata.h"
+#include "pcdet-infer-cpu/common/runtimeconfig.h"
 #include "pcdet-infer-cpu/pre.h"
 #include "pcl.h"
 
@@ -68,11 +69,10 @@ TEST(VoxelSnapshotTest, VoxelShapeTest) {
 
 TEST(VoxelSnapshotTest, PFEShapeTest) {
   std::string folder_path = PCD_PATH;
-  std::vector<std::string> pcd_files = vueron::getFileList(folder_path);
+  std::vector<std::string> pcd_files = vueron::getPCDFileList(folder_path);
   std::string snapshot_folder_path = SNAPSHOT_PATH;
   std::vector<std::string> snapshot_files =
       vueron::getFileList(snapshot_folder_path);
-  std::vector<float> points;
   size_t num_test_files = pcd_files.size();
 
   EXPECT_LE(pcd_files.size(), snapshot_files.size());
@@ -87,8 +87,8 @@ TEST(VoxelSnapshotTest, PFEShapeTest) {
         vueron::readPcdFile(pcd_file, MAX_POINT_NUM);
     const size_t points_buf_len = points.size();
     constexpr size_t point_stride = POINT_STRIDE;
-    std::vector<vueron::Pillar> bev_pillar(GRID_Y_SIZE * GRID_X_SIZE,
-                                           MAX_NUM_POINTS_PER_PILLAR);
+    std::vector<vueron::Pillar> bev_pillar(
+        GRID_Y_SIZE * GRID_X_SIZE, vueron::Pillar(MAX_NUM_POINTS_PER_PILLAR));
     std::vector<size_t> voxel_coords;  // (x, y)
     std::vector<size_t> voxel_num_points;
     std::vector<float> pfe_input(
@@ -104,7 +104,7 @@ TEST(VoxelSnapshotTest, PFEShapeTest) {
 
 TEST(VoxelSnapshotTest, VoxelCoordsValueTest) {
   std::string folder_path = PCD_PATH;
-  std::vector<std::string> pcd_files = vueron::getFileList(folder_path);
+  std::vector<std::string> pcd_files = vueron::getPCDFileList(folder_path);
   std::string snapshot_folder_path = SNAPSHOT_PATH;
   std::vector<std::string> snapshot_files =
       vueron::getFileList(snapshot_folder_path);
@@ -129,8 +129,8 @@ TEST(VoxelSnapshotTest, VoxelCoordsValueTest) {
     std::vector<uint32_t> voxel_coords_snapshot = raw_voxel_coord.data;
 
     // calc values from preprocessing functions
-    std::vector<vueron::Pillar> bev_pillar(GRID_Y_SIZE * GRID_X_SIZE,
-                                           MAX_NUM_POINTS_PER_PILLAR);
+    std::vector<vueron::Pillar> bev_pillar(
+        GRID_Y_SIZE * GRID_X_SIZE, vueron::Pillar(MAX_NUM_POINTS_PER_PILLAR));
     std::vector<size_t> voxel_coords;  // (x, y)
     std::vector<size_t> voxel_num_points;
     std::vector<float> pfe_input(

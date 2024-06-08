@@ -1,6 +1,7 @@
 #include "pcdet-infer-cpu/model.h"
 
-#include "params.h"
+#include "pcdet-infer-cpu/common/metadata.h"
+#include "pcdet-infer-cpu/common/runtimeconfig.h"
 #include "pcdet-infer-cpu/post.h"
 #include "pcdet-infer-cpu/pre.h"
 #include "pcdet-infer-cpu/rpn.h"
@@ -10,7 +11,7 @@ void vueron::run_model(const float *points, const size_t &point_buf_len,
                        std::vector<size_t> &labels,
                        std::vector<float> &scores) {
   std::vector<Pillar> bev_pillar(GRID_Y_SIZE * GRID_X_SIZE,
-                                 MAX_NUM_POINTS_PER_PILLAR);
+                                 Pillar(MAX_NUM_POINTS_PER_PILLAR));
   std::vector<size_t> voxel_coords;  // (x, y)
   std::vector<size_t> voxel_num_points;
   std::vector<float> pfe_input(

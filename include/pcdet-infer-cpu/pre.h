@@ -3,7 +3,8 @@
 
 #include <vector>
 
-#include "params.h"
+#include "pcdet-infer-cpu/common/metadata.h"
+#include "pcdet-infer-cpu/common/runtimeconfig.h"
 
 namespace vueron {
 
@@ -15,7 +16,8 @@ struct Pillar {
   bool is_empty;
 
   Pillar() = delete;
-  Pillar(const size_t &point_num);
+  explicit Pillar(const size_t &point_num);
+  ~Pillar() = default;
 };
 
 void voxelization(std::vector<Pillar> &bev_pillar, const float *points,
@@ -27,6 +29,9 @@ size_t point_decoration(const std::vector<Pillar> &bev_pillar,
                         std::vector<float> &pfe_input, const float *points,
                         const size_t &point_stride);
 
+/*
+  Deprecated
+*/
 void pfe_run(const std::vector<float> &pfe_input,
              std::vector<float> &pfe_output);
 

@@ -3,6 +3,10 @@
 
 #include <vector>
 
+/*
+  Deprecated
+*/
+
 namespace vueron {
 
 void rpn_run(const std::vector<float> &rpn_input,

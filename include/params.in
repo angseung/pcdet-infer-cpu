@@ -40,7 +40,7 @@
 #define FEATURE_X_SIZE 112
 #define FEATURE_Y_SIZE 164
 #define IOU_RECTIFIER \
-  std::vector<float> { 0.68f, 0.71f, 0.65f }
+std::vector<float> { 0.68f, 0.71f, 0.65f }
 
 /*
     User Configurable Param
@@ -67,7 +67,11 @@
 
 #ifndef IOU_RECTIFIER
 #define IOU_RECTIFIER \
-  std::vector<float> { 0.68f, 0.71f, 0.65f }
+std::vector<float> { 0.68f, 0.71f, 0.65f }
 #endif
+
+#define PFE_FILE "@PFE_FILE@"
+#define RPN_FILE "@RPN_FILE@"
+#define POINT_STRIDE 4
 
 #endif  // __PARAMS_H__

@@ -1,80 +1,59 @@
 #include "pcdet-infer-cpu/pcdet.h"
 
-#include <chrono>
 #include <iostream>
+#ifdef _PROFILE
+#include <chrono>
+#endif
 
-#include "config.h"
-
-vueron::PCDet::PCDet()
-    : bev_pillar(GRID_Y_SIZE * GRID_X_SIZE, MAX_NUM_POINTS_PER_PILLAR),
+vueron::PCDet::PCDet(const std::string &pfe_path, const std::string &rpn_path,
+                     const RuntimeConfig *runtimeconfig)
+    : bev_pillar(GRID_Y_SIZE * GRID_X_SIZE, Pillar(MAX_NUM_POINTS_PER_PILLAR)),
+      num_pillars(0),
       pfe_input(MAX_VOXELS * MAX_NUM_POINTS_PER_PILLAR * FEATURE_NUM, 0.0f),
       pfe_output(MAX_VOXELS * NUM_FEATURE_SCATTER, 0.0f),
       bev_image(GRID_Y_SIZE * GRID_X_SIZE * NUM_FEATURE_SCATTER, 0.0f),
-      suppressed(NMS_PRE_MAXSIZE, false),
-      num_pillars(0),
-      pfe_path(PFE_FILE),
-      pfe_input_dim({MAX_VOXELS, MAX_NUM_POINTS_PER_PILLAR, FEATURE_NUM}),
-      pfe(std::make_unique<OrtModel>(
-          pfe_path, pfe_input_dim,
-          MAX_VOXELS * MAX_NUM_POINTS_PER_PILLAR * FEATURE_NUM)),
-      rpn_path(RPN_FILE),
-      rpn_input_dim({1, NUM_FEATURE_SCATTER, GRID_Y_SIZE, GRID_X_SIZE}),
-      rpn(std::make_unique<OrtModel>(
-          rpn_path, rpn_input_dim,
-          GRID_Y_SIZE * GRID_X_SIZE * NUM_FEATURE_SCATTER)) {
-  std::cout << "PFE Model Initialized with default path, " << PFE_FILE
-            << std::endl;
-  std::cout << "RPN Model Initialized with default path, " << RPN_FILE
-            << std::endl;
-};
-
-vueron::PCDet::PCDet(const std::string &pfe_path, const std::string &rpn_path)
-    : bev_pillar(GRID_Y_SIZE * GRID_X_SIZE, MAX_NUM_POINTS_PER_PILLAR),
-      pfe_input(MAX_VOXELS * MAX_NUM_POINTS_PER_PILLAR * FEATURE_NUM, 0.0f),
-      pfe_output(MAX_VOXELS * NUM_FEATURE_SCATTER, 0.0f),
-      bev_image(GRID_Y_SIZE * GRID_X_SIZE * NUM_FEATURE_SCATTER, 0.0f),
-      suppressed(NMS_PRE_MAXSIZE, false),
-      num_pillars(0),
-      pfe_path(pfe_path),
-      pfe_input_dim{MAX_VOXELS, MAX_NUM_POINTS_PER_PILLAR, FEATURE_NUM},
-      pfe(std::make_unique<OrtModel>(
-          pfe_path, pfe_input_dim,
-          MAX_VOXELS * MAX_NUM_POINTS_PER_PILLAR * FEATURE_NUM)),
-      rpn_path(rpn_path),
-      rpn_input_dim{1, NUM_FEATURE_SCATTER, GRID_Y_SIZE, GRID_X_SIZE},
-      rpn(std::make_unique<OrtModel>(
-          rpn_path, rpn_input_dim,
-          GRID_Y_SIZE * GRID_X_SIZE * NUM_FEATURE_SCATTER)) {
+      suppressed(NMS_PRE_MAXSIZE, false) {
   std::cout << "PFE Model Initialized with " << PFE_FILE << std::endl;
   std::cout << "RPN Model Initialized with " << RPN_FILE << std::endl;
-};
+  std::vector<int64_t> pfe_input_dim{MAX_VOXELS, MAX_NUM_POINTS_PER_PILLAR,
+                                     FEATURE_NUM};
+  pfe = std::make_unique<OrtModel>(
+      pfe_path, pfe_input_dim,
+      MAX_VOXELS * MAX_NUM_POINTS_PER_PILLAR * FEATURE_NUM);
 
-vueron::PCDet::~PCDet() = default;
+  std::vector<int64_t> rpn_input_dim{1, NUM_FEATURE_SCATTER, GRID_Y_SIZE,
+                                     GRID_X_SIZE};
+  rpn = std::make_unique<OrtModel>(
+      rpn_path, rpn_input_dim, GRID_Y_SIZE * GRID_X_SIZE * NUM_FEATURE_SCATTER);
+
+  if (runtimeconfig != nullptr) {
+    SetRuntimeConfig(*runtimeconfig);
+  }
+};
 
 void vueron::PCDet::preprocess(const float *points, const size_t &point_buf_len,
                                const size_t &point_stride) {
-  vueron::voxelization(bev_pillar, points, point_buf_len, point_stride);
-  num_pillars =
-      vueron::point_decoration(bev_pillar, voxel_coords, voxel_num_points,
-                               pfe_input, points, point_stride);
+  voxelization(bev_pillar, points, point_buf_len, point_stride);
+  num_pillars = point_decoration(bev_pillar, voxel_coords, voxel_num_points,
+                                 pfe_input, points, point_stride);
 }
 
 void vueron::PCDet::scatter() {
   vueron::scatter(pfe_output, voxel_coords, num_pillars, bev_image);
 }
 
-void vueron::PCDet::postprocess(std::vector<vueron::BndBox> &final_boxes,
-                                std::vector<size_t> &final_labels,
-                                std::vector<float> &final_scores) {
-  vueron::decode_to_boxes(rpn_outputs, pre_boxes, pre_labels, pre_scores);
-  vueron::nms(pre_boxes, pre_scores, suppressed, NMS_THRESH);
-  vueron::gather_boxes(pre_boxes, pre_labels, pre_scores, final_boxes,
-                       final_labels, final_scores, suppressed);
+void vueron::PCDet::postprocess(std::vector<vueron::BndBox> &post_boxes,
+                                std::vector<size_t> &post_labels,
+                                std::vector<float> &post_scores) {
+  decode_to_boxes(rpn_outputs, pre_boxes, pre_labels, pre_scores);
+  nms(pre_boxes, pre_scores, suppressed, NMS_THRESH);
+  gather_boxes(pre_boxes, pre_labels, pre_scores, post_boxes, post_labels,
+               post_scores, suppressed);
 }
 
-void vueron::PCDet::get_pred(std::vector<PredBox> &boxes) {
+void vueron::PCDet::get_pred(std::vector<PredBox> &boxes) const {
   for (size_t i = 0; i < post_boxes.size(); i++) {
-    PredBox box{0.0f};
+    PredBox box{};
     box.x = post_boxes[i].x;
     box.y = post_boxes[i].y;
     box.z = post_boxes[i].z;
@@ -83,7 +62,7 @@ void vueron::PCDet::get_pred(std::vector<PredBox> &boxes) {
     box.dz = post_boxes[i].dz;
     box.heading = post_boxes[i].heading;
     box.score = post_scores[i];
-    box.label = post_labels[i];
+    box.label = static_cast<float>(post_labels[i]);
 
     boxes.push_back(box);
   }
@@ -91,7 +70,7 @@ void vueron::PCDet::get_pred(std::vector<PredBox> &boxes) {
 
 void vueron::PCDet::do_infer(const float *points, const size_t &point_buf_len,
                              const size_t &point_stride,
-                             std::vector<PredBox> &final_boxes) {
+                             std::vector<PredBox> &boxes) {
   /**
    * @brief
    * It writes predictions into a vector, boxes.
@@ -150,7 +129,7 @@ void vueron::PCDet::do_infer(const float *points, const size_t &point_buf_len,
 #ifdef _PROFILE
   auto gather_boxes_startTime = std::chrono::system_clock::now();
 #endif
-  vueron::PCDet::get_pred(final_boxes);
+  vueron::PCDet::get_pred(boxes);
 #ifdef _PROFILE
   auto gather_boxes_endTime = std::chrono::system_clock::now();
   auto gather_boxes_millisec =

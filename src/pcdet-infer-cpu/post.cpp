@@ -4,7 +4,8 @@
 #include <cassert>
 #include <numeric>
 
-#include "params.h"
+#include "pcdet-infer-cpu/common/metadata.h"
+#include "pcdet-infer-cpu/common/runtimeconfig.h"
 
 void vueron::decode_to_boxes(const std::vector<std::vector<float>> &rpn_output,
                              std::vector<BndBox> &boxes,
@@ -13,7 +14,7 @@ void vueron::decode_to_boxes(const std::vector<std::vector<float>> &rpn_output,
   /*
       rpn_output order: hm, dim, center, center_z, rot, iou
   */
-  bool has_iou_head = (rpn_output.size() == 6);  // last had is iou head
+  const bool has_iou_head = (rpn_output.size() == 6);  // last had is iou head
   assert(rpn_output[0].size() ==
          CLASS_NUM * FEATURE_Y_SIZE * FEATURE_X_SIZE);                  // hm
   assert(rpn_output[1].size() == 3 * FEATURE_Y_SIZE * FEATURE_X_SIZE);  // dim
@@ -25,8 +26,8 @@ void vueron::decode_to_boxes(const std::vector<std::vector<float>> &rpn_output,
     assert(rpn_output[5].size() == FEATURE_Y_SIZE * FEATURE_X_SIZE);  // iou
   }
 
-  size_t head_stride = GRID_Y_SIZE / FEATURE_Y_SIZE;
-  std::vector<float> hm = rpn_output[0];
+  const size_t head_stride = GRID_Y_SIZE / FEATURE_Y_SIZE;
+  const std::vector<float> &hm = rpn_output[0];
   assert(hm.size() == CLASS_NUM * FEATURE_Y_SIZE * FEATURE_X_SIZE);
 
   std::vector<size_t> indices(hm.size());
@@ -44,9 +45,9 @@ void vueron::decode_to_boxes(const std::vector<std::vector<float>> &rpn_output,
       decode into boxes
   */
   for (size_t j = 0; j < NMS_PRE_MAXSIZE; j++) {
-    size_t channel_offset = FEATURE_X_SIZE * FEATURE_Y_SIZE;
-    size_t idx = indices[j];  // index for hm ONLY
-    size_t s_idx =
+    const size_t channel_offset = FEATURE_X_SIZE * FEATURE_Y_SIZE;
+    const size_t idx = indices[j];  // index for hm ONLY
+    const size_t s_idx =
         idx % (FEATURE_X_SIZE *
                FEATURE_Y_SIZE);  // per-channel index for the other heads
     assert(idx < CLASS_NUM * FEATURE_X_SIZE * FEATURE_Y_SIZE);
@@ -54,12 +55,12 @@ void vueron::decode_to_boxes(const std::vector<std::vector<float>> &rpn_output,
 
     // calc grid index
     BndBox box{};
-    size_t label = idx / channel_offset;
-    size_t grid_x = idx % FEATURE_X_SIZE;
-    size_t grid_y = (idx / FEATURE_X_SIZE) % FEATURE_Y_SIZE;
+    const size_t label = idx / channel_offset;
+    const size_t grid_x = idx % FEATURE_X_SIZE;
+    const size_t grid_y = (idx / FEATURE_X_SIZE) % FEATURE_Y_SIZE;
     assert(grid_x < FEATURE_X_SIZE);
     assert(grid_y < FEATURE_Y_SIZE);
-    assert(label >= 0 && label < FEATURE_NUM);
+    assert(label < FEATURE_NUM);
 
     // calc box dimensions
     box.dx = exp(rpn_output[1][s_idx]);
@@ -67,8 +68,8 @@ void vueron::decode_to_boxes(const std::vector<std::vector<float>> &rpn_output,
     box.dz = exp(rpn_output[1][2 * channel_offset + s_idx]);
 
     // calc heading angle in radian
-    float cos_rad = rpn_output[4][s_idx];
-    float sin_rad = rpn_output[4][channel_offset + s_idx];
+    const float cos_rad = rpn_output[4][s_idx];
+    const float sin_rad = rpn_output[4][channel_offset + s_idx];
     box.heading = atan2(sin_rad, cos_rad);
     assert(box.heading <= 180.0 / M_PI && box.heading >= -180.0 / M_PI);
 
@@ -106,14 +107,15 @@ void vueron::nms(const std::vector<BndBox> &boxes,
   // sort boxes based on their scores (descending order)
   std::vector<size_t> indices(boxes.size());
   std::iota(indices.begin(), indices.end(), 0);
-  std::sort(indices.begin(), indices.end(),
-            [&](size_t a, size_t b) { return scores[a] > scores[b]; });
+  std::sort(
+      indices.begin(), indices.end(),
+      [&](const size_t a, const size_t b) { return scores[a] > scores[b]; });
 
   size_t processed = 0;
 
   // Loop over each box index
   for (size_t i = 0; i < indices.size(); ++i) {
-    size_t idx = indices[i];
+    const size_t idx = indices[i];
     if (suppressed[idx]) {
       continue;
     }
@@ -125,7 +127,7 @@ void vueron::nms(const std::vector<BndBox> &boxes,
 
     // Compare this box to the rest of the boxes
     for (size_t j = i + 1; j < indices.size(); ++j) {
-      size_t idx_j = indices[j];
+      const size_t idx_j = indices[j];
       if (suppressed[idx_j]) {
         continue;
       }

@@ -3,8 +3,8 @@
 add_library(json_config STATIC metadata.cpp runtimeconfig.cpp)
 
 target_include_directories(json_config PRIVATE
-  ${PROJECT_SOURCE_DIR}/include
-  )
+        ${PROJECT_SOURCE_DIR}/include
+)
 
 # Json library
 include(${PROJECT_SOURCE_DIR}/cmake/CPM.cmake)

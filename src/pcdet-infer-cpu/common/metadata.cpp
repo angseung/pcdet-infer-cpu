@@ -10,7 +10,7 @@ namespace fs = std::filesystem;
 
 namespace vueron {
 
-inline json ReadFile(std::string filename) {
+inline json ReadFile(const std::string &filename) {
   std::ifstream file(filename);
 
   if (!file.is_open()) {
@@ -26,22 +26,23 @@ class Metadata::Impl {
  public:
   json data;
 
-  Impl() {}
+  Impl() = default;
 };
 
 Metadata::Metadata() : pimpl(std::make_unique<Impl>()) {}
 
 Metadata::~Metadata() = default;
 
-void Metadata::Setup(std::string &filename) {
+void Metadata::Setup(const std::string &filename) {
   pimpl->data = ReadFile(filename);
-  auto filepath = fs::path(filename);
-  auto directory = filepath.parent_path();
+  const auto filepath = fs::path(filename);
+  const auto directory = filepath.parent_path();
   std::cout << "Model's metadata file: " << filename << std::endl;
   std::cout << "Model's directory: " << directory << std::endl;
   if (pimpl->data.contains("metadata_file")) {
     pimpl->data["metadata"] =
         ReadFile(directory / pimpl->data["metadata_file"]);
+    std::cout << directory / pimpl->data["metadata_file"] << std::endl;
   }
   if (pimpl->data.contains("model_files")) {
     for (auto &[key, model] : pimpl->data["model_files"].items()) {
@@ -49,83 +50,54 @@ void Metadata::Setup(std::string &filename) {
       std::cout << model << std::endl;
     }
   }
-}
 
-std::string Metadata::pfe_file() { return pimpl->data["model_files"]["pfe"]; }
-std::string Metadata::rpn_file() { return pimpl->data["model_files"]["rpn"]; }
+  /*
+    Copy Json contents into each field of Metadata::metastruct for speed issue
+  */
+  metastruct.pfe_file = pimpl->data["model_files"]["pfe"];
+  metastruct.rpn_file = pimpl->data["model_files"]["rpn"];
 
-float Metadata::pillar_x_size() {
-  return pimpl->data["metadata"]["voxelize"]["pillar_size"]["X"];
-}
-float Metadata::pillar_y_size() {
-  return pimpl->data["metadata"]["voxelize"]["pillar_size"]["Y"];
-}
-float Metadata::pillar_z_size() {
-  return pimpl->data["metadata"]["voxelize"]["pillar_size"]["Z"];
-}
+  metastruct.min_x_range =
+      pimpl->data["metadata"]["voxelize"]["range"]["X"]["MIN"];
+  metastruct.max_x_range =
+      pimpl->data["metadata"]["voxelize"]["range"]["X"]["MAX"];
+  metastruct.min_y_range =
+      pimpl->data["metadata"]["voxelize"]["range"]["Y"]["MIN"];
+  metastruct.max_y_range =
+      pimpl->data["metadata"]["voxelize"]["range"]["Y"]["MAX"];
+  metastruct.min_z_range =
+      pimpl->data["metadata"]["voxelize"]["range"]["Z"]["MIN"];
+  metastruct.max_z_range =
+      pimpl->data["metadata"]["voxelize"]["range"]["Z"]["MAX"];
 
-float Metadata::min_x_range() {
-  return pimpl->data["metadata"]["voxelize"]["range"]["X"]["MIN"];
-}
-float Metadata::max_x_range() {
-  return pimpl->data["metadata"]["voxelize"]["range"]["X"]["MAX"];
-}
-float Metadata::min_y_range() {
-  return pimpl->data["metadata"]["voxelize"]["range"]["Y"]["MIN"];
-}
-float Metadata::max_y_range() {
-  return pimpl->data["metadata"]["voxelize"]["range"]["Y"]["MAX"];
-}
-float Metadata::min_z_range() {
-  return pimpl->data["metadata"]["voxelize"]["range"]["Z"]["MIN"];
-}
-float Metadata::max_z_range() {
-  return pimpl->data["metadata"]["voxelize"]["range"]["Z"]["MAX"];
-}
+  metastruct.pillar_x_size =
+      pimpl->data["metadata"]["voxelize"]["pillar_size"]["X"];
+  metastruct.pillar_y_size =
+      pimpl->data["metadata"]["voxelize"]["pillar_size"]["Y"];
+  metastruct.pillar_z_size =
+      pimpl->data["metadata"]["voxelize"]["pillar_size"]["Z"];
 
-int Metadata::num_point_values() {
-  return pimpl->data["metadata"]["voxelize"]["NUM_POINT_VALUES"];
-}
+  metastruct.num_point_values =
+      pimpl->data["metadata"]["voxelize"]["NUM_POINT_VALUES"];
+  metastruct.zero_intensity =
+      pimpl->data["metadata"]["voxelize"]["ZERO_INTENSITY"];
 
-bool Metadata::zero_intensity() {
-  return pimpl->data["metadata"]["voxelize"]["ZERO_INTENSITY"];
-}
+  metastruct.max_num_points_per_pillar =
+      pimpl->data["metadata"]["encode"]["MAX_NUM_POINTS_PER_PILLAR"];
+  metastruct.max_voxels = pimpl->data["metadata"]["encode"]["MAX_VOXELS"];
+  metastruct.feature_num = pimpl->data["metadata"]["encode"]["FEATURE_NUM"];
 
-int Metadata::max_num_points_per_pillar() {
-  return pimpl->data["metadata"]["encode"]["MAX_NUM_POINTS_PER_PILLAR"];
-}
-int Metadata::max_voxels() {
-  return pimpl->data["metadata"]["encode"]["MAX_VOXELS"];
-}
-int Metadata::feature_num() {
-  return pimpl->data["metadata"]["encode"]["FEATURE_NUM"];
-}
+  metastruct.num_feature_scatter =
+      pimpl->data["metadata"]["scatter"]["NUM_FEATURE_SCATTER"];
+  metastruct.grid_x_size = pimpl->data["metadata"]["scatter"]["GRID_X_SIZE"];
+  metastruct.grid_y_size = pimpl->data["metadata"]["scatter"]["GRID_Y_SIZE"];
+  metastruct.grid_z_size = 1;
 
-int Metadata::num_feature_scatter() {
-  return pimpl->data["metadata"]["scatter"]["NUM_FEATURE_SCATTER"];
+  metastruct.num_classes = pimpl->data["metadata"]["post"]["CLASS_NUM"];
+  metastruct.feature_x_size = pimpl->data["metadata"]["post"]["FEATURE_X_SIZE"];
+  metastruct.feature_y_size = pimpl->data["metadata"]["post"]["FEATURE_Y_SIZE"];
+  metastruct.iou_rectifier = static_cast<std::vector<float>>(
+      pimpl->data["metadata"]["post"]["IOU_RECTIFIER"]);
 }
-int Metadata::grid_x_size() {
-  return pimpl->data["metadata"]["scatter"]["GRID_X_SIZE"];
-}
-int Metadata::grid_y_size() {
-  return pimpl->data["metadata"]["scatter"]["GRID_Y_SIZE"];
-}
-int Metadata::grid_z_size() { return 1; }
-
-int Metadata::num_classes() {
-  return pimpl->data["metadata"]["post"]["CLASS_NUM"];
-}
-int Metadata::feature_x_size() {
-  return pimpl->data["metadata"]["post"]["FEATURE_X_SIZE"];
-}
-int Metadata::feature_y_size() {
-  return pimpl->data["metadata"]["post"]["FEATURE_Y_SIZE"];
-}
-
-std::vector<float> Metadata::iou_rectifier() {
-  return pimpl->data["metadata"]["post"]["IOU_RECTIFIER"];
-}
-
-int Metadata::out_size_factor() { return (feature_x_size() / grid_x_size()); }
 
 }  // namespace vueron
