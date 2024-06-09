@@ -37,6 +37,9 @@ struct MetaStruct {
   int feature_x_size;
   int feature_y_size;
   std::vector<float> iou_rectifier;
+
+  MetaStruct() = default;
+  ~MetaStruct() = default;
 };
 
 class Metadata {
@@ -49,20 +52,38 @@ class Metadata {
   Metadata();
   ~Metadata();
   MetaStruct metastruct{
-      "",   "",    0.0f, 0.0f,
-      0.0f, 0.0f,  0.0f, 0.0f,
+      "PFE_FILE",  // pfe_file
+      "RPN_FILE",  // rpn_file
 
-      0.0f, 0.0f,  0.0f,
+      0.0f,     // min_x_ranges
+      71.68f,   // max_x_ranges
+      -52.48f,  // min_y_ranges
+      52.48f,   // max_y_ranges
+      -2.0f,    // min_z_ranges
+      4.0f,     // max_z_ranges
 
-      4,    false,
+      0.32f,  // pillar_x_size
+      0.32f,  // pillar_y_size
+      1.0f,   // pillar_z_size
 
-      20,   25000, 10,
+      4,      // num_point_values
+      false,  // zero_intensity
 
-      64,   224,   328,  1,
+      20,     // max_num_points_per_pillar
+      25000,  // max_voxels
+      10,     // feature_num
 
-      3,    112,   164,  {0.0f, 0.0f, 0.0f},
+      64,   // num_feature_scatter
+      224,  // grid_x_size
+      328,  // grid_y_size
+      1,    // grid_z_size
 
+      3,                      // class_num
+      112,                    // feature_x_size
+      164,                    // feature_x_size
+      {0.68f, 0.71f, 0.65f},  // iou_rectifier coefficient
   };
+
   static Metadata& Instance() {
     static Metadata metadata;
     return metadata;
