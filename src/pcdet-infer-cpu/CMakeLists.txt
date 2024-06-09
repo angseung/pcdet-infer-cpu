@@ -2,7 +2,7 @@
 
 add_subdirectory(common)
 
-# onnxruntime
+# onnx::runtime
 if (APPLE)
     set(ONNXRUNTIME_ROOTDIR ${PROJECT_SOURCE_DIR}/onnxruntime-osx-arm64-1.16.3)
     add_library(_onnxruntime INTERFACE IMPORTED)
@@ -22,9 +22,8 @@ else ()
 endif ()
 add_library(onnx::runtime ALIAS _onnxruntime)
 
-add_library(pcdet STATIC pre.cpp post.cpp pcdet.cpp ort_model.cpp)
+add_library(pcdet STATIC pre.cpp post.cpp ort_model.cpp pcdet.cpp)
 target_include_directories(pcdet PUBLIC
-        ${PROJECT_SOURCE_DIR}/include
         ${ONNXRUNTIME_ROOTDIR}/include
 )
 target_link_libraries(pcdet PUBLIC json_config onnx::runtime)
