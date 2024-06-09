@@ -1,6 +1,6 @@
 # tests/pcdet_test/CMakeLists.txt
 
-# A library contains only inference codes
+# A PCDet library ONLY for test codes
 add_library(pcdet_test STATIC pre.cpp rpn.cpp post.cpp model.cpp ort_model.cpp pcdet.cpp)
 
 # onnxruntime
