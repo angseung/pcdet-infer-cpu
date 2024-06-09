@@ -1,5 +1,5 @@
-#ifndef __PCDET_H__
-#define __PCDET_H__
+#ifndef __PCDET_H_TEST__
+#define __PCDET_H_TEST__
 
 #include <cstddef>
 #include <memory>  // for unique_ptr
@@ -68,4 +68,4 @@ class PCDet {
 };
 }  // namespace vueron
 
-#endif  // __PCDET_H__
+#endif  // __PCDET_H_TEST__

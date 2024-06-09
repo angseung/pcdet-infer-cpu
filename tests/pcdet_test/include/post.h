@@ -1,5 +1,5 @@
-#ifndef __POST_H__
-#define __POST_H__
+#ifndef __POST_H_TEST__
+#define __POST_H_TEST__
 
 #include <cmath>
 #include <vector>
@@ -256,4 +256,4 @@ void gather_boxes(const std::vector<BndBox> &boxes,
 
 }  // namespace vueron
 
-#endif  // __POST_H__
+#endif  // __POST_H_TEST__

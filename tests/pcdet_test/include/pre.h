@@ -1,5 +1,5 @@
-#ifndef __PRE_H__
-#define __PRE_H__
+#ifndef __PRE_H_TEST__
+#define __PRE_H_TEST__
 
 #include <vector>
 
@@ -39,4 +39,4 @@ void scatter(const std::vector<float> &pfe_output,
              std::vector<float> &rpn_input);
 
 }  // namespace vueron
-#endif  // __PRE_H__
+#endif  // __PRE_H_TEST__

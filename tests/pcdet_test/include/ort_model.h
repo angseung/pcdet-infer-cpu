@@ -1,5 +1,5 @@
-#ifndef __ORT_MODEL_H__
-#define __ORT_MODEL_H__
+#ifndef __ORT_MODEL_H_TEST__
+#define __ORT_MODEL_H_TEST__
 
 #include <vector>
 
@@ -37,4 +37,4 @@ class OrtModel {
 };
 }  // namespace vueron
 
-#endif  //__ORT_MODEL_H__
+#endif  //__ORT_MODEL_H_TEST__
