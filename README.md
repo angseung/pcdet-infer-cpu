@@ -6,11 +6,18 @@
     - Supports macOS & Linux
 - GPU Version ONNXRuntime are not suppprted.
 
-# 2. Install
+# 2. Build
 
-- This repo tested with only onnxruntime==1.16.3.
+- This repo tested ONLY with onnxruntime==1.16.3.
 
-# 2.1. macOS (AArch64)
+## 2.1 Dependencies
+
+- GCC or Clang Complier
+- OpenCV
+- PCL
+- cmake ≥ 3.24
+
+## 2.2. macOS (AArch64)
 
 ```bash
 git clone https://github.com/angseung/pcdet-infer-cpu.git
@@ -54,7 +61,7 @@ cmake --build Debug -j
 
 ## 3.1. main
 
-- This program runs PCDet model with PCD files, and then show the number of detected objects in each classes
+- This program runs a PCDet model with PCD files, and then shows the number of detected objects in each classes
 
 ```bash
 ./Release/bin/main ./YOUR_PCD_DIR_PATH ./YOUR_METADATA_FILE_PATH
@@ -62,7 +69,7 @@ cmake --build Debug -j
 
 ## 3.2. Demo
 
-- This program runs PCDet models with PCD files, and then draws detected bounding boxes on point cloud in
+- This program runs a PCDet model with PCD files, and then draws detected bounding boxes on point cloud in
   bird-eyes-view.
 
 ```bash
