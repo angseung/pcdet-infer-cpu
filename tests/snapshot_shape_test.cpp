@@ -6,7 +6,7 @@
 #include "config.h"
 #include "npy.h"
 #include "params.h"
-#include "pcdet_test/pre.h"
+#include "pcdet_test/include/pre.h"
 #include "pcl.h"
 
 TEST(VoxelSnapshotTest, VoxelShapeTest) {

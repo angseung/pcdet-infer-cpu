@@ -1,7 +1,7 @@
-#include "model.h"
-#include "post.h"
-#include "pre.h"
-#include "rpn.h"
+#include "include/model.h"
+#include "include/post.h"
+#include "include/pre.h"
+#include "include/rpn.h"
 
 void vueron::run_model(const float *points, const size_t &point_buf_len,
                        const size_t &point_stride, std::vector<BndBox> &boxes,

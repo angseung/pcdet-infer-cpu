@@ -7,8 +7,8 @@
 #include "config.h"
 #include "npy.h"
 #include "params.h"
-#include "pcdet_test/model.h"
-#include "pcdet_test/pcdet.h"
+#include "pcdet_test/include/model.h"
+#include "pcdet_test/include/pcdet.h"
 #include "pcl.h"
 #include "type.h"
 
