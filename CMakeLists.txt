@@ -23,17 +23,6 @@ include_directories(${PCL_INCLUDE_DIRS})
 link_directories(${PCL_LIBRARY_DIRS})
 add_definitions(${PCL_DEFINITIONS})
 
-# GoogleTest
-if (${BUILD_TEST})
-    include(FetchContent)
-    FetchContent_Declare(
-            googletest
-            URL https://github.com/google/googletest/archive/03597a01ee50ed33e9dfd640b249b4be3799d395.zip
-    )
-    set(gtest_force_shared_crt ON CACHE BOOL "" FORCE)
-    FetchContent_MakeAvailable(googletest)
-endif ()
-
 set(PFE_FILE ${PROJECT_SOURCE_DIR}/models/gcm_v4_residual/gcm_resfpn_falcon_v4_residual_gelu_full_zero_f71.68_r0_s52.48_pfe.onnx)
 set(RPN_FILE ${PROJECT_SOURCE_DIR}/models/gcm_v4_residual/gcm_resfpn_falcon_v4_residual_gelu_full_zero_f71.68_r0_s52.48_rpn.onnx)
 set(PCD_PATH ${PROJECT_SOURCE_DIR}/pcd/cepton)
@@ -46,14 +35,6 @@ configure_file(
         @ONLY
 )
 
-if (${BUILD_TEST})
-    configure_file(
-            "${PROJECT_SOURCE_DIR}/include/params.in"
-            "${PROJECT_SOURCE_DIR}/include/params.h"
-            @ONLY
-    )
-endif ()
-
 # Set the output directory for executable files
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin)
 
@@ -61,7 +42,20 @@ add_subdirectory(src)
 add_executable(main main.cpp)
 target_link_libraries(main PUBLIC pcdet ${PCL_LIBRARIES})
 
+# GoogleTest
 if (${BUILD_TEST})
+    include(FetchContent)
+    FetchContent_Declare(
+            googletest
+            URL https://github.com/google/googletest/archive/03597a01ee50ed33e9dfd640b249b4be3799d395.zip
+    )
+    set(gtest_force_shared_crt ON CACHE BOOL "" FORCE)
+    FetchContent_MakeAvailable(googletest)
+    configure_file(
+            "${PROJECT_SOURCE_DIR}/include/params.in"
+            "${PROJECT_SOURCE_DIR}/include/params.h"
+            @ONLY
+    )
     add_subdirectory(tests)
 else ()
     message(STATUS "SKIP BUILD TESTS")
