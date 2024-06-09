@@ -6,11 +6,10 @@
 
 #include "config.h"
 #include "npy.h"
-#include "pcdet-infer-cpu/common/metadata.h"
-#include "pcdet-infer-cpu/common/runtimeconfig.h"
-#include "pcdet-infer-cpu/post.h"
-#include "pcdet-infer-cpu/pre.h"
-#include "pcdet-infer-cpu/rpn.h"
+#include "params.h"
+#include "pcdet_test/include/post.h"
+#include "pcdet_test/include/pre.h"
+#include "pcdet_test/include/rpn.h"
 #include "pcl.h"
 #include "type.h"
 

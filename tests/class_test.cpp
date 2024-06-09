@@ -6,10 +6,9 @@
 
 #include "config.h"
 #include "npy.h"
-#include "pcdet-infer-cpu/common/metadata.h"
-#include "pcdet-infer-cpu/common/runtimeconfig.h"
-#include "pcdet-infer-cpu/model.h"
-#include "pcdet-infer-cpu/pcdet.h"
+#include "params.h"
+#include "pcdet_test/include/model.h"
+#include "pcdet_test/include/pcdet.h"
 #include "pcl.h"
 #include "type.h"
 

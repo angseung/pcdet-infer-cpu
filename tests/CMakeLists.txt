@@ -1,4 +1,5 @@
 # tests/CMakeLists.txt
+add_subdirectory(pcdet_test)
 enable_testing()
 
 add_executable(
@@ -8,8 +9,7 @@ add_executable(
 target_link_libraries(
         voxel_snapshot_test
         GTest::gtest_main
-        pcdetfunc
-        json_config
+        pcdet_test
         ${PCL_LIBRARIES}
 )
 
@@ -20,8 +20,7 @@ add_executable(
 target_link_libraries(
         preprocess_value_test
         GTest::gtest_main
-        pcdetfunc
-        json_config
+        pcdet_test
         ${PCL_LIBRARIES}
 )
 
@@ -32,8 +31,7 @@ add_executable(
 target_link_libraries(
         rpn_test
         GTest::gtest_main
-        pcdetfunc
-        json_config
+        pcdet_test
         ${PCL_LIBRARIES}
 )
 
@@ -44,8 +42,7 @@ add_executable(
 target_link_libraries(
         integration_test
         GTest::gtest_main
-        pcdetfunc
-        json_config
+        pcdet_test
         ${PCL_LIBRARIES}
 )
 
@@ -56,8 +53,7 @@ add_executable(
 target_link_libraries(
         class_test
         GTest::gtest_main
-        pcdet
-        json_config
+        pcdet_test
         ${PCL_LIBRARIES}
 )
 
