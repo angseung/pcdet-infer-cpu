@@ -1,5 +1,5 @@
-#ifndef __MODEL_H__
-#define __MODEL_H__
+#ifndef __MODEL_H_TEST__
+#define __MODEL_H_TEST__
 
 #include <vector>
 
@@ -12,4 +12,4 @@ void run_model(const float *points, const size_t &point_buf_len,
 
 }  // namespace vueron
 
-#endif  // __MODEL_H__
+#endif  // __MODEL_H_TEST__

@@ -1,14 +1,14 @@
-#ifndef __PCDET_H__
-#define __PCDET_H__
+#ifndef __PCDET_H_TEST__
+#define __PCDET_H_TEST__
 
 #include <cstddef>
 #include <memory>  // for unique_ptr
 #include <vector>
 
+#include "ort_model.h"
 #include "params.h"
 #include "post.h"
 #include "pre.h"
-#include "ort_model.h"
 
 namespace vueron {
 class PCDet {
@@ -68,4 +68,4 @@ class PCDet {
 };
 }  // namespace vueron
 
-#endif  // __PCDET_H__
+#endif  // __PCDET_H_TEST__

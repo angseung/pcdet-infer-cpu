@@ -1,5 +1,5 @@
-#ifndef __RPN_H__
-#define __RPN_H__
+#ifndef __RPN_H_TEST__
+#define __RPN_H_TEST__
 
 #include <vector>
 
@@ -13,4 +13,4 @@ void rpn_run(const std::vector<float> &rpn_input,
              std::vector<std::vector<float>> &rpn_output);
 }  // namespace vueron
 
-#endif  // __RPN_H__
+#endif  // __RPN_H_TEST__
