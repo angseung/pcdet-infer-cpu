@@ -5,10 +5,10 @@
 #include <memory>  // for unique_ptr
 #include <vector>
 
+#include "ort_model.h"
 #include "params.h"
 #include "post.h"
 #include "pre.h"
-#include "ort_model.h"
 
 namespace vueron {
 class PCDet {
