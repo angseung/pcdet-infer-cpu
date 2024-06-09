@@ -3,7 +3,7 @@
 - An Inference library for PCDet models.
 - An Inference library for CPU only devices.
     - Supports x86-64 & AArch64
-    - Supported macOS & Linux
+    - Supports macOS & Linux
 - GPU Version ONNXRuntime are not suppprted.
 
 # 2. Install
