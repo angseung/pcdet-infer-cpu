@@ -29,12 +29,6 @@ size_t point_decoration(const std::vector<Pillar> &bev_pillar,
                         std::vector<float> &pfe_input, const float *points,
                         const size_t &point_stride);
 
-/*
-  Deprecated
-*/
-void pfe_run(const std::vector<float> &pfe_input,
-             std::vector<float> &pfe_output);
-
 void scatter(const std::vector<float> &pfe_output,
              const std::vector<size_t> &voxel_coords, const size_t &num_pillars,
              std::vector<float> &rpn_input);
