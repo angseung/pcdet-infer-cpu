@@ -21,8 +21,6 @@ elseif (UNIX)
 else ()
     message(FATAL_ERROR "Unsupported OS")
 endif ()
-
-# A library contains an inference model class and it wraps inference codes in pcdetfunc
 add_library(onnx::runtime ALIAS _onnxruntime)
 
 target_include_directories(pcdet_test PUBLIC

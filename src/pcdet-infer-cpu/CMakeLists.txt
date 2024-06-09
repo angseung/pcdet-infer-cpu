@@ -2,9 +2,6 @@
 
 add_subdirectory(common)
 
-# A library contains only inference codes
-add_library(pcdetfunc STATIC pre.cpp rpn.cpp post.cpp model.cpp)
-
 # onnxruntime
 if (APPLE)
     set(ONNXRUNTIME_ROOTDIR ${PROJECT_SOURCE_DIR}/onnxruntime-osx-arm64-1.16.3)
@@ -23,15 +20,11 @@ elseif (UNIX)
 else ()
     message(FATAL_ERROR "Unsupported OS")
 endif ()
-
-# A library contains an inference model class and it wraps inference codes in pcdetfunc
 add_library(onnx::runtime ALIAS _onnxruntime)
 
-target_include_directories(pcdetfunc PUBLIC
+add_library(pcdet STATIC pre.cpp post.cpp pcdet.cpp ort_model.cpp)
+target_include_directories(pcdet PUBLIC
         ${PROJECT_SOURCE_DIR}/include
         ${ONNXRUNTIME_ROOTDIR}/include
 )
-target_link_libraries(pcdetfunc PUBLIC onnx::runtime)
-
-add_library(pcdet STATIC pcdet.cpp ort_model.cpp)
-target_link_libraries(pcdet PUBLIC pcdetfunc json_config)
+target_link_libraries(pcdet PUBLIC json_config onnx::runtime)
