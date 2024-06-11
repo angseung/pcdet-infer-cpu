@@ -22,7 +22,7 @@
 ```bash
 git clone https://github.com/angseung/pcdet-infer-cpu.git
 cd pcdet-infer-cpu
-brew install pcl cmake ninja
+brew install pcl cmake ninja opencv
 wget https://github.com/microsoft/onnxruntime/releases/download/v1.16.3/onnxruntime-osx-arm64-1.16.3.tgz
 tar -zxvf onnxruntime-osx-arm64-1.16.3.tgz
 
@@ -41,7 +41,7 @@ cmake --build Debug -j
 git clone https://github.com/angseung/pcdet-infer-cpu.git
 cd pcdet-infer-cpu
 sudo apt update
-sudo apt install libpcl-dev libopencv-dev -y
+sudo apt install cmake libpcl-dev libopencv-dev -y
 wget https://github.com/microsoft/onnxruntime/releases/download/v1.16.3/onnxruntime-linux-x64-1.16.3.tgz
 tar -zxvf onnxruntime-linux-x64-1.16.3.tgz
 
