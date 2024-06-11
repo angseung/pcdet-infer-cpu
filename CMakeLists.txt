@@ -54,8 +54,8 @@ if (${BUILD_TEST})
 
     # Configure config header for tests
     configure_file(
-            "${PROJECT_SOURCE_DIR}/include/params.in"
-            "${PROJECT_SOURCE_DIR}/include/params.h"
+            "${PROJECT_SOURCE_DIR}/tests/pcdet_test/include/params.in"
+            "${PROJECT_SOURCE_DIR}/tests/pcdet_test/include/params.h"
             @ONLY
     )
     configure_file(

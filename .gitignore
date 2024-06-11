@@ -45,7 +45,7 @@ onnxruntime*/
 models
 include/config.h
 tests/pcdet_test/include/config.h
-include/params.h
+tests/pcdet_test/include/params.h
 bak/
 falcon/
 cepton/

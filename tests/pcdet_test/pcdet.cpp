@@ -1,6 +1,8 @@
 #include "include/pcdet.h"
 
 #include <iostream>
+
+#include "config.h"  // for _PROFILE
 #ifdef _PROFILE
 #include <chrono>
 #endif

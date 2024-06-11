@@ -4,9 +4,9 @@
 #include <cmath>
 #include <numeric>
 
-#include "pcdet_test/include/config.h"
 #include "npy.h"
-#include "params.h"
+#include "pcdet_test/include/config.h"
+#include "pcdet_test/include/params.h"
 #include "pcdet_test/include/post.h"
 #include "pcdet_test/include/pre.h"
 #include "pcdet_test/include/rpn.h"

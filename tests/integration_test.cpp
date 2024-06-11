@@ -4,10 +4,10 @@
 #include <cmath>
 #include <numeric>
 
-#include "pcdet_test/include/config.h"
 #include "npy.h"
-#include "params.h"
+#include "pcdet_test/include/config.h"
 #include "pcdet_test/include/model.h"
+#include "pcdet_test/include/params.h"
 #include "pcl.h"
 #include "type.h"
 

@@ -4,9 +4,8 @@
 
 #include <cassert>
 
-#include "config.h"
+#include "include/params.h"
 #include "onnxruntime_cxx_api.h"
-#include "params.h"
 
 void vueron::rpn_run(const std::vector<float> &rpn_input,
                      std::vector<std::vector<float>> &rpn_output) {
