@@ -10,7 +10,7 @@
 struct RuntimeConfig {
   int max_points{};
   unsigned char shuffle_on{};
-  unsigned char use_cpu{};
+  unsigned char use_cpu{};  // Reserved
   int pre_nms_max_preds{};
   int max_preds{};
   float nms_score_thd{};
@@ -25,7 +25,7 @@ struct RuntimeConfig {
                          float pre_nms_distance_thd = 10.0f,
                          float nms_iou_thd = 0.2f);
   RuntimeConfig() = delete;
-  ~RuntimeConfig();
+  ~RuntimeConfig() = default;
 };
 
 #ifdef __cplusplus
