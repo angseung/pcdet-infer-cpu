@@ -20,7 +20,7 @@ int main(int argc, const char **argv) {
     */
     std::cout << "Usage: " << argv[0] << " <path_to_your_pcd_files_directory>"
               << std::endl;
-    folder_path = PCD_PATH;
+    folder_path = "./pcd/cepton";
     metadata_path = wd + "/models/gcm_v4_residual/metadata.json";
     std::cout << "It will run with default pcd path: " << folder_path
               << std::endl;

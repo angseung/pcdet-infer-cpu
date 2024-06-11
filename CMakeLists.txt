@@ -51,9 +51,16 @@ if (${BUILD_TEST})
     )
     set(gtest_force_shared_crt ON CACHE BOOL "" FORCE)
     FetchContent_MakeAvailable(googletest)
+
+    # Configure config header for tests
     configure_file(
             "${PROJECT_SOURCE_DIR}/include/params.in"
             "${PROJECT_SOURCE_DIR}/include/params.h"
+            @ONLY
+    )
+    configure_file(
+            "${PROJECT_SOURCE_DIR}/tests/pcdet_test/include/config.in"
+            "${PROJECT_SOURCE_DIR}/tests/pcdet_test/include/config.h"
             @ONLY
     )
     add_subdirectory(tests)

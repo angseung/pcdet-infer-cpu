@@ -4,7 +4,7 @@
 #include <cmath>
 #include <numeric>
 
-#include "config.h"
+#include "pcdet_test/include/config.h"
 #include "npy.h"
 #include "params.h"
 #include "pcdet_test/include/post.h"
