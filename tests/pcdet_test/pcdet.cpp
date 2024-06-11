@@ -2,11 +2,6 @@
 
 #include <iostream>
 
-#include "config.h"  // for _PROFILE
-#ifdef _PROFILE
-#include <chrono>
-#endif
-
 vueron::PCDet::PCDet(const std::string &pfe_path, const std::string &rpn_path)
     : bev_pillar(GRID_Y_SIZE * GRID_X_SIZE, Pillar(MAX_NUM_POINTS_PER_PILLAR)),
       num_pillars(0),
@@ -73,77 +68,12 @@ void vueron::PCDet::do_infer(const float *points, const size_t &point_buf_len,
    * It writes predictions into a vector, boxes.
    *
    */
-#ifdef _PROFILE
-  auto pre_startTime = std::chrono::system_clock::now();
-#endif
   vueron::PCDet::preprocess(points, point_buf_len, point_stride);
-#ifdef _PROFILE
-  auto pre_endTime = std::chrono::system_clock::now();
-  auto pre_millisec = std::chrono::duration_cast<std::chrono::milliseconds>(
-      pre_endTime - pre_startTime);
-#endif
-
-#ifdef _PROFILE
-  auto pfe_startTime = std::chrono::system_clock::now();
-#endif
   pfe->run(pfe_input, pfe_output);
-#ifdef _PROFILE
-  auto pfe_endTime = std::chrono::system_clock::now();
-  auto pfe_millisec = std::chrono::duration_cast<std::chrono::milliseconds>(
-      pfe_endTime - pfe_startTime);
-#endif
-
-#ifdef _PROFILE
-  auto scatter_startTime = std::chrono::system_clock::now();
-#endif
   vueron::PCDet::scatter();
-#ifdef _PROFILE
-  auto scatter_endTime = std::chrono::system_clock::now();
-  auto scatter_millisec = std::chrono::duration_cast<std::chrono::milliseconds>(
-      scatter_endTime - scatter_startTime);
-#endif
-
-#ifdef _PROFILE
-  auto rpn_startTime = std::chrono::system_clock::now();
-#endif
   rpn->run(bev_image, rpn_outputs);
-#ifdef _PROFILE
-  auto rpn_endTime = std::chrono::system_clock::now();
-  auto rpn_millisec = std::chrono::duration_cast<std::chrono::milliseconds>(
-      rpn_endTime - rpn_startTime);
-#endif
-
-#ifdef _PROFILE
-  auto post_startTime = std::chrono::system_clock::now();
-#endif
   vueron::PCDet::postprocess(post_boxes, post_labels, post_scores);
-#ifdef _PROFILE
-  auto post_endTime = std::chrono::system_clock::now();
-  auto post_millisec = std::chrono::duration_cast<std::chrono::milliseconds>(
-      post_endTime - post_startTime);
-#endif
-
-#ifdef _PROFILE
-  auto gather_boxes_startTime = std::chrono::system_clock::now();
-#endif
   vueron::PCDet::get_pred(boxes);
-#ifdef _PROFILE
-  auto gather_boxes_endTime = std::chrono::system_clock::now();
-  auto gather_boxes_millisec =
-      std::chrono::duration_cast<std::chrono::milliseconds>(
-          gather_boxes_endTime - gather_boxes_startTime);
-#endif
-
-#ifdef _PROFILE
-  std::cout << "Preprocessing: " << pre_millisec.count() / 1000.0 << std::endl;
-  std::cout << "PFE: " << pfe_millisec.count() / 1000.0 << std::endl;
-  std::cout << "Scatter: " << scatter_millisec.count() / 1000.0 << std::endl;
-  std::cout << "RPN: " << rpn_millisec.count() / 1000.0 << std::endl;
-  std::cout << "Postprocessing: " << post_millisec.count() / 1000.0
-            << std::endl;
-  std::cout << "Gather Boxes: " << gather_boxes_millisec.count() / 1000.0
-            << std::endl;
-#endif
 
   /*
       Reset buffers
@@ -181,64 +111,12 @@ void vueron::PCDet::do_infer(const float *points, const size_t &point_buf_len,
    * final_scores.
    *
    */
-#ifdef _PROFILE
-  auto pre_startTime = std::chrono::system_clock::now();
-#endif
   vueron::PCDet::preprocess(points, point_buf_len, point_stride);
-#ifdef _PROFILE
-  auto pre_endTime = std::chrono::system_clock::now();
-  auto pre_millisec = std::chrono::duration_cast<std::chrono::milliseconds>(
-      pre_endTime - pre_startTime);
-#endif
-
-#ifdef _PROFILE
-  auto pfe_startTime = std::chrono::system_clock::now();
-#endif
   pfe->run(pfe_input, pfe_output);
-#ifdef _PROFILE
-  auto pfe_endTime = std::chrono::system_clock::now();
-  auto pfe_millisec = std::chrono::duration_cast<std::chrono::milliseconds>(
-      pfe_endTime - pfe_startTime);
-#endif
-
-#ifdef _PROFILE
-  auto scatter_startTime = std::chrono::system_clock::now();
-#endif
   vueron::PCDet::scatter();
-#ifdef _PROFILE
-  auto scatter_endTime = std::chrono::system_clock::now();
-  auto scatter_millisec = std::chrono::duration_cast<std::chrono::milliseconds>(
-      scatter_endTime - scatter_startTime);
-#endif
-
-#ifdef _PROFILE
-  auto rpn_startTime = std::chrono::system_clock::now();
-#endif
   rpn->run(bev_image, rpn_outputs);
-#ifdef _PROFILE
-  auto rpn_endTime = std::chrono::system_clock::now();
-  auto rpn_millisec = std::chrono::duration_cast<std::chrono::milliseconds>(
-      rpn_endTime - rpn_startTime);
-#endif
-
-#ifdef _PROFILE
-  auto post_startTime = std::chrono::system_clock::now();
-#endif
   vueron::PCDet::postprocess(final_boxes, final_labels, final_scores);
-#ifdef _PROFILE
-  auto post_endTime = std::chrono::system_clock::now();
-  auto post_millisec = std::chrono::duration_cast<std::chrono::milliseconds>(
-      post_endTime - post_startTime);
-#endif
 
-#ifdef _PROFILE
-  std::cout << "Preprocessing: " << pre_millisec.count() / 1000.0 << std::endl;
-  std::cout << "PFE: " << pfe_millisec.count() / 1000.0 << std::endl;
-  std::cout << "Scatter: " << scatter_millisec.count() / 1000.0 << std::endl;
-  std::cout << "RPN: " << rpn_millisec.count() / 1000.0 << std::endl;
-  std::cout << "Postprocessing: " << post_millisec.count() / 1000.0
-            << std::endl;
-#endif
   /*
       Reset buffers
   */
