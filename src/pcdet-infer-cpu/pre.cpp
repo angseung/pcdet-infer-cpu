@@ -7,7 +7,6 @@
 #include <numeric>
 #include <random>
 
-#include "config.h"
 #include "onnxruntime_cxx_api.h"
 
 vueron::Pillar::Pillar(const size_t &point_num)

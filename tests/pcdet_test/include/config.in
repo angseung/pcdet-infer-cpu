@@ -1,0 +1,9 @@
+#ifndef __CONFIG_H_TEST__
+#define __CONFIG_H_TEST__
+
+#define _EPSILON 1e-4
+
+#define PCD_PATH "@PCD_PATH@"
+#define SNAPSHOT_PATH "@SNAPSHOT_PATH@"
+
+#endif // __CONFIG_H_TEST__

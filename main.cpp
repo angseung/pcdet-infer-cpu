@@ -1,6 +1,5 @@
 #include <filesystem>
 
-#include "config.h"
 #include "npy.h"
 #include "pcdet-infer-cpu/common/metadata.h"
 #include "pcdet-infer-cpu/common/runtimeconfig.h"
@@ -20,7 +19,7 @@ int main(int argc, const char **argv) {
     */
     std::cout << "Usage: " << argv[0] << " <path_to_your_pcd_files_directory>"
               << std::endl;
-    folder_path = PCD_PATH;
+    folder_path = "./pcd/cepton";
     metadata_path = wd + "/models/gcm_v4_residual/metadata.json";
     std::cout << "It will run with default pcd path: " << folder_path
               << std::endl;
@@ -60,14 +59,21 @@ int main(int argc, const char **argv) {
       0.2f,     // float nms_iou_thd;
   };
 
+  /*
+    Init PCDet with metadata & runtimeconfig
+  */
   const auto pcdet =
       std::make_unique<vueron::PCDet>(PFE_FILE, RPN_FILE, &config);
 
   for (const auto &pcd_file : pcd_files) {
+    /*
+      Read point data from pcd files
+    */
     const std::vector<float> points =
         vueron::readPcdFile(pcd_file, MAX_POINT_NUM);
     const float *point_data = points.data();
     const size_t point_buf_len = points.size();
+
     /*
         Buffers for inference
     */

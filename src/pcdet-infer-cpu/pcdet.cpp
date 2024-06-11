@@ -1,5 +1,5 @@
 #include "pcdet-infer-cpu/pcdet.h"
-
+#include "config.h"
 #include <iostream>
 #ifdef _PROFILE
 #include <chrono>

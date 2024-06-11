@@ -4,7 +4,7 @@
 - An Inference library for CPU only devices.
     - Supports x86-64 & AArch64
     - Supports macOS & Linux
-- GPU Version ONNXRuntime are not suppprted.
+- GPU Version ONNXRuntime are not supported yet.
 
 # 2. Build
 
