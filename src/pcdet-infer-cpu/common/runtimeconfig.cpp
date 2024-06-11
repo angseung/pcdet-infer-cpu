@@ -12,5 +12,3 @@ RuntimeConfig::RuntimeConfig(int max_points, unsigned char shuffle_on,
       nms_score_thd(nms_score_thd),
       pre_nms_distance_thd(pre_nms_distance_thd),
       nms_iou_thd(nms_iou_thd){};
-
-RuntimeConfig::~RuntimeConfig() = default;
