@@ -7,6 +7,12 @@
 #include "pcdet-infer-cpu/common/runtimeconfig.h"
 #include "type.h"
 
+std::string floatToString(float value) {
+  std::ostringstream out;
+  out << std::fixed << std::setprecision(2) << value;
+  return out.str();
+}
+
 cv::Mat drawBirdsEyeView(const size_t &points_size, const float *points_data,
                          const std::vector<vueron::BndBox> &boxes,
                          const std::vector<float> &scores,
@@ -53,6 +59,9 @@ cv::Mat drawBirdsEyeView(const size_t &points_size, const float *points_data,
     vertices[1] = cv::Point2f(box.dx / 2, -box.dy / 2);
     vertices[2] = cv::Point2f(-box.dx / 2, -box.dy / 2);
     vertices[3] = cv::Point2f(-box.dx / 2, box.dy / 2);
+
+    std::string text = floatToString(scores[i]);
+    cv::putText(image, text, center, 1, 1.0f, cv::Scalar(0, 255, 255), 1);
 
     for (int i = 0; i < 4; ++i) {
       vertices[i] = rotatePoint(vertices[i], -box.heading);
