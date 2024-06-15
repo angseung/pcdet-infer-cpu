@@ -9,7 +9,7 @@
 #include "type.h"
 
 namespace vueron {
-template <typename T>
+template <typename T = float>
 struct Point {
   T x, y;
   Point() = default;
