@@ -3,10 +3,11 @@
 
 #include <vector>
 
+#include "model.h"
 #include "onnxruntime_cxx_api.h"
 
 namespace vueron {
-class OrtModel {
+class OrtModel : public Model {
  private:
   Ort::MemoryInfo memory_info;
   Ort::Env env;
@@ -27,13 +28,13 @@ class OrtModel {
            const size_t &input_tensor_size);
   OrtModel(const OrtModel &copy) = delete;
   OrtModel &operator=(const OrtModel &copy) = delete;
-  ~OrtModel() = default;
+  ~OrtModel() override = default;
 
   void run(const std::vector<float> &model_input,
-           std::vector<float> &model_output);
+           std::vector<float> &model_output) override;
 
   void run(const std::vector<float> &model_input,
-           std::vector<std::vector<float>> &model_output);
+           std::vector<std::vector<float>> &model_output) override;
 };
 }  // namespace vueron
 

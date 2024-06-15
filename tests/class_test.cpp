@@ -21,7 +21,7 @@ TEST(IntegrationTest, IntegrationTest) {
   constexpr size_t point_stride = POINT_STRIDE;
   std::string pfe_path(PFE_FILE);
   std::string rpn_path(RPN_FILE);
-  const auto pcdet = std::make_unique<vueron::PCDet>(pfe_path, rpn_path);
+  const auto pcdet = std::make_unique<vueron::PCDetCPU>(pfe_path, rpn_path);
 
   for (size_t i = 0; i < num_test_files; i++) {
     const std::string pcd_file = pcd_files[i];
@@ -64,7 +64,7 @@ TEST(IntegrationTest, IntegrationTest) {
     std::vector<vueron::PredBox> pcdet_nms_boxes;
 
     // Do inference with pcdet
-    pcdet->do_infer(points, point_buf_len, point_stride, pcdet_nms_boxes);
+    pcdet->run(points, point_buf_len, point_stride, pcdet_nms_boxes);
 
     EXPECT_EQ(nms_boxes.size(), MAX_OBJ_PER_SAMPLE);
     EXPECT_EQ(nms_scores.size(), MAX_OBJ_PER_SAMPLE);

@@ -2,7 +2,8 @@
 
 #include <iostream>
 
-vueron::PCDet::PCDet(const std::string &pfe_path, const std::string &rpn_path)
+vueron::PCDetCPU::PCDetCPU(const std::string &pfe_path,
+                           const std::string &rpn_path)
     : bev_pillar(GRID_Y_SIZE * GRID_X_SIZE, Pillar(MAX_NUM_POINTS_PER_PILLAR)),
       num_pillars(0),
       pfe_input(MAX_VOXELS * MAX_NUM_POINTS_PER_PILLAR * FEATURE_NUM, 0.0f),
@@ -23,27 +24,28 @@ vueron::PCDet::PCDet(const std::string &pfe_path, const std::string &rpn_path)
       rpn_path, rpn_input_dim, GRID_Y_SIZE * GRID_X_SIZE * NUM_FEATURE_SCATTER);
 };
 
-void vueron::PCDet::preprocess(const float *points, const size_t &point_buf_len,
-                               const size_t &point_stride) {
+void vueron::PCDetCPU::preprocess(const float *points,
+                                  const size_t &point_buf_len,
+                                  const size_t &point_stride) {
   voxelization(bev_pillar, points, point_buf_len, point_stride);
   num_pillars = point_decoration(bev_pillar, voxel_coords, voxel_num_points,
                                  pfe_input, points, point_stride);
 }
 
-void vueron::PCDet::scatter() {
+void vueron::PCDetCPU::scatter() {
   vueron::scatter(pfe_output, voxel_coords, num_pillars, bev_image);
 }
 
-void vueron::PCDet::postprocess(std::vector<vueron::BndBox> &post_boxes,
-                                std::vector<size_t> &post_labels,
-                                std::vector<float> &post_scores) {
+void vueron::PCDetCPU::postprocess(std::vector<vueron::BndBox> &post_boxes,
+                                   std::vector<size_t> &post_labels,
+                                   std::vector<float> &post_scores) {
   decode_to_boxes(rpn_outputs, pre_boxes, pre_labels, pre_scores);
   nms(pre_boxes, pre_scores, suppressed, NMS_THRESH);
   gather_boxes(pre_boxes, pre_labels, pre_scores, post_boxes, post_labels,
                post_scores, suppressed);
 }
 
-void vueron::PCDet::get_pred(std::vector<PredBox> &boxes) const {
+void vueron::PCDetCPU::get_pred(std::vector<PredBox> &boxes) const {
   for (size_t i = 0; i < post_boxes.size(); i++) {
     PredBox box{};
     box.x = post_boxes[i].x;
@@ -60,20 +62,20 @@ void vueron::PCDet::get_pred(std::vector<PredBox> &boxes) const {
   }
 }
 
-void vueron::PCDet::do_infer(const float *points, const size_t &point_buf_len,
-                             const size_t &point_stride,
-                             std::vector<PredBox> &boxes) {
+void vueron::PCDetCPU::run(const float *points, const size_t &point_buf_len,
+                           const size_t &point_stride,
+                           std::vector<PredBox> &boxes) {
   /**
    * @brief
    * It writes predictions into a vector, boxes.
    *
    */
-  vueron::PCDet::preprocess(points, point_buf_len, point_stride);
+  vueron::PCDetCPU::preprocess(points, point_buf_len, point_stride);
   pfe->run(pfe_input, pfe_output);
-  vueron::PCDet::scatter();
+  vueron::PCDetCPU::scatter();
   rpn->run(bev_image, rpn_outputs);
-  vueron::PCDet::postprocess(post_boxes, post_labels, post_scores);
-  vueron::PCDet::get_pred(boxes);
+  vueron::PCDetCPU::postprocess(post_boxes, post_labels, post_scores);
+  vueron::PCDetCPU::get_pred(boxes);
 
   /*
       Reset buffers
@@ -100,22 +102,22 @@ void vueron::PCDet::do_infer(const float *points, const size_t &point_buf_len,
   post_scores.clear();
 };
 
-void vueron::PCDet::do_infer(const float *points, const size_t &point_buf_len,
-                             const size_t &point_stride,
-                             std::vector<vueron::BndBox> &final_boxes,
-                             std::vector<size_t> &final_labels,
-                             std::vector<float> &final_scores) {
+void vueron::PCDetCPU::run(const float *points, const size_t &point_buf_len,
+                           const size_t &point_stride,
+                           std::vector<vueron::BndBox> &final_boxes,
+                           std::vector<size_t> &final_labels,
+                           std::vector<float> &final_scores) {
   /**
    * @brief
    * It writes predictions into three vectors, final_boxes, final_labels, and
    * final_scores.
    *
    */
-  vueron::PCDet::preprocess(points, point_buf_len, point_stride);
+  vueron::PCDetCPU::preprocess(points, point_buf_len, point_stride);
   pfe->run(pfe_input, pfe_output);
-  vueron::PCDet::scatter();
+  vueron::PCDetCPU::scatter();
   rpn->run(bev_image, rpn_outputs);
-  vueron::PCDet::postprocess(final_boxes, final_labels, final_scores);
+  vueron::PCDetCPU::postprocess(final_boxes, final_labels, final_scores);
 
   /*
       Reset buffers
