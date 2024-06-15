@@ -64,7 +64,7 @@ TEST(IntegrationTest, IntegrationTest) {
     std::vector<vueron::PredBox> pcdet_nms_boxes;
 
     // Do inference with pcdet
-    pcdet->do_infer(points, point_buf_len, point_stride, pcdet_nms_boxes);
+    pcdet->run(points, point_buf_len, point_stride, pcdet_nms_boxes);
 
     EXPECT_EQ(nms_boxes.size(), MAX_OBJ_PER_SAMPLE);
     EXPECT_EQ(nms_scores.size(), MAX_OBJ_PER_SAMPLE);

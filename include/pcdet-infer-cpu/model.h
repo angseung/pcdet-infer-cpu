@@ -14,6 +14,8 @@ class Model {
   Model() = default;
   virtual ~Model() = default;
 };
+
+class PCDetModel {};
 }  // namespace vueron
 
 #endif

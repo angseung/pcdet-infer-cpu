@@ -93,8 +93,8 @@ int main(int argc, const char **argv) {
     /*
         Do inference
     */
-    pcdet->do_infer(points, point_buf_len, POINT_STRIDE, nms_boxes, nms_labels,
-                    nms_scores);
+    pcdet->run(points, point_buf_len, POINT_STRIDE, nms_boxes, nms_labels,
+               nms_scores);
 
     /*
         Logging
