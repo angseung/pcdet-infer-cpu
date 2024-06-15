@@ -3,10 +3,11 @@
 
 #include <vector>
 
+#include "model.h"
 #include "onnxruntime_cxx_api.h"
 
 namespace vueron {
-class OrtModel {
+class OrtModel : public Model {
  private:
   Ort::MemoryInfo memory_info;
   Ort::Env env;
