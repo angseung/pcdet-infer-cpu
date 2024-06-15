@@ -11,7 +11,7 @@
 #include "pre.h"
 
 namespace vueron {
-class PCDet {
+class PCDetCPU {
  private:
   /*
       Buffers for Inference Pipeline
@@ -54,11 +54,11 @@ class PCDet {
   void get_pred(std::vector<PredBox> &boxes) const;
 
  public:
-  PCDet() = delete;
-  PCDet(const PCDet &copy) = delete;
-  PCDet &operator=(const PCDet &copy) = delete;
-  PCDet(const std::string &pfe_path, const std::string &rpn_path);
-  ~PCDet() = default;
+  PCDetCPU() = delete;
+  PCDetCPU(const PCDetCPU &copy) = delete;
+  PCDetCPU &operator=(const PCDetCPU &copy) = delete;
+  PCDetCPU(const std::string &pfe_path, const std::string &rpn_path);
+  ~PCDetCPU() = default;
   void run(const float *points, const size_t &point_buf_len,
            const size_t &point_stride, std::vector<PredBox> &boxes);
   void run(const float *points, const size_t &point_buf_len,

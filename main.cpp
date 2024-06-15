@@ -60,10 +60,10 @@ int main(int argc, const char **argv) {
   };
 
   /*
-    Init PCDet with metadata & runtimeconfig
+    Init PCDetCPU with metadata & runtimeconfig
   */
   const auto pcdet =
-      std::make_unique<vueron::PCDet>(PFE_FILE, RPN_FILE, &config);
+      std::make_unique<vueron::PCDetCPU>(PFE_FILE, RPN_FILE, &config);
 
   for (const auto &pcd_file : pcd_files) {
     /*

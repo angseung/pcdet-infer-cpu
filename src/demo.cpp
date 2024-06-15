@@ -70,7 +70,7 @@ int main(int argc, const char **argv) {
   };
 
   const auto pcdet =
-      std::make_unique<vueron::PCDet>(PFE_FILE, RPN_FILE, &config);
+      std::make_unique<vueron::PCDetCPU>(PFE_FILE, RPN_FILE, &config);
 
   for (size_t i = 0; i < num_test_files; i++) {
     const std::string pcd_file = pcd_files[i];

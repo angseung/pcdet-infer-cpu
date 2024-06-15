@@ -21,7 +21,7 @@ TEST(IntegrationTest, IntegrationTest) {
   constexpr size_t point_stride = POINT_STRIDE;
   std::string pfe_path(PFE_FILE);
   std::string rpn_path(RPN_FILE);
-  const auto pcdet = std::make_unique<vueron::PCDet>(pfe_path, rpn_path);
+  const auto pcdet = std::make_unique<vueron::PCDetCPU>(pfe_path, rpn_path);
 
   for (size_t i = 0; i < num_test_files; i++) {
     const std::string pcd_file = pcd_files[i];
