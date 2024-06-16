@@ -11,25 +11,24 @@ namespace fs = std::filesystem;
 
 int main(int argc, const char **argv) {
   const std::string wd = fs::current_path().u8string();
-  std::string folder_path;
+  std::string pcd_path;
   std::string metadata_path;
   if (argc < 2) {
     /*
         Case 1. Use default path for pcd and metadata
     */
     std::cout << "Usage: " << argv[0] << " <path_to_your_pcd_files_directory>"
-              << std::endl;
-    folder_path = "./pcd/cepton";
+              << " <path_to_your_metadata_files_directory>" << std::endl;
+    pcd_path = "./pcd/cepton";
     metadata_path = wd + "/models/gcm_v4_residual/metadata.json";
-    std::cout << "It will run with default pcd path: " << folder_path
-              << std::endl;
+    std::cout << "It will run with default pcd path: " << pcd_path << std::endl;
     std::cout << "It will run with default metadata file: " << metadata_path
               << std::endl;
   } else if (argc == 2) {
     /*
         Case 2. Use default path for metadata
     */
-    folder_path = argv[1];
+    pcd_path = argv[1];
     metadata_path = wd + "/models/gcm_v4_residual/metadata.json";
     std::cout << "It will run with default metadata file: " << metadata_path
               << std::endl;
@@ -37,11 +36,10 @@ int main(int argc, const char **argv) {
     /*
         Case 3. Use specified path for pcd and metadata
     */
-    folder_path = argv[1];
+    pcd_path = argv[1];
     metadata_path = argv[2];
   }
-  const std::vector<std::string> pcd_files =
-      vueron::getPCDFileList(folder_path);
+  const std::vector<std::string> pcd_files = vueron::getPCDFileList(pcd_path);
 
   /*
     Set Metadata & Runtimeconfig
