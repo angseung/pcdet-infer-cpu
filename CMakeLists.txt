@@ -10,7 +10,8 @@ set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
 # Build Options
-set(BUILD_DEMO OFF CACHE BOOL "Build Demo")
+set(BUILD_DEMO ON CACHE BOOL "Build Demo")
+set(BUILD_MAIN ON CACHE BOOL "Build Main")
 set(BUILD_TEST OFF CACHE BOOL "Build Tests")
 
 # Logging Options
@@ -38,9 +39,16 @@ configure_file(
 # Set the output directory for executable files
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin)
 
+# pcdet & demo
 add_subdirectory(src)
-add_executable(main main.cpp)
-target_link_libraries(main PUBLIC pcdet ${PCL_LIBRARIES})
+
+# main
+if (${BUILD_MAIN})
+    add_executable(main main.cpp)
+    target_link_libraries(main PUBLIC pcdet ${PCL_LIBRARIES})
+else ()
+    message(STATUS "SKIP BUILD MAIN")
+endif ()
 
 # GoogleTest
 if (${BUILD_TEST})
