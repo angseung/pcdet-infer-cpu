@@ -20,4 +20,4 @@
 
 namespace fs = std::filesystem;
 
-#endif //__DEMO_H__
+#endif  //__DEMO_H__
