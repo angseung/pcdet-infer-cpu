@@ -1,22 +1,4 @@
-#include <glob.h>
-#include <pcl/io/pcd_io.h>
-#include <pcl/point_types.h>
-
-#include <cstdlib>
-#include <filesystem>
-#include <iomanip>
-#include <string>
-#include <vector>
-
-#include "config.h"
-#include "draw/draw.h"
-#include "npy.h"
-#include "pcdet-infer-cpu/common/metadata.h"
-#include "pcdet-infer-cpu/common/runtimeconfig.h"
-#include "pcdet-infer-cpu/pcdet.h"
-#include "pcl.h"
-
-namespace fs = std::filesystem;
+#include "demo.h"
 
 int main(int argc, const char **argv) {
   const std::string wd = fs::current_path().u8string();
