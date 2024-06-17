@@ -63,15 +63,15 @@ cv::Mat drawBirdsEyeView(const size_t &points_size, const float *points_data,
     std::string text = floatToString(scores[i]);
     cv::putText(image, text, center, 1, 1.0f, cv::Scalar(0, 255, 255), 1);
 
-    for (int i = 0; i < 4; ++i) {
-      vertices[i] = rotatePoint(vertices[i], -box.heading);
-      vertices[i].x *= scale;
-      vertices[i].y *= scale;
-      vertices[i] += center;
+    for (auto &vertice : vertices) {
+      vertice = rotatePoint(vertice, -box.heading);
+      vertice.x *= scale;
+      vertice.y *= scale;
+      vertice += center;
     }
 
-    for (int i = 0; i < 4; ++i) {
-      cv::line(image, vertices[i], vertices[(i + 1) % 4], color, 2);
+    for (int j = 0; j < 4; ++j) {
+      cv::line(image, vertices[j], vertices[(j + 1) % 4], color, 2);
     }
   }
 
