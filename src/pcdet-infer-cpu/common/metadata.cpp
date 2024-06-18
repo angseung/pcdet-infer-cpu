@@ -10,7 +10,42 @@ namespace fs = std::filesystem;
 
 namespace vueron {
 
-inline json ReadFile(const std::string &filename) {
+MetaStruct::MetaStruct(const std::string& pfe_file, const std::string& rpn_file,
+                       float min_x_range, float max_x_range, float min_y_range,
+                       float max_y_range, float min_z_range, float max_z_range,
+                       float pillar_x_size, float pillar_y_size,
+                       float pillar_z_size, int num_point_values,
+                       bool zero_intensity, int max_num_points_per_pillar,
+                       int max_voxels, int feature_num, int num_feature_scatter,
+                       int grid_x_size, int grid_y_size, int grid_z_size,
+                       int class_num, int feature_x_size, int feature_y_size,
+                       const std::vector<float>& iou_rectifier)
+    : pfe_file(pfe_file),
+      rpn_file(rpn_file),
+      min_x_range(min_x_range),
+      max_x_range(max_x_range),
+      min_y_range(min_y_range),
+      max_y_range(max_y_range),
+      min_z_range(min_z_range),
+      max_z_range(max_z_range),
+      pillar_x_size(pillar_x_size),
+      pillar_y_size(pillar_y_size),
+      pillar_z_size(pillar_z_size),
+      num_point_values(num_point_values),
+      zero_intensity(zero_intensity),
+      max_num_points_per_pillar(max_num_points_per_pillar),
+      max_voxels(max_voxels),
+      feature_num(feature_num),
+      num_feature_scatter(num_feature_scatter),
+      grid_x_size(grid_x_size),
+      grid_y_size(grid_y_size),
+      grid_z_size(grid_z_size),
+      class_num(class_num),
+      feature_x_size(feature_x_size),
+      feature_y_size(feature_y_size),
+      iou_rectifier(iou_rectifier) {}
+
+inline json ReadFile(const std::string& filename) {
   std::ifstream file(filename);
 
   if (!file.is_open()) {
@@ -33,7 +68,7 @@ Metadata::Metadata() : pimpl(std::make_unique<Impl>()) {}
 
 Metadata::~Metadata() = default;
 
-void Metadata::Setup(const std::string &filename) {
+void Metadata::Setup(const std::string& filename) {
   pimpl->data = ReadFile(filename);
   const auto filepath = fs::path(filename);
   const auto directory = filepath.parent_path();
@@ -45,7 +80,7 @@ void Metadata::Setup(const std::string &filename) {
     std::cout << directory / pimpl->data["metadata_file"] << std::endl;
   }
   if (pimpl->data.contains("model_files")) {
-    for (auto &[key, model] : pimpl->data["model_files"].items()) {
+    for (auto& [key, model] : pimpl->data["model_files"].items()) {
       model = (directory / model).string();
       std::cout << model << std::endl;
     }
