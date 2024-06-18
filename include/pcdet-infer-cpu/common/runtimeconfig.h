@@ -52,7 +52,7 @@ struct RuntimeConfigSingleton {
   }
 };
 
-inline auto& GetRuntimeConfig() {
+inline RuntimeConfig& GetRuntimeConfig() {
   return RuntimeConfigSingleton::Instance().config;
 }
 inline void SetRuntimeConfig(const RuntimeConfig& config) {
