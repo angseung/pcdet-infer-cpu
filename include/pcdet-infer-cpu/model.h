@@ -1,6 +1,7 @@
 #ifndef __MODEL_H__
 #define __MODEL_H__
 
+#include <cstddef>
 #include <vector>
 
 #include "type.h"
