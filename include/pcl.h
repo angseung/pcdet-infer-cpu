@@ -13,6 +13,66 @@ namespace fs = std::filesystem;
 
 namespace vueron {
 
+class PCDReader {
+ private:
+  std::vector<float> data;
+  int stride = 0;
+
+ public:
+  PCDReader(const std::string &filePath, int expected_point_num = 0);
+
+  const std::vector<float> &getData() const { return data; }
+
+  int getStride() const { return stride; }
+};
+
+PCDReader::PCDReader(const std::string &filePath, int expected_point_num) {
+  std::ifstream file(filePath, std::ios::binary);
+  if (!file) {
+    std::cerr << "Failed to open file: " << filePath << std::endl;
+  }
+
+  std::string line;
+  std::map<std::string, int> fieldOffsets;
+  int pointSize = 0;
+  while (std::getline(file, line)) {
+    std::istringstream iss(line);
+    std::string token;
+    iss >> token;
+
+    if (token == "FIELDS") {
+      std::string field;
+      stride = 0;
+      while (iss >> field) {
+        fieldOffsets[field] = stride * sizeof(float);
+        stride++;
+      }
+      pointSize = stride * sizeof(float);
+    } else if (token == "DATA") {
+      std::string dataType;
+      iss >> dataType;
+      if (dataType != "binary") {
+        std::cerr << "This reader only supports binary data." << std::endl;
+      }
+      break;
+    }
+  }
+
+  std::vector<char> buffer(pointSize);
+  while (file.read(buffer.data(), pointSize)) {
+    for (int i = 0; i < stride; i++) {
+      if (expected_point_num != 0 && i == expected_point_num) {
+        break;
+      }
+      float value;
+      memcpy(&value, buffer.data() + i * sizeof(float), sizeof(float));
+      data.push_back(value);
+    }
+  }
+
+  file.close();
+}
+
 std::vector<std::string> getPCDFileList(const std::string &folder_path) {
   std::vector<std::string> file_list;
   for (const auto &entry : fs::directory_iterator(folder_path)) {
