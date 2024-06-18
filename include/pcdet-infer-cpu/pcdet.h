@@ -2,7 +2,6 @@
 #define __PCDET_H__
 
 #include <cstddef>
-#include <memory>  // for unique_ptr
 #include <vector>
 
 #include "pcdet-infer-cpu/common/runtimeconfig.h"

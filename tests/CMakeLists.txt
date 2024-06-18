@@ -64,7 +64,6 @@ gtest_discover_tests(rpn_test)
 gtest_discover_tests(integration_test)
 gtest_discover_tests(class_test)
 
-
 if (ENABLE_PCL)
     # Point cloud library
     find_package(PCL 1.8 REQUIRED)
