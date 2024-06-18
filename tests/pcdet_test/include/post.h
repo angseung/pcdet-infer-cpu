@@ -2,6 +2,7 @@
 #define __POST_H_TEST__
 
 #include <cmath>
+#include <cstddef>
 #include <vector>
 
 #include "params.h"

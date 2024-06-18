@@ -1,6 +1,7 @@
 #ifndef __PRE_H_TEST__
 #define __PRE_H_TEST__
 
+#include <cstddef>
 #include <vector>
 
 #include "params.h"

@@ -12,17 +12,12 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 # Build Options
 set(BUILD_DEMO ON CACHE BOOL "Build Demo")
 set(BUILD_MAIN ON CACHE BOOL "Build Main")
-set(BUILD_TEST OFF CACHE BOOL "Build Tests")
+set(BUILD_TEST ON CACHE BOOL "Build Tests")
 
 # Logging Options
 set(_PROFILE OFF CACHE BOOL "Logging Model Latency")
 set(_DEBUG OFF CACHE BOOL "Logging Debug Messages")
-
-# Point cloud library
-find_package(PCL 1.8 REQUIRED)
-include_directories(${PCL_INCLUDE_DIRS})
-link_directories(${PCL_LIBRARY_DIRS})
-add_definitions(${PCL_DEFINITIONS})
+set(ENABLE_PCL OFF CACHE BOOL "Use PCL Library to Read PCD Files")
 
 set(PFE_FILE ${PROJECT_SOURCE_DIR}/models/gcm_v4_residual/gcm_resfpn_falcon_v4_residual_gelu_full_zero_f71.68_r0_s52.48_pfe.onnx)
 set(RPN_FILE ${PROJECT_SOURCE_DIR}/models/gcm_v4_residual/gcm_resfpn_falcon_v4_residual_gelu_full_zero_f71.68_r0_s52.48_rpn.onnx)
@@ -45,7 +40,7 @@ add_subdirectory(src)
 # main
 if (${BUILD_MAIN})
     add_executable(main main.cpp)
-    target_link_libraries(main PUBLIC pcdet ${PCL_LIBRARIES})
+    target_link_libraries(main PUBLIC pcl pcdet)
 else ()
     message(STATUS "SKIP BUILD MAIN")
 endif ()

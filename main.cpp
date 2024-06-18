@@ -59,10 +59,11 @@ int main(int argc, const char **argv) {
     /*
       Read point data from pcd files
     */
-    const std::vector<float> points =
-        vueron::readPcdFile(pcd_file, MAX_POINT_NUM);
-    const float *point_data = points.data();
+    vueron::PCDReader reader(pcd_file, MAX_POINT_NUM);
+    const std::vector<float> points = reader.getData();
+    const size_t point_stride = reader.getStride();
     const size_t point_buf_len = points.size();
+    const float *point_data = points.data();
 
     /*
         Buffers for inference
@@ -74,7 +75,7 @@ int main(int argc, const char **argv) {
     /*
         Do inference
     */
-    pcdet->run(point_data, point_buf_len, POINT_STRIDE, nms_boxes, nms_labels,
+    pcdet->run(point_data, point_buf_len, point_stride, nms_boxes, nms_labels,
                nms_scores);
 
     /*
