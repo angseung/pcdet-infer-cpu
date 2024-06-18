@@ -27,7 +27,7 @@ wget https://github.com/microsoft/onnxruntime/releases/download/v1.16.3/onnxrunt
 tar -zxvf onnxruntime-osx-arm64-1.16.3.tgz
 
 # for Release build
-cmake -S. -BRelease -DBUILD_DEMO=ON -DBUILD_TEST=ON
+cmake -S. -BRelease -DBUILD_DEMO=ON -DBUILD_TEST=ON -DENABLE_PCL=ON
 cmake --build Release -j
 
 # for Debug build
@@ -46,7 +46,7 @@ wget https://github.com/microsoft/onnxruntime/releases/download/v1.16.3/onnxrunt
 tar -zxvf onnxruntime-linux-x64-1.16.3.tgz
 
 # for Release build
-cmake -S. -BRelease -DBUILD_DEMO=ON -DBUILD_TEST=ON
+cmake -S. -BRelease -DBUILD_DEMO=ON -DBUILD_TEST=ON -DENABLE_PCL=ON
 cmake --build Release -j
 
 # for Debug build

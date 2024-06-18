@@ -4,7 +4,8 @@ project(
         pcdet-infer-cpu
         VERSION 0.1
         DESCRIPTION "cpu inference framework for pcdet models"
-        LANGUAGES CXX)
+        LANGUAGES CXX
+)
 
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
@@ -38,7 +39,7 @@ set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin)
 add_subdirectory(src)
 
 # main
-if (${BUILD_MAIN})
+if (BUILD_MAIN)
     add_executable(main main.cpp)
     target_link_libraries(main PUBLIC pcl pcdet)
 else ()
