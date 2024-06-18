@@ -52,11 +52,11 @@ jobs:
       run: sudo apt update && sudo apt install libopencv-dev -y && wget https://github.com/microsoft/onnxruntime/releases/download/v1.16.3/onnxruntime-linux-x64-1.16.3.tgz && tar -zxvf onnxruntime-linux-x64-1.16.3.tgz && cmake -B ${{github.workspace}}/build -DCMAKE_BUILD_TYPE=${{env.BUILD_TYPE}}
 
     - name: Configure CMake for ubuntu-20.04
-      if: matrix.os == 'ubuntu-latest'
+      if: matrix.os == 'ubuntu-20.04'
       run: sudo apt update && sudo apt install libopencv-dev -y && wget https://github.com/microsoft/onnxruntime/releases/download/v1.16.3/onnxruntime-linux-x64-1.16.3.tgz && tar -zxvf onnxruntime-linux-x64-1.16.3.tgz && cmake -B ${{github.workspace}}/build -DCMAKE_BUILD_TYPE=${{env.BUILD_TYPE}}
 
     - name: Configure CMake for macos-latest
-      if: matrix.os == 'ubuntu-20.04'
+      if: matrix.os == 'macos-latest'
       run: brew update && brew install opencv pcl cmake && wget https://github.com/microsoft/onnxruntime/releases/download/v1.16.3/onnxruntime-osx-arm64-1.16.3.tgz && tar -zxvf onnxruntime-osx-arm64-1.16.3.tgz && cmake -B ${{github.workspace}}/build -DCMAKE_BUILD_TYPE=${{env.BUILD_TYPE}}
 
     - name: Build
