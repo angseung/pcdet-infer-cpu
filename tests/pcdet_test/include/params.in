@@ -72,7 +72,7 @@ std::vector<float> { 0.68f, 0.71f, 0.65f }
 
 #define PFE_FILE "@PFE_FILE@"
 #define RPN_FILE "@RPN_FILE@"
-#define POINT_STRIDE 4
+#define POINT_STRIDE 4  // stride of point data read with PCL
 #define RANDOM_SEED 123
 
 #endif  // __PARAMS_H__

@@ -133,7 +133,6 @@ inline void LoadMetadata(const std::string& filename) {
 #define FEATURE_Y_SIZE vueron::GetMetadata().feature_y_size
 #define IOU_RECTIFIER vueron::GetMetadata().iou_rectifier
 
-#define POINT_STRIDE 4
 #define INTENSITY_NORMALIZE_DIV 255
 
 #endif  // __METADATA_H__

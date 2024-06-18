@@ -1,5 +1,6 @@
 # src/CMakeLists.txt
 
+add_subdirectory(pcl)
 add_subdirectory(pcdet-infer-cpu)
 
 if (${BUILD_DEMO})
@@ -7,9 +8,9 @@ if (${BUILD_DEMO})
     add_executable(demo demo.cpp)
     target_link_libraries(
             demo
+            pcl
             pcdet
             draw
-            ${PCL_LIBRARIES}
     )
 else ()
     message(STATUS "SKIP BUILD DEMO")

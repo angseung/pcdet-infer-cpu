@@ -10,7 +10,7 @@ target_link_libraries(
         voxel_snapshot_test
         GTest::gtest_main
         pcdet_test
-        ${PCL_LIBRARIES}
+        pcl
 )
 
 add_executable(
@@ -21,7 +21,7 @@ target_link_libraries(
         preprocess_value_test
         GTest::gtest_main
         pcdet_test
-        ${PCL_LIBRARIES}
+        pcl
 )
 
 add_executable(
@@ -32,7 +32,7 @@ target_link_libraries(
         rpn_test
         GTest::gtest_main
         pcdet_test
-        ${PCL_LIBRARIES}
+        pcl
 )
 
 add_executable(
@@ -43,7 +43,7 @@ target_link_libraries(
         integration_test
         GTest::gtest_main
         pcdet_test
-        ${PCL_LIBRARIES}
+        pcl
 )
 
 add_executable(
@@ -54,7 +54,7 @@ target_link_libraries(
         class_test
         GTest::gtest_main
         pcdet_test
-        ${PCL_LIBRARIES}
+        pcl
 )
 
 include(GoogleTest)
@@ -63,3 +63,26 @@ gtest_discover_tests(preprocess_value_test)
 gtest_discover_tests(rpn_test)
 gtest_discover_tests(integration_test)
 gtest_discover_tests(class_test)
+
+
+if (ENABLE_PCL)
+    # Point cloud library
+    find_package(PCL 1.8 REQUIRED)
+    include_directories(${PCL_INCLUDE_DIRS})
+    link_directories(${PCL_LIBRARY_DIRS})
+    add_definitions(${PCL_DEFINITIONS})
+
+    add_executable(
+            pcl_test
+            pcl_test.cpp
+    )
+    target_link_libraries(
+            pcl_test
+            GTest::gtest_main
+            pcdet_test
+            ${PCL_LIBRARIES}
+    )
+    gtest_discover_tests(pcl_test)
+else ()
+    message(STATUS "DO NOT USE PCL")
+endif ()
