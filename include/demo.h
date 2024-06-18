@@ -2,8 +2,6 @@
 #define __DEMO_H__
 
 #include <glob.h>
-#include <pcl/io/pcd_io.h>
-#include <pcl/point_types.h>
 
 #include <cstdlib>
 #include <filesystem>
