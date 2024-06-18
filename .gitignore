@@ -50,6 +50,6 @@ bak/
 falcon/
 cepton/
 *.zip
-outputs/
+outputs*/
 cmake-build-debug/
 .idea/
