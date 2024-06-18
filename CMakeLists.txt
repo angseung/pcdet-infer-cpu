@@ -45,7 +45,7 @@ add_subdirectory(src)
 # main
 if (${BUILD_MAIN})
     add_executable(main main.cpp)
-    target_link_libraries(main PUBLIC pcdet)
+    target_link_libraries(main PUBLIC pcdet pcl)
 else ()
     message(STATUS "SKIP BUILD MAIN")
 endif ()

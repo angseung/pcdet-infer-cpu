@@ -1,6 +1,7 @@
 # src/CMakeLists.txt
 
 add_subdirectory(pcdet-infer-cpu)
+add_subdirectory(pcl)
 
 if (${BUILD_DEMO})
     add_subdirectory(draw)
@@ -9,6 +10,7 @@ if (${BUILD_DEMO})
             demo
             pcdet
             draw
+            pcl
     )
 else ()
     message(STATUS "SKIP BUILD DEMO")
