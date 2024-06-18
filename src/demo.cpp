@@ -58,10 +58,11 @@ int main(int argc, const char **argv) {
     /*
         Read points from pcd files
     */
-    const std::vector<float> buffer =
-        vueron::readPcdFile(pcd_file, MAX_POINT_NUM);
-    const float *points = buffer.data();
+    vueron::PCDReader reader(pcd_file, MAX_POINT_NUM);
+    const std::vector<float> buffer = reader.getData();
+    const size_t point_stride = reader.getStride();
     const size_t point_buf_len = buffer.size();
+    const float *points = buffer.data();
 
     /*
         Buffers for inferece
@@ -73,7 +74,7 @@ int main(int argc, const char **argv) {
     /*
         Do inference
     */
-    pcdet->run(points, point_buf_len, POINT_STRIDE, nms_boxes, nms_labels,
+    pcdet->run(points, point_buf_len, point_stride, nms_boxes, nms_labels,
                nms_scores);
 
     /*
@@ -90,7 +91,7 @@ int main(int argc, const char **argv) {
               << std::setw(3) << ped_cnt << "), cyclist(" << std::setw(3)
               << cyc_cnt << ")" << std::endl;
 
-    auto image = drawBirdsEyeView(buffer.size() / POINT_STRIDE, points,
+    auto image = drawBirdsEyeView(point_buf_len, point_stride, points,
                                   nms_boxes, nms_scores, nms_labels);
     cv::imshow("Bird's Eye View", image);
     cv::waitKey(0);

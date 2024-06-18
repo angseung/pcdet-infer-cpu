@@ -2,10 +2,9 @@
 #define __PCL_H__
 
 #include <glob.h>
-#include <pcl/io/pcd_io.h>
-#include <pcl/point_types.h>
 
 #include <filesystem>  // For std::filesystem
+#include <map>
 #include <string>
 #include <vector>
 
@@ -108,30 +107,6 @@ std::vector<std::string> getFileList(const std::string &folder_path) {
     std::cout << "There's no file in " + folder_path << std::endl;
   }
   return files;
-}
-
-std::vector<float> readPcdFile(const std::string &file_path,
-                               const size_t &max_points) {
-  std::vector<float> points;
-  pcl::PointCloud<pcl::PointXYZI>::Ptr cloud(
-      new pcl::PointCloud<pcl::PointXYZI>);
-
-  if (pcl::io::loadPCDFile<pcl::PointXYZI>(file_path, *cloud) == -1) {
-    PCL_ERROR("Couldn't read the PCD file \n");
-    return points;
-  }
-
-  size_t point_count = std::min(max_points, cloud->points.size());
-  points.reserve(point_count * 4);  // Reserve space for x, y, z, intensity
-
-  for (size_t i = 0; i < point_count; ++i) {
-    points.push_back(cloud->points[i].x);
-    points.push_back(cloud->points[i].y);
-    points.push_back(cloud->points[i].z);
-    points.push_back(cloud->points[i].intensity);
-  }
-
-  return points;
 }
 }  // namespace vueron
 

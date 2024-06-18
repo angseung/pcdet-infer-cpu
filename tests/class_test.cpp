@@ -18,7 +18,6 @@ TEST(IntegrationTest, IntegrationTest) {
   std::string folder_path = PCD_PATH;
   std::vector<std::string> pcd_files = vueron::getPCDFileList(folder_path);
   const size_t num_test_files = pcd_files.size();
-  constexpr size_t point_stride = POINT_STRIDE;
   std::string pfe_path(PFE_FILE);
   std::string rpn_path(RPN_FILE);
   const auto pcdet = std::make_unique<vueron::PCDetCPU>(pfe_path, rpn_path);
@@ -26,10 +25,11 @@ TEST(IntegrationTest, IntegrationTest) {
   for (size_t i = 0; i < num_test_files; i++) {
     const std::string pcd_file = pcd_files[i];
     std::cout << "Testing : " << pcd_file << std::endl;
-    const std::vector<float> buffer =
-        vueron::readPcdFile(pcd_file, MAX_POINT_NUM);
+    vueron::PCDReader reader(pcd_file, MAX_POINT_NUM);
+    const std::vector<float> buffer = reader.getData();
+    const size_t point_stride = reader.getStride();
+    const size_t point_buf_len = buffer.size();
     const float *points = buffer.data();
-    size_t point_buf_len = buffer.size();
 
     /*
         Buffers for Inference

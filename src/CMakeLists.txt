@@ -9,7 +9,6 @@ if (${BUILD_DEMO})
             demo
             pcdet
             draw
-            ${PCL_LIBRARIES}
     )
 else ()
     message(STATUS "SKIP BUILD DEMO")

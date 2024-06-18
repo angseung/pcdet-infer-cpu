@@ -75,10 +75,10 @@ TEST(RPNTest, RPNValueTest) {
     std::cout << "Testing : " << pcd_file << std::endl;
 
     // read point from pcd file
-    const std::vector<float> points =
-        vueron::readPcdFile(pcd_file, MAX_POINT_NUM);
-    const size_t points_buf_len = points.size();
-    constexpr size_t point_stride = POINT_STRIDE;
+    vueron::PCDReader reader(pcd_file, MAX_POINT_NUM);
+    const std::vector<float> points = reader.getData();
+    const size_t point_stride = reader.getStride();
+    const size_t point_buf_len = points.size();
     std::vector<vueron::Pillar> bev_pillar(
         GRID_Y_SIZE * GRID_X_SIZE, vueron::Pillar(MAX_NUM_POINTS_PER_PILLAR));
     std::vector<size_t> voxel_coords;  // (x, y)
@@ -92,7 +92,7 @@ TEST(RPNTest, RPNValueTest) {
         GRID_Y_SIZE * GRID_X_SIZE * NUM_FEATURE_SCATTER,
         0.0f);  // input of RPN
     std::vector<std::vector<float>> rpn_output;
-    vueron::voxelization(bev_pillar, (float *)points.data(), points_buf_len,
+    vueron::voxelization(bev_pillar, (float *)points.data(), point_buf_len,
                          point_stride);
     size_t num_pillars = vueron::point_decoration(
         bev_pillar, voxel_coords, voxel_num_points, pfe_input,
@@ -127,12 +127,14 @@ TEST(RPNTest, RPNValueTest) {
 
     vueron::rpn_run(bev_image, rpn_output);
     std::vector<size_t> head_output_channels{
-        static_cast<size_t>(CLASS_NUM),
-        3,
-        2,
-        1,
-        2,
-        1};  // {hm, dim, center, center_z, rot, iou}
+        static_cast<size_t>(CLASS_NUM),  // hm
+        3,                               // dim
+        2,                               // center
+        1,                               // center_z
+        2,                               // rot
+        1                                // iou
+    };
+
     size_t head_dim = GRID_X_SIZE * GRID_Y_SIZE / 4;
 
     // read snapshot file
