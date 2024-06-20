@@ -14,20 +14,19 @@
 
 - GCC or Clang Complier
 - OpenCV
-- PCL
-- cmake ≥ 3.24
+- cmake ≥ 3.11
 
 ## 2.2. macOS (AArch64)
 
 ```bash
 git clone https://github.com/angseung/pcdet-infer-cpu.git
 cd pcdet-infer-cpu
-brew install pcl cmake ninja opencv
+brew install cmake ninja opencv
 wget https://github.com/microsoft/onnxruntime/releases/download/v1.16.3/onnxruntime-osx-arm64-1.16.3.tgz
 tar -zxvf onnxruntime-osx-arm64-1.16.3.tgz
 
 # for Release build
-cmake -S. -BRelease -DBUILD_DEMO=ON -DBUILD_TEST=ON -DENABLE_PCL=ON
+cmake -S. -BRelease -DBUILD_DEMO=ON -DBUILD_TEST=ON
 cmake --build Release -j
 
 # for Debug build
@@ -46,7 +45,7 @@ wget https://github.com/microsoft/onnxruntime/releases/download/v1.16.3/onnxrunt
 tar -zxvf onnxruntime-linux-x64-1.16.3.tgz
 
 # for Release build
-cmake -S. -BRelease -DBUILD_DEMO=ON -DBUILD_TEST=ON -DENABLE_PCL=ON
+cmake -S. -BRelease -DBUILD_DEMO=ON -DBUILD_TEST=ON
 cmake --build Release -j
 
 # for Debug build
