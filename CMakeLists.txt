@@ -18,7 +18,6 @@ set(BUILD_TEST ON CACHE BOOL "Build Tests")
 # Logging Options
 set(_PROFILE OFF CACHE BOOL "Logging Model Latency")
 set(_DEBUG OFF CACHE BOOL "Logging Debug Messages")
-set(ENABLE_PCL OFF CACHE BOOL "Use PCL Library to Read PCD Files")
 
 set(PFE_FILE ${PROJECT_SOURCE_DIR}/models/gcm_v4_residual/gcm_resfpn_falcon_v4_residual_gelu_full_zero_f71.68_r0_s52.48_pfe.onnx)
 set(RPN_FILE ${PROJECT_SOURCE_DIR}/models/gcm_v4_residual/gcm_resfpn_falcon_v4_residual_gelu_full_zero_f71.68_r0_s52.48_rpn.onnx)
