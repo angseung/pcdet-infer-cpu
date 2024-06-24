@@ -27,9 +27,9 @@ jobs:
       #
       # To add more build types (Release, Debug, RelWithDebInfo, etc.) customize the build_type list.
       matrix:
-        os: [ubuntu-20.04, ubuntu-latest, macos-latest]
-        build_type: [Release]
-        c_compiler: [gcc, clang]
+        os: [ ubuntu-20.04, ubuntu-latest, macos-latest ]
+        build_type: [ Release ]
+        c_compiler: [ gcc, clang ]
         include:
           - os: macos-latest
             c_compiler: clang
@@ -45,20 +45,20 @@ jobs:
     # See: https://docs.github.com/en/free-pro-team@latest/actions/learn-github-actions/managing-complex-workflows#using-a-build-matrix
 
     steps:
-    - uses: actions/checkout@v4
+      - uses: actions/checkout@v4
 
-    - name: Configure CMake for ubuntu-latest
-      if: matrix.os == 'ubuntu-latest'
-      run: sudo apt update && sudo apt install libopencv-dev -y && wget https://github.com/microsoft/onnxruntime/releases/download/v1.16.3/onnxruntime-linux-x64-1.16.3.tgz && tar -zxvf onnxruntime-linux-x64-1.16.3.tgz && cmake -B ${{github.workspace}}/build -DCMAKE_BUILD_TYPE=${{env.BUILD_TYPE}}
+      - name: Configure CMake for ubuntu-latest
+        if: matrix.os == 'ubuntu-latest'
+        run: sudo apt update && sudo apt install libopencv-dev -y && wget https://github.com/microsoft/onnxruntime/releases/download/v1.16.3/onnxruntime-linux-x64-1.16.3.tgz && tar -zxvf onnxruntime-linux-x64-1.16.3.tgz && cmake -B ${{github.workspace}}/build -DCMAKE_BUILD_TYPE=${{env.BUILD_TYPE}}
 
-    - name: Configure CMake for ubuntu-20.04
-      if: matrix.os == 'ubuntu-20.04'
-      run: sudo apt update && sudo apt install libopencv-dev -y && wget https://github.com/microsoft/onnxruntime/releases/download/v1.16.3/onnxruntime-linux-x64-1.16.3.tgz && tar -zxvf onnxruntime-linux-x64-1.16.3.tgz && cmake -B ${{github.workspace}}/build -DCMAKE_BUILD_TYPE=${{env.BUILD_TYPE}}
+      - name: Configure CMake for ubuntu-20.04
+        if: matrix.os == 'ubuntu-20.04'
+        run: sudo apt update && sudo apt install libopencv-dev -y && wget https://github.com/microsoft/onnxruntime/releases/download/v1.16.3/onnxruntime-linux-x64-1.16.3.tgz && tar -zxvf onnxruntime-linux-x64-1.16.3.tgz && cmake -B ${{github.workspace}}/build -DCMAKE_BUILD_TYPE=${{env.BUILD_TYPE}}
 
-    - name: Configure CMake for macos-latest
-      if: matrix.os == 'macos-latest'
-      run: brew update && brew install opencv cmake && wget https://github.com/microsoft/onnxruntime/releases/download/v1.16.3/onnxruntime-osx-arm64-1.16.3.tgz && tar -zxvf onnxruntime-osx-arm64-1.16.3.tgz && cmake -B ${{github.workspace}}/build -DCMAKE_BUILD_TYPE=${{env.BUILD_TYPE}}
+      - name: Configure CMake for macos-latest
+        if: matrix.os == 'macos-latest'
+        run: brew update && brew install opencv cmake && wget https://github.com/microsoft/onnxruntime/releases/download/v1.16.3/onnxruntime-osx-arm64-1.16.3.tgz && tar -zxvf onnxruntime-osx-arm64-1.16.3.tgz && cmake -B ${{github.workspace}}/build -DCMAKE_BUILD_TYPE=${{env.BUILD_TYPE}} -DBUILD_TEST=OFF -DBUILD_DEMO=OFF
 
-    - name: Build
-      # Build your program with the given configuration
-      run: cmake --build ${{github.workspace}}/build
+      - name: Build
+        # Build your program with the given configuration
+        run: cmake --build ${{github.workspace}}/build

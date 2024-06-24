@@ -34,7 +34,7 @@ cmake -S. -BDebug -DBUILD_DEMO=ON -DBUILD_TEST=ON -DCMAKE_BUILD_TYPE=Debug
 cmake --build Debug -j
 ```
 
-# 2.2. Linux (x86)
+## 2.3. Linux (x86)
 
 ```bash
 git clone https://github.com/angseung/pcdet-infer-cpu.git
