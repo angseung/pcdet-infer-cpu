@@ -57,7 +57,7 @@ jobs:
 
       - name: Configure CMake for macos-latest
         if: matrix.os == 'macos-latest'
-        run: brew update && brew install opencv@4.8.1 cmake && wget https://github.com/microsoft/onnxruntime/releases/download/v1.16.3/onnxruntime-osx-arm64-1.16.3.tgz && tar -zxvf onnxruntime-osx-arm64-1.16.3.tgz && cmake -B ${{github.workspace}}/build -DCMAKE_BUILD_TYPE=${{env.BUILD_TYPE}}
+        run: brew update && brew install opencv cmake && wget https://github.com/microsoft/onnxruntime/releases/download/v1.16.3/onnxruntime-osx-arm64-1.16.3.tgz && tar -zxvf onnxruntime-osx-arm64-1.16.3.tgz && cmake -B ${{github.workspace}}/build -DCMAKE_BUILD_TYPE=${{env.BUILD_TYPE}}
 
       - name: Build
         # Build your program with the given configuration
