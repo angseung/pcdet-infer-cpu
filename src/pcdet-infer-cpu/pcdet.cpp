@@ -34,6 +34,8 @@ vueron::PCDetCPU::PCDetCPU(const std::string &pfe_path,
   }
 };
 
+vueron::PCDetCPU::~PCDetCPU() = default;
+
 void vueron::PCDetCPU::preprocess(const float *points,
                                   const size_t &point_buf_len,
                                   const size_t &point_stride) {

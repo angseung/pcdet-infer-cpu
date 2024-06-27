@@ -37,6 +37,8 @@ vueron::OrtModel::OrtModel(const std::string &onnx_path,
   }
 }
 
+vueron::OrtModel::~OrtModel() = default;
+
 void vueron::OrtModel::run(const std::vector<float> &model_input,
                            std::vector<std::vector<float>> &model_output) {
   /*
