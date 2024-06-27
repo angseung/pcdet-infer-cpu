@@ -1,6 +1,7 @@
 #ifndef __METADATA_H__
 #define __METADATA_H__
 
+#include <iostream>
 #include <memory>
 #include <string>
 #include <vector>
@@ -65,12 +66,12 @@ class Metadata {
       "PFE_FILE",  // std::string pfe_file
       "RPN_FILE",  // std::string rpn_file
 
-      0.0f,     // float min_x_ranges
-      71.68f,   // float max_x_ranges
-      -52.48f,  // float min_y_ranges
-      52.48f,   // float max_y_ranges
-      -2.0f,    // float min_z_ranges
-      4.0f,     // float max_z_ranges
+      0.0f,     // float min_x_range
+      71.68f,   // float max_x_range
+      -52.48f,  // float min_y_range
+      52.48f,   // float max_y_range
+      -2.0f,    // float min_z_range
+      4.0f,     // float max_z_range
 
       0.32f,  // float pillar_x_size
       0.32f,  // float pillar_y_size
@@ -104,7 +105,12 @@ class Metadata {
   }
 };
 
+std::ostream& operator<<(std::ostream& os, const Metadata& metadata);
+
+inline Metadata& GetMetaInstance() { return Metadata::Instance(); }
+
 inline MetaStruct& GetMetadata() { return Metadata::Instance().metastruct; }
+
 inline void LoadMetadata(const std::string& filename) {
   Metadata::Load(filename);
 }
