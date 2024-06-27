@@ -4,6 +4,8 @@
 
 #include <algorithm>
 #include <cassert>
+#include <cmath>
+#include <iostream>
 #include <numeric>
 #include <random>
 
@@ -55,6 +57,12 @@ void vueron::voxelization(std::vector<Pillar> &bev_pillar, const float *points,
         point_y < MIN_Y_RANGE || point_y > MAX_Y_RANGE ||
         point_z < MIN_Z_RANGE || point_z > MAX_Z_RANGE) {
       continue;
+    }
+
+    if (std::isnan(point_x) || std::isnan(point_y) || std::isnan(point_z)) {
+      std::cout << "point value has nan." << std::endl;
+      std::cout << "Terminate Program" << std::endl;
+      exit(1);
     }
 
     // check out-of-range point
