@@ -58,7 +58,7 @@ class PCDetCPU : public PCDet {
   PCDetCPU &operator=(const PCDetCPU &copy) = delete;
   PCDetCPU(const std::string &pfe_path, const std::string &rpn_path,
            const RuntimeConfig *runtimeconfig = nullptr);
-  ~PCDetCPU() override = default;
+  ~PCDetCPU() override;
   void run(const float *points, const size_t &point_buf_len,
            const size_t &point_stride, std::vector<PredBox> &boxes) override;
   void run(const float *points, const size_t &point_buf_len,

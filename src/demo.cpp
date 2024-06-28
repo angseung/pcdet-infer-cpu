@@ -51,6 +51,9 @@ int main(int argc, const char **argv) {
       0.2f,     // float nms_iou_thd;
   };
 
+  std::cout << vueron::GetMetaInstance() << std::endl;
+  std::cout << vueron::GetRuntimInstance() << std::endl;
+
   const auto pcdet =
       std::make_unique<vueron::PCDetCPU>(PFE_FILE, RPN_FILE, &config);
 

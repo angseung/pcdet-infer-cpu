@@ -3,6 +3,7 @@
 
 #ifdef __cplusplus
 #include <cstddef>
+#include <iostream>
 #else
 #include <stddef.h>
 #endif
@@ -17,6 +18,7 @@ struct RuntimeConfig {
   float pre_nms_distance_thd;
   float nms_iou_thd;
 
+#ifdef __cplusplus
   RuntimeConfig() = delete;
   explicit RuntimeConfig(int max_points = 1000000,
                          unsigned char shuffle_on = true,
@@ -26,6 +28,7 @@ struct RuntimeConfig {
                          float pre_nms_distance_thd = 10.0f,
                          float nms_iou_thd = 0.2f);
   ~RuntimeConfig() = default;
+#endif
 };
 
 #ifdef __cplusplus
@@ -52,6 +55,13 @@ struct RuntimeConfigSingleton {
   }
 };
 
+std::ostream& operator<<(std::ostream& os,
+                         const RuntimeConfigSingleton& runtimeconfigsingletone);
+
+inline RuntimeConfigSingleton& GetRuntimInstance() {
+  return RuntimeConfigSingleton::Instance();
+}
+
 inline RuntimeConfig& GetRuntimeConfig() {
   return RuntimeConfigSingleton::Instance().config;
 }
@@ -72,6 +82,6 @@ inline void SetRuntimeConfig(const RuntimeConfig& config) {
 #define CONF_THRESH 0.4f
 #define RANDOM_SEED 123
 
-#endif
+#endif  //__cplusplus
 
 #endif  // __RUNTIMECONFIG_H__
