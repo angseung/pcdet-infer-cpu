@@ -13,8 +13,8 @@ std::string floatToString(const float value) {
   return out.str();
 }
 
-cv::Mat drawBirdsEyeView(const size_t &point_buf_len,
-                         const size_t &point_stride, const float *points_data,
+cv::Mat drawBirdsEyeView(const size_t point_buf_len, const size_t point_stride,
+                         const float *points_data,
                          const std::vector<vueron::BndBox> &boxes,
                          const std::vector<float> &scores,
                          const std::vector<size_t> &labels) {

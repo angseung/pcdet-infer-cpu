@@ -11,7 +11,7 @@
 
 #include "onnxruntime_cxx_api.h"
 
-vueron::Pillar::Pillar(const size_t &point_num)
+vueron::Pillar::Pillar(const size_t point_num)
     : point_index(point_num, 0),
       pillar_grid_x(0),
       pillar_grid_y(0),
@@ -19,8 +19,8 @@ vueron::Pillar::Pillar(const size_t &point_num)
       is_empty(true) {}
 
 void vueron::voxelization(std::vector<Pillar> &bev_pillar, const float *points,
-                          const size_t &points_buf_len,
-                          const size_t &point_stride) {
+                          const size_t points_buf_len,
+                          const size_t point_stride) {
   // check grid size
   assert(GRID_X_SIZE == (float)((MAX_X_RANGE - MIN_X_RANGE) / PILLAR_X_SIZE));
   assert(GRID_Y_SIZE == (float)((MAX_Y_RANGE - MIN_Y_RANGE) / PILLAR_Y_SIZE));
@@ -94,7 +94,7 @@ size_t vueron::point_decoration(const std::vector<Pillar> &bev_pillar,
                                 std::vector<size_t> &voxel_num_points,
                                 std::vector<float> &pfe_input,
                                 const float *points,
-                                const size_t &point_stride) {
+                                const size_t point_stride) {
   size_t num_pillars = 0;
   size_t index = 0;
 
@@ -201,7 +201,7 @@ size_t vueron::point_decoration(const std::vector<Pillar> &bev_pillar,
 
 void vueron::scatter(const std::vector<float> &pfe_output,
                      const std::vector<size_t> &voxel_coords,
-                     const size_t &num_pillars, std::vector<float> &rpn_input) {
+                     const size_t num_pillars, std::vector<float> &rpn_input) {
   assert(rpn_input.size() == GRID_Y_SIZE * GRID_X_SIZE * NUM_FEATURE_SCATTER);
   assert(pfe_output.size() == MAX_VOXELS * NUM_FEATURE_SCATTER);
 

@@ -24,7 +24,7 @@ class OrtModel {
   OrtModel() = delete;
   OrtModel(const std::string &onnx_path,
            const std::vector<int64_t> &input_node_dims,
-           const size_t &input_tensor_size);
+           const size_t input_tensor_size);
   OrtModel(const OrtModel &copy) = delete;
   OrtModel &operator=(const OrtModel &copy) = delete;
   ~OrtModel() = default;

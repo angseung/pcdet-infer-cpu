@@ -102,7 +102,7 @@ void vueron::decode_to_boxes(const std::vector<std::vector<float>> &rpn_output,
 
 void vueron::nms(const std::vector<BndBox> &boxes,
                  const std::vector<float> &scores,
-                 std::vector<bool> &suppressed, const float &iou_threshold) {
+                 std::vector<bool> &suppressed, const float iou_threshold) {
   assert(boxes.size() == scores.size());
   // sort boxes based on their scores (descending order)
   std::vector<size_t> indices(boxes.size());
