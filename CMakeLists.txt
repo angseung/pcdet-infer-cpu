@@ -46,7 +46,7 @@ else ()
 endif ()
 
 # GoogleTest
-if (${BUILD_TEST})
+if (BUILD_TEST)
     include(FetchContent)
     FetchContent_Declare(
             googletest

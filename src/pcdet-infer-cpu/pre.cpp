@@ -16,7 +16,7 @@ vueron::Pillar::Pillar(const size_t &point_num)
       pillar_grid_x(0),
       pillar_grid_y(0),
       point_num_in_pillar(0),
-      is_empty(true){};
+      is_empty(true) {}
 
 void vueron::voxelization(std::vector<Pillar> &bev_pillar, const float *points,
                           const size_t &points_buf_len,
