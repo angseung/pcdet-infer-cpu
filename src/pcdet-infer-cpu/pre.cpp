@@ -207,6 +207,7 @@ void vueron::scatter(const std::vector<float> &pfe_output,
 
   for (size_t i = 0; i < num_pillars; i++) {
     // voxel_coords : (x, y)
+    // TODO: Check here, index error occured.
     const size_t curr_grid_x = voxel_coords[2 * i];
     const size_t curr_grid_y = voxel_coords[2 * i + 1];
     const size_t source_voxel_index = NUM_FEATURE_SCATTER * i;
