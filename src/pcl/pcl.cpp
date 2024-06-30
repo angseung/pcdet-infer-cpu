@@ -48,6 +48,10 @@ vueron::PCDReader::PCDReader(const std::string &filePath,
   while (file.read(buffer.data(), pointSize)) {
     for (int i = 0; i < stride; i++) {
       if (expected_point_num != 0 && i == expected_point_num) {
+        std::cout << "WARNING from " << filePath << "." << std::endl;
+        std::cout << "The number of point in this pcd file is larger than "
+                     "expected_point_num: "
+                  << expected_point_num << ". \nEarly stop." << std::endl;
         break;
       }
       float value;

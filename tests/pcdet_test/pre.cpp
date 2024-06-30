@@ -4,6 +4,7 @@
 
 #include <algorithm>
 #include <cassert>
+#include <iostream>
 #include <numeric>
 #include <random>
 
@@ -44,16 +45,30 @@ void vueron::voxelization(std::vector<Pillar> &bev_pillar, const float *points,
     const float point_x = points[point_stride * i];
     const float point_y = points[point_stride * i + 1];
     const float point_z = points[point_stride * i + 2];
+    const float point_w = points[point_stride * i + 3];
+
+    if (std::isnan(point_x) || std::isnan(point_y) || std::isnan(point_z) ||
+        std::isnan(point_w)) {
+      std::cout << "point value has nan." << std::endl;
+      std::cout << "Terminate Program" << std::endl;
+      exit(1);
+    }
+
+    assert(!std::isnan(point_x));
+    assert(!std::isnan(point_y));
+    assert(!std::isnan(point_z));
+    assert(!std::isnan(point_w));
 
     const size_t voxel_index_x =
         floorf((point_x - MIN_X_RANGE) / PILLAR_X_SIZE);
     const size_t voxel_index_y =
         floorf((point_y - MIN_Y_RANGE) / PILLAR_Y_SIZE);
 
-    // skip if out-of-range point
+    // skip if out-of-range point or current point is located in edge
     if (point_x < MIN_X_RANGE || point_x > MAX_X_RANGE ||
         point_y < MIN_Y_RANGE || point_y > MAX_Y_RANGE ||
-        point_z < MIN_Z_RANGE || point_z > MAX_Z_RANGE) {
+        point_z < MIN_Z_RANGE || point_z > MAX_Z_RANGE ||
+        voxel_index_x >= GRID_X_SIZE || voxel_index_y >= GRID_Y_SIZE) {
       continue;
     }
 
