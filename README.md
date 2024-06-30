@@ -34,13 +34,13 @@ cmake -S. -BDebug -DBUILD_DEMO=ON -DBUILD_TEST=ON -DCMAKE_BUILD_TYPE=Debug
 cmake --build Debug -j
 ```
 
-## 2.3. Linux (x86)
+## 2.3. Linux (x86-64)
 
 ```bash
 git clone https://github.com/angseung/pcdet-infer-cpu.git
 cd pcdet-infer-cpu
 sudo apt update
-sudo apt install cmake libopencv-dev -y
+sudo apt install cmake libopencv-dev build-essential -y
 wget https://github.com/microsoft/onnxruntime/releases/download/v1.16.3/onnxruntime-linux-x64-1.16.3.tgz
 tar -zxvf onnxruntime-linux-x64-1.16.3.tgz
 
