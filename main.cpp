@@ -49,8 +49,8 @@ int main(int argc, const char **argv) {
       0.2f,     // float nms_iou_thd;
   };
 
-  std::cout << vueron::GetMetaInstance() << std::endl;
-  std::cout << vueron::GetRuntimeInstance() << std::endl;
+  std::cout << vueron::GetMetadata() << std::endl;
+  std::cout << vueron::GetRuntimeConfig() << std::endl;
 
   /*
     Init PCDetCPU with metadata & runtimeconfig

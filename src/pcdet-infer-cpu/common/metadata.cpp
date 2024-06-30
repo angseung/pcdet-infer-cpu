@@ -46,39 +46,38 @@ MetaStruct::MetaStruct(std::string pfe_file, std::string rpn_file,
       feature_y_size(feature_y_size),
       iou_rectifier(iou_rectifier) {}
 
-std::ostream& operator<<(std::ostream& os, const Metadata& metadata) {
+std::ostream& operator<<(std::ostream& os, const MetaStruct& metastruct) {
   os << "=============== Metadata ===============\n"
-     << "pfe_file: " << metadata.metastruct.pfe_file << "\n"
-     << "rpn_file: " << metadata.metastruct.rpn_file << "\n"
-     << "min_x_range: " << metadata.metastruct.min_x_range << "\n"
-     << "max_x_range: " << metadata.metastruct.max_x_range << "\n"
-     << "min_y_range: " << metadata.metastruct.min_y_range << "\n"
-     << "max_y_range: " << metadata.metastruct.max_y_range << "\n"
-     << "min_z_range: " << metadata.metastruct.min_z_range << "\n"
-     << "max_z_range: " << metadata.metastruct.max_z_range << "\n"
-     << "pillar_x_size: " << metadata.metastruct.pillar_x_size << "\n"
-     << "pillar_y_size: " << metadata.metastruct.pillar_y_size << "\n"
-     << "pillar_z_size: " << metadata.metastruct.pillar_z_size << "\n"
-     << "num_point_values: " << metadata.metastruct.num_point_values << "\n"
-     << "zero_intensity: "
-     << static_cast<bool>(metadata.metastruct.zero_intensity) << "\n"
-     << "max_num_points_per_pillar: "
-     << metadata.metastruct.max_num_points_per_pillar << "\n"
-     << "max_voxels: " << metadata.metastruct.max_voxels << "\n"
-     << "feature_num: " << metadata.metastruct.feature_num << "\n"
-     << "num_feature_scatter: " << metadata.metastruct.num_feature_scatter
+     << "pfe_file: " << metastruct.pfe_file << "\n"
+     << "rpn_file: " << metastruct.rpn_file << "\n"
+     << "min_x_range: " << metastruct.min_x_range << "\n"
+     << "max_x_range: " << metastruct.max_x_range << "\n"
+     << "min_y_range: " << metastruct.min_y_range << "\n"
+     << "max_y_range: " << metastruct.max_y_range << "\n"
+     << "min_z_range: " << metastruct.min_z_range << "\n"
+     << "max_z_range: " << metastruct.max_z_range << "\n"
+     << "pillar_x_size: " << metastruct.pillar_x_size << "\n"
+     << "pillar_y_size: " << metastruct.pillar_y_size << "\n"
+     << "pillar_z_size: " << metastruct.pillar_z_size << "\n"
+     << "num_point_values: " << metastruct.num_point_values << "\n"
+     << "zero_intensity: " << static_cast<bool>(metastruct.zero_intensity)
      << "\n"
-     << "grid_x_size: " << metadata.metastruct.grid_x_size << "\n"
-     << "grid_y_size: " << metadata.metastruct.grid_y_size << "\n"
-     << "grid_z_size: " << metadata.metastruct.grid_z_size << "\n"
-     << "class_num: " << metadata.metastruct.class_num << "\n"
-     << "feature_x_size: " << metadata.metastruct.feature_x_size << "\n"
-     << "feature_y_size: " << metadata.metastruct.feature_y_size << "\n"
+     << "max_num_points_per_pillar: " << metastruct.max_num_points_per_pillar
+     << "\n"
+     << "max_voxels: " << metastruct.max_voxels << "\n"
+     << "feature_num: " << metastruct.feature_num << "\n"
+     << "num_feature_scatter: " << metastruct.num_feature_scatter << "\n"
+     << "grid_x_size: " << metastruct.grid_x_size << "\n"
+     << "grid_y_size: " << metastruct.grid_y_size << "\n"
+     << "grid_z_size: " << metastruct.grid_z_size << "\n"
+     << "class_num: " << metastruct.class_num << "\n"
+     << "feature_x_size: " << metastruct.feature_x_size << "\n"
+     << "feature_y_size: " << metastruct.feature_y_size << "\n"
      << "iou_rectifier: ";
-  for (const auto& value : metadata.metastruct.iou_rectifier) {
+  for (const auto& value : metastruct.iou_rectifier) {
     os << value << " ";
   }
-  os << "\n";
+  os << "\n=======================================\n";
   return os;
 }
 
