@@ -68,7 +68,7 @@ void vueron::voxelization(std::vector<Pillar> &bev_pillar, const float *points,
     const size_t voxel_index_y =
         floorf((point_y - MIN_Y_RANGE) / PILLAR_Y_SIZE);
 
-    // skip if out-of-range point or current point is located in edge
+    // skip if out-of-range point or current point is located on edge
     if (point_x < MIN_X_RANGE || point_x > MAX_X_RANGE ||
         point_y < MIN_Y_RANGE || point_y > MAX_Y_RANGE ||
         point_z < MIN_Z_RANGE || point_z > MAX_Z_RANGE ||
