@@ -4,7 +4,7 @@
 
 vueron::OrtModel::OrtModel(const std::string &onnx_path,
                            const std::vector<int64_t> &input_node_dims,
-                           const size_t &input_tensor_size)
+                           const size_t input_tensor_size)
     : memory_info(
           Ort::MemoryInfo::CreateCpu(OrtArenaAllocator, OrtMemTypeDefault)),
       env(ORT_LOGGING_LEVEL_WARNING, "test"),

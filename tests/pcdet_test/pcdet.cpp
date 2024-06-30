@@ -25,8 +25,8 @@ vueron::PCDetCPU::PCDetCPU(const std::string &pfe_path,
 };
 
 void vueron::PCDetCPU::preprocess(const float *points,
-                                  const size_t &point_buf_len,
-                                  const size_t &point_stride) {
+                                  const size_t point_buf_len,
+                                  const size_t point_stride) {
   voxelization(bev_pillar, points, point_buf_len, point_stride);
   num_pillars = point_decoration(bev_pillar, voxel_coords, voxel_num_points,
                                  pfe_input, points, point_stride);
@@ -62,8 +62,8 @@ void vueron::PCDetCPU::get_pred(std::vector<PredBox> &boxes) const {
   }
 }
 
-void vueron::PCDetCPU::run(const float *points, const size_t &point_buf_len,
-                           const size_t &point_stride,
+void vueron::PCDetCPU::run(const float *points, const size_t point_buf_len,
+                           const size_t point_stride,
                            std::vector<PredBox> &boxes) {
   /**
    * @brief
@@ -102,8 +102,8 @@ void vueron::PCDetCPU::run(const float *points, const size_t &point_buf_len,
   post_scores.clear();
 };
 
-void vueron::PCDetCPU::run(const float *points, const size_t &point_buf_len,
-                           const size_t &point_stride,
+void vueron::PCDetCPU::run(const float *points, const size_t point_buf_len,
+                           const size_t point_stride,
                            std::vector<vueron::BndBox> &final_boxes,
                            std::vector<size_t> &final_labels,
                            std::vector<float> &final_scores) {

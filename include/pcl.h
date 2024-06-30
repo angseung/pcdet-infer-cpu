@@ -1,7 +1,7 @@
 #ifndef __PCL_H__
 #define __PCL_H__
 
-#include <filesystem>  // For std::filesystem
+#include <filesystem>  // for std::filesystem
 #include <string>
 #include <vector>
 
@@ -14,7 +14,7 @@ class PCDReader {
 
  public:
   PCDReader() = delete;
-  explicit PCDReader(const std::string &filePath, int expected_point_num = 0);
+  explicit PCDReader(const std::string &filePath);
   ~PCDReader() = default;
   const std::vector<float> &getData() const;
   const int getStride() const;

@@ -4,8 +4,8 @@
 #include "include/pre.h"
 #include "include/rpn.h"
 
-void vueron::run_model(const float *points, const size_t &point_buf_len,
-                       const size_t &point_stride, std::vector<BndBox> &boxes,
+void vueron::run_model(const float *points, const size_t point_buf_len,
+                       const size_t point_stride, std::vector<BndBox> &boxes,
                        std::vector<size_t> &labels,
                        std::vector<float> &scores) {
   std::vector<Pillar> bev_pillar(GRID_Y_SIZE * GRID_X_SIZE,

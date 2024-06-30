@@ -11,16 +11,16 @@
 
 #include "onnxruntime_cxx_api.h"
 
-vueron::Pillar::Pillar(const size_t &point_num)
+vueron::Pillar::Pillar(const size_t point_num)
     : point_index(point_num, 0),
       pillar_grid_x(0),
       pillar_grid_y(0),
       point_num_in_pillar(0),
-      is_empty(true){};
+      is_empty(true) {}
 
 void vueron::voxelization(std::vector<Pillar> &bev_pillar, const float *points,
-                          const size_t &points_buf_len,
-                          const size_t &point_stride) {
+                          const size_t points_buf_len,
+                          const size_t point_stride) {
   // check grid size
   assert(GRID_X_SIZE == (float)((MAX_X_RANGE - MIN_X_RANGE) / PILLAR_X_SIZE));
   assert(GRID_Y_SIZE == (float)((MAX_Y_RANGE - MIN_Y_RANGE) / PILLAR_Y_SIZE));
@@ -28,41 +28,53 @@ void vueron::voxelization(std::vector<Pillar> &bev_pillar, const float *points,
 
   // check buffer size
   assert(points_buf_len % point_stride == 0);
+  const size_t points_num = points_buf_len / point_stride;
 
   std::mt19937 rng(RANDOM_SEED);
 
-  const size_t points_num = points_buf_len / point_stride;
-  std::vector<size_t> indices(points_num, 0);
+  // clip point buffer if points_num is larger than MAX_POINT_NUM in
+  // runtimeconfig.
+  const size_t num_points_to_voxelize =
+      (points_num > MAX_POINT_NUM) ? MAX_POINT_NUM : points_num;
+
+  std::vector<size_t> indices(num_points_to_voxelize, 0);
   std::iota(indices.begin(), indices.end(), 0);
 
   if (SHUFFLE_ON) {
     std::shuffle(indices.begin(), indices.end(), rng);
   }
 
-  const size_t num_points_to_voxelize =
-      (points_num > MAX_POINT_NUM) ? MAX_POINT_NUM : points_num;
   for (size_t idx = 0; idx < num_points_to_voxelize; idx++) {
     const size_t i = indices[idx];
     const float point_x = points[point_stride * i];
     const float point_y = points[point_stride * i + 1];
     const float point_z = points[point_stride * i + 2];
+    const float point_w = points[point_stride * i + 3];
+
+    // check point value is NaN or not.
+    if (std::isnan(point_x) || std::isnan(point_y) || std::isnan(point_z) ||
+        std::isnan(point_w)) {
+      std::cerr << "ERROR: NaN value encountered in point data." << std::endl;
+      std::exit(EXIT_FAILURE);
+      exit(1);
+    }
+
+    assert(!std::isnan(point_x));
+    assert(!std::isnan(point_y));
+    assert(!std::isnan(point_z));
+    assert(!std::isnan(point_w));
 
     const size_t voxel_index_x =
         floorf((point_x - MIN_X_RANGE) / PILLAR_X_SIZE);
     const size_t voxel_index_y =
         floorf((point_y - MIN_Y_RANGE) / PILLAR_Y_SIZE);
 
-    // skip if out-of-range point
+    // skip if out-of-range point or current point is located on edge
     if (point_x < MIN_X_RANGE || point_x > MAX_X_RANGE ||
         point_y < MIN_Y_RANGE || point_y > MAX_Y_RANGE ||
-        point_z < MIN_Z_RANGE || point_z > MAX_Z_RANGE) {
+        point_z < MIN_Z_RANGE || point_z > MAX_Z_RANGE ||
+        voxel_index_x >= GRID_X_SIZE || voxel_index_y >= GRID_Y_SIZE) {
       continue;
-    }
-
-    if (std::isnan(point_x) || std::isnan(point_y) || std::isnan(point_z)) {
-      std::cout << "point value has nan." << std::endl;
-      std::cout << "Terminate Program" << std::endl;
-      exit(1);
     }
 
     // check out-of-range point
@@ -94,7 +106,7 @@ size_t vueron::point_decoration(const std::vector<Pillar> &bev_pillar,
                                 std::vector<size_t> &voxel_num_points,
                                 std::vector<float> &pfe_input,
                                 const float *points,
-                                const size_t &point_stride) {
+                                const size_t point_stride) {
   size_t num_pillars = 0;
   size_t index = 0;
 
@@ -201,12 +213,13 @@ size_t vueron::point_decoration(const std::vector<Pillar> &bev_pillar,
 
 void vueron::scatter(const std::vector<float> &pfe_output,
                      const std::vector<size_t> &voxel_coords,
-                     const size_t &num_pillars, std::vector<float> &rpn_input) {
+                     const size_t num_pillars, std::vector<float> &rpn_input) {
   assert(rpn_input.size() == GRID_Y_SIZE * GRID_X_SIZE * NUM_FEATURE_SCATTER);
   assert(pfe_output.size() == MAX_VOXELS * NUM_FEATURE_SCATTER);
 
   for (size_t i = 0; i < num_pillars; i++) {
     // voxel_coords : (x, y)
+    // TODO: Check here, index error occured.
     const size_t curr_grid_x = voxel_coords[2 * i];
     const size_t curr_grid_y = voxel_coords[2 * i + 1];
     const size_t source_voxel_index = NUM_FEATURE_SCATTER * i;
