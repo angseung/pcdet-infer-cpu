@@ -11,7 +11,7 @@ RuntimeConfig::RuntimeConfig(int max_points, unsigned char shuffle_on,
       max_preds(max_preds),
       nms_score_thd(nms_score_thd),
       pre_nms_distance_thd(pre_nms_distance_thd),
-      nms_iou_thd(nms_iou_thd){};
+      nms_iou_thd(nms_iou_thd) {}
 
 std::ostream& vueron::operator<<(
     std::ostream& os,
@@ -29,7 +29,7 @@ std::ostream& vueron::operator<<(
      << "\n"
      << "pre_nms_distance_thd: "
      << runtimeconfigsingletone.config.pre_nms_distance_thd << "\n"
-     << "nms_iou_thd: " << runtimeconfigsingletone.config.nms_iou_thd << "\n";
+     << "nms_iou_thd: " << runtimeconfigsingletone.config.nms_iou_thd;
 
   os << std::endl;
 
