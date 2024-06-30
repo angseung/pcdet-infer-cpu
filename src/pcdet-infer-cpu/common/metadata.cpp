@@ -4,9 +4,7 @@
 #include <fstream>
 #include <iostream>
 #include <nlohmann/json.hpp>
-#include <utility>
 
-using json = nlohmann::json;
 namespace fs = std::filesystem;
 
 namespace vueron {
@@ -81,26 +79,26 @@ std::ostream& operator<<(std::ostream& os, const MetaStruct& metastruct) {
   return os;
 }
 
-inline json ReadFile(const std::string& filename) {
+inline nlohmann::json ReadFile(const std::string& filename) {
   std::ifstream file(filename);
 
   if (!file.is_open()) {
     throw std::runtime_error("File open failed");
   }
-  json data = json::parse(file);
+  nlohmann::json data = nlohmann::json::parse(file);
 
   file.close();
   return data;
 }
 
-class Metadata::Impl {
+class Metadata::MetadataImpl {
  public:
-  json data;
+  nlohmann::json data;
 
-  Impl() = default;
+  MetadataImpl() = default;
 };
 
-Metadata::Metadata() : pimpl(std::make_unique<Impl>()) {}
+Metadata::Metadata() : pimpl(std::make_unique<MetadataImpl>()) {}
 
 Metadata::~Metadata() = default;
 
@@ -123,7 +121,7 @@ void Metadata::Setup(const std::string& filename) {
   }
 
   /*
-    Copy Json contents into each field of Metadata::metastruct for speed issue
+    Copy json contents into each field of Metadata::metastruct for speed issue
   */
   metastruct.pfe_file = pimpl->data["model_files"]["pfe"];
   metastruct.rpn_file = pimpl->data["model_files"]["rpn"];
