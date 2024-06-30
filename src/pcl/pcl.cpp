@@ -54,7 +54,7 @@ vueron::PCDReader::PCDReader(const std::string &filePath) {
       // check parsed point value is NaN or not.
       if (std::isnan(value)) {
         std::cerr << "ERROR: NaN value encountered in the file." << std::endl;
-        std::exit(EXIT_FAILURE);  // exit with error
+        std::exit(EXIT_FAILURE);
       }
       data.push_back(value);
     }

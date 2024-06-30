@@ -27,21 +27,21 @@ void vueron::voxelization(std::vector<Pillar> &bev_pillar, const float *points,
 
   // check buffer size
   assert(points_buf_len % point_stride == 0);
+  const size_t points_num = points_buf_len / point_stride;
 
   std::mt19937 rng(RANDOM_SEED);
-
-  const size_t points_num = points_buf_len / point_stride;
-  std::vector<size_t> indices(points_num, 0);
-  std::iota(indices.begin(), indices.end(), 0);
-
-  if (SHUFFLE_ON) {
-    std::shuffle(indices.begin(), indices.end(), rng);
-  }
 
   // clip point buffer if points_num is larger than MAX_POINT_NUM in
   // runtimeconfig.
   const size_t num_points_to_voxelize =
       (points_num > MAX_POINT_NUM) ? MAX_POINT_NUM : points_num;
+
+  std::vector<size_t> indices(num_points_to_voxelize, 0);
+  std::iota(indices.begin(), indices.end(), 0);
+
+  if (SHUFFLE_ON) {
+    std::shuffle(indices.begin(), indices.end(), rng);
+  }
 
   for (size_t idx = 0; idx < num_points_to_voxelize; idx++) {
     const size_t i = indices[idx];
@@ -50,10 +50,11 @@ void vueron::voxelization(std::vector<Pillar> &bev_pillar, const float *points,
     const float point_z = points[point_stride * i + 2];
     const float point_w = points[point_stride * i + 3];
 
+    // check point value is NaN or not.
     if (std::isnan(point_x) || std::isnan(point_y) || std::isnan(point_z) ||
         std::isnan(point_w)) {
-      std::cout << "point value has nan." << std::endl;
-      std::cout << "Terminate Program" << std::endl;
+      std::cerr << "ERROR: NaN value encountered in point data." << std::endl;
+      std::exit(EXIT_FAILURE);
       exit(1);
     }
 
