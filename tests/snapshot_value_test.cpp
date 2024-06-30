@@ -27,7 +27,7 @@ TEST(VoxelValueTest, ScatterTest) {
     std::cout << "Testing : " << pcd_file << std::endl;
 
     // read point from pcd file
-    vueron::PCDReader reader(pcd_file, MAX_POINT_NUM);
+    vueron::PCDReader reader(pcd_file);
     const std::vector<float> buffer = reader.getData();
     const size_t point_stride = reader.getStride();
     const size_t point_buf_len = buffer.size();
@@ -93,7 +93,7 @@ TEST(VoxelValueTest, PFERunTest) {
     std::cout << "Testing : " << pcd_file << std::endl;
 
     // read point from pcd file
-    vueron::PCDReader reader(pcd_file, MAX_POINT_NUM);
+    vueron::PCDReader reader(pcd_file);
     const std::vector<float> points = reader.getData();
     const size_t point_stride = reader.getStride();
     const size_t point_buf_len = points.size();
@@ -151,7 +151,7 @@ TEST(VoxelValueTest, BEVValueTest) {
     std::cout << "Testing : " << pcd_file << std::endl;
 
     // read point from pcd file
-    vueron::PCDReader reader(pcd_file, MAX_POINT_NUM);
+    vueron::PCDReader reader(pcd_file);
     const std::vector<float> points = reader.getData();
     const size_t point_stride = reader.getStride();
     const size_t point_buf_len = points.size();

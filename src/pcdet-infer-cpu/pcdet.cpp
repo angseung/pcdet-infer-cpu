@@ -32,6 +32,9 @@ vueron::PCDetCPU::PCDetCPU(const std::string &pfe_path,
   if (runtimeconfig != nullptr) {
     SetRuntimeConfig(*runtimeconfig);
   }
+
+  std::cout << "=============== RuntimeConfig ===============" << std::endl;
+  std::cout << GetRuntimeInstance() << std::endl;
 };
 
 vueron::PCDetCPU::~PCDetCPU() = default;

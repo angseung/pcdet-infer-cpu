@@ -58,7 +58,7 @@ struct RuntimeConfigSingleton {
 std::ostream& operator<<(std::ostream& os,
                          const RuntimeConfigSingleton& runtimeconfigsingletone);
 
-inline RuntimeConfigSingleton& GetRuntimInstance() {
+inline RuntimeConfigSingleton& GetRuntimeInstance() {
   return RuntimeConfigSingleton::Instance();
 }
 

@@ -52,7 +52,6 @@ int main(int argc, const char **argv) {
   };
 
   std::cout << vueron::GetMetaInstance() << std::endl;
-  std::cout << vueron::GetRuntimInstance() << std::endl;
 
   const auto pcdet =
       std::make_unique<vueron::PCDetCPU>(PFE_FILE, RPN_FILE, &config);
@@ -63,7 +62,7 @@ int main(int argc, const char **argv) {
     /*
         Read points from pcd files
     */
-    vueron::PCDReader reader(pcd_file, MAX_POINT_NUM);
+    vueron::PCDReader reader(pcd_file);
     const std::vector<float> buffer = reader.getData();
     const size_t point_stride = reader.getStride();
     const size_t point_buf_len = buffer.size();

@@ -3,6 +3,8 @@
 #include <glob.h>
 
 #include <algorithm>
+#include <cmath>
+#include <cstdlib>  // std::exit and EXIT_FAILURE
 #include <cstring>
 #include <fstream>
 #include <iostream>
@@ -11,8 +13,7 @@
 
 namespace fs = std::filesystem;
 
-vueron::PCDReader::PCDReader(const std::string &filePath,
-                             int expected_point_num) {
+vueron::PCDReader::PCDReader(const std::string &filePath) {
   std::ifstream file(filePath, std::ios::binary);
   if (!file) {
     std::cerr << "Failed to open file: " << filePath << std::endl;
@@ -47,15 +48,14 @@ vueron::PCDReader::PCDReader(const std::string &filePath,
   std::vector<char> buffer(pointSize);
   while (file.read(buffer.data(), pointSize)) {
     for (int i = 0; i < stride; i++) {
-      if (expected_point_num != 0 && i == expected_point_num) {
-        std::cout << "WARNING from " << filePath << "." << std::endl;
-        std::cout << "The number of point in this pcd file is larger than "
-                     "expected_point_num: "
-                  << expected_point_num << ". \nEarly stop." << std::endl;
-        break;
-      }
       float value;
       memcpy(&value, buffer.data() + i * sizeof(float), sizeof(float));
+
+      // check parsed point value is NaN or not.
+      if (std::isnan(value)) {
+        std::cerr << "ERROR: NaN value encountered in the file." << std::endl;
+        std::exit(EXIT_FAILURE);  // exit with error
+      }
       data.push_back(value);
     }
   }

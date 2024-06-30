@@ -26,7 +26,7 @@ TEST(IntegrationTest, IntegrationTest) {
     const std::string pcd_file = pcd_files[i];
     const std::string snapshot_dir = snapshot_files[i];
     std::cout << "Testing : " << pcd_file << std::endl;
-    vueron::PCDReader reader(pcd_file, MAX_POINT_NUM);
+    vueron::PCDReader reader(pcd_file);
     const std::vector<float> buffer = reader.getData();
     const size_t point_stride = reader.getStride();
     const size_t point_buf_len = buffer.size();
