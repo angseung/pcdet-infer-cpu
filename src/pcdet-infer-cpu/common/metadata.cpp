@@ -47,7 +47,7 @@ MetaStruct::MetaStruct(std::string pfe_file, std::string rpn_file,
       iou_rectifier(iou_rectifier) {}
 
 std::ostream& operator<<(std::ostream& os, const Metadata& metadata) {
-  os << "Metadata" << std::endl
+  os << "=============== Metadata ===============\n"
      << "pfe_file: " << metadata.metastruct.pfe_file << "\n"
      << "rpn_file: " << metadata.metastruct.rpn_file << "\n"
      << "min_x_range: " << metadata.metastruct.min_x_range << "\n"

@@ -49,6 +49,9 @@ int main(int argc, const char **argv) {
       0.2f,     // float nms_iou_thd;
   };
 
+  std::cout << vueron::GetMetaInstance() << std::endl;
+  std::cout << vueron::GetRuntimeInstance() << std::endl;
+
   /*
     Init PCDetCPU with metadata & runtimeconfig
   */
@@ -59,7 +62,7 @@ int main(int argc, const char **argv) {
     /*
       Read point data from pcd files
     */
-    vueron::PCDReader reader(pcd_file, MAX_POINT_NUM);
+    vueron::PCDReader reader(pcd_file);
     const std::vector<float> points = reader.getData();
     const size_t point_stride = reader.getStride();
     const size_t point_buf_len = points.size();

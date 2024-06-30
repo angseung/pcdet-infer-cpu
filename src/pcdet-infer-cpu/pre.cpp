@@ -39,8 +39,11 @@ void vueron::voxelization(std::vector<Pillar> &bev_pillar, const float *points,
     std::shuffle(indices.begin(), indices.end(), rng);
   }
 
+  // clip point buffer if points_num is larger than MAX_POINT_NUM in
+  // runtimeconfig.
   const size_t num_points_to_voxelize =
       (points_num > MAX_POINT_NUM) ? MAX_POINT_NUM : points_num;
+
   for (size_t idx = 0; idx < num_points_to_voxelize; idx++) {
     const size_t i = indices[idx];
     const float point_x = points[point_stride * i];
