@@ -53,10 +53,12 @@ struct MetaStruct {
   ~MetaStruct() = default;
 };
 
+std::ostream& operator<<(std::ostream& os, const MetaStruct& metastruct);
+
 class Metadata {
  private:
-  class Impl;
-  std::unique_ptr<Impl> pimpl;
+  class MetadataImpl;
+  std::unique_ptr<MetadataImpl> pimpl;
   void Setup(const std::string& filename);
 
  public:
@@ -104,10 +106,6 @@ class Metadata {
     instance.Setup(filename);
   }
 };
-
-std::ostream& operator<<(std::ostream& os, const Metadata& metadata);
-
-inline Metadata& GetMetaInstance() { return Metadata::Instance(); }
 
 inline MetaStruct& GetMetadata() { return Metadata::Instance().metastruct; }
 

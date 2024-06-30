@@ -31,6 +31,8 @@ struct RuntimeConfig {
 #endif
 };
 
+std::ostream& operator<<(std::ostream& os, const RuntimeConfig& runtimeconfig);
+
 #ifdef __cplusplus
 namespace vueron {
 
@@ -54,13 +56,6 @@ struct RuntimeConfigSingleton {
     instance.config = config;
   }
 };
-
-std::ostream& operator<<(std::ostream& os,
-                         const RuntimeConfigSingleton& runtimeconfigsingletone);
-
-inline RuntimeConfigSingleton& GetRuntimeInstance() {
-  return RuntimeConfigSingleton::Instance();
-}
 
 inline RuntimeConfig& GetRuntimeConfig() {
   return RuntimeConfigSingleton::Instance().config;

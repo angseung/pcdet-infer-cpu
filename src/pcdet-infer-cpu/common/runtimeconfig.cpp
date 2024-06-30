@@ -13,25 +13,18 @@ RuntimeConfig::RuntimeConfig(int max_points, unsigned char shuffle_on,
       pre_nms_distance_thd(pre_nms_distance_thd),
       nms_iou_thd(nms_iou_thd) {}
 
-std::ostream& vueron::operator<<(
-    std::ostream& os,
-    const vueron::RuntimeConfigSingleton& runtimeconfigsingletone) {
+std::ostream& operator<<(std::ostream& os, const RuntimeConfig& runtimeconfig) {
   os << "=============== RuntimeConfig ===============\n"
-     << "max_points: " << runtimeconfigsingletone.config.max_points << "\n"
-     << "shuffle_on: "
-     << static_cast<bool>(runtimeconfigsingletone.config.shuffle_on) << "\n"
-     << "use_cpu: " << static_cast<bool>(runtimeconfigsingletone.config.use_cpu)
-     << "\n"
-     << "pre_nms_max_preds: "
-     << runtimeconfigsingletone.config.pre_nms_max_preds << "\n"
-     << "max_preds: " << runtimeconfigsingletone.config.max_preds << "\n"
-     << "nms_score_thd: " << runtimeconfigsingletone.config.nms_score_thd
-     << "\n"
-     << "pre_nms_distance_thd: "
-     << runtimeconfigsingletone.config.pre_nms_distance_thd << "\n"
-     << "nms_iou_thd: " << runtimeconfigsingletone.config.nms_iou_thd;
+     << "max_points: " << runtimeconfig.max_points << "\n"
+     << "shuffle_on: " << static_cast<bool>(runtimeconfig.shuffle_on) << "\n"
+     << "use_cpu: " << static_cast<bool>(runtimeconfig.use_cpu) << "\n"
+     << "pre_nms_max_preds: " << runtimeconfig.pre_nms_max_preds << "\n"
+     << "max_preds: " << runtimeconfig.max_preds << "\n"
+     << "nms_score_thd: " << runtimeconfig.nms_score_thd << "\n"
+     << "pre_nms_distance_thd: " << runtimeconfig.pre_nms_distance_thd << "\n"
+     << "nms_iou_thd: " << runtimeconfig.nms_iou_thd;
 
-  os << std::endl;
+  os << "\n=============================================" << std::endl;
 
   return os;
 }
