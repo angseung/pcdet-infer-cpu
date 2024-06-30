@@ -16,7 +16,8 @@ RuntimeConfig::RuntimeConfig(int max_points, unsigned char shuffle_on,
 std::ostream& vueron::operator<<(
     std::ostream& os,
     const vueron::RuntimeConfigSingleton& runtimeconfigsingletone) {
-  os << "max_points: " << runtimeconfigsingletone.config.max_points << "\n"
+  os << "=============== RuntimeConfig ===============\n"
+     << "max_points: " << runtimeconfigsingletone.config.max_points << "\n"
      << "shuffle_on: "
      << static_cast<bool>(runtimeconfigsingletone.config.shuffle_on) << "\n"
      << "use_cpu: " << static_cast<bool>(runtimeconfigsingletone.config.use_cpu)
