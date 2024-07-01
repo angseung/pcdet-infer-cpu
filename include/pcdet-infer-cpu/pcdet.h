@@ -2,12 +2,14 @@
 #define __PCDET_H__
 
 #include <cstddef>
+#include <string>
 #include <vector>
 
 #include "pcdet-infer-cpu/common/runtimeconfig.h"
 #include "pcdet-infer-cpu/ort_model.h"
 #include "pcdet-infer-cpu/post.h"
 #include "pcdet-infer-cpu/pre.h"
+#include "version.h"
 
 namespace vueron {
 class PCDetCPU : public PCDet {
@@ -44,6 +46,9 @@ class PCDetCPU : public PCDet {
   std::vector<size_t> post_labels;  // labels after NMS
   std::vector<float> post_scores;   // scores after NMS
 
+  // version info
+  std::string version_info;
+
   void preprocess(const float *points, const size_t point_buf_len,
                   const size_t point_stride);
   void scatter();
@@ -65,6 +70,7 @@ class PCDetCPU : public PCDet {
            const size_t point_stride, std::vector<BndBox> &final_boxes,
            std::vector<size_t> &final_labels,
            std::vector<float> &final_scores) override;
+  std::string getVersionInfo();
 };
 }  // namespace vueron
 
