@@ -2,6 +2,7 @@
 #define __MODEL_H__
 
 #include <cstddef>
+#include <string>
 #include <vector>
 
 #include "type.h"
@@ -28,6 +29,7 @@ class PCDet {
                    const size_t point_stride, std::vector<BndBox> &final_boxes,
                    std::vector<size_t> &final_labels,
                    std::vector<float> &final_scores) = 0;
+  virtual std::string getVersionInfo() = 0;
   PCDet() = default;
   PCDet(const PCDet &copy) = delete;
   PCDet &operator=(PCDet &copy) = delete;

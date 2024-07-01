@@ -57,6 +57,7 @@ int main(int argc, const char **argv) {
   */
   const auto pcdet =
       std::make_unique<vueron::PCDetCPU>(PFE_FILE, RPN_FILE, &config);
+  std::cout << pcdet->getVersionInfo() << std::endl;
 
   for (const auto &pcd_file : pcd_files) {
     /*

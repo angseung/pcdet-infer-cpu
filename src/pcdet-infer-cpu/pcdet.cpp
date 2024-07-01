@@ -32,6 +32,10 @@ vueron::PCDetCPU::PCDetCPU(const std::string &pfe_path,
   if (runtimeconfig != nullptr) {
     SetRuntimeConfig(*runtimeconfig);
   }
+  std::string git_tag_info(GIT_TAG_VERSION);
+  std::string build_info(BUILD_TIME);
+
+  version_info = "libDL " + git_tag_info + " (" + build_info + ")";
 };
 
 vueron::PCDetCPU::~PCDetCPU() = default;
@@ -272,3 +276,5 @@ void vueron::PCDetCPU::run(const float *points, const size_t point_buf_len,
   post_labels.clear();
   post_scores.clear();
 };
+
+std::string vueron::PCDetCPU::getVersionInfo() { return version_info; }

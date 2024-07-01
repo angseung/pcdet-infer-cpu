@@ -53,3 +53,4 @@ cepton/
 outputs*/
 cmake-build-debug/
 .idea/
+include/version.h
