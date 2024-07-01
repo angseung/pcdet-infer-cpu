@@ -24,6 +24,12 @@ set(RPN_FILE ${PROJECT_SOURCE_DIR}/models/gcm_v4_residual/gcm_resfpn_falcon_v4_r
 set(PCD_PATH ${PROJECT_SOURCE_DIR}/pcd/cepton)
 set(SNAPSHOT_PATH ${PROJECT_SOURCE_DIR}/zero_snapshots/pcd*)
 
+# Configure version.h
+execute_process(
+    COMMAND sh version.sh
+    WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}
+)
+
 # Configure config header
 configure_file(
         "${PROJECT_SOURCE_DIR}/include/config.in"
