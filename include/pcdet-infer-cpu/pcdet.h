@@ -70,7 +70,7 @@ class PCDetCPU : public PCDet {
            const size_t point_stride, std::vector<BndBox> &final_boxes,
            std::vector<size_t> &final_labels,
            std::vector<float> &final_scores) override;
-  std::string getVersionInfo();
+  std::string getVersionInfo() override;
 };
 }  // namespace vueron
 
