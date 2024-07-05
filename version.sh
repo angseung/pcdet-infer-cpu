@@ -22,11 +22,6 @@ fi
 
 BUILD_TIME=$(date +"%Y-%m-%dT%H:%M:%S%z")
 
-# Remove the existing version.h file if it exists
-if [ -f ./src/version.h ]; then
-    rm ./src/version.h
-fi
-
 # Create a version.h file with the git commit hash
 echo "#ifndef VERSION_H" > ./include/version.h
 echo "#define VERSION_H" >> ./include/version.h
