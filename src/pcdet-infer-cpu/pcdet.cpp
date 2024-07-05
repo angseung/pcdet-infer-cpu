@@ -277,4 +277,4 @@ void vueron::PCDetCPU::run(const float *points, const size_t point_buf_len,
   post_scores.clear();
 };
 
-std::string vueron::PCDetCPU::getVersionInfo() { return version_info; }
+std::string vueron::PCDetCPU::getVersionInfo() const { return version_info; }

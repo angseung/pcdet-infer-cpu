@@ -35,6 +35,9 @@ class OrtModel : public Model {
 
   void run(const std::vector<float> &model_input,
            std::vector<std::vector<float>> &model_output) override;
+
+  void run(const std::vector<std::vector<float>> &model_input,
+           std::vector<std::vector<float>> &model_output) override;
 };
 }  // namespace vueron
 

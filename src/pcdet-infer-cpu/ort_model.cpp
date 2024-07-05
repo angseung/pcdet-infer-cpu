@@ -117,3 +117,9 @@ void vueron::OrtModel::run(const std::vector<float> &model_input,
   // Copy the output tensor data to the output vector
   std::copy(floatarr, floatarr + output_size, model_output.begin());
 };
+
+void vueron::OrtModel::run(const std::vector<std::vector<float>> &model_input,
+                           std::vector<std::vector<float>> &model_output) {
+  const std::string e("This function is not implemented yet.");
+  throw std::runtime_error(e);
+}
