@@ -25,10 +25,12 @@ set(PCD_PATH ${PROJECT_SOURCE_DIR}/pcd/cepton)
 set(SNAPSHOT_PATH ${PROJECT_SOURCE_DIR}/zero_snapshots/pcd*)
 
 # Configure version.h
+message(STATUS "Generating version.h in include directory...")
 execute_process(
     COMMAND sh version.sh
     WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}
 )
+message(STATUS "Generating done.")
 
 # Configure config header
 configure_file(
