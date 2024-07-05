@@ -46,11 +46,6 @@ class PCDetCPU : public PCDet {
   std::vector<size_t> post_labels;  // labels after NMS
   std::vector<float> post_scores;   // scores after NMS
 
-  /*
-      version info
-  */
-  std::string version_info;
-
   void preprocess(const float *points, const size_t point_buf_len,
                   const size_t point_stride);
   void scatter();
@@ -72,7 +67,6 @@ class PCDetCPU : public PCDet {
            const size_t point_stride, std::vector<BndBox> &final_boxes,
            std::vector<size_t> &final_labels,
            std::vector<float> &final_scores) override;
-  std::string getVersionInfo() const override;
 };
 }  // namespace vueron
 
