@@ -3,6 +3,7 @@
 #include <iostream>
 
 #include "config.h"
+#include "version.h"
 #ifdef _PROFILE
 #include <chrono>
 #endif
@@ -32,8 +33,8 @@ vueron::PCDetCPU::PCDetCPU(const std::string &pfe_path,
   if (runtimeconfig != nullptr) {
     SetRuntimeConfig(*runtimeconfig);
   }
-  std::string git_tag_info(GIT_TAG_VERSION);
-  std::string build_info(BUILD_TIME);
+  const std::string git_tag_info(GIT_TAG_VERSION);
+  const std::string build_info(BUILD_TIME);
 
   version_info = "libpcdet " + git_tag_info + " (" + build_info + ")";
 };

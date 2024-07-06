@@ -9,9 +9,24 @@
 #include "pcdet-infer-cpu/ort_model.h"
 #include "pcdet-infer-cpu/post.h"
 #include "pcdet-infer-cpu/pre.h"
-#include "version.h"
 
 namespace vueron {
+class PCDet {
+ public:
+  std::string version_info;
+  virtual void run(const float *points, const size_t point_buf_len,
+                   const size_t point_stride, std::vector<PredBox> &boxes) = 0;
+  virtual void run(const float *points, const size_t point_buf_len,
+                   const size_t point_stride, std::vector<BndBox> &final_boxes,
+                   std::vector<size_t> &final_labels,
+                   std::vector<float> &final_scores) = 0;
+  const std::string &getVersionInfo() const { return version_info; }
+  PCDet() = default;
+  PCDet(const PCDet &copy) = delete;
+  PCDet &operator=(const PCDet &copy) = delete;
+  virtual ~PCDet() = default;
+};
+
 class PCDetCPU : public PCDet {
  private:
   /*
@@ -35,7 +50,9 @@ class PCDetCPU : public PCDet {
   std::vector<float> pre_scores;                // scores before NMS
   std::vector<bool> suppressed;                 // mask for nms
 
-  // Ort Models
+  /*
+      Ort Models
+  */
   std::unique_ptr<OrtModel> pfe;
   std::unique_ptr<OrtModel> rpn;
 
