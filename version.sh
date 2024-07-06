@@ -1,4 +1,4 @@
-#!/usr/bin/bash
+#!/usr/bin/env bash
 
 if [ -n "$1" ]; then
         BUILD_NUMBER="-$1"
