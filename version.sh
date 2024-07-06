@@ -16,7 +16,7 @@ else
         GIT_TAG="$GIT_TAG"
 fi
 
-if [[ "$GIT_DIRTY" != "" ]]; then
+if [ "$GIT_DIRTY" != "" ]; then
         GIT_TAG="$GIT_TAG-dirty"
 fi
 
