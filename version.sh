@@ -1,4 +1,4 @@
-#!/usr/bin/bash
+#!/usr/bin/env bash
 
 if [ -n "$1" ]; then
         BUILD_NUMBER="-$1"
@@ -10,13 +10,13 @@ REV_HASH=`git rev-list --tags --max-count=1 | head -c 7`
 GIT_TAG=`git describe --tags --always $REV_HASH`
 GIT_HASH=`git log -n 1 | head -n 1 | sed -e 's/^commit //' | head -c 7`
 GIT_DIRTY=`git status -uno -s | grep -v 'go.mod' | grep -v 'go.sum'`
-if [[ "$REV_HASH" != "$GIT_HASH" ]]; then
+if [ "$REV_HASH" != "$GIT_HASH" ]; then
         GIT_TAG="latest-$GIT_HASH"
 else
         GIT_TAG="$GIT_TAG"
 fi
 
-if [[ "$GIT_DIRTY" != "" ]]; then
+if [ "$GIT_DIRTY" != "" ]; then
         GIT_TAG="$GIT_TAG-dirty"
 fi
 

@@ -3,6 +3,7 @@
 #include <iostream>
 
 #include "config.h"
+#include "version.h"
 #ifdef _PROFILE
 #include <chrono>
 #endif
@@ -15,25 +16,25 @@ vueron::PCDetCPU::PCDetCPU(const std::string &pfe_path,
       pfe_input(MAX_VOXELS * MAX_NUM_POINTS_PER_PILLAR * FEATURE_NUM, 0.0f),
       pfe_output(MAX_VOXELS * NUM_FEATURE_SCATTER, 0.0f),
       bev_image(GRID_Y_SIZE * GRID_X_SIZE * NUM_FEATURE_SCATTER, 0.0f),
-      suppressed(NMS_PRE_MAXSIZE, false) {
-  std::cout << "PFE Model Initialized with " << PFE_FILE << std::endl;
-  std::cout << "RPN Model Initialized with " << RPN_FILE << std::endl;
-  std::vector<int64_t> pfe_input_dim{MAX_VOXELS, MAX_NUM_POINTS_PER_PILLAR,
-                                     FEATURE_NUM};
-  pfe = std::make_unique<OrtModel>(
-      pfe_path, pfe_input_dim,
-      MAX_VOXELS * MAX_NUM_POINTS_PER_PILLAR * FEATURE_NUM);
-
-  std::vector<int64_t> rpn_input_dim{1, NUM_FEATURE_SCATTER, GRID_Y_SIZE,
-                                     GRID_X_SIZE};
-  rpn = std::make_unique<OrtModel>(
-      rpn_path, rpn_input_dim, GRID_Y_SIZE * GRID_X_SIZE * NUM_FEATURE_SCATTER);
+      suppressed(NMS_PRE_MAXSIZE, false),
+      pfe(std::make_unique<OrtModel>(
+          pfe_path,
+          std::vector<int64_t>{MAX_VOXELS, MAX_NUM_POINTS_PER_PILLAR,
+                               FEATURE_NUM},
+          MAX_VOXELS * MAX_NUM_POINTS_PER_PILLAR * FEATURE_NUM)),
+      rpn(std::make_unique<OrtModel>(
+          rpn_path,
+          std::vector<int64_t>{1, NUM_FEATURE_SCATTER, GRID_Y_SIZE,
+                               GRID_X_SIZE},
+          GRID_Y_SIZE * GRID_X_SIZE * NUM_FEATURE_SCATTER)) {
+  std::clog << "PFE Model Initialized with " << PFE_FILE << std::endl;
+  std::clog << "RPN Model Initialized with " << RPN_FILE << std::endl;
 
   if (runtimeconfig != nullptr) {
     SetRuntimeConfig(*runtimeconfig);
   }
-  std::string git_tag_info(GIT_TAG_VERSION);
-  std::string build_info(BUILD_TIME);
+  const std::string git_tag_info{GIT_TAG_VERSION};
+  const std::string build_info{BUILD_TIME};
 
   version_info = "libpcdet " + git_tag_info + " (" + build_info + ")";
 };
@@ -89,7 +90,7 @@ void vueron::PCDetCPU::run(const float *points, const size_t point_buf_len,
 #ifdef _PROFILE
   auto pre_startTime = std::chrono::system_clock::now();
 #endif
-  vueron::PCDetCPU::preprocess(points, point_buf_len, point_stride);
+  preprocess(points, point_buf_len, point_stride);
 #ifdef _PROFILE
   auto pre_endTime = std::chrono::system_clock::now();
   auto pre_millisec = std::chrono::duration_cast<std::chrono::milliseconds>(
@@ -109,7 +110,7 @@ void vueron::PCDetCPU::run(const float *points, const size_t point_buf_len,
 #ifdef _PROFILE
   auto scatter_startTime = std::chrono::system_clock::now();
 #endif
-  vueron::PCDetCPU::scatter();
+  scatter();
 #ifdef _PROFILE
   auto scatter_endTime = std::chrono::system_clock::now();
   auto scatter_millisec = std::chrono::duration_cast<std::chrono::milliseconds>(
@@ -129,7 +130,7 @@ void vueron::PCDetCPU::run(const float *points, const size_t point_buf_len,
 #ifdef _PROFILE
   auto post_startTime = std::chrono::system_clock::now();
 #endif
-  vueron::PCDetCPU::postprocess(post_boxes, post_labels, post_scores);
+  postprocess(post_boxes, post_labels, post_scores);
 #ifdef _PROFILE
   auto post_endTime = std::chrono::system_clock::now();
   auto post_millisec = std::chrono::duration_cast<std::chrono::milliseconds>(
@@ -139,7 +140,7 @@ void vueron::PCDetCPU::run(const float *points, const size_t point_buf_len,
 #ifdef _PROFILE
   auto gather_boxes_startTime = std::chrono::system_clock::now();
 #endif
-  vueron::PCDetCPU::get_pred(boxes);
+  get_pred(boxes);
 #ifdef _PROFILE
   auto gather_boxes_endTime = std::chrono::system_clock::now();
   auto gather_boxes_millisec =
@@ -197,7 +198,7 @@ void vueron::PCDetCPU::run(const float *points, const size_t point_buf_len,
 #ifdef _PROFILE
   auto pre_startTime = std::chrono::system_clock::now();
 #endif
-  vueron::PCDetCPU::preprocess(points, point_buf_len, point_stride);
+  preprocess(points, point_buf_len, point_stride);
 #ifdef _PROFILE
   auto pre_endTime = std::chrono::system_clock::now();
   auto pre_millisec = std::chrono::duration_cast<std::chrono::milliseconds>(
@@ -217,7 +218,7 @@ void vueron::PCDetCPU::run(const float *points, const size_t point_buf_len,
 #ifdef _PROFILE
   auto scatter_startTime = std::chrono::system_clock::now();
 #endif
-  vueron::PCDetCPU::scatter();
+  scatter();
 #ifdef _PROFILE
   auto scatter_endTime = std::chrono::system_clock::now();
   auto scatter_millisec = std::chrono::duration_cast<std::chrono::milliseconds>(
@@ -237,7 +238,7 @@ void vueron::PCDetCPU::run(const float *points, const size_t point_buf_len,
 #ifdef _PROFILE
   auto post_startTime = std::chrono::system_clock::now();
 #endif
-  vueron::PCDetCPU::postprocess(final_boxes, final_labels, final_scores);
+  postprocess(final_boxes, final_labels, final_scores);
 #ifdef _PROFILE
   auto post_endTime = std::chrono::system_clock::now();
   auto post_millisec = std::chrono::duration_cast<std::chrono::milliseconds>(
