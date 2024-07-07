@@ -3,9 +3,6 @@
 
 #include <vector>
 
-#include "pcdet-infer-cpu/common/metadata.h"
-#include "pcdet-infer-cpu/common/runtimeconfig.h"
-
 namespace vueron {
 
 struct Pillar {

@@ -2,7 +2,6 @@
 #define __METADATA_H__
 
 #include <iostream>
-#include <memory>
 #include <string>
 #include <vector>
 

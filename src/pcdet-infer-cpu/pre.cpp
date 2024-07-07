@@ -10,6 +10,8 @@
 #include <random>
 
 #include "onnxruntime_cxx_api.h"
+#include "pcdet-infer-cpu/common/metadata.h"
+#include "pcdet-infer-cpu/common/runtimeconfig.h"
 
 vueron::Pillar::Pillar(const size_t point_num)
     : point_index(point_num, 0),
