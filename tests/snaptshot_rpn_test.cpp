@@ -4,8 +4,8 @@
 #include <cmath>
 #include <numeric>
 
-#include "npy.h"
 #include "pcdet_test/include/config.h"
+#include "pcdet_test/include/npy.h"
 #include "pcdet_test/include/params.h"
 #include "pcdet_test/include/post.h"
 #include "pcdet_test/include/pre.h"

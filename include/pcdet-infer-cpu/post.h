@@ -249,7 +249,7 @@ inline float calculateIOU(const float *box_a, const float *box_b) {
 }
 
 void nms(const std::vector<BndBox> &boxes, const std::vector<float> &scores,
-         std::vector<bool> &suppressed, const float iou_threshold);
+         std::vector<bool> &suppressed, float iou_threshold);
 
 void gather_boxes(const std::vector<BndBox> &boxes,
                   const std::vector<size_t> &labels,

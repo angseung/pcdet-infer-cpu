@@ -56,13 +56,13 @@ const bool big_endian = true;
 const bool big_endian = false;
 #endif
 
-const size_t magic_string_length = 6;
+constexpr size_t magic_string_length = 6;
 const std::array<char, magic_string_length> magic_string = {'\x93', 'N', 'U',
                                                             'M',    'P', 'Y'};
 
-const char little_endian_char = '<';
-const char big_endian_char = '>';
-const char no_endian_char = '|';
+constexpr char little_endian_char = '<';
+constexpr char big_endian_char = '>';
+constexpr char no_endian_char = '|';
 
 constexpr std::array<char, 3> endian_chars = {little_endian_char,
                                               big_endian_char, no_endian_char};
