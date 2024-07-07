@@ -33,8 +33,8 @@ vueron::PCDetCPU::PCDetCPU(const std::string &pfe_path,
   if (runtimeconfig != nullptr) {
     SetRuntimeConfig(*runtimeconfig);
   }
-  const std::string git_tag_info(GIT_TAG_VERSION);
-  const std::string build_info(BUILD_TIME);
+  const std::string git_tag_info{GIT_TAG_VERSION};
+  const std::string build_info{BUILD_TIME};
 
   version_info = "libpcdet " + git_tag_info + " (" + build_info + ")";
 };
@@ -90,7 +90,7 @@ void vueron::PCDetCPU::run(const float *points, const size_t point_buf_len,
 #ifdef _PROFILE
   auto pre_startTime = std::chrono::system_clock::now();
 #endif
-  vueron::PCDetCPU::preprocess(points, point_buf_len, point_stride);
+  preprocess(points, point_buf_len, point_stride);
 #ifdef _PROFILE
   auto pre_endTime = std::chrono::system_clock::now();
   auto pre_millisec = std::chrono::duration_cast<std::chrono::milliseconds>(
@@ -110,7 +110,7 @@ void vueron::PCDetCPU::run(const float *points, const size_t point_buf_len,
 #ifdef _PROFILE
   auto scatter_startTime = std::chrono::system_clock::now();
 #endif
-  vueron::PCDetCPU::scatter();
+  scatter();
 #ifdef _PROFILE
   auto scatter_endTime = std::chrono::system_clock::now();
   auto scatter_millisec = std::chrono::duration_cast<std::chrono::milliseconds>(
@@ -130,7 +130,7 @@ void vueron::PCDetCPU::run(const float *points, const size_t point_buf_len,
 #ifdef _PROFILE
   auto post_startTime = std::chrono::system_clock::now();
 #endif
-  vueron::PCDetCPU::postprocess(post_boxes, post_labels, post_scores);
+  postprocess(post_boxes, post_labels, post_scores);
 #ifdef _PROFILE
   auto post_endTime = std::chrono::system_clock::now();
   auto post_millisec = std::chrono::duration_cast<std::chrono::milliseconds>(
@@ -140,7 +140,7 @@ void vueron::PCDetCPU::run(const float *points, const size_t point_buf_len,
 #ifdef _PROFILE
   auto gather_boxes_startTime = std::chrono::system_clock::now();
 #endif
-  vueron::PCDetCPU::get_pred(boxes);
+  get_pred(boxes);
 #ifdef _PROFILE
   auto gather_boxes_endTime = std::chrono::system_clock::now();
   auto gather_boxes_millisec =
@@ -198,7 +198,7 @@ void vueron::PCDetCPU::run(const float *points, const size_t point_buf_len,
 #ifdef _PROFILE
   auto pre_startTime = std::chrono::system_clock::now();
 #endif
-  vueron::PCDetCPU::preprocess(points, point_buf_len, point_stride);
+  preprocess(points, point_buf_len, point_stride);
 #ifdef _PROFILE
   auto pre_endTime = std::chrono::system_clock::now();
   auto pre_millisec = std::chrono::duration_cast<std::chrono::milliseconds>(
@@ -218,7 +218,7 @@ void vueron::PCDetCPU::run(const float *points, const size_t point_buf_len,
 #ifdef _PROFILE
   auto scatter_startTime = std::chrono::system_clock::now();
 #endif
-  vueron::PCDetCPU::scatter();
+  scatter();
 #ifdef _PROFILE
   auto scatter_endTime = std::chrono::system_clock::now();
   auto scatter_millisec = std::chrono::duration_cast<std::chrono::milliseconds>(
@@ -238,7 +238,7 @@ void vueron::PCDetCPU::run(const float *points, const size_t point_buf_len,
 #ifdef _PROFILE
   auto post_startTime = std::chrono::system_clock::now();
 #endif
-  vueron::PCDetCPU::postprocess(final_boxes, final_labels, final_scores);
+  postprocess(final_boxes, final_labels, final_scores);
 #ifdef _PROFILE
   auto post_endTime = std::chrono::system_clock::now();
   auto post_millisec = std::chrono::duration_cast<std::chrono::milliseconds>(
