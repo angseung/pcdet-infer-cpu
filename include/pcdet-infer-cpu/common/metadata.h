@@ -2,8 +2,8 @@
 #define __METADATA_H__
 
 #include <iostream>
-#include <string>
 #include <memory>
+#include <string>
 #include <vector>
 
 namespace vueron {
