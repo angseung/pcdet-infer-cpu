@@ -16,19 +16,19 @@ vueron::PCDetCPU::PCDetCPU(const std::string &pfe_path,
       pfe_input(MAX_VOXELS * MAX_NUM_POINTS_PER_PILLAR * FEATURE_NUM, 0.0f),
       pfe_output(MAX_VOXELS * NUM_FEATURE_SCATTER, 0.0f),
       bev_image(GRID_Y_SIZE * GRID_X_SIZE * NUM_FEATURE_SCATTER, 0.0f),
-      suppressed(NMS_PRE_MAXSIZE, false) {
-  std::cout << "PFE Model Initialized with " << PFE_FILE << std::endl;
-  std::cout << "RPN Model Initialized with " << RPN_FILE << std::endl;
-  std::vector<int64_t> pfe_input_dim{MAX_VOXELS, MAX_NUM_POINTS_PER_PILLAR,
-                                     FEATURE_NUM};
-  pfe = std::make_unique<OrtModel>(
-      pfe_path, pfe_input_dim,
-      MAX_VOXELS * MAX_NUM_POINTS_PER_PILLAR * FEATURE_NUM);
-
-  std::vector<int64_t> rpn_input_dim{1, NUM_FEATURE_SCATTER, GRID_Y_SIZE,
-                                     GRID_X_SIZE};
-  rpn = std::make_unique<OrtModel>(
-      rpn_path, rpn_input_dim, GRID_Y_SIZE * GRID_X_SIZE * NUM_FEATURE_SCATTER);
+      suppressed(NMS_PRE_MAXSIZE, false),
+      pfe(std::make_unique<OrtModel>(
+          pfe_path,
+          std::vector<int64_t>{MAX_VOXELS, MAX_NUM_POINTS_PER_PILLAR,
+                               FEATURE_NUM},
+          MAX_VOXELS * MAX_NUM_POINTS_PER_PILLAR * FEATURE_NUM)),
+      rpn(std::make_unique<OrtModel>(
+          rpn_path,
+          std::vector<int64_t>{1, NUM_FEATURE_SCATTER, GRID_Y_SIZE,
+                               GRID_X_SIZE},
+          GRID_Y_SIZE * GRID_X_SIZE * NUM_FEATURE_SCATTER)) {
+  std::clog << "PFE Model Initialized with " << PFE_FILE << std::endl;
+  std::clog << "RPN Model Initialized with " << RPN_FILE << std::endl;
 
   if (runtimeconfig != nullptr) {
     SetRuntimeConfig(*runtimeconfig);
