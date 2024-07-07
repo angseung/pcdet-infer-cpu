@@ -1,6 +1,7 @@
 #ifndef __MAIN_H__
 #define __MAIN_H__
 
+#include <algorithm>
 #include <filesystem>
 
 #include "pcdet-infer-cpu/common/metadata.h"
