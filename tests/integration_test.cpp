@@ -4,14 +4,14 @@
 #include <cmath>
 #include <numeric>
 
-#include "npy.h"
 #include "pcdet_test/include/config.h"
 #include "pcdet_test/include/model.h"
+#include "pcdet_test/include/npy.h"
 #include "pcdet_test/include/params.h"
 #include "pcl.h"
 #include "type.h"
 
-#define _ERROR 1e-3
+#define ERROR 1e-3
 
 TEST(IntegrationTest, IntegrationTest) {
   const std::string folder_path = PCD_PATH;
@@ -74,15 +74,15 @@ TEST(IntegrationTest, IntegrationTest) {
     EXPECT_EQ(nms_labels.size(), MAX_OBJ_PER_SAMPLE);
 
     for (size_t j = 0; j < labels_snapshot.size(); j++) {
-      EXPECT_NEAR(nms_boxes[j].x, boxes_snapshot[7 * j], _ERROR);
-      EXPECT_NEAR(nms_boxes[j].y, boxes_snapshot[7 * j + 1], _ERROR);
-      EXPECT_NEAR(nms_boxes[j].z, boxes_snapshot[7 * j + 2], _ERROR);
-      EXPECT_NEAR(nms_boxes[j].dx, boxes_snapshot[7 * j + 3], _ERROR);
-      EXPECT_NEAR(nms_boxes[j].dy, boxes_snapshot[7 * j + 4], _ERROR);
-      EXPECT_NEAR(nms_boxes[j].dz, boxes_snapshot[7 * j + 5], _ERROR);
-      EXPECT_NEAR(nms_boxes[j].heading, boxes_snapshot[7 * j + 6], _ERROR);
+      EXPECT_NEAR(nms_boxes[j].x, boxes_snapshot[7 * j], ERROR);
+      EXPECT_NEAR(nms_boxes[j].y, boxes_snapshot[7 * j + 1], ERROR);
+      EXPECT_NEAR(nms_boxes[j].z, boxes_snapshot[7 * j + 2], ERROR);
+      EXPECT_NEAR(nms_boxes[j].dx, boxes_snapshot[7 * j + 3], ERROR);
+      EXPECT_NEAR(nms_boxes[j].dy, boxes_snapshot[7 * j + 4], ERROR);
+      EXPECT_NEAR(nms_boxes[j].dz, boxes_snapshot[7 * j + 5], ERROR);
+      EXPECT_NEAR(nms_boxes[j].heading, boxes_snapshot[7 * j + 6], ERROR);
 
-      EXPECT_NEAR(scores_snapshot[j], nms_scores[j], _ERROR);
+      EXPECT_NEAR(scores_snapshot[j], nms_scores[j], ERROR);
       EXPECT_EQ(labels_snapshot[j], nms_labels[j]);
     }
 

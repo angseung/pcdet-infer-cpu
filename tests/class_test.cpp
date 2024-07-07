@@ -4,15 +4,13 @@
 #include <cmath>
 #include <numeric>
 
-#include "npy.h"
 #include "pcdet_test/include/config.h"
 #include "pcdet_test/include/model.h"
+#include "pcdet_test/include/npy.h"
 #include "pcdet_test/include/params.h"
 #include "pcdet_test/include/pcdet.h"
 #include "pcl.h"
 #include "type.h"
-
-#define _ERROR 1e-3
 
 TEST(IntegrationTest, IntegrationTest) {
   std::string folder_path = PCD_PATH;

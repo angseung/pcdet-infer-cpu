@@ -3,7 +3,6 @@
 
 #include <filesystem>
 
-#include "npy.h"
 #include "pcdet-infer-cpu/common/metadata.h"
 #include "pcdet-infer-cpu/common/runtimeconfig.h"
 #include "pcdet-infer-cpu/pcdet.h"
