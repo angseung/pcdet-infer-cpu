@@ -45,8 +45,8 @@ class PCDetCPU {
   std::vector<size_t> post_labels;  // labels after NMS
   std::vector<float> post_scores;   // scores after NMS
 
-  void preprocess(const float *points, const size_t point_buf_len,
-                  const size_t point_stride);
+  void preprocess(const float *points, size_t point_buf_len,
+                  size_t point_stride);
   void scatter();
   void postprocess(std::vector<BndBox> &post_boxes,
                    std::vector<size_t> &post_labels,
@@ -59,11 +59,11 @@ class PCDetCPU {
   PCDetCPU &operator=(const PCDetCPU &copy) = delete;
   PCDetCPU(const std::string &pfe_path, const std::string &rpn_path);
   ~PCDetCPU() = default;
-  void run(const float *points, const size_t point_buf_len,
-           const size_t point_stride, std::vector<PredBox> &boxes);
-  void run(const float *points, const size_t point_buf_len,
-           const size_t point_stride, std::vector<BndBox> &final_boxes,
-           std::vector<size_t> &final_labels, std::vector<float> &final_scores);
+  void run(const float *points, size_t point_buf_len, size_t point_stride,
+           std::vector<PredBox> &boxes);
+  void run(const float *points, size_t point_buf_len, size_t point_stride,
+           std::vector<BndBox> &final_boxes, std::vector<size_t> &final_labels,
+           std::vector<float> &final_scores);
 };
 }  // namespace vueron
 
