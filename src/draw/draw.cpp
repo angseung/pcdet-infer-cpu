@@ -13,18 +13,13 @@ std::string floatToString(const float value) {
   return out.str();
 }
 
-cv::Mat drawBirdsEyeView(const size_t point_buf_len, const size_t point_stride,
-                         const float *points_data,
-                         const std::vector<vueron::BndBox> &boxes,
-                         const std::vector<float> &scores,
-                         const std::vector<size_t> &labels) {
-  constexpr float scale = 12.0;
+void drawBirdsEyeView(const size_t point_buf_len, const size_t point_stride,
+                      const float *points_data,
+                      const std::vector<vueron::BndBox> &boxes,
+                      const std::vector<float> &scores,
+                      const std::vector<size_t> &labels, const float scale,
+                      cv::Mat &image) {
   const size_t points_size = point_buf_len / point_stride;
-
-  const int width = static_cast<int>((MAX_X_RANGE - MIN_X_RANGE) * scale);
-  const int height = static_cast<int>((MAX_Y_RANGE - MIN_Y_RANGE) * scale);
-
-  cv::Mat image(height, width, CV_8UC3, cv::Scalar(0, 0, 0));
 
   // draw pcd
   for (size_t i = 0; i < points_size; ++i) {
@@ -76,6 +71,4 @@ cv::Mat drawBirdsEyeView(const size_t point_buf_len, const size_t point_stride,
       cv::line(image, vertices[j], vertices[(j + 1) % 4], color, 2);
     }
   }
-
-  return image;
 }

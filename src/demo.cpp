@@ -98,8 +98,14 @@ int main(int argc, const char **argv) {
               << std::setw(3) << ped_cnt << "), cyclist(" << std::setw(3)
               << cyc_cnt << ")" << std::endl;
 
-    auto image = drawBirdsEyeView(point_buf_len, point_stride, points,
-                                  nms_boxes, nms_scores, nms_labels);
+    constexpr float scale = 12.0;
+
+    const int width = static_cast<int>((MAX_X_RANGE - MIN_X_RANGE) * scale);
+    const int height = static_cast<int>((MAX_Y_RANGE - MIN_Y_RANGE) * scale);
+
+    cv::Mat image(height, width, CV_8UC3, cv::Scalar(0, 0, 0));
+    drawBirdsEyeView(point_buf_len, point_stride, points, nms_boxes, nms_scores,
+                     nms_labels, scale, image);
     cv::imshow("Bird's Eye View", image);
     cv::waitKey(0);
 #ifdef _DEBUG
