@@ -27,7 +27,7 @@ void drawBirdsEyeView(const size_t point_buf_len, const size_t point_stride,
         static_cast<int>((points_data[i * point_stride] - MIN_X_RANGE) * scale);
     const int y = static_cast<int>(
         (MAX_Y_RANGE - points_data[i * point_stride + 1]) * scale);
-    cv::circle(image, cv::Point(x, y), 0, cv::Scalar(255, 255, 255), 1);
+    cv::circle(image, cv::Point{x, y}, 0, cv::Scalar{255, 255, 255}, 1);
   }
 
   // draw boxes
