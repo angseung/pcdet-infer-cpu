@@ -87,7 +87,7 @@ int main(int argc, const char **argv) {
         Logging
     */
     auto veh_cnt = std::count_if(nms_labels.begin(), nms_labels.end(),
-                                 [](int j) { return i == j; });
+                                 [](int j) { return j == 1; });
     auto ped_cnt = std::count_if(nms_labels.begin(), nms_labels.end(),
                                  [](int j) { return j == 2; });
     auto cyc_cnt = std::count_if(nms_labels.begin(), nms_labels.end(),
