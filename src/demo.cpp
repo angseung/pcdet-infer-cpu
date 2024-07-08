@@ -14,8 +14,9 @@ int main(int argc, const char **argv) {
               << " <path_to_your_metadata_files_directory>" << std::endl;
     pcd_path = "./pcd/cepton";
     metadata_path = wd + "/models/gcm_v4_residual/metadata.json";
-    std::cout << "It will run with default pcd path: " << pcd_path << std::endl;
-    std::cout << "It will run with default metadata file: " << metadata_path
+    std::cout << "It will run with a default pcd path: " << pcd_path
+              << std::endl;
+    std::cout << "It will run with a default metadata file: " << metadata_path
               << std::endl;
   } else if (argc == 2) {
     /*
@@ -23,7 +24,7 @@ int main(int argc, const char **argv) {
     */
     pcd_path = argv[1];
     metadata_path = wd + "/models/gcm_v4_residual/metadata.json";
-    std::cout << "It will run with default metadata file: " << metadata_path
+    std::cout << "It will run with a default metadata file: " << metadata_path
               << std::endl;
   } else {
     /*
@@ -87,18 +88,24 @@ int main(int argc, const char **argv) {
         Logging
     */
     auto veh_cnt = std::count_if(nms_labels.begin(), nms_labels.end(),
-                                 [](int i) { return i == 1; });
+                                 [](int j) { return j == 1; });
     auto ped_cnt = std::count_if(nms_labels.begin(), nms_labels.end(),
-                                 [](int i) { return i == 2; });
+                                 [](int j) { return j == 2; });
     auto cyc_cnt = std::count_if(nms_labels.begin(), nms_labels.end(),
-                                 [](int i) { return i == 3; });
+                                 [](int j) { return j == 3; });
     std::cout << "Input file: " << pcd_file << std::endl;
     std::cout << "vehicle(" << std::setw(3) << veh_cnt << "), pedestrian("
               << std::setw(3) << ped_cnt << "), cyclist(" << std::setw(3)
               << cyc_cnt << ")" << std::endl;
 
-    auto image = drawBirdsEyeView(point_buf_len, point_stride, points,
-                                  nms_boxes, nms_scores, nms_labels);
+    constexpr float scale = 12.0;
+
+    const int width = static_cast<int>((MAX_X_RANGE - MIN_X_RANGE) * scale);
+    const int height = static_cast<int>((MAX_Y_RANGE - MIN_Y_RANGE) * scale);
+
+    cv::Mat image(height, width, CV_8UC3, cv::Scalar(0, 0, 0));
+    drawBirdsEyeView(point_buf_len, point_stride, points, nms_boxes, nms_scores,
+                     nms_labels, scale, image);
     cv::imshow("Bird's Eye View", image);
     cv::waitKey(0);
 #ifdef _DEBUG
