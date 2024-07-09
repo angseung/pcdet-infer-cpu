@@ -27,7 +27,7 @@ void drawBirdsEyeView(const size_t point_buf_len, const size_t point_stride,
         static_cast<int>((points_data[i * point_stride] - MIN_X_RANGE) * scale);
     const int y = static_cast<int>(
         (MAX_Y_RANGE - points_data[i * point_stride + 1]) * scale);
-    cv::circle(image, cv::Point(x, y), 0, cv::Scalar(255, 255, 255), 1);
+    cv::circle(image, cv::Point{x, y}, 0, cv::Scalar{255, 255, 255}, 1);
   }
 
   // draw boxes
@@ -36,16 +36,16 @@ void drawBirdsEyeView(const size_t point_buf_len, const size_t point_stride,
     cv::Scalar color;
     switch (labels[i]) {
       case 1:
-        color = cv::Scalar(0, 0, 255);  // red
+        color = cv::Scalar{0, 0, 255};  // red
         break;
       case 2:
-        color = cv::Scalar(0, 255, 0);  // green
+        color = cv::Scalar{0, 255, 0};  // green
         break;
       case 3:
-        color = cv::Scalar(255, 0, 0);  // blue
+        color = cv::Scalar{255, 0, 0};  // blue
         break;
       default:
-        color = cv::Scalar(0, 255, 255);  // yellow (defalut)
+        color = cv::Scalar{0, 255, 255};  // yellow (defalut)
         break;
     }
     vueron::BndBox box{boxes[i]};
@@ -58,7 +58,7 @@ void drawBirdsEyeView(const size_t point_buf_len, const size_t point_stride,
     vertices[3] = cv::Point2f(-box.dx / 2, box.dy / 2);
 
     std::string text = floatToString(scores[i]);
-    cv::putText(image, text, center, 1, 1.0f, cv::Scalar(0, 255, 255), 1);
+    cv::putText(image, text, center, 1, 1.0f, cv::Scalar{0, 255, 255}, 1);
 
     for (auto &vertice : vertices) {
       vertice = rotatePoint(vertice, -box.heading);

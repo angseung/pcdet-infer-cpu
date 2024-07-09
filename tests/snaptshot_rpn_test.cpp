@@ -76,7 +76,7 @@ TEST(RPNTest, RPNValueTest) {
 
     // read point from pcd file
     vueron::PCDReader reader(pcd_file);
-    const std::vector<float> points = reader.getData();
+    const std::vector<float> &points = reader.getData();
     const size_t point_stride = reader.getStride();
     const size_t point_buf_len = points.size();
     std::vector<vueron::Pillar> bev_pillar(
@@ -92,13 +92,10 @@ TEST(RPNTest, RPNValueTest) {
         GRID_Y_SIZE * GRID_X_SIZE * NUM_FEATURE_SCATTER,
         0.0f);  // input of RPN
     std::vector<std::vector<float>> rpn_output;
-    vueron::voxelization(bev_pillar, (float *)points.data(), point_buf_len,
-                         point_stride);
-    size_t num_pillars = vueron::point_decoration(
-        bev_pillar, voxel_coords, voxel_num_points, pfe_input,
-        (float *)points.data(), point_stride);
-    size_t num_voxels_manual =
-        std::accumulate(voxel_num_points.begin(), voxel_num_points.end(), 0);
+    voxelization(bev_pillar, points.data(), point_buf_len, point_stride);
+    size_t num_pillars =
+        point_decoration(bev_pillar, voxel_coords, voxel_num_points, pfe_input,
+                         points.data(), point_stride);
     EXPECT_EQ(num_pillars, voxel_num_points.size());
 
     // check remainder voxels is zero

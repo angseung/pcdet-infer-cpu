@@ -65,7 +65,7 @@ int main(int argc, const char **argv) {
     /*
         Read points from pcd files
     */
-    vueron::PCDReader reader(pcd_file);
+    vueron::PCDReader reader{pcd_file};
     const std::vector<float> buffer = reader.getData();
     const size_t point_stride = reader.getStride();
     const size_t point_buf_len = buffer.size();
@@ -103,7 +103,7 @@ int main(int argc, const char **argv) {
     const int width = static_cast<int>((MAX_X_RANGE - MIN_X_RANGE) * scale);
     const int height = static_cast<int>((MAX_Y_RANGE - MIN_Y_RANGE) * scale);
 
-    cv::Mat image(height, width, CV_8UC3, cv::Scalar(0, 0, 0));
+    cv::Mat image(height, width, CV_8UC3, cv::Scalar{0, 0, 0});
     drawBirdsEyeView(point_buf_len, point_stride, points, nms_boxes, nms_scores,
                      nms_labels, scale, image);
     cv::imshow("Bird's Eye View", image);

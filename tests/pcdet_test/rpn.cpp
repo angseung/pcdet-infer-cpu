@@ -44,8 +44,8 @@ void vueron::rpn_run(const std::vector<float> &rpn_input,
   }
 
   // Make input tensor
-  auto input_tensor = Ort::Value::CreateTensor<float>(
-      memory_info, (float *)rpn_input.data(), input_tensor_size,
+  const auto input_tensor = Ort::Value::CreateTensor<float>(
+      memory_info, const_cast<float *>(rpn_input.data()), input_tensor_size,
       input_node_dims.data(), input_node_dims.size());
   assert(input_tensor.IsTensor());
 

@@ -17,7 +17,7 @@ class PCDReader {
   explicit PCDReader(const std::string &filePath);
   ~PCDReader() = default;
   const std::vector<float> &getData() const;
-  const int getStride() const;
+  int getStride() const;
 };
 
 std::vector<std::string> getPCDFileList(const std::string &folder_path);
