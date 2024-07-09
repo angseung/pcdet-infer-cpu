@@ -47,7 +47,7 @@ void vueron::OrtModel::run(const std::vector<float> &model_input,
 
   // Make input tensor
   auto input_tensor = Ort::Value::CreateTensor<float>(
-      memory_info, (float *)model_input.data(), input_tensor_size,
+      memory_info, const_cast<float *>(model_input.data()), input_tensor_size,
       input_node_dims.data(), input_node_dims.size());
   assert(input_tensor.IsTensor());
 
@@ -90,7 +90,7 @@ void vueron::OrtModel::run(const std::vector<float> &model_input,
 
   // Make input tensor
   auto input_tensor = Ort::Value::CreateTensor<float>(
-      memory_info, (float *)model_input.data(), input_tensor_size,
+      memory_info, const_cast<float *>(model_input.data()), input_tensor_size,
       input_node_dims.data(), input_node_dims.size());
   assert(input_tensor.IsTensor());
 

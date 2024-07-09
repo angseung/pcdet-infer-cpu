@@ -49,7 +49,7 @@ void vueron::OrtModel::run(const std::vector<float> &model_input,
 
   // Make input tensor
   auto input_tensor = Ort::Value::CreateTensor<float>(
-      memory_info, (float *)model_input.data(), input_tensor_size,
+      memory_info, const_cast<float *>(model_input.data()), input_tensor_size,
       input_node_dims.data(), input_node_dims.size());
   assert(input_tensor.IsTensor());
 
@@ -91,8 +91,8 @@ void vueron::OrtModel::run(const std::vector<float> &model_input,
   assert(output_node_names.size() == 1);
 
   // Make input tensor
-  auto input_tensor = Ort::Value::CreateTensor<float>(
-      memory_info, (float *)model_input.data(), input_tensor_size,
+  const auto input_tensor = Ort::Value::CreateTensor<float>(
+      memory_info, const_cast<float *>(model_input.data()), input_tensor_size,
       input_node_dims.data(), input_node_dims.size());
   assert(input_tensor.IsTensor());
 
@@ -106,10 +106,10 @@ void vueron::OrtModel::run(const std::vector<float> &model_input,
   Ort::Value &output_tensor = output_tensors.front();
 
   // Get shape and size of an output tensor
-  auto output_tensor_info = output_tensor.GetTensorTypeAndShapeInfo();
+  const auto output_tensor_info = output_tensor.GetTensorTypeAndShapeInfo();
   auto output_dims = output_tensor_info.GetShape();
-  size_t output_size = output_tensor_info.GetElementCount();
-  float *floatarr = output_tensor.GetTensorMutableData<float>();
+  const size_t output_size = output_tensor_info.GetElementCount();
+  auto *floatarr = output_tensor.GetTensorMutableData<float>();
 
   // Resize the output vector to fit the output tensor data
   model_output.resize(output_size);

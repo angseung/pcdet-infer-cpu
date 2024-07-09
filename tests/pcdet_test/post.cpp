@@ -130,7 +130,8 @@ void vueron::nms(const std::vector<BndBox> &boxes,
       }
 
       // Calculate the IOU of the current box with the rest of the boxes
-      if (calculateIOU((float *)&boxes[idx], (float *)&boxes[idx_j]) >
+      if (calculateIOU(static_cast<const float *>(boxes[idx]),
+                       static_cast<const float *>(boxes[idx_j])) >
           iou_threshold) {
         suppressed[idx_j] = true;
       }

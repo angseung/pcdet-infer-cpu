@@ -5,6 +5,11 @@ namespace vueron {
 
 struct BndBox {
   float x, y, z, dx, dy, dz, heading;
+
+  // Operator overload to cast BndBox to const float*
+  explicit operator const float*() const {
+    return &x;  // Return the address of the 'x' member
+  }
 };
 
 struct PredBox {

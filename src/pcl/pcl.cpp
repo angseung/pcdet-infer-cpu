@@ -65,7 +65,7 @@ vueron::PCDReader::PCDReader(const std::string &filePath) {
 
 const std::vector<float> &vueron::PCDReader::getData() const { return data; }
 
-const int vueron::PCDReader::getStride() const { return stride; }
+int vueron::PCDReader::getStride() const { return stride; }
 
 std::vector<std::string> vueron::getPCDFileList(
     const std::string &folder_path) {

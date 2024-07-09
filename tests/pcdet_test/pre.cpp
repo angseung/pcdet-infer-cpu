@@ -247,8 +247,8 @@ void vueron::pfe_run(const std::vector<float> &pfe_input,
   assert(output_node_names.size() == 1);
 
   // Make input tensor
-  auto input_tensor = Ort::Value::CreateTensor<float>(
-      memory_info, (float *)(pfe_input.data()), input_tensor_size,
+  const auto input_tensor = Ort::Value::CreateTensor<float>(
+      memory_info, const_cast<float *>(pfe_input.data()), input_tensor_size,
       input_node_dims.data(), 3);
   assert(input_tensor.IsTensor());
 

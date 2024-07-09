@@ -86,7 +86,7 @@ TEST(VoxelSnapshotTest, PFEShapeTest) {
     const std::vector<float> buffer = reader.getData();
     const size_t point_stride = reader.getStride();
     const size_t point_buf_len = buffer.size();
-    const float *points = buffer.data();
+    const float* points = buffer.data();
     std::vector<vueron::Pillar> bev_pillar(
         GRID_Y_SIZE * GRID_X_SIZE, vueron::Pillar(MAX_NUM_POINTS_PER_PILLAR));
     std::vector<size_t> voxel_coords;  // (x, y)
@@ -108,7 +108,6 @@ TEST(VoxelSnapshotTest, VoxelCoordsValueTest) {
   std::string snapshot_folder_path = SNAPSHOT_PATH;
   std::vector<std::string> snapshot_files =
       vueron::getFileList(snapshot_folder_path);
-  std::vector<float> points;
   size_t num_test_files = pcd_files.size();
 
   EXPECT_LE(pcd_files.size(), snapshot_files.size());
@@ -120,9 +119,8 @@ TEST(VoxelSnapshotTest, VoxelCoordsValueTest) {
 
     // read point from pcd file
     vueron::PCDReader reader(pcd_file);
-    const std::vector<float> points = reader.getData();
+    const std::vector<float>& points = reader.getData();
     const size_t point_stride = reader.getStride();
-    const size_t point_buf_len = points.size();
 
     // read voxels from snapshot file
     const std::string voxel_coord_path = snapshot_dir + "/voxel_coord.npy";
@@ -139,11 +137,7 @@ TEST(VoxelSnapshotTest, VoxelCoordsValueTest) {
     std::vector<float> pfe_input(
         MAX_VOXELS * MAX_NUM_POINTS_PER_PILLAR * FEATURE_NUM, 0.0f);
 
-    vueron::voxelization(bev_pillar, (float *)points.data(), points.size(),
-                         point_stride);
-    size_t num_pillars = vueron::point_decoration(
-        bev_pillar, voxel_coords, voxel_num_points, pfe_input,
-        (float *)points.data(), point_stride);
+    voxelization(bev_pillar, points.data(), points.size(), point_stride);
 
     EXPECT_EQ(voxel_coords.size() / 2, voxel_num_points.size());
     EXPECT_EQ(voxel_coords.size(), voxel_coords_snapshot.size());
