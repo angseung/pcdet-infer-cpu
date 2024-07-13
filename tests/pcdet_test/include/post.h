@@ -9,14 +9,14 @@
 #include "type.h"
 
 namespace vueron {
-
+template <typename T = float>
 struct Point {
-  float x, y;
-  Point() : x(0.0f), y(0.0f) {}
-  Point(const float _x, const float _y) { x = _x, y = _y; }
+  T x, y;
+  Point() = default;
+  Point(const T _x, const T _y) { x = _x, y = _y; }
   ~Point() = default;
 
-  void set(const float _x, const float _y) {
+  void set(const T _x, const T _y) {
     x = _x;
     y = _y;
   }
@@ -32,16 +32,17 @@ inline float min(const float a, const float b) { return a > b ? b : a; }
 
 inline float max(const float a, const float b) { return a > b ? a : b; }
 
-inline float cross(const Point &a, const Point &b) {
+inline float cross(const Point<float> &a, const Point<float> &b) {
   return a.x * b.y - a.y * b.x;
 }
 
-inline float cross(const Point &p1, const Point &p2, const Point &p0) {
+inline float cross(const Point<float> &p1, const Point<float> &p2,
+                   const Point<float> &p0) {
   return (p1.x - p0.x) * (p2.y - p0.y) - (p2.x - p0.x) * (p1.y - p0.y);
 }
 
-inline int check_rect_cross(const Point &p1, const Point &p2, const Point &q1,
-                            const Point &q2) {
+inline int check_rect_cross(const Point<float> &p1, const Point<float> &p2,
+                            const Point<float> &q1, const Point<float> &q2) {
   const int ret = min(p1.x, p2.x) <= max(q1.x, q2.x) &&
                   min(q1.x, q2.x) <= max(p1.x, p2.x) &&
                   min(p1.y, p2.y) <= max(q1.y, q2.y) &&
@@ -49,7 +50,7 @@ inline int check_rect_cross(const Point &p1, const Point &p2, const Point &q1,
   return ret;
 }
 
-inline int check_in_box2d(const float *box, const Point &p) {
+inline int check_in_box2d(const float *box, const Point<float> &p) {
   // params: (7) [x, y, z, dx, dy, dz, heading]
   constexpr float MARGIN = 1e-2;
 
@@ -66,8 +67,9 @@ inline int check_in_box2d(const float *box, const Point &p) {
           fabs(rot_y) < box[4] / 2 + MARGIN);
 }
 
-inline void rotate_around_center(const Point &center, const float angle_cos,
-                                 const float angle_sin, Point &p) {
+inline void rotate_around_center(const Point<float> &center,
+                                 const float angle_cos, const float angle_sin,
+                                 Point<float> &p) {
   const float new_x =
       (p.x - center.x) * angle_cos + (p.y - center.y) * (-angle_sin) + center.x;
   const float new_y =
@@ -75,13 +77,15 @@ inline void rotate_around_center(const Point &center, const float angle_cos,
   p.set(new_x, new_y);
 }
 
-inline int point_cmp(const Point &a, const Point &b, const Point &center) {
+inline int point_cmp(const Point<float> &a, const Point<float> &b,
+                     const Point<float> &center) {
   return atan2(a.y - center.y, a.x - center.x) >
          atan2(b.y - center.y, b.x - center.x);
 }
 
-inline int intersection(const Point &p1, const Point &p0, const Point &q1,
-                        const Point &q0, Point &ans) {
+inline int intersection(const Point<float> &p1, const Point<float> &p0,
+                        const Point<float> &q1, const Point<float> &q0,
+                        Point<float> &ans) {
   // fast exclusion
   if (check_rect_cross(p0, p1, q0, q1) == 0) return 0;
 
@@ -142,16 +146,16 @@ inline float box_overlap(const float *box_a, const float *box_b) {
   const float b_x1 = box_b[0] - b_dx_half, b_y1 = box_b[1] - b_dy_half;
   const float b_x2 = box_b[0] + b_dx_half, b_y2 = box_b[1] + b_dy_half;
 
-  const Point center_a(box_a[0], box_a[1]);
-  const Point center_b(box_b[0], box_b[1]);
+  const Point<float> center_a(box_a[0], box_a[1]);
+  const Point<float> center_b(box_b[0], box_b[1]);
 
-  Point box_a_corners[5];
+  Point<float> box_a_corners[5];
   box_a_corners[0].set(a_x1, a_y1);
   box_a_corners[1].set(a_x2, a_y1);
   box_a_corners[2].set(a_x2, a_y2);
   box_a_corners[3].set(a_x1, a_y2);
 
-  Point box_b_corners[5];
+  Point<float> box_b_corners[5];
   box_b_corners[0].set(b_x1, b_y1);
   box_b_corners[1].set(b_x2, b_y1);
   box_b_corners[2].set(b_x2, b_y2);
@@ -170,8 +174,8 @@ inline float box_overlap(const float *box_a, const float *box_b) {
   box_b_corners[4] = box_b_corners[0];
 
   // get intersection of lines
-  Point cross_points[16];
-  Point poly_center;
+  Point<float> cross_points[16];
+  Point<float> poly_center{};
   int cnt = 0, flag = 0;
 
   poly_center.set(0, 0);
@@ -201,11 +205,11 @@ inline float box_overlap(const float *box_a, const float *box_b) {
     }
   }
 
-  poly_center.x /= cnt;
-  poly_center.y /= cnt;
+  poly_center.x /= static_cast<float>(cnt);
+  poly_center.y /= static_cast<float>(cnt);
 
   // sort the points of polygon
-  Point temp{};
+  Point<float> temp{};
   for (int j = 0; j < cnt - 1; j++) {
     for (int i = 0; i < cnt - j - 1; i++) {
       if (point_cmp(cross_points[i], cross_points[i + 1], poly_center)) {
@@ -223,7 +227,7 @@ inline float box_overlap(const float *box_a, const float *box_b) {
                   cross_points[k + 1] - cross_points[0]);
   }
 
-  return fabs(area) / 2.0;
+  return fabs(area) / 2.0f;
 }
 
 inline float calculateIOU(const float *box_a, const float *box_b) {

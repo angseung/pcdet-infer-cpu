@@ -149,7 +149,7 @@ size_t vueron::point_decoration(const std::vector<Pillar> &bev_pillar,
         (PILLAR_Y_SIZE / 2.0f) +
         (static_cast<float>(pillar.pillar_grid_y) * PILLAR_Y_SIZE) +
         MIN_Y_RANGE;
-    const float z_center = (PILLAR_Z_SIZE / 2.0f) + MIN_Z_RANGE;
+    constexpr float z_center = (PILLAR_Z_SIZE / 2.0f) + MIN_Z_RANGE;
 
     // write encoded features into raw_voxels and pfe_input
     for (size_t i = 0; i < MAX_NUM_POINTS_PER_PILLAR; i++) {
@@ -162,36 +162,35 @@ size_t vueron::point_decoration(const std::vector<Pillar> &bev_pillar,
         /*
           for models use intensity features
         */
-        if (NUM_POINT_VALUES >= 4) {
-          // for zero intensity models
-          if (ZERO_INTENSITY) {
-            pfe_input[index + 3] = 0.0f;
-          }
-          // for normal intensity models
-          else {
-            pfe_input[index + 3] = points[point_stride * point_index + 3] /
-                                   INTENSITY_NORMALIZE_DIV;
-          }
-          pfe_input[index + 4] = pfe_input[index] - mean_x;
-          pfe_input[index + 5] = pfe_input[index + 1] - mean_y;
-          pfe_input[index + 6] = pfe_input[index + 2] - mean_z;
+        assert(NUM_POINT_VALUES == 4);
+#if NUM_POINT_VALUES == 4
+#if ZERO_INTENSITY
+        // for zero intensity models
+        pfe_input[index + 3] = 0.0f;
+#else
+        // for normal intensity models
+        pfe_input[index + 3] =
+            points[point_stride * point_index + 3] / INTENSITY_NORMALIZE_DIV;
+#endif
+        pfe_input[index + 4] = pfe_input[index] - mean_x;
+        pfe_input[index + 5] = pfe_input[index + 1] - mean_y;
+        pfe_input[index + 6] = pfe_input[index + 2] - mean_z;
 
-          pfe_input[index + 7] = pfe_input[index] - x_center;
-          pfe_input[index + 8] = pfe_input[index + 1] - y_center;
-          pfe_input[index + 9] = pfe_input[index + 2] - z_center;
-        }
+        pfe_input[index + 7] = pfe_input[index] - x_center;
+        pfe_input[index + 8] = pfe_input[index + 1] - y_center;
+        pfe_input[index + 9] = pfe_input[index + 2] - z_center;
         /*
           for models do not use intensity features
         */
-        else {
-          pfe_input[index + 3] = pfe_input[index] - mean_x;
-          pfe_input[index + 4] = pfe_input[index + 1] - mean_y;
-          pfe_input[index + 5] = pfe_input[index + 2] - mean_z;
+#else
+        pfe_input[index + 3] = pfe_input[index] - mean_x;
+        pfe_input[index + 4] = pfe_input[index + 1] - mean_y;
+        pfe_input[index + 5] = pfe_input[index + 2] - mean_z;
 
-          pfe_input[index + 6] = pfe_input[index] - x_center;
-          pfe_input[index + 7] = pfe_input[index + 1] - y_center;
-          pfe_input[index + 8] = pfe_input[index + 2] - z_center;
-        }
+        pfe_input[index + 6] = pfe_input[index] - x_center;
+        pfe_input[index + 7] = pfe_input[index + 1] - y_center;
+        pfe_input[index + 8] = pfe_input[index + 2] - z_center;
+#endif
       }
       index += FEATURE_NUM;
     }
