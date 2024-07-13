@@ -65,7 +65,7 @@ int main(int argc, const char **argv) {
       Read point data from pcd files
     */
     vueron::PCDReader reader{pcd_file};
-    const std::vector<float> points = reader.getData();
+    const std::vector<float> &points = reader.getData();
     const size_t point_stride = reader.getStride();
     const size_t point_buf_len = points.size();
     const float *point_data = points.data();

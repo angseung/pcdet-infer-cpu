@@ -60,13 +60,13 @@ int main(int argc, const char **argv) {
   std::cout << pcdet->getVersionInfo() << std::endl;
 
   for (size_t i = 0; i < num_test_files; i++) {
-    const std::string pcd_file = pcd_files[i];
+    const std::string &pcd_file = pcd_files[i];
 
     /*
         Read points from pcd files
     */
     vueron::PCDReader reader{pcd_file};
-    const std::vector<float> buffer = reader.getData();
+    const std::vector<float> &buffer = reader.getData();
     const size_t point_stride = reader.getStride();
     const size_t point_buf_len = buffer.size();
     const float *points = buffer.data();
