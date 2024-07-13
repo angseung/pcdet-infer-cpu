@@ -33,8 +33,7 @@ int main(int argc, const char **argv) {
     pcd_path = argv[1];
     metadata_path = argv[2];
   }
-  const std::vector<std::string> pcd_files = vueron::getPCDFileList(pcd_path);
-  const size_t num_test_files = pcd_files.size();
+  const auto pcd_files = vueron::getPCDFileList(pcd_path);
 
   /*
     Set Metadata & Runtimeconfig
@@ -59,9 +58,7 @@ int main(int argc, const char **argv) {
       std::make_unique<vueron::PCDetCPU>(PFE_FILE, RPN_FILE, &config);
   std::cout << pcdet->getVersionInfo() << std::endl;
 
-  for (size_t i = 0; i < num_test_files; i++) {
-    const std::string &pcd_file = pcd_files[i];
-
+  for (const auto &pcd_file : pcd_files) {
     /*
         Read points from pcd files
     */
@@ -107,7 +104,7 @@ int main(int argc, const char **argv) {
     drawBirdsEyeView(point_buf_len, point_stride, points, nms_boxes, nms_scores,
                      nms_labels, scale, image);
     cv::imshow("Bird's Eye View", image);
-    cv::waitKey(0);
+    cv::waitKey(1);
 #ifdef _DEBUG
     std::string output_file_name = "outputs/" + std::to_string(i + 1) + ".png";
     cv::imwrite(output_file_name, image);
