@@ -22,9 +22,9 @@ void vueron::voxelization(std::vector<Pillar> &bev_pillar, const float *points,
                           const size_t points_buf_len,
                           const size_t point_stride) {
   // check grid size
-  assert(GRID_X_SIZE == (float)((MAX_X_RANGE - MIN_X_RANGE) / PILLAR_X_SIZE));
-  assert(GRID_Y_SIZE == (float)((MAX_Y_RANGE - MIN_Y_RANGE) / PILLAR_Y_SIZE));
-  assert(1.0f == (float)((MAX_Z_RANGE - MIN_Z_RANGE) / PILLAR_Z_SIZE));
+  assert(GRID_X_SIZE == (MAX_X_RANGE - MIN_X_RANGE) / PILLAR_X_SIZE);
+  assert(GRID_Y_SIZE == (MAX_Y_RANGE - MIN_Y_RANGE) / PILLAR_Y_SIZE);
+  assert(1.0f == (MAX_Z_RANGE - MIN_Z_RANGE) / PILLAR_Z_SIZE);
 
   // check buffer size
   assert(points_buf_len % point_stride == 0);
@@ -54,15 +54,8 @@ void vueron::voxelization(std::vector<Pillar> &bev_pillar, const float *points,
     // check point value is NaN or not.
     if (std::isnan(point_x) || std::isnan(point_y) || std::isnan(point_z) ||
         std::isnan(point_w)) {
-      std::cerr << "ERROR: NaN value encountered in point data." << std::endl;
-      std::exit(EXIT_FAILURE);
-      exit(1);
+      throw std::runtime_error("ERROR: NaN value encountered in point data.");
     }
-
-    assert(!std::isnan(point_x));
-    assert(!std::isnan(point_y));
-    assert(!std::isnan(point_z));
-    assert(!std::isnan(point_w));
 
     const auto voxel_index_x =
         static_cast<size_t>(floorf((point_x - MIN_X_RANGE) / PILLAR_X_SIZE));
