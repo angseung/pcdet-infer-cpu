@@ -31,10 +31,10 @@ vueron::PCDReader::PCDReader(const std::string &filePath) {
       std::string field;
       stride = 0;
       while (iss >> field) {
-        fieldOffsets[field] = stride * sizeof(float);
+        fieldOffsets[field] = static_cast<int>(stride * sizeof(float));
         stride++;
       }
-      pointSize = stride * sizeof(float);
+      pointSize = static_cast<int>(stride * sizeof(float));
     } else if (token == "DATA") {
       std::string dataType;
       iss >> dataType;
@@ -91,7 +91,7 @@ std::vector<std::string> vueron::getFileList(const std::string &folder_path) {
 
   if (ret == 0) {
     for (size_t i = 0; i < glob_result.gl_pathc; ++i) {
-      files.push_back(std::string(glob_result.gl_pathv[i]));
+      files.emplace_back(glob_result.gl_pathv[i]);
     }
   } else {
     std::cerr << "glob() failed with return code: " << ret << std::endl;
@@ -99,7 +99,7 @@ std::vector<std::string> vueron::getFileList(const std::string &folder_path) {
 
   globfree(&glob_result);
 
-  if (files.size() == 0) {
+  if (files.empty()) {
     std::cout << "There's no file in " + folder_path << std::endl;
   }
   return files;
