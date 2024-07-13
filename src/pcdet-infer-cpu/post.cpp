@@ -74,9 +74,9 @@ void vueron::decode_to_boxes(const std::vector<std::vector<float>> &rpn_output,
     assert(box.heading <= 180.0 / M_PI && box.heading >= -180.0 / M_PI);
 
     // calc center point
-    box.x = (static_cast<float>(head_stride) * PILLAR_X_SIZE *
-                 (static_cast<float>(grid_x) + rpn_output[2][s_idx]) +
-             MIN_X_RANGE);
+    box.x = static_cast<float>(head_stride) * PILLAR_X_SIZE *
+                (static_cast<float>(grid_x) + rpn_output[2][s_idx]) +
+            MIN_X_RANGE;
     box.y = static_cast<float>(head_stride) * PILLAR_Y_SIZE *
                 (static_cast<float>(grid_y) +
                  rpn_output[2][channel_offset + s_idx]) +
@@ -86,9 +86,9 @@ void vueron::decode_to_boxes(const std::vector<std::vector<float>> &rpn_output,
     /*
         append decoded boxes, scores, and labels
     */
-    // rectifying score if model has iou head
     float rectified_score;
     if (has_iou_head) {
+      // rectifying score if model has iou head
       rectified_score = rectify_score(sigmoid(hm[idx]), rpn_output[5][s_idx],
                                       IOU_RECTIFIER[label]);
     } else {

@@ -170,13 +170,13 @@ size_t vueron::point_decoration(const std::vector<Pillar> &bev_pillar,
         /*
           for models use intensity features
         */
+        assert(NUM_POINT_VALUES == 4);
         if (NUM_POINT_VALUES >= 4) {
-          // for zero intensity models
           if (ZERO_INTENSITY) {
+            // for zero intensity models
             pfe_input[index + 3] = 0.0f;
-          }
-          // for normal intensity models
-          else {
+          } else {
+            // for normal intensity models
             pfe_input[index + 3] = points[point_stride * point_index + 3] /
                                    INTENSITY_NORMALIZE_DIV;
           }
