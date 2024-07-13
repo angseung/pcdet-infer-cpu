@@ -64,10 +64,10 @@ void vueron::voxelization(std::vector<Pillar> &bev_pillar, const float *points,
     assert(!std::isnan(point_z));
     assert(!std::isnan(point_w));
 
-    const size_t voxel_index_x =
-        floorf((point_x - MIN_X_RANGE) / PILLAR_X_SIZE);
-    const size_t voxel_index_y =
-        floorf((point_y - MIN_Y_RANGE) / PILLAR_Y_SIZE);
+    const auto voxel_index_x =
+        static_cast<size_t>(floorf((point_x - MIN_X_RANGE) / PILLAR_X_SIZE));
+    const auto voxel_index_y =
+        static_cast<size_t>(floorf((point_y - MIN_Y_RANGE) / PILLAR_Y_SIZE));
 
     // skip if out-of-range point or current point is located on edge
     if (point_x < MIN_X_RANGE || point_x > MAX_X_RANGE ||
