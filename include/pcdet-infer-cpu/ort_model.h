@@ -28,6 +28,8 @@ class OrtModel : public Model {
            size_t input_tensor_size);
   OrtModel(const OrtModel &copy) = delete;
   OrtModel &operator=(const OrtModel &copy) = delete;
+  OrtModel(const OrtModel &&rhs) = delete;
+  OrtModel &operator=(const OrtModel &&rhs) = delete;
   ~OrtModel() override;
 
   void run(const std::vector<float> &model_input,

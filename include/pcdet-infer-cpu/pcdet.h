@@ -24,6 +24,8 @@ class PCDet {
   PCDet() = default;
   PCDet(const PCDet &copy) = delete;
   PCDet &operator=(const PCDet &copy) = delete;
+  PCDet(const PCDet &&copy) = delete;
+  PCDet &operator=(const PCDet &&copy) = delete;
   virtual ~PCDet() = default;
 };
 
@@ -65,16 +67,18 @@ class PCDetCPU : public PCDet {
 
   void preprocess(const float *points, size_t point_buf_len,
                   size_t point_stride);
-  void scatter();
+  void scatter() noexcept;
   void postprocess(std::vector<BndBox> &post_boxes,
                    std::vector<size_t> &post_labels,
                    std::vector<float> &post_scores);
-  void get_pred(std::vector<PredBox> &boxes) const;
+  void get_pred(std::vector<PredBox> &boxes) const noexcept;
 
  public:
   PCDetCPU() = delete;
   PCDetCPU(const PCDetCPU &copy) = delete;
   PCDetCPU &operator=(const PCDetCPU &copy) = delete;
+  PCDetCPU(const PCDetCPU &&rhs) = delete;
+  PCDetCPU &operator=(const PCDetCPU &&rhs) = delete;
   PCDetCPU(const std::string &pfe_path, const std::string &rpn_path,
            const RuntimeConfig *runtimeconfig = nullptr);
   ~PCDetCPU() override;
