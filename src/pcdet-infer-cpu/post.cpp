@@ -37,9 +37,9 @@ void vueron::decode_to_boxes(const std::vector<std::vector<float>> &rpn_output,
       get topk scores and their indices
   */
   std::iota(indices.begin(), indices.end(), 0);
-  std::partial_sort(indices.begin(), indices.begin() + NMS_PRE_MAXSIZE,
-                    indices.end(),
-                    [&](size_t A, size_t B) { return hm[A] > hm[B]; });
+  std::partial_sort(
+      indices.begin(), indices.begin() + NMS_PRE_MAXSIZE, indices.end(),
+      [&](const size_t A, const size_t B) { return hm[A] > hm[B]; });
 
   /*
       decode into boxes
@@ -74,19 +74,21 @@ void vueron::decode_to_boxes(const std::vector<std::vector<float>> &rpn_output,
     assert(box.heading <= 180.0 / M_PI && box.heading >= -180.0 / M_PI);
 
     // calc center point
-    box.x = head_stride * PILLAR_X_SIZE * (grid_x + rpn_output[2][s_idx]) +
+    box.x = static_cast<float>(head_stride) * PILLAR_X_SIZE *
+                (static_cast<float>(grid_x) + rpn_output[2][s_idx]) +
             MIN_X_RANGE;
-    box.y = head_stride * PILLAR_Y_SIZE *
-                (grid_y + rpn_output[2][channel_offset + s_idx]) +
+    box.y = static_cast<float>(head_stride) * PILLAR_Y_SIZE *
+                (static_cast<float>(grid_y) +
+                 rpn_output[2][channel_offset + s_idx]) +
             MIN_Y_RANGE;
     box.z = rpn_output[3][s_idx];
 
     /*
         append decoded boxes, scores, and labels
     */
-    // rectifying score if model has iou head
     float rectified_score;
     if (has_iou_head) {
+      // rectifying score if model has iou head
       rectified_score = rectify_score(sigmoid(hm[idx]), rpn_output[5][s_idx],
                                       IOU_RECTIFIER[label]);
     } else {

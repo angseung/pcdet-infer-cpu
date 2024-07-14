@@ -175,7 +175,7 @@ inline float box_overlap(const float *box_a, const float *box_b) {
 
   // get intersection of lines
   Point<float> cross_points[16];
-  Point<float> poly_center;
+  Point<float> poly_center{};
   int cnt = 0, flag = 0;
 
   poly_center.set(0, 0);
@@ -205,8 +205,8 @@ inline float box_overlap(const float *box_a, const float *box_b) {
     }
   }
 
-  poly_center.x /= cnt;
-  poly_center.y /= cnt;
+  poly_center.x /= static_cast<float>(cnt);
+  poly_center.y /= static_cast<float>(cnt);
 
   // sort the points of polygon
   Point<float> temp{};
@@ -227,7 +227,7 @@ inline float box_overlap(const float *box_a, const float *box_b) {
                   cross_points[k + 1] - cross_points[0]);
   }
 
-  return fabs(area) / 2.0;
+  return fabs(area) / 2.0f;
 }
 
 inline float calculateIOU(const float *box_a, const float *box_b) {

@@ -22,9 +22,9 @@ void vueron::voxelization(std::vector<Pillar> &bev_pillar, const float *points,
                           const size_t points_buf_len,
                           const size_t point_stride) {
   // check grid size
-  assert(GRID_X_SIZE == (float)((MAX_X_RANGE - MIN_X_RANGE) / PILLAR_X_SIZE));
-  assert(GRID_Y_SIZE == (float)((MAX_Y_RANGE - MIN_Y_RANGE) / PILLAR_Y_SIZE));
-  assert(1.0f == (float)((MAX_Z_RANGE - MIN_Z_RANGE) / PILLAR_Z_SIZE));
+  assert(GRID_X_SIZE == (MAX_X_RANGE - MIN_X_RANGE) / PILLAR_X_SIZE);
+  assert(GRID_Y_SIZE == (MAX_Y_RANGE - MIN_Y_RANGE) / PILLAR_Y_SIZE);
+  assert(1.0f == (MAX_Z_RANGE - MIN_Z_RANGE) / PILLAR_Z_SIZE);
 
   // check buffer size
   assert(points_buf_len % point_stride == 0);
@@ -54,20 +54,13 @@ void vueron::voxelization(std::vector<Pillar> &bev_pillar, const float *points,
     // check point value is NaN or not.
     if (std::isnan(point_x) || std::isnan(point_y) || std::isnan(point_z) ||
         std::isnan(point_w)) {
-      std::cerr << "ERROR: NaN value encountered in point data." << std::endl;
-      std::exit(EXIT_FAILURE);
-      exit(1);
+      throw std::runtime_error("ERROR: NaN value encountered in point data.");
     }
 
-    assert(!std::isnan(point_x));
-    assert(!std::isnan(point_y));
-    assert(!std::isnan(point_z));
-    assert(!std::isnan(point_w));
-
-    const size_t voxel_index_x =
-        floorf((point_x - MIN_X_RANGE) / PILLAR_X_SIZE);
-    const size_t voxel_index_y =
-        floorf((point_y - MIN_Y_RANGE) / PILLAR_Y_SIZE);
+    const auto voxel_index_x =
+        static_cast<size_t>(floorf((point_x - MIN_X_RANGE) / PILLAR_X_SIZE));
+    const auto voxel_index_y =
+        static_cast<size_t>(floorf((point_y - MIN_Y_RANGE) / PILLAR_Y_SIZE));
 
     // skip if out-of-range point or current point is located on edge
     if (point_x < MIN_X_RANGE || point_x > MAX_X_RANGE ||
@@ -170,13 +163,13 @@ size_t vueron::point_decoration(const std::vector<Pillar> &bev_pillar,
         /*
           for models use intensity features
         */
+        assert(NUM_POINT_VALUES == 4);
         if (NUM_POINT_VALUES >= 4) {
-          // for zero intensity models
           if (ZERO_INTENSITY) {
+            // for zero intensity models
             pfe_input[index + 3] = 0.0f;
-          }
-          // for normal intensity models
-          else {
+          } else {
+            // for normal intensity models
             pfe_input[index + 3] = points[point_stride * point_index + 3] /
                                    INTENSITY_NORMALIZE_DIV;
           }
