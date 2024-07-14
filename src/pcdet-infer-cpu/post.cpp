@@ -98,7 +98,7 @@ void vueron::decode_to_boxes(const std::vector<std::vector<float>> &rpn_output,
     if (rectified_score > SCORE_THRESH) {
       scores.push_back(rectified_score);
       boxes.push_back(box);
-      labels.push_back(label + 1);
+      labels.push_back(label);
     }
   }
 }
@@ -110,9 +110,10 @@ void vueron::nms(const std::vector<BndBox> &boxes,
   // sort boxes based on their scores (descending order)
   std::vector<size_t> indices(boxes.size());
   std::iota(indices.begin(), indices.end(), 0);
-  std::sort(
-      indices.begin(), indices.end(),
-      [&](const size_t a, const size_t b) -> bool { return scores[a] > scores[b]; });
+  std::sort(indices.begin(), indices.end(),
+            [&](const size_t a, const size_t b) -> bool {
+              return scores[a] > scores[b];
+            });
 
   size_t processed = 0;
 
