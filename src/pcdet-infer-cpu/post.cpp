@@ -32,6 +32,7 @@ void vueron::decode_to_boxes(const std::vector<std::vector<float>> &rpn_output,
 
   std::vector<size_t> indices(hm.size());
   assert(IOU_RECTIFIER.size() == 3);
+  assert(IOU_RECTIFIER.size() == CLASS_NUM);
 
   /*
       get topk scores and their indices
@@ -39,7 +40,7 @@ void vueron::decode_to_boxes(const std::vector<std::vector<float>> &rpn_output,
   std::iota(indices.begin(), indices.end(), 0);
   std::partial_sort(
       indices.begin(), indices.begin() + NMS_PRE_MAXSIZE, indices.end(),
-      [&](const size_t A, const size_t B) { return hm[A] > hm[B]; });
+      [&](const size_t A, const size_t B) -> bool { return hm[A] > hm[B]; });
 
   /*
       decode into boxes
@@ -111,7 +112,7 @@ void vueron::nms(const std::vector<BndBox> &boxes,
   std::iota(indices.begin(), indices.end(), 0);
   std::sort(
       indices.begin(), indices.end(),
-      [&](const size_t a, const size_t b) { return scores[a] > scores[b]; });
+      [&](const size_t a, const size_t b) -> bool { return scores[a] > scores[b]; });
 
   size_t processed = 0;
 

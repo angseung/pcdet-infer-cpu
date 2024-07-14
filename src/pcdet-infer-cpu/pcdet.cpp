@@ -8,6 +8,10 @@
 #include <chrono>
 #endif
 
+const std::string &vueron::PCDet::getVersionInfo() const noexcept {
+  return version_info;
+}
+
 vueron::PCDetCPU::PCDetCPU(const std::string &pfe_path,
                            const std::string &rpn_path,
                            const RuntimeConfig *runtimeconfig)
@@ -49,7 +53,7 @@ void vueron::PCDetCPU::preprocess(const float *points,
                                  pfe_input, points, point_stride);
 }
 
-void vueron::PCDetCPU::scatter() {
+void vueron::PCDetCPU::scatter() noexcept {
   vueron::scatter(pfe_output, voxel_coords, num_pillars, bev_image);
 }
 
@@ -62,7 +66,7 @@ void vueron::PCDetCPU::postprocess(std::vector<vueron::BndBox> &post_boxes,
                post_scores, suppressed);
 }
 
-void vueron::PCDetCPU::get_pred(std::vector<PredBox> &boxes) const {
+void vueron::PCDetCPU::get_pred(std::vector<PredBox> &boxes) const noexcept {
   for (size_t i = 0; i < post_boxes.size(); i++) {
     PredBox box{};
     box.x = post_boxes[i].x;

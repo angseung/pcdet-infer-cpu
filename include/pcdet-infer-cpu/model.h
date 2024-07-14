@@ -20,6 +20,8 @@ class Model {
   Model() = default;
   Model(const Model &copy) = delete;
   Model &operator=(const Model &copy) = delete;
+  Model(const Model &&rhs) = delete;
+  Model &operator=(const Model &&rhs) = delete;
   virtual ~Model() = default;
 };
 }  // namespace vueron
