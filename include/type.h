@@ -16,7 +16,7 @@ struct BndBox {
 struct PredBox {
   float x, y, z, dx, dy, dz, heading, score, label;
 
-  // Operator overload to cast BndBox to const float*
+  // Operator overload to cast PredBox to const float*
   explicit operator const float*() const {
     return &x;  // Return the address of the 'x' member
   }
