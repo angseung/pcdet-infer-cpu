@@ -8,6 +8,10 @@
 #include <chrono>
 #endif
 
+const std::string &vueron::PCDet::getVersionInfo() const noexcept {
+  return version_info;
+}
+
 vueron::PCDetCPU::PCDetCPU(const std::string &pfe_path,
                            const std::string &rpn_path,
                            const RuntimeConfig *runtimeconfig)
