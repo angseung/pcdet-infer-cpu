@@ -35,13 +35,13 @@ void drawBirdsEyeView(const size_t point_buf_len, const size_t point_stride,
     if (scores[i] < CONF_THRESH) continue;
     cv::Scalar color;
     switch (labels[i]) {
-      case 1:
+      case 0:
         color = cv::Scalar{0, 0, 255};  // red
         break;
-      case 2:
+      case 1:
         color = cv::Scalar{0, 255, 0};  // green
         break;
-      case 3:
+      case 2:
         color = cv::Scalar{255, 0, 0};  // blue
         break;
       default:
