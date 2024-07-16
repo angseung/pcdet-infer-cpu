@@ -30,7 +30,7 @@ void vueron::voxelization(std::vector<Pillar> &bev_pillar, const float *points,
   assert(points_buf_len % point_stride == 0);
   const size_t points_num = points_buf_len / point_stride;
 
-  std::mt19937 rng(RANDOM_SEED);
+  std::mt19937 rng{RANDOM_SEED};
 
   // clip point buffer if points_num is larger than MAX_POINT_NUM in
   // runtimeconfig.
@@ -54,7 +54,7 @@ void vueron::voxelization(std::vector<Pillar> &bev_pillar, const float *points,
     // check point value is NaN or not.
     if (std::isnan(point_x) || std::isnan(point_y) || std::isnan(point_z) ||
         std::isnan(point_w)) {
-      throw std::runtime_error("ERROR: NaN value encountered in point data.");
+      throw std::runtime_error{"ERROR: NaN value encountered in point data."};
     }
 
     const auto voxel_index_x =
@@ -212,7 +212,6 @@ void vueron::scatter(const std::vector<float> &pfe_output,
 
   for (size_t i = 0; i < num_pillars; i++) {
     // voxel_coords : (x, y)
-    // TODO: Check here, index error occured.
     const size_t curr_grid_x = voxel_coords[2 * i];
     const size_t curr_grid_y = voxel_coords[2 * i + 1];
     const size_t source_voxel_index = NUM_FEATURE_SCATTER * i;

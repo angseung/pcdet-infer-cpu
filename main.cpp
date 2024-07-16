@@ -2,8 +2,8 @@
 
 int main(int argc, const char **argv) {
   const std::string wd = fs::current_path().u8string();
-  std::string pcd_path;
-  std::string metadata_path;
+  std::string pcd_path{};
+  std::string metadata_path{};
 
   if (argc < 2) {
     /*
@@ -40,25 +40,26 @@ int main(int argc, const char **argv) {
   vueron::LoadMetadata(metadata_path);
 
   RuntimeConfig config{
-      1000000,  // int max_points;
-      false,    // bool shuffle_on;
-      true,     // bool use_cpu;
-      500,      // int pre_nms_max_preds;
-      83,       // int max_preds;
-      0.1f,     // float nms_score_thd;
-      10.0f,    // float pre_nms_distance_thd;
-      0.2f,     // float nms_iou_thd;
+      150000,  // int max_points;
+      false,   // bool shuffle_on;
+      true,    // bool use_cpu;
+      500,     // int pre_nms_max_preds;
+      83,      // int max_preds;
+      0.1f,    // float nms_score_thd;
+      10.0f,   // float pre_nms_distance_thd;
+      0.2f,    // float nms_iou_thd;
   };
-
-  std::cout << vueron::GetMetadata() << std::endl;
-  std::cout << vueron::GetRuntimeConfig() << std::endl;
 
   /*
     Init PCDetCPU with metadata & runtimeconfig
   */
   const auto pcdet =
       std::make_unique<vueron::PCDetCPU>(PFE_FILE, RPN_FILE, &config);
+
+  // logging version & config info
   std::cout << pcdet->getVersionInfo() << std::endl;
+  std::cout << vueron::GetMetadata() << std::endl;
+  std::cout << vueron::GetRuntimeConfig() << std::endl;
 
   for (const auto &pcd_file : pcd_files) {
     /*
