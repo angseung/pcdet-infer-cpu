@@ -120,6 +120,5 @@ void vueron::OrtModel::run(const std::vector<float> &model_input,
 
 void vueron::OrtModel::run(const std::vector<std::vector<float>> &model_input,
                            std::vector<std::vector<float>> &model_output) {
-  const std::string e("This function is not implemented yet.");
-  throw std::runtime_error(e);
+  throw std::runtime_error{"This function is not implemented yet."};
 }
