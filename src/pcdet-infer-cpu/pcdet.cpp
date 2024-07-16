@@ -15,7 +15,8 @@ const std::string &vueron::PCDet::getVersionInfo() const noexcept {
 vueron::PCDetCPU::PCDetCPU(const std::string &pfe_path,
                            const std::string &rpn_path,
                            const RuntimeConfig *runtimeconfig)
-    : bev_pillar(GRID_Y_SIZE * GRID_X_SIZE, Pillar(MAX_NUM_POINTS_PER_PILLAR)),
+    : bev_pillar(GRID_Y_SIZE * GRID_X_SIZE,
+                 Pillar{static_cast<size_t>(MAX_NUM_POINTS_PER_PILLAR)}),
       num_pillars(0),
       pfe_input(MAX_VOXELS * MAX_NUM_POINTS_PER_PILLAR * FEATURE_NUM, 0.0f),
       pfe_output(MAX_VOXELS * NUM_FEATURE_SCATTER, 0.0f),
@@ -40,7 +41,7 @@ vueron::PCDetCPU::PCDetCPU(const std::string &pfe_path,
   const std::string git_tag_info{GIT_TAG_VERSION};
   const std::string build_info{BUILD_TIME};
 
-  version_info = "libpcdet " + git_tag_info + " (" + build_info + ")";
+  version_info = "libpcdet-cpu " + git_tag_info + " (" + build_info + ")";
 };
 
 vueron::PCDetCPU::~PCDetCPU() = default;
@@ -167,7 +168,7 @@ void vueron::PCDetCPU::run(const float *points, const size_t point_buf_len,
       Reset buffers
   */
   std::fill(bev_pillar.begin(), bev_pillar.end(),
-            Pillar(MAX_NUM_POINTS_PER_PILLAR));
+            Pillar{static_cast<size_t>(MAX_NUM_POINTS_PER_PILLAR)});
   std::fill(pfe_input.begin(), pfe_input.end(), 0.0f);
   std::fill(pfe_output.begin(), pfe_output.end(), 0.0f);
   std::fill(bev_image.begin(), bev_image.end(), 0.0f);
@@ -261,7 +262,7 @@ void vueron::PCDetCPU::run(const float *points, const size_t point_buf_len,
       Reset buffers
   */
   std::fill(bev_pillar.begin(), bev_pillar.end(),
-            Pillar(MAX_NUM_POINTS_PER_PILLAR));
+            Pillar{static_cast<size_t>(MAX_NUM_POINTS_PER_PILLAR)});
   std::fill(pfe_input.begin(), pfe_input.end(), 0.0f);
   std::fill(pfe_output.begin(), pfe_output.end(), 0.0f);
   std::fill(bev_image.begin(), bev_image.end(), 0.0f);
