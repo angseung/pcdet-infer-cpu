@@ -9,7 +9,7 @@ namespace fs = std::filesystem;
 
 namespace vueron {
 
-MetaStruct::MetaStruct(std::string pfe_file, std::string rpn_file,
+MetaStruct::MetaStruct(std::string& pfe_file, std::string& rpn_file,
                        float min_x_range, float max_x_range, float min_y_range,
                        float max_y_range, float min_z_range, float max_z_range,
                        float pillar_x_size, float pillar_y_size,
@@ -19,8 +19,8 @@ MetaStruct::MetaStruct(std::string pfe_file, std::string rpn_file,
                        int grid_x_size, int grid_y_size, int grid_z_size,
                        int class_num, int feature_x_size, int feature_y_size,
                        const std::vector<float>& iou_rectifier)
-    : pfe_file(std::move(pfe_file)),
-      rpn_file(std::move(rpn_file)),
+    : pfe_file(pfe_file),
+      rpn_file(rpn_file),
       min_x_range(min_x_range),
       max_x_range(max_x_range),
       min_y_range(min_y_range),

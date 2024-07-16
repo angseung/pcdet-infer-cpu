@@ -39,8 +39,8 @@ struct MetaStruct {
   int feature_y_size;
   std::vector<float> iou_rectifier;
 
-  MetaStruct() = delete;
-  explicit MetaStruct(std::string pfe_file, std::string rpn_file,
+  MetaStruct() = default;
+  explicit MetaStruct(std::string& pfe_file, std::string& rpn_file,
                       float min_x_range, float max_x_range, float min_y_range,
                       float max_y_range, float min_z_range, float max_z_range,
                       float pillar_x_size, float pillar_y_size,
@@ -64,38 +64,7 @@ class Metadata {
  public:
   Metadata();
   ~Metadata();
-  MetaStruct metastruct{
-      "PFE_FILE",  // std::string pfe_file
-      "RPN_FILE",  // std::string rpn_file
-
-      0.0f,     // float min_x_range
-      71.68f,   // float max_x_range
-      -52.48f,  // float min_y_range
-      52.48f,   // float max_y_range
-      -2.0f,    // float min_z_range
-      4.0f,     // float max_z_range
-
-      0.32f,  // float pillar_x_size
-      0.32f,  // float pillar_y_size
-      1.0f,   // float pillar_z_size
-
-      4,      // int num_point_values
-      false,  // bool zero_intensity
-
-      20,     // int max_num_points_per_pillar
-      25000,  // int max_voxels
-      10,     // int feature_num
-
-      64,   // int num_feature_scatter
-      224,  // int grid_x_size
-      328,  // int grid_y_size
-      1,    // int grid_z_size
-
-      3,                      // int class_num
-      112,                    // int feature_x_size
-      164,                    // int feature_x_size
-      {0.68f, 0.71f, 0.65f},  // std::vector<float> iou_rectifier
-  };
+  MetaStruct metastruct;
 
   static Metadata& Instance() {
     static Metadata metadata;
