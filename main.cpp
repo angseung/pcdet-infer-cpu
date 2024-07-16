@@ -2,8 +2,8 @@
 
 int main(int argc, const char **argv) {
   const std::string wd = fs::current_path().u8string();
-  std::string pcd_path;
-  std::string metadata_path;
+  std::string pcd_path{};
+  std::string metadata_path{};
 
   if (argc < 2) {
     /*
