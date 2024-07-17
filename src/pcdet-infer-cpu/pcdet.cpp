@@ -34,6 +34,12 @@ vueron::PCDetCPU::PCDetCPU(const std::string &pfe_path,
           GRID_Y_SIZE * GRID_X_SIZE * NUM_FEATURE_SCATTER)) {
   std::clog << "PFE Model Initialized with " << PFE_FILE << std::endl;
   std::clog << "RPN Model Initialized with " << RPN_FILE << std::endl;
+  pre_boxes.reserve(NMS_PRE_MAXSIZE);
+  pre_labels.reserve(NMS_PRE_MAXSIZE);
+  pre_scores.reserve(NMS_PRE_MAXSIZE);
+  post_boxes.reserve(MAX_OBJ_PER_SAMPLE);
+  post_labels.reserve(MAX_OBJ_PER_SAMPLE);
+  post_scores.reserve(MAX_OBJ_PER_SAMPLE);
 
   if (runtimeconfig != nullptr) {
     SetRuntimeConfig(*runtimeconfig);
