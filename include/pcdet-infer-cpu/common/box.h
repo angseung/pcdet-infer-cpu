@@ -1,8 +1,8 @@
 #ifndef BOX_H
 #define BOX_H
 
-struct BndBox {
+struct Box {
   float x, y, z, dx, dy, dz, heading;
 };
 
-#endif //BOX_H
+#endif  // BOX_H
