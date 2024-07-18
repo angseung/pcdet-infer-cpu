@@ -1,5 +1,7 @@
 #include "pcdet_c.h"
 
+#include <memory>
+
 #include "pcdet-infer-cpu/pcdet.h"
 
 static std::unique_ptr<vueron::PCDetCPU> pcdet;

@@ -1,12 +1,15 @@
 #ifndef __PCDET_C_H__
 #define __PCDET_C_H__
 
-#include <cstddef>
-#include <memory>
+#include <stddef.h>
 
 #include "pcdet-infer-cpu/common/box.h"
 #include "pcdet-infer-cpu/common/metadata.h"
 #include "pcdet-infer-cpu/common/runtimeconfig.h"
+
+#ifdef __cplusplus
+extern "C" {
+#endif
 
 const char* get_pcdet_cpu_version(void);
 
@@ -17,5 +20,9 @@ size_t pcdet_run(const float* points, int points_num, int point_stride,
                  float** score, size_t** label, Box** box);
 
 void pcdet_finalize(void);
+
+#ifdef __cplusplus
+}
+#endif
 
 #endif  // __PCDET_C_H__
