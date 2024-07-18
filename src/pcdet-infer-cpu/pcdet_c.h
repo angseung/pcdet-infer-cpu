@@ -1,5 +1,5 @@
-#ifndef PCDET_C_H
-#define PCDET_C_H
+#ifndef __PCDET_C_H__
+#define __PCDET_C_H__
 
 #include <cstddef>
 #include <memory>
@@ -18,4 +18,4 @@ size_t pcdet_run(const float* points, int points_num, int point_stride,
 
 void pcdet_finalize(void);
 
-#endif  // PCDET_C_H
+#endif  // __PCDET_C_H__
