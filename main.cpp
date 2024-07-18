@@ -87,12 +87,15 @@ int main(int argc, const char **argv) {
     /*
         Logging
     */
-    auto veh_cnt = std::count_if(nms_labels.begin(), nms_labels.end(),
-                                 [](const int j) -> bool { return j == 0; });
-    auto ped_cnt = std::count_if(nms_labels.begin(), nms_labels.end(),
-                                 [](const int j) -> bool { return j == 1; });
-    auto cyc_cnt = std::count_if(nms_labels.begin(), nms_labels.end(),
-                                 [](const int j) -> bool { return j == 2; });
+    const auto veh_cnt =
+        std::count_if(nms_labels.begin(), nms_labels.end(),
+                      [](const int j) -> bool { return j == 0; });
+    const auto ped_cnt =
+        std::count_if(nms_labels.begin(), nms_labels.end(),
+                      [](const int j) -> bool { return j == 1; });
+    const auto cyc_cnt =
+        std::count_if(nms_labels.begin(), nms_labels.end(),
+                      [](const int j) -> bool { return j == 2; });
     std::cout << "Input file: " << pcd_file << std::endl;
     std::cout << "vehicle(" << std::setw(3) << veh_cnt << "), pedestrian("
               << std::setw(3) << ped_cnt << "), cyclist(" << std::setw(3)
