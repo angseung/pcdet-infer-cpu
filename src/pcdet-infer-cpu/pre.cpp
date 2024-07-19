@@ -197,6 +197,14 @@ size_t vueron::point_decoration(const std::vector<Pillar> &bev_pillar,
       index += FEATURE_NUM;
     }
     num_pillars++;
+
+    // exception for MAX_VOXELS
+    if (num_pillars == MAX_VOXELS) {
+      std::cout
+          << "The number of voxels in current frame is larger than MAX_VOXELS: "
+          << MAX_VOXELS << std::endl;
+      break;
+    }
   }
 
   assert(voxel_coords.size() / 2 == voxel_num_points.size());
