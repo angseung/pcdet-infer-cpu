@@ -1,16 +1,25 @@
 #include "pcdet_c.h"
 
+#include <cassert>
 #include <memory>
 
 #include "pcdet-infer-cpu/pcdet.h"
 
+extern "C" {
+
 static std::unique_ptr<vueron::PCDetCPU> pcdet;
-static std::vector<vueron::BndBox> nms_pred;
-static std::vector<float> nms_score;
-static std::vector<size_t> nms_labels;
+static std::vector<vueron::BndBox> g_nms_pred;
+static std::vector<float> g_nms_score;
+static std::vector<size_t> g_nms_labels;
+
+const char* get_pcdet_cpu_version(void) {
+  static std::string version{"PCDetCPU"};
+
+  return version.c_str();
+};
 
 void pcdet_initialize(const char* metadata_path,
-                      const RuntimeConfig* runtimeconfig) {
+                      const struct RuntimeConfig* runtimeconfig) {
   const std::string metadata_path_string{metadata_path};
   vueron::LoadMetadata(metadata_path_string);
   pcdet = std::make_unique<vueron::PCDetCPU>(PFE_FILE, RPN_FILE, runtimeconfig);
@@ -18,22 +27,27 @@ void pcdet_initialize(const char* metadata_path,
   std::cout << *runtimeconfig << std::endl;
 }
 
-size_t pcdet_run(const float* points, const int points_num,
+size_t pcdet_run(const float* points, const int point_buf_len,
                  const int point_stride, float** score, size_t** label,
                  Box** box) {
-  static size_t num_preds;
-  pcdet->run(points, points_num, point_stride, nms_pred, nms_labels, nms_score);
+  assert(point_buf_len % point_stride == 0);
+  pcdet->run(points, point_buf_len, point_stride, g_nms_pred, g_nms_labels,
+             g_nms_score);
 
-  num_preds = nms_labels.size();
-  *score = nms_score.data();
-  *label = nms_labels.data();
-  *box = (Box*)nms_pred.data();
+  assert(g_nms_pred.size() == g_nms_labels.size() &&
+         g_nms_labels.size() == g_nms_score.size());
 
-  nms_score.clear();
-  nms_pred.clear();
-  nms_pred.clear();
+  size_t num_preds = g_nms_labels.size();
+  *score = g_nms_score.data();
+  *label = g_nms_labels.data();
+  *box = (Box*)g_nms_pred.data();
+
+  g_nms_score.clear();
+  g_nms_pred.clear();
+  g_nms_labels.clear();
 
   return num_preds;
 }
 
-void pcdet_finalize() { pcdet = nullptr; }
+void pcdet_finalize(void) { pcdet = nullptr; }
+}

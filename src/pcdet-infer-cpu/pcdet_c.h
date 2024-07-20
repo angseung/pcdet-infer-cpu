@@ -14,9 +14,9 @@ extern "C" {
 const char* get_pcdet_cpu_version(void);
 
 void pcdet_initialize(const char* metadata_path,
-                      struct Runtimeconfig* runtimeconfig);
+                      const struct RuntimeConfig* runtimeconfig);
 
-size_t pcdet_run(const float* points, int points_num, int point_stride,
+size_t pcdet_run(const float* points, int point_buf_len, int point_stride,
                  float** score, size_t** label, Box** box);
 
 void pcdet_finalize(void);
