@@ -55,4 +55,5 @@ void pcdet_finalize(void) {
   g_nms_pred.clear();
   g_nms_labels.clear();
 }
-}
+
+}  // extern "C"

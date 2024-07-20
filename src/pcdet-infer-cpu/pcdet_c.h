@@ -22,7 +22,7 @@ size_t pcdet_run(const float* points, int point_buf_len, int point_stride,
 void pcdet_finalize(void);
 
 #ifdef __cplusplus
-}
+}  // extern "C"
 #endif
 
 #endif  // __PCDET_C_H__
