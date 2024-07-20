@@ -107,6 +107,11 @@ void vueron::nms(const std::vector<BndBox> &boxes,
                  const std::vector<float> &scores,
                  std::vector<bool> &suppressed, const float iou_threshold) {
   assert(boxes.size() == scores.size());
+
+  if (boxes.empty()) {
+    return;
+  }
+
   // sort boxes based on their scores (descending order)
   std::vector<size_t> indices(boxes.size());
   std::iota(indices.begin(), indices.end(), 0);
