@@ -66,7 +66,7 @@ cmake --build Debug -j
 ./Release/bin/main ./YOUR_PCD_DIR_PATH ./YOUR_METADATA_FILE_PATH
 ```
 
-## 3.2. Demo
+## 3.2. demo
 
 - This program runs a PCDet model with PCD files, and then draws detected bounding boxes on point cloud in
   bird-eyes-view.
