@@ -66,11 +66,70 @@ cmake --build Debug -j
 ./Release/bin/main ./YOUR_PCD_DIR_PATH ./YOUR_METADATA_FILE_PATH
 ```
 
-## 3.2. Demo
+## 3.2. demo
 
 - This program runs a PCDet model with PCD files, and then draws detected bounding boxes on point cloud in
   bird-eyes-view.
 
 ```bash
-./Release/bin/main ./YOUR_PCD_DIR_PATH ./YOUR_METADATA_FILE_PATH
+./Release/bin/demo ./YOUR_PCD_DIR_PATH ./YOUR_METADATA_FILE_PATH
 ```
+
+### 3.2.1. demo_c
+
+- This program has same functions with `demo`, but it is implemented with inference codes
+  in `pcdet_c.h` & `pcdet_c.cpp`.
+- Refer this code if you want to use this repository in C project.
+
+```bash
+./Release/bin/demo_c ./YOUR_PCD_DIR_PATH ./YOUR_METADATA_FILE_PATH
+```
+
+---
+
+# Update History
+
+## Release 1.1.0
+
+### 1. Update
+
+- Removed Point Cloud Library from dependency.
+    - We manually implemented a library for parsing points from pcd files.
+- Optimized point shuffle process.
+- Renamed `PCDet` class to `PCDetCPU`.
+- Implemented base abstact `PCDet` & `Model` class for `PCDetCPU` & `OrtModel` class respectively.
+- Support `<<` operator for `Runtimeconfig` & `Metadata` class
+    - This operator prints all member variables in `Runtimeconfig` & `Metadata`.
+- Modified `Point` structure with template structure.
+
+### 2. Bug Fix
+
+- Fixed assertion error that can be occured if point value is on grid edge.
+- Removed `MAX_POINT_NUM` from a pcd parser.
+- Modified all `int&` and `float&` type arguments to `int` and `float` .
+
+---
+
+## Release 1.2.0
+
+### 1. Update
+
+- Class label are modified from 1, 2, 3, … to 0, 1, 2, …
+- Added assertion to check `CLASS_NUM == IOU_RECTIFIER.size()`
+- Removed all C style casting for more stable code
+
+---
+
+## Release 1.3.0
+
+### 1. Bug Fix
+
+- Fixed segmentation fault error that can be occurs if MAX_VOXELS in model configuration is smaller than the number of
+  voxels in input data.
+
+### 2. Update
+
+- Support binding with C program.
+    - source codes are available in `pcdet_c.cpp` & `pcdet_c.h`.
+
+---
