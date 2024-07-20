@@ -13,7 +13,7 @@ static std::vector<float> g_nms_score;
 static std::vector<size_t> g_nms_labels;
 
 const char* get_pcdet_cpu_version(void) {
-  static std::string version{"PCDetCPU"};
+  static std::string version{pcdet->version_info};
 
   return version.c_str();
 };
