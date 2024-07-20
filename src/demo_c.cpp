@@ -1,5 +1,7 @@
 #include "demo_c.h"
 
+namespace fs = std::filesystem;
+
 int main(int argc, const char **argv) {
   const std::string wd = fs::current_path().u8string();
   std::string pcd_path{};

@@ -15,6 +15,4 @@
 #include "pcdet-infer-cpu/pcdet_c.h"
 #include "pcl.h"
 
-namespace fs = std::filesystem;
-
 #endif  //__DEMO_C_H__
