@@ -27,11 +27,10 @@ void vueron::decode_to_boxes(const std::vector<std::vector<float>> &rpn_output,
   }
 
   const size_t head_stride = GRID_Y_SIZE / FEATURE_Y_SIZE;
-  const std::vector<float> &hm = rpn_output[0];
+  const auto &hm = rpn_output[0];
   assert(hm.size() == CLASS_NUM * FEATURE_Y_SIZE * FEATURE_X_SIZE);
 
   std::vector<size_t> indices(hm.size());
-  assert(IOU_RECTIFIER.size() == 3);
   assert(IOU_RECTIFIER.size() == CLASS_NUM);
 
   /*
