@@ -7,9 +7,9 @@
 #include <vector>
 
 #include "draw/draw.h"
-#include "pcdet-infer-cpu//pcdet_c.h"
 #include "pcdet-infer-cpu/common/metadata.h"
 #include "pcdet-infer-cpu/common/runtimeconfig.h"
+#include "pcdet-infer-cpu/pcdet_c.h"
 #include "pcl.h"
 
 namespace fs = std::filesystem;

@@ -3,9 +3,9 @@
 
 #include <stddef.h>
 
-#include "pcdet-infer-cpu/common/box.h"
-#include "pcdet-infer-cpu/common/metadata.h"
-#include "pcdet-infer-cpu/common/runtimeconfig.h"
+#include "common/box.h"
+#include "common/metadata.h"
+#include "common/runtimeconfig.h"
 
 #ifdef __cplusplus
 extern "C" {

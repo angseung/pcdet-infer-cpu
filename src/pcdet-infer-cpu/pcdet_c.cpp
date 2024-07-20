@@ -1,4 +1,4 @@
-#include "pcdet_c.h"
+#include "pcdet-infer-cpu/pcdet_c.h"
 
 #include <cassert>
 #include <memory>
