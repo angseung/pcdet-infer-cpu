@@ -1,16 +1,4 @@
-#include <glob.h>
-
-#include <cstdlib>
-#include <filesystem>
-#include <iomanip>
-#include <string>
-#include <vector>
-
-#include "draw/draw.h"
-#include "pcdet-infer-cpu/common/metadata.h"
-#include "pcdet-infer-cpu/common/runtimeconfig.h"
-#include "pcdet-infer-cpu/pcdet_c.h"
-#include "pcl.h"
+#include "demo_c.h"
 
 namespace fs = std::filesystem;
 
@@ -54,7 +42,7 @@ int main(int argc, const char **argv) {
 
   RuntimeConfig config{
       150000,  // int max_points;
-      false,   // bool shuffle_on;
+      true,    // bool shuffle_on;
       true,    // bool use_cpu;
       500,     // int pre_nms_max_preds;
       83,      // int max_preds;
@@ -66,7 +54,7 @@ int main(int argc, const char **argv) {
   pcdet_initialize(metadata_path.c_str(), &config);
 
   // logging version & config info
-  //   std::cout << pcdet->getVersionInfo() << std::endl;
+  std::cout << std::string{get_pcdet_cpu_version()} << std::endl;
   std::cout << vueron::GetMetadata() << std::endl;
   std::cout << vueron::GetRuntimeConfig() << std::endl;
 
