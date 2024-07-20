@@ -49,5 +49,10 @@ size_t pcdet_run(const float* points, const int point_buf_len,
   return num_preds;
 }
 
-void pcdet_finalize(void) { pcdet = nullptr; }
+void pcdet_finalize(void) {
+  pcdet = nullptr;
+  g_nms_score.clear();
+  g_nms_pred.clear();
+  g_nms_labels.clear();
+}
 }
