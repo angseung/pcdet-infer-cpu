@@ -79,16 +79,8 @@ cmake --build Debug -j
 
 - This program has same functions with `demo`, but it is implemented with inference codes
   in `pcdet_c.h` & `pcdet_c.cpp`.
-- Refers this code if you want to use this repository in C project.
-
-```jsx
-.
-/Release/
-bin / demo_c.
-/YOUR_PCD_DIR_PATH ./
-YOUR_METADATA_FILE_PATH
-```
+- Refer this code if you want to use this repository in C project.
 
 ```bash
-./Release/bin/main ./YOUR_PCD_DIR_PATH ./YOUR_METADATA_FILE_PATH
+./Release/bin/demo_c ./YOUR_PCD_DIR_PATH ./YOUR_METADATA_FILE_PATH
 ```
