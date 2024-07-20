@@ -1,6 +1,9 @@
 # src/pcdet-infer-cpu/common/CMakeLists.txt
 add_library(json_config STATIC metadata.cpp runtimeconfig.cpp)
 
+# Add the PIC flag
+set_target_properties(json_config PROPERTIES POSITION_INDEPENDENT_CODE ON)
+
 # Json library
 include(${PROJECT_SOURCE_DIR}/cmake/CPM.cmake)
 CPMAddPackage("gh:nlohmann/json@3.10.5")

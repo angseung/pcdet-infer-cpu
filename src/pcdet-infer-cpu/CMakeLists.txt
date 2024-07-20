@@ -22,10 +22,18 @@ else ()
 endif ()
 add_library(onnx::runtime ALIAS _onnxruntime)
 
-add_library(pcdet STATIC pre.cpp post.cpp ort_model.cpp pcdet.cpp)
+add_library(pcdet STATIC pre.cpp post.cpp ort_model.cpp pcdet.cpp pcdet_c.cpp)
 target_include_directories(
         pcdet
         PUBLIC
         ${ONNXRUNTIME_ROOTDIR}/include
 )
 target_link_libraries(pcdet PUBLIC json_config onnx::runtime)
+
+add_library(pcdet_shared SHARED pre.cpp post.cpp ort_model.cpp pcdet.cpp pcdet_c.cpp)
+target_include_directories(
+        pcdet_shared
+        PRIVATE
+        ${ONNXRUNTIME_ROOTDIR}/include
+)
+target_link_libraries(pcdet_shared PRIVATE json_config onnx::runtime)
