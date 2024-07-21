@@ -38,8 +38,6 @@ int main(int argc, const char **argv) {
   /*
     Set Metadata & Runtimeconfig
   */
-  //   vueron::LoadMetadata(metadata_path);
-
   RuntimeConfig config{
       150000,  // int max_points;
       true,    // bool shuffle_on;
@@ -71,39 +69,38 @@ int main(int argc, const char **argv) {
     /*
         Buffers for inferece
     */
-    Box *boxes;
-    size_t *labels;
     float *scores;
+    size_t *labels;
+    Box *boxes;
 
-    std::vector<vueron::BndBox> nms_boxes;
-    std::vector<size_t> nms_labels;
     std::vector<float> nms_scores;
-    size_t n_boxes = 0;
+    std::vector<size_t> nms_labels;
+    std::vector<vueron::BndBox> nms_boxes;
 
     /*
         Do inference
     */
-    n_boxes = pcdet_run(points, point_buf_len, point_stride, &scores, &labels,
-                        &boxes);
+    size_t n_boxes = pcdet_run(points, point_buf_len, point_stride, &scores,
+                               &labels, &boxes);
 
     /*
         Copy predicted boxes into vector
     */
     for (size_t box_index = 0; box_index < n_boxes; box_index++) {
+      vueron::BndBox box{};
+
       nms_labels.push_back(labels[box_index]);
       nms_scores.push_back(scores[box_index]);
-      vueron::BndBox box{};
       Box box_c{boxes[box_index]};
 
       box.x = box_c.x;
       box.y = box_c.y;
       box.z = box_c.z;
-
       box.dx = box_c.dx;
       box.dy = box_c.dy;
       box.dz = box_c.dz;
-
       box.heading = box_c.heading;
+
       nms_boxes.push_back(box);
     }
 
