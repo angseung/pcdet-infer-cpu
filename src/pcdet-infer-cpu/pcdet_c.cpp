@@ -47,10 +47,10 @@ size_t pcdet_run(const float* points, const int point_buf_len,
          g_nms_labels.size() == g_nms_score.size());
 
   // copy address of output buffer to return pointers
-  size_t num_preds = g_nms_labels.size();
+  const size_t num_preds = g_nms_labels.size();
   *score = g_nms_score.data();
   *label = g_nms_labels.data();
-  *box = (Box*)g_nms_pred.data();
+  *box = reinterpret_cast<Box*>(g_nms_pred.data());
 
   // clear global static buffers
   g_nms_score.clear();

@@ -46,7 +46,7 @@ std::vector<float> { 0.68f, 0.71f, 0.65f }
     User Configurable Param
 */
 // pre
-#define SHUFFLE_ON false
+#define SHUFFLE_ON true
 #define MAX_POINT_NUM 1000000
 #define INTENSITY_NORMALIZE_DIV 255
 

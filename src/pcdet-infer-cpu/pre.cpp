@@ -30,7 +30,8 @@ void vueron::voxelization(std::vector<Pillar> &bev_pillar, const float *points,
   assert(points_buf_len % point_stride == 0);
   const size_t points_num = points_buf_len / point_stride;
 
-  std::mt19937 rng{RANDOM_SEED};
+  std::random_device rd;
+  std::mt19937 rng{rd()};
 
   // clip point buffer if points_num is larger than MAX_POINT_NUM in
   // runtimeconfig.
