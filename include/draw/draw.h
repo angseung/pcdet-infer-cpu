@@ -4,7 +4,7 @@
 #include <cstddef>
 #include <opencv2/opencv.hpp>
 
-#include "type.h"
+#include "pcdet-infer-cpu/common/type.h"
 
 inline cv::Point2f rotatePoint(const cv::Point2f &point, const float angle) {
   const float x = point.x * std::cos(angle) - point.y * std::sin(angle);
@@ -14,7 +14,7 @@ inline cv::Point2f rotatePoint(const cv::Point2f &point, const float angle) {
 
 void drawBirdsEyeView(size_t point_buf_len, size_t point_stride,
                       const float *points_data,
-                      const std::vector<vueron::BndBox> &boxes,
+                      const std::vector<BndBox> &boxes,
                       const std::vector<float> &scores,
                       const std::vector<size_t> &labels, float scale,
                       cv::Mat &image);

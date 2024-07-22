@@ -1,27 +1,28 @@
 #ifndef __TYPE_H__
 #define __TYPE_H__
 
-namespace vueron {
-
 struct BndBox {
   float x, y, z, dx, dy, dz, heading;
 
+#ifdef __cplusplus
   // Operator overload to cast BndBox to const float*
   explicit operator const float*() const {
     return &x;  // Return the address of the 'x' member
   }
   explicit operator float() const = delete;
+#endif  // __cplusplus
 };
 
 struct PredBox {
   float x, y, z, dx, dy, dz, heading, score, label;
 
+#ifdef __cplusplus
   // Operator overload to cast PredBox to const float*
   explicit operator const float*() const {
     return &x;  // Return the address of the 'x' member
   }
   explicit operator float() const = delete;
+#endif  // __cplusplus
 };
-}  // namespace vueron
 
 #endif  // __TYPE_H__

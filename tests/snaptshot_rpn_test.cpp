@@ -4,6 +4,7 @@
 #include <cmath>
 #include <numeric>
 
+#include "pcdet-infer-cpu/common/type.h"
 #include "pcdet_test/include/config.h"
 #include "pcdet_test/include/npy.h"
 #include "pcdet_test/include/params.h"
@@ -11,7 +12,6 @@
 #include "pcdet_test/include/pre.h"
 #include "pcdet_test/include/rpn.h"
 #include "pcl.h"
-#include "type.h"
 
 #define _EPSILON_RPN 5e-3
 #define _EPSILON_HM 1e-3

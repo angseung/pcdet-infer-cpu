@@ -6,7 +6,7 @@
 #include <vector>
 
 #include "params.h"
-#include "type.h"
+#include "pcdet-infer-cpu/common/type.h"
 
 namespace vueron {
 template <typename T = float>

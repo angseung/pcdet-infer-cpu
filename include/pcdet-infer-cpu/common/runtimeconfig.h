@@ -31,9 +31,9 @@ struct RuntimeConfig {
 #endif
 };
 
+#ifdef __cplusplus
 std::ostream& operator<<(std::ostream& os, const RuntimeConfig& runtimeconfig);
 
-#ifdef __cplusplus
 namespace vueron {
 
 struct RuntimeConfigSingleton {

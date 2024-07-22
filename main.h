@@ -6,9 +6,9 @@
 
 #include "pcdet-infer-cpu/common/metadata.h"
 #include "pcdet-infer-cpu/common/runtimeconfig.h"
+#include "pcdet-infer-cpu/common/type.h"
 #include "pcdet-infer-cpu/pcdet.h"
 #include "pcl.h"
-#include "type.h"
 
 namespace fs = std::filesystem;
 

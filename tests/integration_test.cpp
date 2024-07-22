@@ -4,12 +4,12 @@
 #include <cmath>
 #include <numeric>
 
+#include "pcdet-infer-cpu/common/type.h"
 #include "pcdet_test/include/config.h"
 #include "pcdet_test/include/model.h"
 #include "pcdet_test/include/npy.h"
 #include "pcdet_test/include/params.h"
 #include "pcl.h"
-#include "type.h"
 
 #define ERROR 1e-3
 
@@ -61,7 +61,7 @@ TEST(IntegrationTest, IntegrationTest) {
         Inference with pcd file
     */
     // Buffers for inferece
-    std::vector<vueron::BndBox> nms_boxes;
+    std::vector<BndBox> nms_boxes;
     std::vector<float> nms_scores;
     std::vector<size_t> nms_labels;
 
