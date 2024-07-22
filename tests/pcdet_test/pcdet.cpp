@@ -36,7 +36,7 @@ void vueron::PCDetCPU::scatter() {
   vueron::scatter(pfe_output, voxel_coords, num_pillars, bev_image);
 }
 
-void vueron::PCDetCPU::postprocess(std::vector<vueron::BndBox> &post_boxes,
+void vueron::PCDetCPU::postprocess(std::vector<BndBox> &post_boxes,
                                    std::vector<size_t> &post_labels,
                                    std::vector<float> &post_scores) {
   decode_to_boxes(rpn_outputs, pre_boxes, pre_labels, pre_scores);
@@ -104,7 +104,7 @@ void vueron::PCDetCPU::run(const float *points, const size_t point_buf_len,
 
 void vueron::PCDetCPU::run(const float *points, const size_t point_buf_len,
                            const size_t point_stride,
-                           std::vector<vueron::BndBox> &final_boxes,
+                           std::vector<BndBox> &final_boxes,
                            std::vector<size_t> &final_labels,
                            std::vector<float> &final_scores) {
   /**

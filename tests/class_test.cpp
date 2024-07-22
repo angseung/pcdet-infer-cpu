@@ -45,12 +45,12 @@ TEST(IntegrationTest, IntegrationTest) {
         GRID_Y_SIZE * GRID_X_SIZE * NUM_FEATURE_SCATTER,
         0.0f);  // input of RPN
     std::vector<std::vector<float>> rpn_outputs;
-    std::vector<vueron::BndBox> pre_boxes;  // boxes before NMS
-    std::vector<size_t> pre_labels;         // labels before NMS
-    std::vector<float> pre_scores;          // scores before NMS
+    std::vector<BndBox> pre_boxes;   // boxes before NMS
+    std::vector<size_t> pre_labels;  // labels before NMS
+    std::vector<float> pre_scores;   // scores before NMS
 
     // Buffers for inferece for pcdetfunc
-    std::vector<vueron::BndBox> nms_boxes;
+    std::vector<BndBox> nms_boxes;
     std::vector<size_t> nms_labels;
     std::vector<float> nms_scores;
 
@@ -59,7 +59,7 @@ TEST(IntegrationTest, IntegrationTest) {
                       nms_labels, nms_scores);
 
     // Buffers for inferece for pcdet
-    std::vector<vueron::PredBox> pcdet_nms_boxes;
+    std::vector<PredBox> pcdet_nms_boxes;
 
     // Do inference with pcdet
     pcdet->run(points, point_buf_len, point_stride, pcdet_nms_boxes);

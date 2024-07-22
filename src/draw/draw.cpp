@@ -15,7 +15,7 @@ std::string floatToString(const float value) {
 
 void drawBirdsEyeView(const size_t point_buf_len, const size_t point_stride,
                       const float *points_data,
-                      const std::vector<vueron::BndBox> &boxes,
+                      const std::vector<BndBox> &boxes,
                       const std::vector<float> &scores,
                       const std::vector<size_t> &labels, const float scale,
                       cv::Mat &image) {
@@ -48,7 +48,7 @@ void drawBirdsEyeView(const size_t point_buf_len, const size_t point_stride,
         color = cv::Scalar{0, 255, 255};  // yellow (defalut)
         break;
     }
-    vueron::BndBox box{boxes[i]};
+    BndBox box{boxes[i]};
     const cv::Point2f center((box.x - MIN_X_RANGE) * scale,
                              (MAX_Y_RANGE - box.y) * scale);
     cv::Point2f vertices[4];

@@ -8,7 +8,7 @@
 extern "C" {
 
 static std::unique_ptr<vueron::PCDetCPU> pcdet;
-static std::vector<vueron::BndBox> g_nms_pred;
+static std::vector<BndBox> g_nms_pred;
 static std::vector<float> g_nms_score;
 static std::vector<size_t> g_nms_labels;
 static std::string version;
@@ -34,7 +34,7 @@ void pcdet_initialize(const char* metadata_path,
 
 size_t pcdet_run(const float* points, const int point_buf_len,
                  const int point_stride, float** score, size_t** label,
-                 Box** box) {
+                 BndBox** box) {
   // check point input size
   assert(point_buf_len % point_stride == 0);
 
@@ -50,7 +50,7 @@ size_t pcdet_run(const float* points, const int point_buf_len,
   const size_t num_preds = g_nms_labels.size();
   *score = g_nms_score.data();
   *label = g_nms_labels.data();
-  *box = reinterpret_cast<Box*>(g_nms_pred.data());
+  *box = g_nms_pred.data();
 
   // clear global static buffers
   g_nms_score.clear();

@@ -71,11 +71,11 @@ int main(int argc, const char **argv) {
     */
     float *scores;
     size_t *labels;
-    Box *boxes;
+    BndBox *boxes;
 
     std::vector<float> nms_scores;
     std::vector<size_t> nms_labels;
-    std::vector<vueron::BndBox> nms_boxes;
+    std::vector<BndBox> nms_boxes;
 
     /*
         Do inference
@@ -87,20 +87,9 @@ int main(int argc, const char **argv) {
         Copy predicted boxes into vector
     */
     for (size_t box_index = 0; box_index < n_boxes; box_index++) {
-      vueron::BndBox box{};
-
+      BndBox box{boxes[box_index]};
       nms_labels.push_back(labels[box_index]);
       nms_scores.push_back(scores[box_index]);
-      Box box_c{boxes[box_index]};
-
-      box.x = box_c.x;
-      box.y = box_c.y;
-      box.z = box_c.z;
-      box.dx = box_c.dx;
-      box.dy = box_c.dy;
-      box.dz = box_c.dz;
-      box.heading = box_c.heading;
-
       nms_boxes.push_back(box);
     }
 
