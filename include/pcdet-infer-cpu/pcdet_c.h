@@ -1,7 +1,11 @@
 #ifndef __PCDET_C_H__
 #define __PCDET_C_H__
 
+#ifdef __cplusplus
+#include <cstddef>
+#else
 #include <stddef.h>
+#endif
 
 #include "common/metadata.h"
 #include "common/runtimeconfig.h"
