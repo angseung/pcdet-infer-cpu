@@ -5,7 +5,7 @@
 
 #include "pcdet-infer-cpu/common/metadata.h"
 #include "pcdet-infer-cpu/common/runtimeconfig.h"
-#include "type.h"
+#include "pcdet-infer-cpu/common/type.h"
 
 std::string floatToString(const float value) {
   std::ostringstream out;

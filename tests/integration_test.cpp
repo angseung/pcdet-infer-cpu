@@ -4,12 +4,12 @@
 #include <cmath>
 #include <numeric>
 
+#include "pcdet-infer-cpu/common/type.h"
 #include "pcdet_test/include/config.h"
 #include "pcdet_test/include/model.h"
 #include "pcdet_test/include/npy.h"
 #include "pcdet_test/include/params.h"
 #include "pcl.h"
-#include "type.h"
 
 #define ERROR 1e-3
 

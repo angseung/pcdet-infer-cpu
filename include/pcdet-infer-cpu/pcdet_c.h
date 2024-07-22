@@ -5,7 +5,7 @@
 
 #include "common/metadata.h"
 #include "common/runtimeconfig.h"
-#include "type.h"
+#include "pcdet-infer-cpu/common/type.h"
 
 #ifdef __cplusplus
 extern "C" {
