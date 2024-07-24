@@ -10,6 +10,4 @@
 #include "pcdet-infer-cpu/pcdet.h"
 #include "pcl.h"
 
-namespace fs = std::filesystem;
-
 #endif  //__MAIN_H__
