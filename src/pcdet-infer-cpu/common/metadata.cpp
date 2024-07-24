@@ -83,7 +83,7 @@ inline nlohmann::json ReadFile(const std::string& filename) {
   std::ifstream file(filename);
 
   if (!file.is_open()) {
-    throw std::runtime_error{"File open failed"};
+    throw std::runtime_error{"File open failed\n"};
   }
   nlohmann::json data = nlohmann::json::parse(file);
 

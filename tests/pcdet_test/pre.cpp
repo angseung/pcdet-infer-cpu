@@ -52,7 +52,7 @@ void vueron::voxelization(std::vector<Pillar> &bev_pillar, const float *points,
     // check point value is NaN or not.
     if (std::isnan(point_x) || std::isnan(point_y) || std::isnan(point_z) ||
         std::isnan(point_w)) {
-      throw std::runtime_error{"ERROR: NaN value encountered in point data."};
+      throw std::runtime_error{"ERROR: NaN value encountered in point data.\n"};
     }
 
     const auto voxel_index_x =
