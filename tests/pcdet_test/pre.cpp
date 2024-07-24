@@ -21,16 +21,13 @@ void vueron::voxelization(std::vector<Pillar> &bev_pillar, const float *points,
                           const size_t points_buf_len,
                           const size_t point_stride) {
   // check grid size
-  assert(GRID_X_SIZE == (MAX_X_RANGE - MIN_X_RANGE) / PILLAR_X_SIZE);
-  assert(GRID_Y_SIZE == (MAX_Y_RANGE - MIN_Y_RANGE) / PILLAR_Y_SIZE);
-  assert(1.0f == (MAX_Z_RANGE - MIN_Z_RANGE) / PILLAR_Z_SIZE);
+  assert((MAX_X_RANGE - MIN_X_RANGE) / PILLAR_X_SIZE == GRID_X_SIZE);
+  assert((MAX_Y_RANGE - MIN_Y_RANGE) / PILLAR_Y_SIZE == GRID_Y_SIZE);
+  assert((MAX_Z_RANGE - MIN_Z_RANGE) / PILLAR_Z_SIZE == 1.0f);
 
   // check buffer size
   assert(points_buf_len % point_stride == 0);
   const size_t points_num = points_buf_len / point_stride;
-
-  std::random_device rd;
-  std::mt19937 rng{rd()};
 
   // clip point buffer if points_num is larger than MAX_POINT_NUM in
   // runtimeconfig.
@@ -41,6 +38,7 @@ void vueron::voxelization(std::vector<Pillar> &bev_pillar, const float *points,
   std::iota(indices.begin(), indices.end(), 0);
 
 #if SHUFFLE_ON
+  std::mt19937 rng{RANDOM_SEED};
   std::shuffle(indices.begin(), indices.end(), rng);
 #endif
 
