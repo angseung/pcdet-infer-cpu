@@ -16,8 +16,8 @@ class PCDReader {
   PCDReader() = delete;
   explicit PCDReader(const std::string &filePath);
   ~PCDReader() = default;
-  const std::vector<float> &getData() const;
-  int getStride() const;
+  const std::vector<float> &getData() const noexcept;
+  int getStride() const noexcept;
   PCDReader(PCDReader &copy) = delete;
   PCDReader &operator=(PCDReader &copy) = delete;
 };

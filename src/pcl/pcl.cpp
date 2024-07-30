@@ -69,14 +69,17 @@ vueron::PCDReader::PCDReader(const std::string &filePath) {
 
   // check num_points
   if (numPoints != data.size() * sizeof(float) / pointSize) {
-    std::cerr << "Parsed point_num is difference with num_points in pcd header"
-              << std::endl;
+    std::cerr << "Parsed point_num:" << data.size() * sizeof(float) / pointSize
+              << " is different with num_points in pcd header:" << numPoints
+              << " ." << std::endl;
   }
 }
 
-const std::vector<float> &vueron::PCDReader::getData() const { return data; }
+const std::vector<float> &vueron::PCDReader::getData() const noexcept {
+  return data;
+}
 
-int vueron::PCDReader::getStride() const { return stride; }
+int vueron::PCDReader::getStride() const noexcept { return stride; }
 
 std::vector<std::string> vueron::getPCDFileList(
     const std::string &folder_path) {
