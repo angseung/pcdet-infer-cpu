@@ -18,6 +18,8 @@ class PCDReader {
   ~PCDReader() = default;
   const std::vector<float> &getData() const;
   int getStride() const;
+  PCDReader(PCDReader &copy) = delete;
+  PCDReader &operator=(PCDReader &copy) = delete;
 };
 
 std::vector<std::string> getPCDFileList(const std::string &folder_path);

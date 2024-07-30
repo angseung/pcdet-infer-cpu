@@ -22,6 +22,7 @@ vueron::PCDReader::PCDReader(const std::string &filePath) {
   std::string line;
   std::map<std::string, int> fieldOffsets;
   int pointSize = 0;
+  int numPoints = 0;
   while (std::getline(file, line)) {
     std::istringstream iss(line);
     std::string token;
@@ -42,6 +43,10 @@ vueron::PCDReader::PCDReader(const std::string &filePath) {
         std::cerr << "This reader only supports binary data." << std::endl;
       }
       break;
+    } else if (token == "POINTS") {
+      std::string point_num_string =
+          line.replace(line.begin(), line.begin() + 6, "");
+      numPoints = std::stoi(point_num_string);
     }
   }
 
@@ -61,6 +66,12 @@ vueron::PCDReader::PCDReader(const std::string &filePath) {
   }
 
   file.close();
+
+  // check num_points
+  if (numPoints != data.size() * sizeof(float) / pointSize) {
+    std::cerr << "Parsed point_num is difference with num_points in pcd header"
+              << std::endl;
+  }
 }
 
 const std::vector<float> &vueron::PCDReader::getData() const { return data; }
