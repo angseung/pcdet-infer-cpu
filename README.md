@@ -124,12 +124,12 @@ cmake --build Debug -j
 
 ### 1. Bug Fix
 
-- Fixed segmentation fault error that can be occurs if MAX_VOXELS in model configuration is smaller than the number of
+- Fixed segmentation fault error that can occur if `MAX_VOXELS` in model configuration is smaller than the number of
   voxels in input data.
 
 ### 2. Update
 
-- Support binding with C program.
-    - source codes are available in `pcdet_c.cpp` & `pcdet_c.h`.
+- Support language binding for C.
+    - Source codes are available in `pcdet_c.cpp` & `pcdet_c.h`.
 
 ---
