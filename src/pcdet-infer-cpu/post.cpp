@@ -31,7 +31,9 @@ void vueron::decode_to_boxes(const std::vector<std::vector<float>> &rpn_output,
   assert(hm.size() == CLASS_NUM * FEATURE_Y_SIZE * FEATURE_X_SIZE);
 
   std::vector<size_t> indices(hm.size());
-  assert(IOU_RECTIFIER.size() == CLASS_NUM);
+  if (has_iou_head) {
+    assert(IOU_RECTIFIER.size() == CLASS_NUM);
+  }
 
   /*
       get topk scores and their indices
