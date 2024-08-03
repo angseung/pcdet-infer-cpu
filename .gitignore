@@ -54,3 +54,5 @@ outputs*/
 cmake-build-debug/
 .idea/
 include/version.h
+*.pcd
+open3d*/

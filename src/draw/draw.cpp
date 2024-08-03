@@ -72,3 +72,25 @@ void drawBirdsEyeView(const size_t point_buf_len, const size_t point_stride,
     }
   }
 }
+
+void draw3DEyeView(const size_t point_buf_len, const size_t point_stride,
+                   const float *points_data, const std::vector<BndBox> &boxes,
+                   const std::vector<float> &scores,
+                   const std::vector<size_t> &labels) {
+  const size_t points_size = point_buf_len / point_stride;
+  open3d::geometry::PointCloud pointcloud;
+  for (size_t i = 0; i < points_size; i++) {
+    pointcloud.points_.emplace_back(points_data[point_stride * i],
+                                    points_data[point_stride * i + 1],
+                                    points_data[point_stride * i + 2]);
+  }
+  open3d::visualization::Visualizer visualizer;
+  std::shared_ptr<open3d::geometry::PointCloud> pointcloud_ptr(
+      new open3d::geometry::PointCloud);
+  *pointcloud_ptr = pointcloud;
+
+  visualizer.CreateVisualizerWindow("Open3D", 1600, 900);
+  visualizer.AddGeometry(pointcloud_ptr);
+  visualizer.Run();
+  visualizer.DestroyVisualizerWindow();
+}

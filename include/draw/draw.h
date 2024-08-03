@@ -1,6 +1,9 @@
 #ifndef __DRAW_H__
 #define __DRAW_H__
 
+#include <open3d/Open3D.h>
+
+#include <Eigen/Dense>
 #include <cstddef>
 #include <opencv2/opencv.hpp>
 
@@ -18,5 +21,10 @@ void drawBirdsEyeView(size_t point_buf_len, size_t point_stride,
                       const std::vector<float> &scores,
                       const std::vector<size_t> &labels, float scale,
                       cv::Mat &image);
+
+void draw3DEyeView(size_t point_buf_len, size_t point_stride,
+                   const float *points_data, const std::vector<BndBox> &boxes,
+                   const std::vector<float> &scores,
+                   const std::vector<size_t> &labels);
 
 #endif  // __DRAW_H__
