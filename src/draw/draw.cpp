@@ -73,10 +73,10 @@ void drawBirdsEyeView(const size_t point_buf_len, const size_t point_stride,
   }
 }
 
-void draw3DEyeView(const size_t point_buf_len, const size_t point_stride,
-                   const float *points_data, const std::vector<BndBox> &boxes,
-                   const std::vector<float> &scores,
-                   const std::vector<size_t> &labels) {
+void draw3DView(const size_t point_buf_len, const size_t point_stride,
+                const float *points_data, const std::vector<BndBox> &boxes,
+                const std::vector<float> &scores,
+                const std::vector<size_t> &labels) {
   const size_t points_size = point_buf_len / point_stride;
   open3d::geometry::PointCloud pointcloud;
   for (size_t i = 0; i < points_size; i++) {
@@ -93,7 +93,7 @@ void draw3DEyeView(const size_t point_buf_len, const size_t point_stride,
       new open3d::geometry::PointCloud);
   *pointcloud_ptr = pointcloud;
   visualizer.CreateVisualizerWindow("Open3D", 1600, 900);
-  // visualizer.AddGeometry(pointcloud_ptr);
+  visualizer.AddGeometry(pointcloud_ptr);
 
   for (size_t i = 0; i < scores.size(); i++) {
     // Define the center of the cuboid
