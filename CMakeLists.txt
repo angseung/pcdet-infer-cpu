@@ -14,6 +14,7 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(BUILD_DEMO ON CACHE BOOL "Build Demo")
 set(BUILD_MAIN ON CACHE BOOL "Build Main")
 set(BUILD_TEST ON CACHE BOOL "Build Tests")
+set(ENABLE_OPEN3D OFF CACHE BOOL "Build emo_3d")
 
 # Logging Options
 set(_PROFILE OFF CACHE BOOL "Logging Model Latency")

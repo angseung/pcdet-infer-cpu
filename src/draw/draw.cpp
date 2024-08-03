@@ -7,6 +7,12 @@
 #include "pcdet-infer-cpu/common/runtimeconfig.h"
 #include "pcdet-infer-cpu/common/type.h"
 
+#ifdef ENABLE_OPEN3D
+#include <open3d/Open3D.h>
+
+#include <Eigen/Dense>
+#endif  // ENABLE_OPEN3D
+
 std::string floatToString(const float value) {
   std::ostringstream out;
   out << std::fixed << std::setprecision(2) << value;
@@ -72,3 +78,59 @@ void drawBirdsEyeView(const size_t point_buf_len, const size_t point_stride,
     }
   }
 }
+
+#ifdef ENABLE_OPEN3D
+void draw3DView(const size_t point_buf_len, const size_t point_stride,
+                const float *points_data, const std::vector<BndBox> &boxes,
+                const std::vector<float> &scores,
+                const std::vector<size_t> &labels) {
+  const size_t points_size = point_buf_len / point_stride;
+  open3d::geometry::PointCloud pointcloud;
+  for (size_t i = 0; i < points_size; i++) {
+    pointcloud.points_.emplace_back(points_data[point_stride * i],
+                                    points_data[point_stride * i + 1],
+                                    points_data[point_stride * i + 2]);
+  }
+
+  const std::vector<Eigen::Vector3d> colors(points_size,
+                                            Eigen::Vector3d(1.0, 1.0, 1.0));
+  pointcloud.colors_ = colors;
+  open3d::visualization::Visualizer visualizer;
+  const std::shared_ptr<open3d::geometry::PointCloud> pointcloud_ptr(
+      new open3d::geometry::PointCloud);
+  *pointcloud_ptr = pointcloud;
+  visualizer.CreateVisualizerWindow("Open3D", 1600, 900);
+  visualizer.AddGeometry(pointcloud_ptr);
+
+  for (size_t i = 0; i < scores.size(); i++) {
+    // Define the center of the cuboid
+    const BndBox box{boxes[i]};
+    Eigen::Vector3d center(box.x, box.y, box.z);
+
+    // Define the 3D dimensions of the cuboid
+    Eigen::Vector3d dimensions(box.dx, box.dy, box.dz);
+
+    // Define the rotation angles in radians
+    const float theta = box.heading / 4;
+    Eigen::Matrix3d rotation =
+        Eigen::AngleAxisd(theta, Eigen::Vector3d::UnitZ()).toRotationMatrix();
+
+    // Generate Oriented Bounding Box
+    open3d::geometry::OrientedBoundingBox obb;
+    obb.center_ = center;
+    obb.extent_ = dimensions;
+    obb.R_ = rotation;
+    auto line_set =
+        open3d::geometry::LineSet::CreateFromOrientedBoundingBox(obb);
+    Eigen::Vector3d color(1.0, 0.0, 0.0);  // RGB: Red
+    line_set->colors_.resize(line_set->lines_.size(), color);
+
+    visualizer.AddGeometry(line_set);
+  }
+
+  visualizer.GetRenderOption().background_color_ =
+      Eigen::Vector3d(0.0, 0.0, 0.0);
+  visualizer.Run();
+  visualizer.DestroyVisualizerWindow();
+}
+#endif  // ENABLE_OPEN3D

@@ -19,6 +19,15 @@ if (BUILD_DEMO)
             pcdet
             draw
     )
+    if (ENABLE_OPEN3D)
+        add_executable(demo_3d demo_3d.cpp)
+        target_link_libraries(
+                demo_3d
+                pcl
+                pcdet
+                draw
+        )
+    endif ()
 else ()
     message(STATUS "SKIP BUILD DEMO")
 endif ()
