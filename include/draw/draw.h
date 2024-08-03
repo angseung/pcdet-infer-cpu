@@ -1,9 +1,6 @@
 #ifndef __DRAW_H__
 #define __DRAW_H__
 
-#include <open3d/Open3D.h>
-
-#include <Eigen/Dense>
 #include <cstddef>
 #include <opencv2/opencv.hpp>
 

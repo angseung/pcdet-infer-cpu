@@ -49,15 +49,15 @@ jobs:
 
       - name: Configure CMake for ubuntu-latest
         if: matrix.os == 'ubuntu-latest'
-        run: sudo apt update && sudo apt install libopencv-dev libglu1-mesa-dev libglfw3-dev libgl1-mesa-dev -y && wget https://github.com/isl-org/Open3D/releases/download/main-devel/open3d-devel-linux-x86_64-cxx11-abi-0.18.0+b271acb.tar.xz && tar -xvf open3d-devel-linux-x86_64-cxx11-abi-0.18.0+b271acb.tar.xz && wget https://github.com/microsoft/onnxruntime/releases/download/v1.16.3/onnxruntime-linux-x64-1.16.3.tgz && tar -zxvf onnxruntime-linux-x64-1.16.3.tgz && cmake -B ${{github.workspace}}/build -DCMAKE_BUILD_TYPE=${{env.BUILD_TYPE}}
+        run: sudo apt update && sudo apt install libopencv-dev libglu1-mesa-dev libglfw3-dev libgl1-mesa-dev -y && wget https://github.com/isl-org/Open3D/releases/download/main-devel/open3d-devel-linux-x86_64-cxx11-abi-0.18.0+b271acb.tar.xz && tar -xvf open3d-devel-linux-x86_64-cxx11-abi-0.18.0+b271acb.tar.xz && wget https://github.com/microsoft/onnxruntime/releases/download/v1.16.3/onnxruntime-linux-x64-1.16.3.tgz && tar -zxvf onnxruntime-linux-x64-1.16.3.tgz && cmake -B ${{github.workspace}}/build -DCMAKE_BUILD_TYPE=${{env.BUILD_TYPE}} -DENABLE_OPEN3D=ON
 
       - name: Configure CMake for ubuntu-20.04
         if: matrix.os == 'ubuntu-20.04'
-        run: sudo apt update && sudo apt install libopencv-dev libglu1-mesa-dev libglfw3-dev libgl1-mesa-dev -y && wget https://github.com/isl-org/Open3D/releases/download/main-devel/open3d-devel-linux-x86_64-cxx11-abi-0.18.0+b271acb.tar.xz && tar -xvf open3d-devel-linux-x86_64-cxx11-abi-0.18.0+b271acb.tar.xz && wget https://github.com/microsoft/onnxruntime/releases/download/v1.16.3/onnxruntime-linux-x64-1.16.3.tgz && tar -zxvf onnxruntime-linux-x64-1.16.3.tgz && cmake -B ${{github.workspace}}/build -DCMAKE_BUILD_TYPE=${{env.BUILD_TYPE}}
+        run: sudo apt update && sudo apt install libopencv-dev libglu1-mesa-dev libglfw3-dev libgl1-mesa-dev -y && wget https://github.com/isl-org/Open3D/releases/download/main-devel/open3d-devel-linux-x86_64-cxx11-abi-0.18.0+b271acb.tar.xz && tar -xvf open3d-devel-linux-x86_64-cxx11-abi-0.18.0+b271acb.tar.xz && wget https://github.com/microsoft/onnxruntime/releases/download/v1.16.3/onnxruntime-linux-x64-1.16.3.tgz && tar -zxvf onnxruntime-linux-x64-1.16.3.tgz && cmake -B ${{github.workspace}}/build -DCMAKE_BUILD_TYPE=${{env.BUILD_TYPE}} -DENABLE_OPEN3D=ON
 
       - name: Configure CMake for macos-latest
         if: matrix.os == 'macos-latest'
-        run: brew update && brew install wget opencv cmake && wget https://github.com/isl-org/Open3D/releases/download/main-devel/open3d-devel-darwin-arm64-0.18.0+b271acb.tar.xz && tar -xvf open3d-devel-darwin-arm64-0.18.0+b271acb.tar.xz && wget https://github.com/microsoft/onnxruntime/releases/download/v1.16.3/onnxruntime-osx-arm64-1.16.3.tgz && tar -zxvf onnxruntime-osx-arm64-1.16.3.tgz && cmake -B ${{github.workspace}}/build -DCMAKE_BUILD_TYPE=${{env.BUILD_TYPE}}
+        run: brew update && brew install wget opencv cmake && wget https://github.com/isl-org/Open3D/releases/download/main-devel/open3d-devel-darwin-arm64-0.18.0+b271acb.tar.xz && tar -xvf open3d-devel-darwin-arm64-0.18.0+b271acb.tar.xz && wget https://github.com/microsoft/onnxruntime/releases/download/v1.16.3/onnxruntime-osx-arm64-1.16.3.tgz && tar -zxvf onnxruntime-osx-arm64-1.16.3.tgz && cmake -B ${{github.workspace}}/build -DCMAKE_BUILD_TYPE=${{env.BUILD_TYPE}} -DENABLE_OPEN3D=ON
 
       - name: Build
         # Build your program with the given configuration

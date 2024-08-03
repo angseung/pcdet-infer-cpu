@@ -3,5 +3,6 @@
 
 #cmakedefine _PROFILE
 #cmakedefine _DEBUG
+#cmakedefine ENABLE_OPEN3D
 
 #endif // __CONFIG_H__

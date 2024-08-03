@@ -3,9 +3,16 @@
 #include <cmath>
 #include <vector>
 
+#include "config.h"
 #include "pcdet-infer-cpu/common/metadata.h"
 #include "pcdet-infer-cpu/common/runtimeconfig.h"
 #include "pcdet-infer-cpu/common/type.h"
+
+#ifdef ENABLE_OPEN3D
+#include <open3d/Open3D.h>
+
+#include <Eigen/Dense>
+#endif  // ENABLE_OPEN3D
 
 std::string floatToString(const float value) {
   std::ostringstream out;
@@ -73,6 +80,7 @@ void drawBirdsEyeView(const size_t point_buf_len, const size_t point_stride,
   }
 }
 
+#ifdef ENABLE_OPEN3D
 void draw3DView(const size_t point_buf_len, const size_t point_stride,
                 const float *points_data, const std::vector<BndBox> &boxes,
                 const std::vector<float> &scores,
@@ -126,3 +134,4 @@ void draw3DView(const size_t point_buf_len, const size_t point_stride,
   visualizer.Run();
   visualizer.DestroyVisualizerWindow();
 }
+#endif  // ENABLE_OPEN3D

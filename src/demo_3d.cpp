@@ -93,6 +93,10 @@ int main(int argc, const char **argv) {
     */
     pcdet->run(point_data, point_buf_len, point_stride, nms_boxes, nms_labels,
                nms_scores);
+
+    /*
+        Draw with Open3D
+    */
     draw3DView(point_buf_len, point_stride, point_data, nms_boxes, nms_scores,
                nms_labels);
   }
