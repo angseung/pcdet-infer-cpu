@@ -3,7 +3,6 @@
 #include <cmath>
 #include <vector>
 
-#include "config.h"
 #include "pcdet-infer-cpu/common/metadata.h"
 #include "pcdet-infer-cpu/common/runtimeconfig.h"
 #include "pcdet-infer-cpu/common/type.h"
