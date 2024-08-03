@@ -103,27 +103,22 @@ void draw3DView(const size_t point_buf_len, const size_t point_stride,
     // Define the 3D dimensions of the cuboid
     Eigen::Vector3d dimensions(box.dx, box.dy, box.dz);
 
-    // Define the rotation angles in radians (yaw, pitch, roll)
-    double yaw = M_PI / 4;    // 45 degrees
-    double pitch = M_PI / 6;  // 30 degrees
-    double roll = M_PI / 3;   // 60 degrees
-
-    // Create a rotation matrix from the Euler angles
+    // Define the rotation angles in radians
+    const float theta = box.heading / 4;
     Eigen::Matrix3d rotation =
-        (Eigen::AngleAxisd(yaw, Eigen::Vector3d::UnitZ()) *
-         Eigen::AngleAxisd(pitch, Eigen::Vector3d::UnitY()) *
-         Eigen::AngleAxisd(roll, Eigen::Vector3d::UnitX()))
-            .matrix();
+        Eigen::AngleAxisd(theta, Eigen::Vector3d::UnitZ()).toRotationMatrix();
 
-    // Create an oriented bounding box
-    open3d::geometry::OrientedBoundingBox obb(center, rotation, dimensions);
-
-    // Convert the oriented bounding box to a LineSet for visualization
-    auto obb_lines =
+    // Generate Oriented Bounding Box
+    open3d::geometry::OrientedBoundingBox obb;
+    obb.center_ = center;
+    obb.extent_ = dimensions;
+    obb.R_ = rotation;
+    auto line_set =
         open3d::geometry::LineSet::CreateFromOrientedBoundingBox(obb);
+    Eigen::Vector3d color(1.0, 0.0, 0.0);  // RGB: Red
+    line_set->colors_.resize(line_set->lines_.size(), color);
 
-    // Add the oriented bounding box to the visualizer
-    visualizer.AddGeometry(obb_lines);
+    visualizer.AddGeometry(line_set);
   }
 
   visualizer.GetRenderOption().background_color_ =

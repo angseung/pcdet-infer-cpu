@@ -70,7 +70,6 @@ int main(int argc, const char **argv) {
   std::cout << pcdet->getVersionInfo() << std::endl;
   std::cout << vueron::GetMetadata() << std::endl;
   std::cout << vueron::GetRuntimeConfig() << std::endl;
-  cv::Mat mat;
 
   for (const auto &pcd_file : pcd_files) {
     /*
