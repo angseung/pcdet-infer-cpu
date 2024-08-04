@@ -91,14 +91,14 @@ inline nlohmann::json ReadFile(const std::string& filename) {
   return data;
 }
 
-class Metadata::MetadataImpl {
+class Metadata::Impl {
  public:
   nlohmann::json data;
 
-  MetadataImpl() = default;
+  Impl() = default;
 };
 
-Metadata::Metadata() : pimpl(std::make_unique<MetadataImpl>()) {}
+Metadata::Metadata() : pimpl(std::make_unique<Impl>()) {}
 
 Metadata::~Metadata() = default;
 
