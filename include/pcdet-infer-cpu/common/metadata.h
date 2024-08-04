@@ -57,14 +57,18 @@ std::ostream& operator<<(std::ostream& os, const MetaStruct& metastruct);
 
 class Metadata {
  private:
-  class MetadataImpl;
-  std::unique_ptr<MetadataImpl> pimpl;
+  class Impl;
+  std::unique_ptr<Impl> pimpl;
   void Setup(const std::string& filename);
 
  public:
   Metadata();
   ~Metadata();
   MetaStruct metastruct;
+  Metadata(const Metadata& copy) = delete;
+  Metadata& operator=(const Metadata& copy) = delete;
+  Metadata(const Metadata&& rhs) = delete;
+  Metadata& operator=(const Metadata&& rhs) = delete;
 
   static Metadata& Instance() {
     static Metadata metadata;
