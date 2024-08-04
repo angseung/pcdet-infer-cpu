@@ -27,6 +27,8 @@ if (BUILD_DEMO)
                 pcdet
                 draw
         )
+    else()
+        message(STATUS "SKIP BUILD DEMO_3D")
     endif ()
 else ()
     message(STATUS "SKIP BUILD DEMO")
