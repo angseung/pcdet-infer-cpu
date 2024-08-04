@@ -24,8 +24,8 @@ class PCDet {
   PCDet() = default;
   PCDet(const PCDet &copy) = delete;
   PCDet &operator=(const PCDet &copy) = delete;
-  PCDet(const PCDet &&copy) = delete;
-  PCDet &operator=(const PCDet &&copy) = delete;
+  PCDet(const PCDet &&rhs) = delete;
+  PCDet &operator=(const PCDet &&rhs) = delete;
   virtual ~PCDet() = default;
 };
 
