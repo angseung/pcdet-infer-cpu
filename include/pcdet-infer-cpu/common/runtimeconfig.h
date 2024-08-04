@@ -47,14 +47,14 @@ struct RuntimeConfigSingleton {
       10.0f,   // float pre_nms_distance_thd;
       0.2f,    // float nms_iou_thd;
   };
-  static RuntimeConfigSingleton& Instance() {
-    static RuntimeConfigSingleton config;
-    return config;
-  }
-  static void Set(const RuntimeConfig& config) {
-    auto& instance = Instance();
-    instance.config = config;
-  }
+  RuntimeConfigSingleton(const RuntimeConfigSingleton& copy) = delete;
+  RuntimeConfigSingleton& operator=(const RuntimeConfigSingleton& copy) =
+      delete;
+  RuntimeConfigSingleton(const RuntimeConfigSingleton&& rhs) = delete;
+  RuntimeConfigSingleton& operator=(const RuntimeConfigSingleton&& rhs) =
+      delete;
+  static RuntimeConfigSingleton& Instance();
+  static void Set(const RuntimeConfig& config);
 };
 
 inline RuntimeConfig& GetRuntimeConfig() {
