@@ -31,3 +31,13 @@ std::ostream& operator<<(std::ostream& os, const RuntimeConfig& runtimeconfig) {
 
   return os;
 }
+
+vueron::RuntimeConfigSingleton& vueron::RuntimeConfigSingleton::Instance() {
+  static RuntimeConfigSingleton config{};
+  return config;
+}
+
+void vueron::RuntimeConfigSingleton::Set(const RuntimeConfig& config) {
+  auto& instance = Instance();
+  instance.config = config;
+}
