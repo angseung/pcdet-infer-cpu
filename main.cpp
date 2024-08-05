@@ -104,5 +104,7 @@ int main(int argc, const char **argv) {
               << cyc_cnt << ")" << std::endl;
   }
 
+  std::cout << "Inference done." << std::endl;
+
   return 0;
 }

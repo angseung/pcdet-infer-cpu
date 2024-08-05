@@ -133,5 +133,7 @@ int main(int argc, const char **argv) {
 
   pcdet_finalize();
 
+  std::cout << "Inference done." << std::endl;
+
   return 0;
 }

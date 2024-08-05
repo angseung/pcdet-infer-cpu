@@ -115,5 +115,7 @@ int main(int argc, const char **argv) {
 #endif
   }
 
+  std::cout << "Inference done." << std::endl;
+
   return 0;
 }
