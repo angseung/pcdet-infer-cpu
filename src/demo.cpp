@@ -99,7 +99,7 @@ int main(int argc, const char **argv) {
               << std::setw(3) << ped_cnt << "), cyclist(" << std::setw(3)
               << cyc_cnt << ")" << std::endl;
 
-    constexpr float scale = 12.0;
+    constexpr float scale = 12.0f;
 
     const int width = static_cast<int>((MAX_X_RANGE - MIN_X_RANGE) * scale);
     const int height = static_cast<int>((MAX_Y_RANGE - MIN_Y_RANGE) * scale);
@@ -114,6 +114,8 @@ int main(int argc, const char **argv) {
     cv::imwrite(output_file_name, image);
 #endif
   }
+
+  std::cout << "Inference done." << std::endl;
 
   return 0;
 }
