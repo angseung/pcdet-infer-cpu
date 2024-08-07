@@ -1,9 +1,9 @@
 # src/draw/CMakeLists.txt
 if (ENABLE_OPEN3D)
     if (APPLE)
-        list(APPEND CMAKE_PREFIX_PATH ${PROJECT_SOURCE_DIR}/open3d-devel-darwin-arm64-0.18.0+b271acb/lib/cmake)
+        list(APPEND CMAKE_PREFIX_PATH ${PROJECT_SOURCE_DIR}/open3d-devel-darwin-arm64-0.18.0/lib/cmake)
     elseif (UNIX)
-        list(APPEND CMAKE_PREFIX_PATH ${PROJECT_SOURCE_DIR}/open3d-devel-linux-x86_64-cxx11-abi-0.18.0+b271acb/lib/cmake)
+        list(APPEND CMAKE_PREFIX_PATH ${PROJECT_SOURCE_DIR}/open3d-devel-linux-x86_64-cxx11-abi-0.18.0/lib/cmake)
     else ()
         message(FATAL_ERROR "Unsupported OS")
     endif ()
