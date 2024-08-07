@@ -22,7 +22,8 @@ else ()
 endif ()
 add_library(onnx::runtime ALIAS _onnxruntime)
 
-add_library(pcdet STATIC pre.cpp post.cpp ort_model.cpp pcdet.cpp pcdet_c.cpp)
+set(PCDET_SRC_FILES pre.cpp post.cpp ort_model.cpp pcdet.cpp pcdet_c.cpp)
+add_library(pcdet STATIC ${PCDET_SRC_FILES})
 target_include_directories(
         pcdet
         PUBLIC
