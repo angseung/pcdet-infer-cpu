@@ -56,3 +56,4 @@ cmake-build-debug/
 include/version.h
 *.pcd
 open3d*/
+*.tar.gz

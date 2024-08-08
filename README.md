@@ -14,38 +14,39 @@
 
 - GCC or Clang Complier
 - OpenCV
-- cmake ≥ 3.11
+- PCL
+- cmake ≥ 3.24
 
 ## 2.2. macOS (AArch64)
 
 ```bash
 git clone https://github.com/angseung/pcdet-infer-cpu.git
 cd pcdet-infer-cpu
-brew install cmake ninja opencv
+brew install pcl cmake ninja libomp
 wget https://github.com/microsoft/onnxruntime/releases/download/v1.16.3/onnxruntime-osx-arm64-1.16.3.tgz
 tar -zxvf onnxruntime-osx-arm64-1.16.3.tgz
 
 # for Release build
-cmake -S. -BRelease -DBUILD_DEMO=ON -DBUILD_TEST=ON
+cmake -S. -BRelease -DBUILD_DEMO=ON -DBUILD_TEST=OFF
 cmake --build Release -j
 
 # for Debug build
-cmake -S. -BDebug -DBUILD_DEMO=ON -DBUILD_TEST=ON -DCMAKE_BUILD_TYPE=Debug
+cmake -S. -BDebug -DBUILD_DEMO=ON -DBUILD_TEST=OFF -DCMAKE_BUILD_TYPE=Debug
 cmake --build Debug -j
 ```
 
-## 2.3. Linux (x86-64)
+# 2.2. Linux (x86)
 
 ```bash
 git clone https://github.com/angseung/pcdet-infer-cpu.git
 cd pcdet-infer-cpu
 sudo apt update
-sudo apt install cmake libopencv-dev build-essential -y
+sudo apt install libpcl-dev libopencv-dev -y
 wget https://github.com/microsoft/onnxruntime/releases/download/v1.16.3/onnxruntime-linux-x64-1.16.3.tgz
 tar -zxvf onnxruntime-linux-x64-1.16.3.tgz
 
 # for Release build
-cmake -S. -BRelease -DBUILD_DEMO=ON -DBUILD_TEST=ON
+cmake -S. -BRelease -DBUILD_DEMO=ON -DBUILD_TEST=OFF
 cmake --build Release -j
 
 # for Debug build
@@ -68,6 +69,8 @@ cmake --build Debug -j
 
 ## 3.2. demo
 
+### 3.2.1. demo
+
 - This program runs a PCDet model with PCD files, and then draws detected bounding boxes on point cloud in
   bird-eyes-view.
 
@@ -75,19 +78,33 @@ cmake --build Debug -j
 ./Release/bin/demo ./YOUR_PCD_DIR_PATH ./YOUR_METADATA_FILE_PATH
 ```
 
-### 3.2.1. demo_c
+### 3.2.2. demo_c
 
 - This program has same functions with `demo`, but it is implemented with inference codes
   in `pcdet_c.h` & `pcdet_c.cpp`.
-- Refer this code if you want to use this repository in C project.
+- Refers this code if you want to use this repository in C project.
 
 ```bash
 ./Release/bin/demo_c ./YOUR_PCD_DIR_PATH ./YOUR_METADATA_FILE_PATH
 ```
 
+### 3.2.3. demo_3d
+
+- This program draws 3D point cloud in your PCD files.
+
+```bash
+./Release/bin/demo_3d ./YOUR_PCD_DIR_PATH ./YOUR_METADATA_FILE_PATH
+```
+
 ---
 
 # Update History
+
+## Release 1.0.0
+
+- Initial Release
+
+---
 
 ## Release 1.1.0
 
@@ -131,5 +148,14 @@ cmake --build Debug -j
 
 - Support language binding for C.
     - Source codes are available in `pcdet_c.cpp` & `pcdet_c.h`.
+
+---
+
+## Release 1.4.0
+
+### 1. Update
+
+- Support 3D drawing for PCD file.
+    - Source codes are available in `demo_3d.cpp`.
 
 ---
