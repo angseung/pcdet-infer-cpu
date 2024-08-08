@@ -21,7 +21,7 @@
 ```bash
 git clone https://github.com/angseung/pcdet-infer-cpu.git
 cd pcdet-infer-cpu
-brew install cmake ninja opencv libopm
+brew install cmake ninja opencv libomp
 wget https://github.com/microsoft/onnxruntime/releases/download/v1.16.3/onnxruntime-osx-arm64-1.16.3.tgz
 tar -zxvf onnxruntime-osx-arm64-1.16.3.tgz
 
