@@ -10,6 +10,11 @@ project(
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
+if (NOT CMAKE_BUILD_TYPE)
+    # Set default build type to Release if not specified
+    set(CMAKE_BUILD_TYPE "Release" CACHE STRING "Build with Release Mode." FORCE)
+endif ()
+
 # Build Options
 set(BUILD_DEMO ON CACHE BOOL "Build Demo")
 set(BUILD_MAIN ON CACHE BOOL "Build Main")
