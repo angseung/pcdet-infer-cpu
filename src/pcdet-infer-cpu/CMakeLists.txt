@@ -35,7 +35,7 @@ target_include_directories(
 target_link_libraries(pcdet PUBLIC ${PCDET_OBJS})
 
 # Shared Object for pcdet
-set(PCDET_VERSION 1.3.0 CACHE STRING "PCDet version")
+set(PCDET_VERSION 1.4.0 CACHE STRING "PCDet version")
 set(PCDET_SO_VERSION 1)
 add_library(pcdet_shared SHARED ${PCDET_SRC_FILES})
 set_target_properties(pcdet_shared PROPERTIES LIBRARY_OUTPUT_DIRECTORY ${CMAKE_RUNTIME_OUTPUT_DIRECTORY})
@@ -88,7 +88,7 @@ add_custom_command(
 # 4. zip target directory
 set(OS_NAME ${CMAKE_SYSTEM_NAME})
 set(ARCH_NAME ${CMAKE_SYSTEM_PROCESSOR})
-set(TAR_OUTPUT ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/pcdet_${PCDET_VERSION}_${CMAKE_SYSTEM_NAME}_${CMAKE_SYSTEM_PROCESSOR}.tar.gz)
+set(TAR_OUTPUT ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/pcdet_${PCDET_VERSION}_${CMAKE_BUILD_TYPE}_${CMAKE_SYSTEM_NAME}_${CMAKE_SYSTEM_PROCESSOR}.tar.gz)
 add_custom_command(
         TARGET pcdet_shared POST_BUILD
         COMMAND ${CMAKE_COMMAND} -E tar "zcf" ${TAR_OUTPUT} -- ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/libpcdet
