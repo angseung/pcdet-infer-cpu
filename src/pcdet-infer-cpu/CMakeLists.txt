@@ -47,32 +47,51 @@ target_include_directories(
 )
 target_link_libraries(pcdet_shared PUBLIC ${PCDET_OBJS})
 
-# zip library files
-#set(PCDET_LIB_FILES
-#        ${PROJECT_SOURCE_DIR}/include/pcdet-infer-cpu/pcdet_c.h
-#        ${PROJECT_SOURCE_DIR}/include/pcdet-infer-cpu/common/runtimeconfig.h
-#        ${PROJECT_SOURCE_DIR}/include/pcdet-infer-cpu/common/metadata.h
-#        ${PROJECT_SOURCE_DIR}/include/pcdet-infer-cpu/common/type.h
-#)
-#if (APPLE)
-#    list(APPEND PCDET_LIB_FILES ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/libpcdet_shared.${PCDET_VERSION}.dylib)
-#    list(APPEND PCDET_LIB_FILES ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/libpcdet_shared.${PCDET_SO_VERSION}.dylib)
-#    list(APPEND PCDET_LIB_FILES ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/libpcdet_shared.dylib)
-#elseif (UNIX)
-#    list(APPEND PCDET_LIB_FILES ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/libpcdet_shared.${PCDET_VERSION}.so)
-#    list(APPEND PCDET_LIB_FILES ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/libpcdet_shared.${PCDET_SO_VERSION}.so)
-#    list(APPEND PCDET_LIB_FILES ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/libpcdet_shared.so)
-#else ()
-#    message(FATAL_ERROR "Unsupported OS. This library supports only macOS & linux ONLY")
-#endif ()
-#
-#set(OS_NAME ${CMAKE_SYSTEM_NAME})
-#set(ARCH_NAME ${CMAKE_SYSTEM_PROCESSOR})
-#set(TAR_OUTPUT ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/pcdet_${PCDET_VERSION}_${CMAKE_SYSTEM_NAME}_${CMAKE_SYSTEM_PROCESSOR}.tar.gz)
-#add_custom_command(
-#        OUTPUT ${TAR_OUTPUT}
-#        COMMAND ${CMAKE_COMMAND} -E tar zcvf ${TAR_OUTPUT} ${PCDET_LIB_FILES}
-#        DEPENDS ${PCDET_LIB_FILES}
-#        COMMENT "Generating tar.gz archive of pcdet library"
-#)
-#add_custom_target(create_tar ALL DEPENDS ${TAR_OUTPUT})
+## zip library files
+# 1. Create target directory if it doesn't exist
+file(MAKE_DIRECTORY ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/libpcdet/pcdet)
+
+# 2. Copy header files to the target directory
+set(PCDET_HRADER_FILES
+        ${PROJECT_SOURCE_DIR}/include/pcdet-infer-cpu/pcdet_c.h
+        ${PROJECT_SOURCE_DIR}/include/pcdet-infer-cpu/common/runtimeconfig.h
+        ${PROJECT_SOURCE_DIR}/include/pcdet-infer-cpu/common/metadata.h
+        ${PROJECT_SOURCE_DIR}/include/pcdet-infer-cpu/common/type.h
+)
+foreach (file ${PCDET_HRADER_FILES})
+    file(COPY ${file} DESTINATION ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/libpcdet/pcdet)
+endforeach ()
+
+# 3. Copy lib files to the target directory
+set(PCDET_LIB_FILES)
+if (APPLE)
+    list(APPEND PCDET_LIB_FILES ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/libpcdet_shared.${PCDET_VERSION}.dylib)
+    list(APPEND PCDET_LIB_FILES ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/libpcdet_shared.${PCDET_SO_VERSION}.dylib)
+    list(APPEND PCDET_LIB_FILES ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/libpcdet_shared.dylib)
+elseif (UNIX)
+    list(APPEND PCDET_LIB_FILES ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/libpcdet_shared.${PCDET_VERSION}.so)
+    list(APPEND PCDET_LIB_FILES ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/libpcdet_shared.${PCDET_SO_VERSION}.so)
+    list(APPEND PCDET_LIB_FILES ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/libpcdet_shared.so)
+else ()
+    message(FATAL_ERROR "Unsupported OS. This library supports only macOS & linux ONLY")
+endif ()
+foreach (file ${PCDET_LIB_FILES})
+    file(COPY ${file} DESTINATION ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/libpcdet)
+endforeach ()
+
+# 4. zip target directory
+set(OS_NAME ${CMAKE_SYSTEM_NAME})
+set(ARCH_NAME ${CMAKE_SYSTEM_PROCESSOR})
+set(TAR_OUTPUT ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/pcdet_${PCDET_VERSION}_${CMAKE_SYSTEM_NAME}_${CMAKE_SYSTEM_PROCESSOR}.tar.gz)
+add_custom_command(
+        OUTPUT ${TAR_OUTPUT}
+        COMMAND ${CMAKE_COMMAND} -E tar "zcvf" ${TAR_OUTPUT} -- ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/libpcdet
+        # delete temporary directory when compression is done.
+        COMMAND ${CMAKE_COMMAND} -E remove_directory ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/libpcdet
+        DEPENDS ${PCDET_LIB_FILES}
+        COMMENT "Creating tar.gz archive: ${TAR_OUTPUT}"
+        WORKING_DIRECTORY ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}
+)
+
+# Add a target to run the custom command
+add_custom_target(create_tar ALL DEPENDS ${TAR_OUTPUT})
