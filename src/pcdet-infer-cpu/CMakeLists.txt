@@ -91,10 +91,10 @@ set(ARCH_NAME ${CMAKE_SYSTEM_PROCESSOR})
 set(TAR_OUTPUT ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/pcdet_${PCDET_VERSION}_${CMAKE_SYSTEM_NAME}_${CMAKE_SYSTEM_PROCESSOR}.tar.gz)
 add_custom_command(
         TARGET pcdet_shared POST_BUILD
-        COMMAND ${CMAKE_COMMAND} -E tar "zcvf" ${TAR_OUTPUT} -- ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/libpcdet
+        COMMAND ${CMAKE_COMMAND} -E tar "zcf" ${TAR_OUTPUT} -- ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/libpcdet
         # delete temporary directory when compression is done.
         COMMAND ${CMAKE_COMMAND} -E remove_directory ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/libpcdet
         DEPENDS ${PCDET_LIB_FILES}
-        COMMENT "Creating tar.gz archive: ${TAR_OUTPUT}"
+        COMMENT "Creating tar.gz archive in {CMAKE_RUNTIME_OUTPUT_DIRECTORY}."
         WORKING_DIRECTORY ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}
 )
