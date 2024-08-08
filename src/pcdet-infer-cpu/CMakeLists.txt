@@ -95,6 +95,6 @@ add_custom_command(
         # delete temporary directory when compression is done.
         COMMAND ${CMAKE_COMMAND} -E remove_directory ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/libpcdet
         DEPENDS ${PCDET_LIB_FILES}
-        COMMENT "Creating tar.gz archive in {CMAKE_RUNTIME_OUTPUT_DIRECTORY}."
+        COMMENT "Creating tar.gz archive in ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}."
         WORKING_DIRECTORY ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}
 )
