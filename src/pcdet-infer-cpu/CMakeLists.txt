@@ -58,9 +58,12 @@ set(PCDET_HRADER_FILES
         ${PROJECT_SOURCE_DIR}/include/pcdet-infer-cpu/common/metadata.h
         ${PROJECT_SOURCE_DIR}/include/pcdet-infer-cpu/common/type.h
 )
-foreach (file ${PCDET_HRADER_FILES})
-    file(COPY ${file} DESTINATION ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/libpcdet/pcdet)
-endforeach ()
+add_custom_command(
+        TARGET pcdet_shared POST_BUILD
+        COMMAND ${CMAKE_COMMAND} -E make_directory ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/libpcdet
+        COMMAND ${CMAKE_COMMAND} -E copy ${PCDET_HRADER_FILES} ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/libpcdet/pcdet
+        COMMENT "Copying PCDet headers after build."
+)
 
 # 3. Copy lib files to the target directory
 set(PCDET_LIB_FILES)
@@ -75,16 +78,19 @@ elseif (UNIX)
 else ()
     message(FATAL_ERROR "Unsupported OS. This library supports only macOS & linux ONLY")
 endif ()
-foreach (file ${PCDET_LIB_FILES})
-    file(COPY ${file} DESTINATION ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/libpcdet)
-endforeach ()
+add_custom_command(
+        TARGET pcdet_shared POST_BUILD
+        COMMAND ${CMAKE_COMMAND} -E make_directory ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/libpcdet
+        COMMAND ${CMAKE_COMMAND} -E copy ${PCDET_LIB_FILES} ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/libpcdet
+        COMMENT "Copying PCDet shared libraries after build."
+)
 
 # 4. zip target directory
 set(OS_NAME ${CMAKE_SYSTEM_NAME})
 set(ARCH_NAME ${CMAKE_SYSTEM_PROCESSOR})
 set(TAR_OUTPUT ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/pcdet_${PCDET_VERSION}_${CMAKE_SYSTEM_NAME}_${CMAKE_SYSTEM_PROCESSOR}.tar.gz)
 add_custom_command(
-        OUTPUT ${TAR_OUTPUT}
+        TARGET pcdet_shared POST_BUILD
         COMMAND ${CMAKE_COMMAND} -E tar "zcvf" ${TAR_OUTPUT} -- ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/libpcdet
         # delete temporary directory when compression is done.
         COMMAND ${CMAKE_COMMAND} -E remove_directory ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/libpcdet
@@ -92,6 +98,3 @@ add_custom_command(
         COMMENT "Creating tar.gz archive: ${TAR_OUTPUT}"
         WORKING_DIRECTORY ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}
 )
-
-# 5. Add a target to run the custom command
-add_custom_target(create_tar ALL DEPENDS ${TAR_OUTPUT})
