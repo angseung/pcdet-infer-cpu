@@ -35,7 +35,7 @@ target_include_directories(
 target_link_libraries(pcdet PUBLIC ${PCDET_OBJS})
 
 # Shared Object for pcdet
-set(PCDET_VERSION 1.0.0 CACHE STRING "PCDet version")
+set(PCDET_VERSION 1.3.0 CACHE STRING "PCDet version")
 set(PCDET_SO_VERSION 1)
 add_library(pcdet_shared SHARED ${PCDET_SRC_FILES})
 set_target_properties(pcdet_shared PROPERTIES LIBRARY_OUTPUT_DIRECTORY ${CMAKE_RUNTIME_OUTPUT_DIRECTORY})
@@ -93,5 +93,5 @@ add_custom_command(
         WORKING_DIRECTORY ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}
 )
 
-# Add a target to run the custom command
+# 5. Add a target to run the custom command
 add_custom_target(create_tar ALL DEPENDS ${TAR_OUTPUT})
