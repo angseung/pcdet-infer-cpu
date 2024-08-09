@@ -20,8 +20,8 @@ const char* get_pcdet_cpu_version(void);
 void pcdet_initialize(const char* metadata_path,
                       const struct RuntimeConfig* runtimeconfig);
 
-size_t pcdet_run(const float* points, int point_buf_len, int point_stride,
-                 BndBox** box);
+int pcdet_run(const float* points, int point_buf_len, int point_stride,
+              BndBox** box);
 
 void pcdet_finalize(void);
 

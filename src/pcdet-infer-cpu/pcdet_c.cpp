@@ -18,7 +18,7 @@ const char* get_pcdet_cpu_version(void) {
   version = std::string{pcdet->version_info};
 
   return version.c_str();
-};
+}
 
 void pcdet_initialize(const char* metadata_path,
                       const struct RuntimeConfig* runtimeconfig) {
@@ -33,8 +33,8 @@ void pcdet_initialize(const char* metadata_path,
   std::cout << *runtimeconfig << std::endl;
 }
 
-size_t pcdet_run(const float* points, const int point_buf_len,
-                 const int point_stride, BndBox** box) {
+int pcdet_run(const float* points, const int point_buf_len,
+              const int point_stride, BndBox** box) {
   // check point input size
   assert(point_buf_len % point_stride == 0);
   g_nms_boxes.clear();
@@ -49,8 +49,8 @@ size_t pcdet_run(const float* points, const int point_buf_len,
   assert(g_nms_boxes.empty());
 
   // copy address of output buffer to return pointers
-  const size_t num_preds = g_nms_labels.size();
-  for (size_t i = 0; i < g_nms_pred.size(); i++) {
+  const int num_preds = static_cast<int>(g_nms_labels.size());
+  for (size_t i = 0; i < num_preds; i++) {
     BndBox box{};
     box.x = g_nms_pred[i].x;
     box.y = g_nms_pred[i].y;
