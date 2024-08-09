@@ -88,8 +88,7 @@ std::vector<std::string> &vueron::getPCDFileList(
   file_list.clear();
   assert(file_list.empty());
   for (const auto &entry : fs::directory_iterator(folder_path)) {
-    const std::string curr_pcd_file_name = entry.path().string();
-    if (curr_pcd_file_name.find(".pcd") == std::string::npos) {
+    if (entry.path().string().find(".pcd") == std::string::npos) {
       continue;
     }
     file_list.push_back(entry.path().string());
