@@ -54,6 +54,8 @@ file(MAKE_DIRECTORY ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/libpcdet/pcdet)
 # 2. Copy header files to the target directory
 set(PCDET_HRADER_FILES
         ${PROJECT_SOURCE_DIR}/include/pcdet-infer-cpu/pcdet_c.h
+)
+set(PCDET_COMMON_HRADER_FILES
         ${PROJECT_SOURCE_DIR}/include/pcdet-infer-cpu/common/runtimeconfig.h
         ${PROJECT_SOURCE_DIR}/include/pcdet-infer-cpu/common/metadata.h
         ${PROJECT_SOURCE_DIR}/include/pcdet-infer-cpu/common/type.h
@@ -61,7 +63,10 @@ set(PCDET_HRADER_FILES
 add_custom_command(
         TARGET pcdet_shared POST_BUILD
         COMMAND ${CMAKE_COMMAND} -E make_directory ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/libpcdet
+        COMMAND ${CMAKE_COMMAND} -E make_directory ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/libpcdet/pcdet
+        COMMAND ${CMAKE_COMMAND} -E make_directory ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/libpcdet/pcdet/common
         COMMAND ${CMAKE_COMMAND} -E copy ${PCDET_HRADER_FILES} ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/libpcdet/pcdet
+        COMMAND ${CMAKE_COMMAND} -E copy ${PCDET_COMMON_HRADER_FILES} ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/libpcdet/pcdet/common
         COMMENT "Copying PCDet headers after build."
 )
 
