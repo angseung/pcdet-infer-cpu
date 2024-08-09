@@ -8,10 +8,10 @@
 extern "C" {
 
 static std::unique_ptr<vueron::PCDetCPU> pcdet;
-static std::vector<BndBox> g_nms_pred;
+static std::vector<Box> g_nms_pred;
 static std::vector<float> g_nms_score;
 static std::vector<size_t> g_nms_labels;
-static std::vector<PredBox> g_nms_boxes;
+static std::vector<BndBox> g_nms_boxes;
 
 const char* get_pcdet_cpu_version(void) {
   static std::string version{};
@@ -34,7 +34,7 @@ void pcdet_initialize(const char* metadata_path,
 }
 
 size_t pcdet_run(const float* points, const int point_buf_len,
-                 const int point_stride, PredBox** box) {
+                 const int point_stride, BndBox** box) {
   // check point input size
   assert(point_buf_len % point_stride == 0);
   g_nms_boxes.clear();
@@ -51,7 +51,7 @@ size_t pcdet_run(const float* points, const int point_buf_len,
   // copy address of output buffer to return pointers
   const size_t num_preds = g_nms_labels.size();
   for (size_t i = 0; i < g_nms_pred.size(); i++) {
-    PredBox box{};
+    BndBox box{};
     box.x = g_nms_pred[i].x;
     box.y = g_nms_pred[i].y;
     box.z = g_nms_pred[i].z;

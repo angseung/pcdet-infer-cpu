@@ -21,7 +21,7 @@ void pcdet_initialize(const char* metadata_path,
                       const struct RuntimeConfig* runtimeconfig);
 
 size_t pcdet_run(const float* points, int point_buf_len, int point_stride,
-                 PredBox** box);
+                 BndBox** box);
 
 void pcdet_finalize(void);
 

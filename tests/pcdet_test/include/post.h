@@ -131,7 +131,7 @@ inline float rectify_score(const float score, const float iou,
 }
 
 void decode_to_boxes(const std::vector<std::vector<float>> &rpn_output,
-                     std::vector<BndBox> &boxes, std::vector<size_t> &labels,
+                     std::vector<Box> &boxes, std::vector<size_t> &labels,
                      std::vector<float> &scores);
 
 inline float box_overlap(const float *box_a, const float *box_b) {
@@ -248,13 +248,13 @@ inline float calculateIOU(const float *box_a, const float *box_b) {
   return s_overlap / fmaxf(sa + sb - s_overlap, EPS);
 }
 
-void nms(const std::vector<BndBox> &boxes, const std::vector<float> &scores,
+void nms(const std::vector<Box> &boxes, const std::vector<float> &scores,
          std::vector<bool> &suppressed, float iou_threshold);
 
-void gather_boxes(const std::vector<BndBox> &boxes,
+void gather_boxes(const std::vector<Box> &boxes,
                   const std::vector<size_t> &labels,
                   const std::vector<float> &scores,
-                  std::vector<BndBox> &nms_boxes,
+                  std::vector<Box> &nms_boxes,
                   std::vector<size_t> &nms_labels,
                   std::vector<float> &nms_scores,
                   const std::vector<bool> &suppressed);

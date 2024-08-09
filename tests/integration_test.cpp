@@ -61,7 +61,7 @@ TEST(IntegrationTest, IntegrationTest) {
         Inference with pcd file
     */
     // Buffers for inferece
-    std::vector<BndBox> nms_boxes;
+    std::vector<Box> nms_boxes;
     std::vector<float> nms_scores;
     std::vector<size_t> nms_labels;
 
