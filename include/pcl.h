@@ -22,9 +22,9 @@ class PCDReader {
   PCDReader &operator=(PCDReader &copy) = delete;
 };
 
-std::vector<std::string> getPCDFileList(const std::string &folder_path);
+std::vector<std::string> &getPCDFileList(const std::string &folder_path);
 
-std::vector<std::string> getFileList(const std::string &folder_path);
+std::vector<std::string> &getFileList(const std::string &folder_path);
 }  // namespace vueron
 
 #endif  // __PCL_H__

@@ -3,6 +3,7 @@
 #include <glob.h>
 
 #include <algorithm>
+#include <cassert>
 #include <cmath>
 #include <cstdlib>  // std::exit and EXIT_FAILURE
 #include <cstring>
@@ -81,9 +82,11 @@ const std::vector<float> &vueron::PCDReader::getData() const noexcept {
 
 int vueron::PCDReader::getStride() const noexcept { return stride; }
 
-std::vector<std::string> vueron::getPCDFileList(
+std::vector<std::string> &vueron::getPCDFileList(
     const std::string &folder_path) {
-  std::vector<std::string> file_list;
+  static std::vector<std::string> file_list;
+  file_list.clear();
+  assert(file_list.empty());
   for (const auto &entry : fs::directory_iterator(folder_path)) {
     const std::string curr_pcd_file_name = entry.path().string();
     if (curr_pcd_file_name.find(".pcd") == std::string::npos) {
@@ -97,8 +100,10 @@ std::vector<std::string> vueron::getPCDFileList(
   return file_list;
 }
 
-std::vector<std::string> vueron::getFileList(const std::string &folder_path) {
-  std::vector<std::string> files;
+std::vector<std::string> &vueron::getFileList(const std::string &folder_path) {
+  static std::vector<std::string> files;
+  files.clear();
+  assert(files.empty());
   glob_t glob_result;
 
   int ret = glob(folder_path.c_str(), GLOB_TILDE, nullptr, &glob_result);
