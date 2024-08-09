@@ -7,11 +7,13 @@
 
 extern "C" {
 
-static std::unique_ptr<vueron::PCDetCPU> pcdet;
+static std::unique_ptr<vueron::PCDetCPU> pcdet = nullptr;
+static std::vector<BndBox> g_nms_boxes;
+
+// Temporary global static buffers for pcdet->pcdet_run()
 static std::vector<Box> g_nms_pred;
 static std::vector<float> g_nms_score;
 static std::vector<size_t> g_nms_labels;
-static std::vector<BndBox> g_nms_boxes;
 
 const char* get_pcdet_cpu_version(void) {
   static std::string version{};
@@ -24,11 +26,17 @@ void pcdet_initialize(const char* metadata_path,
                       const struct RuntimeConfig* runtimeconfig) {
   const std::string metadata_path_string{metadata_path};
 
+  // MAX_OBJ_PER_SAMPLE is maximum size of each vectors.
+  g_nms_boxes.reserve(MAX_OBJ_PER_SAMPLE);
+  g_nms_pred.reserve(MAX_OBJ_PER_SAMPLE);
+  g_nms_score.reserve(MAX_OBJ_PER_SAMPLE);
+  g_nms_labels.reserve(MAX_OBJ_PER_SAMPLE);
+
   // initialize model with metadata
   vueron::LoadMetadata(metadata_path_string);
   pcdet = std::make_unique<vueron::PCDetCPU>(PFE_FILE, RPN_FILE, runtimeconfig);
 
-  // logging configurations
+  // logging Metadata & RuntimeConfig
   std::cout << vueron::GetMetadata() << std::endl;
   std::cout << *runtimeconfig << std::endl;
 }
@@ -51,7 +59,7 @@ int pcdet_run(const float* points, const int point_buf_len,
   // copy address of output buffer to return pointers
   const int num_preds = static_cast<int>(g_nms_labels.size());
   for (int i = 0; i < num_preds; i++) {
-    BndBox temp_box{};
+    BndBox temp_box{0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f};
     temp_box.x = g_nms_pred[i].x;
     temp_box.y = g_nms_pred[i].y;
     temp_box.z = g_nms_pred[i].z;
