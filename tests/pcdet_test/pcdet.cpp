@@ -36,7 +36,7 @@ void vueron::PCDetCPU::scatter() {
   vueron::scatter(pfe_output, voxel_coords, num_pillars, bev_image);
 }
 
-void vueron::PCDetCPU::postprocess(std::vector<BndBox> &post_boxes,
+void vueron::PCDetCPU::postprocess(std::vector<Box> &post_boxes,
                                    std::vector<size_t> &post_labels,
                                    std::vector<float> &post_scores) {
   decode_to_boxes(rpn_outputs, pre_boxes, pre_labels, pre_scores);
@@ -45,9 +45,9 @@ void vueron::PCDetCPU::postprocess(std::vector<BndBox> &post_boxes,
                post_scores, suppressed);
 }
 
-void vueron::PCDetCPU::get_pred(std::vector<PredBox> &boxes) const {
+void vueron::PCDetCPU::get_pred(std::vector<BndBox> &boxes) const {
   for (size_t i = 0; i < post_boxes.size(); i++) {
-    PredBox box{};
+    BndBox box{};
     box.x = post_boxes[i].x;
     box.y = post_boxes[i].y;
     box.z = post_boxes[i].z;
@@ -64,7 +64,7 @@ void vueron::PCDetCPU::get_pred(std::vector<PredBox> &boxes) const {
 
 void vueron::PCDetCPU::run(const float *points, const size_t point_buf_len,
                            const size_t point_stride,
-                           std::vector<PredBox> &boxes) {
+                           std::vector<BndBox> &boxes) {
   /**
    * @brief
    * It writes predictions into a vector, boxes.
@@ -104,7 +104,7 @@ void vueron::PCDetCPU::run(const float *points, const size_t point_buf_len,
 
 void vueron::PCDetCPU::run(const float *points, const size_t point_buf_len,
                            const size_t point_stride,
-                           std::vector<BndBox> &final_boxes,
+                           std::vector<Box> &final_boxes,
                            std::vector<size_t> &final_labels,
                            std::vector<float> &final_scores) {
   /**

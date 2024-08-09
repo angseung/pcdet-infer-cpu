@@ -69,12 +69,12 @@ int main(int argc, const char **argv) {
     /*
         Buffers for inferece
     */
-    PredBox *preds;
+    BndBox *preds;
 
     std::vector<float> nms_scores;
     std::vector<size_t> nms_labels;
-    std::vector<BndBox> nms_boxes;
-    std::vector<PredBox> nms_preds;
+    std::vector<Box> nms_boxes;
+    std::vector<BndBox> nms_preds;
 
     /*
         Do inference
@@ -85,8 +85,8 @@ int main(int argc, const char **argv) {
         Copy predicted boxes into vector
     */
     for (size_t box_index = 0; box_index < n_boxes; box_index++) {
-      PredBox pred{preds[box_index]};
-      BndBox box{};
+      BndBox pred{preds[box_index]};
+      Box box{};
       nms_labels.push_back(static_cast<size_t>(pred.label));
       nms_scores.push_back(pred.score);
       box.x = pred.x;

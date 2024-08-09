@@ -5,7 +5,7 @@
 #include <numeric>
 
 void vueron::decode_to_boxes(const std::vector<std::vector<float>> &rpn_output,
-                             std::vector<BndBox> &boxes,
+                             std::vector<Box> &boxes,
                              std::vector<size_t> &labels,
                              std::vector<float> &scores) {
   /*
@@ -53,7 +53,7 @@ void vueron::decode_to_boxes(const std::vector<std::vector<float>> &rpn_output,
     assert(s_idx < FEATURE_X_SIZE * FEATURE_Y_SIZE);
 
     // calc grid index
-    BndBox box{};
+    Box box{};
     const size_t label = idx / channel_offset;
     const size_t grid_x = idx % FEATURE_X_SIZE;
     const size_t grid_y = (idx / FEATURE_X_SIZE) % FEATURE_Y_SIZE;
@@ -101,7 +101,7 @@ void vueron::decode_to_boxes(const std::vector<std::vector<float>> &rpn_output,
   }
 }
 
-void vueron::nms(const std::vector<BndBox> &boxes,
+void vueron::nms(const std::vector<Box> &boxes,
                  const std::vector<float> &scores,
                  std::vector<bool> &suppressed, const float iou_threshold) {
   assert(boxes.size() == scores.size());
@@ -149,10 +149,10 @@ void vueron::nms(const std::vector<BndBox> &boxes,
   }
 }
 
-void vueron::gather_boxes(const std::vector<BndBox> &boxes,
+void vueron::gather_boxes(const std::vector<Box> &boxes,
                           const std::vector<size_t> &labels,
                           const std::vector<float> &scores,
-                          std::vector<BndBox> &nms_boxes,
+                          std::vector<Box> &nms_boxes,
                           std::vector<size_t> &nms_labels,
                           std::vector<float> &nms_scores,
                           const std::vector<bool> &suppressed) {

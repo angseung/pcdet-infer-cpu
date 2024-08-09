@@ -5,7 +5,7 @@
 #include "include/rpn.h"
 
 void vueron::run_model(const float *points, const size_t point_buf_len,
-                       const size_t point_stride, std::vector<BndBox> &boxes,
+                       const size_t point_stride, std::vector<Box> &boxes,
                        std::vector<size_t> &labels,
                        std::vector<float> &scores) {
   std::vector<Pillar> bev_pillar(GRID_Y_SIZE * GRID_X_SIZE,
@@ -20,7 +20,7 @@ void vueron::run_model(const float *points, const size_t point_buf_len,
   std::vector<float> bev_image(GRID_Y_SIZE * GRID_X_SIZE * NUM_FEATURE_SCATTER,
                                0.0f);  // input of RPN
   std::vector<std::vector<float>> rpn_outputs;
-  std::vector<BndBox> pre_boxes;   // boxes before NMS
+  std::vector<Box> pre_boxes;   // boxes before NMS
   std::vector<size_t> pre_labels;  // labels before NMS
   std::vector<float> pre_scores;   // scores before NMS
 
