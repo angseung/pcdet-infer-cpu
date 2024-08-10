@@ -40,12 +40,12 @@ cmake --build Debug -j
 git clone https://github.com/angseung/pcdet-infer-cpu.git
 cd pcdet-infer-cpu
 sudo apt update
-sudo apt install libopencv-dev -y
+sudo apt install cmake build-essential libopencv-dev -y
 wget https://github.com/microsoft/onnxruntime/releases/download/v1.16.3/onnxruntime-linux-x64-1.16.3.tgz
 tar -zxvf onnxruntime-linux-x64-1.16.3.tgz
 
 # for Release build
-cmake -S. -BRelease -DBUILD_DEMO=ON -DBUILD_TEST=ON
+cmake -S. -BRelease -DBUILD_DEMO=ON -DBUILD_TEST=OFF
 cmake --build Release -j
 
 # for Debug build
