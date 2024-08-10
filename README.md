@@ -2,19 +2,18 @@
 
 - An Inference library for PCDet models.
 - An Inference library for CPU only devices.
-    - Supports x86-64 & AArch64
-    - Supports macOS & Linux
-- GPU Version ONNXRuntime are not supported yet.
+    - Support x86-64 & AArch64
+    - Support macOS & Linux
+- GPU Version ONNXRuntime is not supported yet.
 
 # 2. Build
 
-- This repo tested ONLY with onnxruntime==1.16.3.
+- This repo tested ONLY with `onnxruntime`==1.16.3.
 
 ## 2.1 Dependencies
 
 - GCC or Clang Complier
 - OpenCV
-- PCL
 - cmake ≥ 3.24
 
 ## 2.2. macOS (AArch64)
@@ -22,12 +21,12 @@
 ```bash
 git clone https://github.com/angseung/pcdet-infer-cpu.git
 cd pcdet-infer-cpu
-brew install pcl cmake ninja libomp
+brew install cmake ninja opencv
 wget https://github.com/microsoft/onnxruntime/releases/download/v1.16.3/onnxruntime-osx-arm64-1.16.3.tgz
 tar -zxvf onnxruntime-osx-arm64-1.16.3.tgz
 
 # for Release build
-cmake -S. -BRelease -DBUILD_DEMO=ON -DBUILD_TEST=OFF
+cmake -S. -BRelease -DBUILD_DEMO=ON -DBUILD_TEST=ON
 cmake --build Release -j
 
 # for Debug build
@@ -41,7 +40,7 @@ cmake --build Debug -j
 git clone https://github.com/angseung/pcdet-infer-cpu.git
 cd pcdet-infer-cpu
 sudo apt update
-sudo apt install libpcl-dev libopencv-dev -y
+sudo apt install cmake build-essential libopencv-dev -y
 wget https://github.com/microsoft/onnxruntime/releases/download/v1.16.3/onnxruntime-linux-x64-1.16.3.tgz
 tar -zxvf onnxruntime-linux-x64-1.16.3.tgz
 
@@ -56,8 +55,8 @@ cmake --build Debug -j
 
 # 3. Run
 
-- `YOUR_PCD_DIR_PATH` means a parent directory of pcd files.
-- `YOUR_METADATA_FILE_PATH` means a `metadata.json` file that describes configurations of your PCDet models.
+- `YOUR_PCD_DIR_PATH` indicates a parent directory of pcd files.
+- `YOUR_METADATA_FILE_PATH` indicates a `metadata.json` file that describes configurations of your PCDet models.
 
 ## 3.1. main
 
@@ -82,18 +81,10 @@ cmake --build Debug -j
 
 - This program has same functions with `demo`, but it is implemented with inference codes
   in `pcdet_c.h` & `pcdet_c.cpp`.
-- Refers this code if you want to use this repository in C project.
+- Please refer `pcdet_c.h` & `pcdet_c.cpp` if you want to use this repository in your C project.
 
 ```bash
 ./Release/bin/demo_c ./YOUR_PCD_DIR_PATH ./YOUR_METADATA_FILE_PATH
-```
-
-### 3.2.3. demo_3d
-
-- This program draws 3D point cloud in your PCD files.
-
-```bash
-./Release/bin/demo_3d ./YOUR_PCD_DIR_PATH ./YOUR_METADATA_FILE_PATH
 ```
 
 ---
@@ -159,3 +150,10 @@ cmake --build Debug -j
     - Source codes are available in `demo_3d.cpp`.
 
 ---
+
+## Release 1.4.1
+
+### 1. Update
+
+- Removed `demo_3d.cpp`.
+- Added library compression script in `src/pcdet-infer-cpu/CMakeLists.txt`.
