@@ -4,7 +4,7 @@
 #include <cmath>
 #include <numeric>
 
-#include "pcdet-infer-cpu/common/type.h"
+#include "pcdet-infer-cpu/common/box.h"
 #include "pcdet_test/include/config.h"
 #include "pcdet_test/include/model.h"
 #include "pcdet_test/include/npy.h"

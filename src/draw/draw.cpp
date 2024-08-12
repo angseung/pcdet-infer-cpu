@@ -5,7 +5,7 @@
 
 #include "pcdet-infer-cpu/common/metadata.h"
 #include "pcdet-infer-cpu/common/runtimeconfig.h"
-#include "pcdet-infer-cpu/common/type.h"
+#include "pcdet-infer-cpu/common/box.h"
 
 #ifdef ENABLE_OPEN3D
 #include <open3d/Open3D.h>
