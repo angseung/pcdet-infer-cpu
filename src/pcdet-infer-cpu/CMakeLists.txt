@@ -35,7 +35,7 @@ target_include_directories(
 target_link_libraries(pcdet PUBLIC ${PCDET_OBJS})
 
 # Shared Object for pcdet
-set(PCDET_VERSION 1.4.0 CACHE STRING "PCDet version")
+set(PCDET_VERSION 1.4.1 CACHE STRING "PCDet version")
 set(PCDET_SO_VERSION 1)
 add_library(pcdet_shared SHARED ${PCDET_SRC_FILES})
 set_target_properties(pcdet_shared PROPERTIES LIBRARY_OUTPUT_DIRECTORY ${CMAKE_RUNTIME_OUTPUT_DIRECTORY})
@@ -58,7 +58,7 @@ set(PCDET_HRADER_FILES
 set(PCDET_COMMON_HRADER_FILES
         ${PROJECT_SOURCE_DIR}/include/pcdet-infer-cpu/common/runtimeconfig.h
         ${PROJECT_SOURCE_DIR}/include/pcdet-infer-cpu/common/metadata.h
-        ${PROJECT_SOURCE_DIR}/include/pcdet-infer-cpu/common/type.h
+        ${PROJECT_SOURCE_DIR}/include/pcdet-infer-cpu/common/box.h
 )
 add_custom_command(
         TARGET pcdet_shared POST_BUILD

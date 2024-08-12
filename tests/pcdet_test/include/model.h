@@ -4,7 +4,7 @@
 #include <cstddef>
 #include <vector>
 
-#include "pcdet-infer-cpu/common/type.h"
+#include "pcdet-infer-cpu/common/box.h"
 
 namespace vueron {
 void run_model(const float *points, size_t point_buf_len, size_t point_stride,

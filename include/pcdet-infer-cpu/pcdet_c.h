@@ -9,7 +9,7 @@
 
 #include "common/metadata.h"
 #include "common/runtimeconfig.h"
-#include "common/type.h"
+#include "common/box.h"
 
 #ifdef __cplusplus
 extern "C" {

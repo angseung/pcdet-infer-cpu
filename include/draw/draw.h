@@ -5,7 +5,7 @@
 #include <opencv2/opencv.hpp>
 
 #include "config.h"
-#include "pcdet-infer-cpu/common/type.h"
+#include "pcdet-infer-cpu/common/box.h"
 
 inline cv::Point2f rotatePoint(const cv::Point2f &point, const float angle) {
   const float x = point.x * std::cos(angle) - point.y * std::sin(angle);

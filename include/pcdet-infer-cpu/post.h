@@ -6,7 +6,7 @@
 
 #include "pcdet-infer-cpu/common/metadata.h"
 #include "pcdet-infer-cpu/common/runtimeconfig.h"
-#include "pcdet-infer-cpu/common/type.h"
+#include "pcdet-infer-cpu/common/box.h"
 
 namespace vueron {
 template <typename T = float>

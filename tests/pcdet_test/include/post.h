@@ -6,7 +6,7 @@
 #include <vector>
 
 #include "params.h"
-#include "pcdet-infer-cpu/common/type.h"
+#include "pcdet-infer-cpu/common/box.h"
 
 namespace vueron {
 template <typename T = float>
@@ -253,8 +253,7 @@ void nms(const std::vector<Box> &boxes, const std::vector<float> &scores,
 
 void gather_boxes(const std::vector<Box> &boxes,
                   const std::vector<size_t> &labels,
-                  const std::vector<float> &scores,
-                  std::vector<Box> &nms_boxes,
+                  const std::vector<float> &scores, std::vector<Box> &nms_boxes,
                   std::vector<size_t> &nms_labels,
                   std::vector<float> &nms_scores,
                   const std::vector<bool> &suppressed);

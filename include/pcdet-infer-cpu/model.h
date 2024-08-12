@@ -5,7 +5,7 @@
 #include <string>
 #include <vector>
 
-#include "pcdet-infer-cpu/common/type.h"
+#include "pcdet-infer-cpu/common/box.h"
 
 namespace vueron {
 
