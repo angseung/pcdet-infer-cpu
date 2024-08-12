@@ -33,7 +33,7 @@ int main(int argc, const char **argv) {
     pcd_path = argv[1];
     metadata_path = argv[2];
   }
-  const auto pcd_files = vueron::getPCDFileList(pcd_path);
+  const auto &pcd_files = vueron::getPCDFileList(pcd_path);
 
   /*
     Set Metadata & Runtimeconfig
@@ -63,7 +63,7 @@ int main(int argc, const char **argv) {
     vueron::PCDReader reader{pcd_file};
     const auto &buffer = reader.getData();
     const auto point_stride = reader.getStride();
-    const int point_buf_len = static_cast<int>(buffer.size());
+    const auto point_buf_len = static_cast<int>(buffer.size());
     const auto *points = buffer.data();
 
     /*
@@ -132,7 +132,9 @@ int main(int argc, const char **argv) {
     nms_scores.clear();
 
 #ifdef _DEBUG
-    std::string output_file_name = "outputs/" + std::to_string(i + 1) + ".png";
+    static size_t count = 0;
+    std::string output_file_name =
+        "./outputs/" + std::to_string(count++) + ".png";
     cv::imwrite(output_file_name, image);
 #endif
   }
