@@ -78,7 +78,7 @@ int main(int argc, const char **argv) {
     vueron::PCDReader reader{pcd_file};
     const auto &points = reader.getData();
     const auto point_stride = reader.getStride();
-    const auto point_buf_len = points.size();
+    const auto point_buf_len = static_cast<int>(points.size());
     const auto *point_data = points.data();
 
     /*

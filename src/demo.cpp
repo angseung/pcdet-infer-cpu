@@ -66,7 +66,7 @@ int main(int argc, const char **argv) {
     vueron::PCDReader reader{pcd_file};
     const auto &buffer = reader.getData();
     const auto point_stride = reader.getStride();
-    const auto point_buf_len = buffer.size();
+    const auto point_buf_len = static_cast<int>(buffer.size());
     const auto *points = buffer.data();
 
     /*
@@ -110,7 +110,9 @@ int main(int argc, const char **argv) {
     cv::imshow("Bird's Eye View", image);
     cv::waitKey(1);
 #ifdef _DEBUG
-    std::string output_file_name = "outputs/" + std::to_string(i + 1) + ".png";
+    static size_t count = 0;
+    std::string output_file_name =
+        "./outputs/" + std::to_string(count++) + ".png";
     cv::imwrite(output_file_name, image);
 #endif
   }
