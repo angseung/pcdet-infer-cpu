@@ -33,7 +33,7 @@ int main(int argc, const char **argv) {
     pcd_path = argv[1];
     metadata_path = argv[2];
   }
-  const auto pcd_files = vueron::getPCDFileList(pcd_path);
+  const auto &pcd_files = vueron::getPCDFileList(pcd_path);
 
   /*
     Set Metadata & Runtimeconfig
