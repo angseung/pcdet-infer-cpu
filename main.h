@@ -3,10 +3,11 @@
 
 #include <algorithm>
 #include <filesystem>
+#include <numeric>
 
+#include "pcdet-infer-cpu/common/box.h"
 #include "pcdet-infer-cpu/common/metadata.h"
 #include "pcdet-infer-cpu/common/runtimeconfig.h"
-#include "pcdet-infer-cpu/common/box.h"
 #include "pcdet-infer-cpu/pcdet.h"
 #include "pcl.h"
 

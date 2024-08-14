@@ -1,4 +1,5 @@
-#include "demo_c.h"
+#include "demo_common.h"
+#include "pcdet-infer-cpu/pcdet_c.h"
 
 namespace fs = std::filesystem;
 
@@ -67,7 +68,7 @@ int main(int argc, const char **argv) {
     const auto *points = buffer.data();
 
     /*
-        Buffers for inferece
+        Buffers for inference
     */
     BndBox *preds;
 
@@ -102,15 +103,20 @@ int main(int argc, const char **argv) {
     /*
         Logging
     */
+    std::vector<int> indices(nms_labels.size());
+    std::iota(indices.begin(), indices.end(), 0);
     const auto veh_cnt =
-        std::count_if(nms_labels.begin(), nms_labels.end(),
-                      [](const int j) -> bool { return j == 0; });
+        std::count_if(indices.begin(), indices.end(), [&](const int j) -> bool {
+          return nms_labels[j] == 0 && nms_scores[j] >= VEH_THRESHOLD;
+        });
     const auto ped_cnt =
-        std::count_if(nms_labels.begin(), nms_labels.end(),
-                      [](const int j) -> bool { return j == 1; });
+        std::count_if(indices.begin(), indices.end(), [&](const int j) -> bool {
+          return nms_labels[j] == 1 && nms_scores[j] >= PED_THRESHOLD;
+        });
     const auto cyc_cnt =
-        std::count_if(nms_labels.begin(), nms_labels.end(),
-                      [](const int j) -> bool { return j == 2; });
+        std::count_if(indices.begin(), indices.end(), [&](const int j) -> bool {
+          return nms_labels[j] == 2 && nms_scores[j] >= CYC_THRESHOLD;
+        });
     std::cout << "Input file: " << pcd_file << std::endl;
     std::cout << "vehicle(" << std::setw(3) << veh_cnt << "), pedestrian("
               << std::setw(3) << ped_cnt << "), cyclist(" << std::setw(3)
