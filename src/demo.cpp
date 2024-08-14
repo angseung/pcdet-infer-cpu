@@ -90,15 +90,15 @@ int main(int argc, const char **argv) {
     std::iota(indices.begin(), indices.end(), 0);
     const auto veh_cnt =
         std::count_if(indices.begin(), indices.end(), [&](const int j) -> bool {
-          return nms_labels[j] == 0 && nms_scores[j] > VEH_THRESHOLD;
+          return nms_labels[j] == 0 && nms_scores[j] >= VEH_THRESHOLD;
         });
     const auto ped_cnt =
         std::count_if(indices.begin(), indices.end(), [&](const int j) -> bool {
-          return nms_labels[j] == 1 && nms_scores[j] > PED_THRESHOLD;
+          return nms_labels[j] == 1 && nms_scores[j] >= PED_THRESHOLD;
         });
     const auto cyc_cnt =
         std::count_if(indices.begin(), indices.end(), [&](const int j) -> bool {
-          return nms_labels[j] == 2 && nms_scores[j] > CYC_THRESHOLD;
+          return nms_labels[j] == 2 && nms_scores[j] >= CYC_THRESHOLD;
         });
     std::cout << "Input file: " << pcd_file << std::endl;
     std::cout << "vehicle(" << std::setw(3) << veh_cnt << "), pedestrian("
