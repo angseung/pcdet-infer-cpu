@@ -54,7 +54,7 @@ void drawBirdsEyeView(const size_t point_buf_len, const size_t point_stride,
         color = cv::Scalar{255, 0, 0};  // blue
         break;
       default:
-        color = cv::Scalar{0, 255, 255};  // yellow (defalut)
+        color = cv::Scalar{0, 255, 255};  // yellow (default)
         break;
     }
     Box box{boxes[i]};
