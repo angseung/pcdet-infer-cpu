@@ -1,11 +1,13 @@
 #include "draw/draw.h"
 
+#include <demo_common.h>
+
 #include <cmath>
 #include <vector>
 
+#include "pcdet-infer-cpu/common/box.h"
 #include "pcdet-infer-cpu/common/metadata.h"
 #include "pcdet-infer-cpu/common/runtimeconfig.h"
-#include "pcdet-infer-cpu/common/box.h"
 
 #ifdef ENABLE_OPEN3D
 #include <open3d/Open3D.h>
@@ -20,8 +22,7 @@ std::string floatToString(const float value) {
 }
 
 void drawBirdsEyeView(const size_t point_buf_len, const size_t point_stride,
-                      const float *points_data,
-                      const std::vector<Box> &boxes,
+                      const float *points_data, const std::vector<Box> &boxes,
                       const std::vector<float> &scores,
                       const std::vector<size_t> &labels, const float scale,
                       cv::Mat &image) {
@@ -37,8 +38,10 @@ void drawBirdsEyeView(const size_t point_buf_len, const size_t point_stride,
   }
 
   // draw boxes
+  std::vector<float> score_threshold{VEH_THRESHOLD, PED_THRESHOLD,
+                                     CYC_THRESHOLD};
   for (size_t i = 0; i < scores.size(); ++i) {
-    if (scores[i] < CONF_THRESH) continue;
+    if (scores[i] < score_threshold[labels[i]]) continue;
     cv::Scalar color;
     switch (labels[i]) {
       case 0:
