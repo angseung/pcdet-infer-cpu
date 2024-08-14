@@ -68,7 +68,7 @@ int main(int argc, const char **argv) {
     const auto *points = buffer.data();
 
     /*
-        Buffers for inferece
+        Buffers for inference
     */
     BndBox *preds;
 

@@ -71,7 +71,7 @@ int main(int argc, const char **argv) {
     const auto *points = buffer.data();
 
     /*
-        Buffers for inferece
+        Buffers for inference
     */
     std::vector<Box> nms_boxes;
     std::vector<size_t> nms_labels;
