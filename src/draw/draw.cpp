@@ -38,8 +38,8 @@ void drawBirdsEyeView(const size_t point_buf_len, const size_t point_stride,
   }
 
   // draw boxes
-  std::vector<float> score_threshold{VEH_THRESHOLD, PED_THRESHOLD,
-                                     CYC_THRESHOLD};
+  const std::vector<float> score_threshold{VEH_THRESHOLD, PED_THRESHOLD,
+                                           CYC_THRESHOLD};
   for (size_t i = 0; i < scores.size(); ++i) {
     if (scores[i] < score_threshold[labels[i]]) continue;
     cv::Scalar color;
