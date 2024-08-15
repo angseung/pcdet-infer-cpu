@@ -37,7 +37,7 @@ int main(int argc, const char **argv) {
   const auto &pcd_files = vueron::getPCDFileList(pcd_path);
 
   /*
-    Set Metadata & Runtimeconfig
+    Set Metadata & RuntimeConfig
   */
   RuntimeConfig config{
       1500000,  // int max_points;
