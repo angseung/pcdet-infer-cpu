@@ -58,8 +58,7 @@ std::ostream& operator<<(std::ostream& os, const MetaStruct& metastruct) {
      << "pillar_y_size: " << metastruct.pillar_y_size << "\n"
      << "pillar_z_size: " << metastruct.pillar_z_size << "\n"
      << "num_point_values: " << metastruct.num_point_values << "\n"
-     << "zero_intensity: " << static_cast<bool>(metastruct.zero_intensity)
-     << "\n"
+     << "zero_intensity: " << metastruct.zero_intensity << "\n"
      << "max_num_points_per_pillar: " << metastruct.max_num_points_per_pillar
      << "\n"
      << "max_voxels: " << metastruct.max_voxels << "\n"
