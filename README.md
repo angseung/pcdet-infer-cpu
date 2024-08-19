@@ -157,3 +157,14 @@ cmake --build Debug -j
 
 - Removed `demo_3d.cpp`.
 - Added library compression script in `src/pcdet-infer-cpu/CMakeLists.txt`.
+
+---
+
+## Release 1.4.2
+
+### 1. Update
+
+- Renamed `type.h` → `box.h` for a compatible issue.
+- Separated `CONF_THRE` for each classes.
+    - Removed `CONF_THRE` in `runtimeconfig.h`.
+    - Added macros indicate threshold for each classes in `demo_common.h`.

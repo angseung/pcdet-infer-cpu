@@ -37,7 +37,7 @@ int main(int argc, const char **argv) {
   const auto &pcd_files = vueron::getPCDFileList(pcd_path);
 
   /*
-    Set Metadata & Runtimeconfig
+    Set Metadata & RuntimeConfig
   */
   RuntimeConfig config{
       1500000,  // int max_points;
@@ -87,7 +87,7 @@ int main(int argc, const char **argv) {
     */
     for (size_t box_index = 0; box_index < n_boxes; box_index++) {
       BndBox pred{preds[box_index]};
-      Box box{};
+      Box box{0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f};
       nms_labels.push_back(static_cast<size_t>(pred.label));
       nms_scores.push_back(pred.score);
       box.x = pred.x;
