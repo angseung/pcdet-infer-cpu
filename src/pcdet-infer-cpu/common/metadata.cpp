@@ -97,7 +97,7 @@ class Metadata::Impl {
   Impl() = default;
 };
 
-Metadata::Metadata() : pimpl(std::make_unique<Impl>()) {}
+Metadata::Metadata() : pimpl(std::make_unique<Impl>()), metastruct() {}
 
 Metadata::~Metadata() = default;
 
