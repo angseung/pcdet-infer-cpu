@@ -86,17 +86,17 @@ int main(int argc, const char **argv) {
         Copy predicted boxes into vector
     */
     for (size_t box_index = 0; box_index < n_boxes; box_index++) {
-      BndBox pred{preds[box_index]};
+      auto [x, y, z, dx, dy, dz, heading, score, label]{preds[box_index]};
       Box box{0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f};
-      nms_labels.push_back(static_cast<size_t>(pred.label));
-      nms_scores.push_back(pred.score);
-      box.x = pred.x;
-      box.y = pred.y;
-      box.z = pred.z;
-      box.dx = pred.dx;
-      box.dy = pred.dy;
-      box.dz = pred.dz;
-      box.heading = pred.heading;
+      nms_labels.push_back(label);
+      nms_scores.push_back(score);
+      box.x = x;
+      box.y = y;
+      box.z = z;
+      box.dx = dx;
+      box.dy = dy;
+      box.dz = dz;
+      box.heading = heading;
       nms_boxes.push_back(box);
     }
 
