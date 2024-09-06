@@ -7,9 +7,8 @@
 #include <stddef.h>
 #endif
 
-#include "common/metadata.h"
-#include "common/runtimeconfig.h"
 #include "common/box.h"
+#include "common/runtimeconfig.h"
 
 #ifdef __cplusplus
 extern "C" {
@@ -17,6 +16,7 @@ extern "C" {
 
 const char* get_pcdet_cpu_version(void);
 
+// Use "struct" keyword for compatibility with C.
 void pcdet_initialize(const char* metadata_path,
                       const struct RuntimeConfig* runtimeconfig);
 
