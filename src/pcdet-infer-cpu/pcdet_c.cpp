@@ -7,16 +7,16 @@
 
 extern "C" {
 
-static std::unique_ptr<vueron::PCDetCPU> pcdet = nullptr;
+static std::unique_ptr<vueron::PCDetCPU> pcdet;
 static std::vector<BndBox> g_nms_boxes;
 
-// Temporary global static buffers for pcdet->pcdet_run()
+// Global static buffers for pcdet->pcdet_run()
 static std::vector<Box> g_nms_pred;
 static std::vector<float> g_nms_score;
 static std::vector<size_t> g_nms_labels;
 
 const char* get_pcdet_cpu_version(void) {
-  static std::string version{};
+  static std::string version;
   version = std::string{pcdet->version_info};
 
   return version.c_str();
@@ -24,6 +24,7 @@ const char* get_pcdet_cpu_version(void) {
 
 void pcdet_initialize(const char* metadata_path,
                       const struct RuntimeConfig* runtimeconfig) {
+  // Use "struct" keyword for compatibility with C.
   const std::string metadata_path_string{metadata_path};
 
   // MAX_OBJ_PER_SAMPLE is maximum size of each vectors.
