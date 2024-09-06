@@ -40,7 +40,7 @@ struct MetaStruct {
   std::vector<float> iou_rectifier;
 
   MetaStruct() = default;
-  explicit MetaStruct(std::string& pfe_file, std::string& rpn_file,
+  explicit MetaStruct(std::string pfe_file, std::string rpn_file,
                       float min_x_range, float max_x_range, float min_y_range,
                       float max_y_range, float min_z_range, float max_z_range,
                       float pillar_x_size, float pillar_y_size,
