@@ -27,7 +27,7 @@ void pcdet_initialize(const char* metadata_path,
   // Use "struct" keyword for compatibility with C.
   const std::string metadata_path_string{metadata_path};
 
-  // MAX_OBJ_PER_SAMPLE is maximum size of each vectors.
+  // MAX_OBJ_PER_SAMPLE is the maximum number of each vector.
   g_nms_boxes.reserve(MAX_OBJ_PER_SAMPLE);
   g_nms_pred.reserve(MAX_OBJ_PER_SAMPLE);
   g_nms_score.reserve(MAX_OBJ_PER_SAMPLE);
@@ -58,8 +58,8 @@ int pcdet_run(const float* points, const int point_buf_len,
          g_nms_labels.size() == g_nms_score.size());
 
   // copy address of output buffer to return pointers
-  const int num_preds = static_cast<int>(g_nms_labels.size());
-  for (int i = 0; i < num_preds; i++) {
+  const int n_pred_boxes = static_cast<int>(g_nms_labels.size());
+  for (int i = 0; i < n_pred_boxes; i++) {
     BndBox temp_box{0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f};
     temp_box.x = g_nms_pred[i].x;
     temp_box.y = g_nms_pred[i].y;
@@ -81,7 +81,7 @@ int pcdet_run(const float* points, const int point_buf_len,
   g_nms_labels.clear();
   *box = g_nms_boxes.data();
 
-  return num_preds;
+  return n_pred_boxes;
 }
 
 void pcdet_finalize(void) {
