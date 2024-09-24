@@ -70,9 +70,13 @@ void vueron::decode_to_boxes(const std::vector<std::vector<float>> &rpn_output,
     box.dz = exp(rpn_output[1][2 * channel_offset + s_idx]);
 
     // calc heading angle in radian
-    const float cos_rad = rpn_output[4][s_idx];
-    const float sin_rad = rpn_output[4][channel_offset + s_idx];
-    box.heading = atan2(sin_rad, cos_rad);
+    if (label == 1) {
+      box.heading = 0.0f;
+    } else {
+      const float cos_rad = rpn_output[4][s_idx];
+      const float sin_rad = rpn_output[4][channel_offset + s_idx];
+      box.heading = atan2(sin_rad, cos_rad);
+    }
     assert(box.heading <= 180.0 / M_PI && box.heading >= -180.0 / M_PI);
 
     // calc center point
