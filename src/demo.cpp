@@ -114,7 +114,7 @@ int main(int argc, const char **argv) {
     drawBirdsEyeView(point_buf_len, point_stride, points, nms_boxes, nms_scores,
                      nms_labels, scale, image);
     cv::imshow("Bird's Eye View", image);
-    cv::waitKey(1);
+    cv::waitKey(0);
 #ifdef _DEBUG
     static size_t count = 0;
     std::string output_file_name =
