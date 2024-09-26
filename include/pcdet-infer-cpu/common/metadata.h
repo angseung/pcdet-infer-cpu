@@ -71,7 +71,7 @@ class Metadata {
   Metadata(const Metadata&& rhs) = delete;
   Metadata& operator=(const Metadata&& rhs) = delete;
 
-  static Metadata& Instance() {
+  static Metadata& Instance() noexcept {
     static Metadata metadata;
     return metadata;
   }
