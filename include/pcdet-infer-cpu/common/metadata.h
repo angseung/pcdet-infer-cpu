@@ -41,6 +41,7 @@ struct MetaStruct {
   std::vector<float> iou_rectifier;
 
   MetaStruct() = default;
+  // use non-const args for pfe_file & rpn_file since they will be moved.
   explicit MetaStruct(std::string pfe_file, std::string rpn_file,
                       float min_x_range, float max_x_range, float min_y_range,
                       float max_y_range, float min_z_range, float max_z_range,
@@ -71,6 +72,7 @@ class Metadata {
   Metadata(const Metadata&& rhs) = delete;
   Metadata& operator=(const Metadata&& rhs) = delete;
 
+  static void ValidateMetadata();
   static Metadata& Instance() noexcept {
     static Metadata metadata;
     return metadata;
@@ -93,6 +95,7 @@ inline MetaStruct& GetMetadata() {
 inline void LoadMetadata(const std::string& filename) {
   Metadata::Load(filename);
   Metadata::Instance().metastruct.initialized = true;
+  Metadata::ValidateMetadata();
   std::cout << "Loaded Metadata successfully." << std::endl;
 }
 

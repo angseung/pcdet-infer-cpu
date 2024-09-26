@@ -1,5 +1,6 @@
 #include "pcdet-infer-cpu/common/metadata.h"
 
+#include <cmath>
 #include <filesystem>
 #include <fstream>
 #include <iostream>
@@ -167,6 +168,42 @@ void Metadata::Setup(const std::string& filename) {
   metastruct.feature_y_size = pimpl->data["metadata"]["post"]["FEATURE_Y_SIZE"];
   metastruct.iou_rectifier = static_cast<std::vector<float>>(
       pimpl->data["metadata"]["post"]["IOU_RECTIFIER"]);
+}
+
+void Metadata::ValidateMetadata() {
+  if (!Metadata::Instance().metastruct.initialized) {
+    throw std::runtime_error("Metadata structure not initialized");
+  }
+  const bool validate_grid_sizes =
+      GRID_X_SIZE % FEATURE_X_SIZE == 0 && GRID_Y_SIZE % FEATURE_Y_SIZE == 0;
+  if (!validate_grid_sizes) {
+    throw std::runtime_error("Invalid grid size.");
+  }
+  const bool validate_class_num = CLASS_NUM == IOU_RECTIFIER.size();
+  if (!validate_class_num) {
+    throw std::runtime_error("Invalid class number.");
+  }
+
+  const bool validate_grid_x_size =
+      (MAX_X_RANGE - MIN_X_RANGE) / PILLAR_X_SIZE == GRID_X_SIZE;
+
+  const bool validate_grid_y_size =
+      (MAX_Y_RANGE - MIN_Y_RANGE) / PILLAR_Y_SIZE == GRID_Y_SIZE;
+
+  const bool validate_grid_z_size =
+      (MAX_Z_RANGE - MIN_Z_RANGE) / PILLAR_Z_SIZE == GRID_Z_SIZE &&
+      GRID_Z_SIZE == 1;
+
+  if (!validate_grid_x_size || !validate_grid_y_size || !validate_grid_z_size) {
+    throw std::runtime_error("Invalid detection range.");
+  }
+
+  const bool validate_feature_num = FEATURE_NUM == 10;
+  if (!validate_feature_num) {
+    throw std::runtime_error("Invalid feature number.");
+  }
+
+  std::cout << "Validated Metadata successfully" << std::endl;
 }
 
 }  // namespace vueron
