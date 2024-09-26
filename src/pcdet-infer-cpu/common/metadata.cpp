@@ -1,6 +1,5 @@
 #include "pcdet-infer-cpu/common/metadata.h"
 
-#include <cmath>
 #include <filesystem>
 #include <fstream>
 #include <iostream>
