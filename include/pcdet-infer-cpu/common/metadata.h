@@ -8,6 +8,7 @@
 
 namespace vueron {
 struct MetaStruct {
+  bool initialized = false;
   std::string pfe_file;
   std::string rpn_file;
 
@@ -70,7 +71,7 @@ class Metadata {
   Metadata(const Metadata&& rhs) = delete;
   Metadata& operator=(const Metadata&& rhs) = delete;
 
-  static Metadata& Instance() {
+  static Metadata& Instance() noexcept {
     static Metadata metadata;
     return metadata;
   }
@@ -80,10 +81,19 @@ class Metadata {
   }
 };
 
-inline MetaStruct& GetMetadata() { return Metadata::Instance().metastruct; }
+inline MetaStruct& GetMetadata() {
+  if (!Metadata::Instance().metastruct.initialized) {
+    throw std::runtime_error{
+        "Metadata is not initialized yet. Please call LoadMetadata "
+        "function to initialize Metadata."};
+  }
+  return Metadata::Instance().metastruct;
+}
 
 inline void LoadMetadata(const std::string& filename) {
   Metadata::Load(filename);
+  Metadata::Instance().metastruct.initialized = true;
+  std::cout << "Loaded Metadata successfully." << std::endl;
 }
 
 }  // namespace vueron
