@@ -34,10 +34,13 @@ jobs:
           - os: macos-latest
             c_compiler: clang
             cpp_compiler: clang++
-          - os: ubuntu-latest
+          - os: ubuntu-20.04
             c_compiler: gcc
             cpp_compiler: g++
-          - os: ubuntu-20.04
+          - os: ubuntu-22.04
+            c_compiler: gcc
+            cpp_compiler: g++
+          - os: ubuntu-24.04
             c_compiler: gcc
             cpp_compiler: g++
     # The CMake configure and build commands are platform agnostic and should work equally well on Windows or Mac.
