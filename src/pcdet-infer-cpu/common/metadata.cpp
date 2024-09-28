@@ -112,12 +112,21 @@ void Metadata::Setup(const std::string& filename) {
     pimpl->data["metadata"] =
         ReadFile(directory / pimpl->data["metadata_file"]);
     std::cout << directory / pimpl->data["metadata_file"] << std::endl;
+  } else {
+    throw std::runtime_error{"No metadata file found"};
   }
   if (pimpl->data.contains("model_files")) {
     for (auto& [key, model] : pimpl->data["model_files"].items()) {
       model = (directory / model).string();
       std::cout << model << std::endl;
     }
+  } else {
+    throw std::runtime_error{"No model file found"};
+  }
+  if (pimpl->data["metadata"].contains("configurable_params")) {
+    std::cout
+        << "Found configurable_params in metadata file. Use this configuration."
+        << std::endl;
   }
 
   /*
