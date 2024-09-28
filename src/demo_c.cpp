@@ -52,11 +52,6 @@ int main(int argc, const char **argv) {
 
   pcdet_initialize(metadata_path.c_str(), &config);
 
-  // logging version & config info
-  std::cout << std::string{get_pcdet_cpu_version()} << std::endl;
-  std::cout << vueron::GetMetadata() << std::endl;
-  std::cout << vueron::GetRuntimeConfig() << std::endl;
-
   for (const auto &pcd_file : pcd_files) {
     /*
         Read points from pcd files

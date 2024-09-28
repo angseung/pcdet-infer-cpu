@@ -38,7 +38,10 @@ void pcdet_initialize(const char* metadata_path,
   pcdet = std::make_unique<vueron::PCDetCPU>(PFE_FILE, RPN_FILE, runtimeconfig);
 
   // logging Metadata & RuntimeConfig
+  std::cout << std::string{get_pcdet_cpu_version()} << std::endl;
   std::cout << vueron::GetMetadata() << std::endl;
+
+  // logging version info
   std::cout << *runtimeconfig << std::endl;
 }
 
