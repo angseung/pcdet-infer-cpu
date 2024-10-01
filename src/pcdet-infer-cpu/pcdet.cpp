@@ -32,9 +32,6 @@ vueron::PCDetCPU::PCDetCPU(const std::string &pfe_path,
           std::vector<int64_t>{1, NUM_FEATURE_SCATTER, GRID_Y_SIZE,
                                GRID_X_SIZE},
           GRID_Y_SIZE * GRID_X_SIZE * NUM_FEATURE_SCATTER)) {
-  std::clog << "PFE Model Initialized with " << PFE_FILE << std::endl;
-  std::clog << "RPN Model Initialized with " << RPN_FILE << std::endl;
-
   // pre-allocate buffers
   voxel_coords.reserve(2 * MAX_VOXELS);
   voxel_num_points.reserve(MAX_VOXELS);

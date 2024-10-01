@@ -2,7 +2,7 @@ cmake_minimum_required(VERSION 3.24)
 
 project(
         pcdet-infer-cpu
-        VERSION 0.1
+        VERSION 1.4.2
         DESCRIPTION "cpu inference framework for pcdet models"
         LANGUAGES CXX
 )

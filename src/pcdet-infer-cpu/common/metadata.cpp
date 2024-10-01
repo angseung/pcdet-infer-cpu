@@ -111,12 +111,10 @@ void Metadata::Setup(const std::string& filename) {
   if (pimpl->data.contains("metadata_file")) {
     pimpl->data["metadata"] =
         ReadFile(directory / pimpl->data["metadata_file"]);
-    std::cout << directory / pimpl->data["metadata_file"] << std::endl;
   }
   if (pimpl->data.contains("model_files")) {
     for (auto& [key, model] : pimpl->data["model_files"].items()) {
       model = (directory / model).string();
-      std::cout << model << std::endl;
     }
   }
 
