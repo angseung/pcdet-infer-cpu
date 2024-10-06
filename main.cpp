@@ -58,11 +58,6 @@ int main(int argc, const char **argv) {
   const auto pcdet =
       std::make_unique<vueron::PCDetCPU>(PFE_FILE, RPN_FILE, &config);
 
-  // logging version & config info
-  std::cout << pcdet->getVersionInfo() << std::endl;
-  std::cout << vueron::GetMetadata() << std::endl;
-  std::cout << vueron::GetRuntimeConfig() << std::endl;
-
   for (const auto &pcd_file : pcd_files) {
     /*
       Read point data from pcd files

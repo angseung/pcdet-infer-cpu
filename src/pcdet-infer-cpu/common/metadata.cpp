@@ -118,7 +118,6 @@ void Metadata::Setup(const std::string& filename) {
   if (pimpl->data.contains("model_files")) {
     for (auto& [key, model] : pimpl->data["model_files"].items()) {
       model = (directory / model).string();
-      std::cout << model << std::endl;
     }
   } else {
     throw std::runtime_error{"No model file found"};

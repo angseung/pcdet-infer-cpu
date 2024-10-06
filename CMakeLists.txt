@@ -1,8 +1,8 @@
-cmake_minimum_required(VERSION 3.11)
+cmake_minimum_required(VERSION 3.24)
 
 project(
         pcdet-infer-cpu
-        VERSION 0.1
+        VERSION 1.4.2
         DESCRIPTION "cpu inference framework for pcdet models"
         LANGUAGES CXX
 )
@@ -24,8 +24,7 @@ set(BUILD_TEST ON CACHE BOOL "Build Tests")
 set(_PROFILE OFF CACHE BOOL "Logging Model Latency")
 set(_DEBUG OFF CACHE BOOL "Logging Debug Messages")
 
-set(PFE_FILE ${PROJECT_SOURCE_DIR}/models/gcm_v4_residual/gcm_resfpn_falcon_v4_residual_gelu_full_zero_f71.68_r0_s52.48_pfe.onnx)
-set(RPN_FILE ${PROJECT_SOURCE_DIR}/models/gcm_v4_residual/gcm_resfpn_falcon_v4_residual_gelu_full_zero_f71.68_r0_s52.48_rpn.onnx)
+# Set default pcd file path
 set(PCD_PATH ${PROJECT_SOURCE_DIR}/pcd/cepton)
 
 # Configure version.h
