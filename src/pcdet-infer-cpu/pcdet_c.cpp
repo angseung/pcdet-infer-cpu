@@ -26,7 +26,6 @@ void pcdet_initialize(const char* metadata_path, const char* onnx_hash,
                       const struct RuntimeConfig* runtimeconfig) {
   // Use "struct" keyword for compatibility with C.
   const std::string metadata_path_string{metadata_path};
-  const std::string onnx_hash_string{onnx_hash};
 
   // MAX_OBJ_PER_SAMPLE is the maximum number of each vector.
   g_nms_boxes.reserve(MAX_OBJ_PER_SAMPLE);
