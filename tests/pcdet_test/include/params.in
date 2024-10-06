@@ -47,7 +47,6 @@ std::vector<float> { 0.68f, 0.71f, 0.65f }
 */
 // pre
 #define SHUFFLE_ON true
-#define MAX_POINT_NUM 1000000
 #define INTENSITY_NORMALIZE_DIV 255
 
 // post
