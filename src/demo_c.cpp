@@ -50,7 +50,7 @@ int main(int argc, const char **argv) {
       0.2f,     // float nms_iou_thd;
   };
 
-  pcdet_initialize(metadata_path.c_str(), &config);
+  pcdet_initialize(metadata_path.c_str(), nullptr, &config);
 
   for (const auto &pcd_file : pcd_files) {
     /*
@@ -75,7 +75,7 @@ int main(int argc, const char **argv) {
     /*
         Do inference
     */
-    size_t n_boxes = pcdet_run(points, point_buf_len, point_stride, &preds);
+    size_t n_boxes = pcdet_infer(points, point_buf_len, point_stride, &preds);
 
     /*
         Copy predicted boxes into vector

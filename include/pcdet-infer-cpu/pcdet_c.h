@@ -14,14 +14,14 @@
 extern "C" {
 #endif
 
-const char* get_pcdet_cpu_version(void);
+const char* GetlibDLVersion(void);
 
 // Use "struct" keyword for compatibility with C.
-void pcdet_initialize(const char* metadata_path,
+void pcdet_initialize(const char* metadata_path, const char* onnx_hash,
                       const struct RuntimeConfig* runtimeconfig);
 
-int pcdet_run(const float* points, int point_buf_len, int point_stride,
-              BndBox** box);
+int pcdet_infer(const float* points, int point_buf_len, int point_stride,
+                BndBox** box);
 
 void pcdet_finalize(void);
 

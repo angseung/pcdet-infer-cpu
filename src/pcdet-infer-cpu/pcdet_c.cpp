@@ -15,17 +15,18 @@ static std::vector<Box> g_nms_pred;
 static std::vector<float> g_nms_score;
 static std::vector<size_t> g_nms_labels;
 
-const char* get_pcdet_cpu_version(void) {
+const char* GetlibDLVersion(void) {
   static std::string version;
   version = std::string{pcdet->version_info};
 
   return version.c_str();
 }
 
-void pcdet_initialize(const char* metadata_path,
+void pcdet_initialize(const char* metadata_path, const char* onnx_hash,
                       const struct RuntimeConfig* runtimeconfig) {
   // Use "struct" keyword for compatibility with C.
   const std::string metadata_path_string{metadata_path};
+  const std::string onnx_hash_string{onnx_hash};
 
   // MAX_OBJ_PER_SAMPLE is the maximum number of each vector.
   g_nms_boxes.reserve(MAX_OBJ_PER_SAMPLE);
@@ -38,15 +39,15 @@ void pcdet_initialize(const char* metadata_path,
   pcdet = std::make_unique<vueron::PCDetCPU>(PFE_FILE, RPN_FILE, runtimeconfig);
 
   // logging Metadata & RuntimeConfig
-  std::cout << std::string{get_pcdet_cpu_version()} << std::endl;
+  std::cout << std::string{GetlibDLVersion()} << std::endl;
   std::cout << vueron::GetMetadata() << std::endl;
 
   // logging version info
   std::cout << *runtimeconfig << std::endl;
 }
 
-int pcdet_run(const float* points, const int point_buf_len,
-              const int point_stride, BndBox** box) {
+int pcdet_infer(const float* points, const int point_buf_len,
+                const int point_stride, BndBox** box) {
   // check point input size
   assert(point_buf_len % point_stride == 0);
   g_nms_boxes.clear();
