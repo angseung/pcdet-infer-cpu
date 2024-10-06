@@ -6,6 +6,8 @@
 #include <string>
 #include <vector>
 
+#include "runtimeconfig.h"
+
 namespace vueron {
 struct MetaStruct {
   bool initialized = false;
