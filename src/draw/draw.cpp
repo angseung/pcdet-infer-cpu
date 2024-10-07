@@ -58,6 +58,10 @@ void drawBirdsEyeView(const size_t point_buf_len, const size_t point_stride,
         break;
     }
     Box box{boxes[i]};
+    if (labels[i] == 1) {
+      box.heading = 0.0f;
+    }
+
     const cv::Point2f center((box.x - MIN_X_RANGE) * scale,
                              (MAX_Y_RANGE - box.y) * scale);
     cv::Point2f vertices[4];
