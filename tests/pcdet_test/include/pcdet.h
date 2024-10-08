@@ -51,7 +51,7 @@ class PCDetCPU {
   void postprocess(std::vector<Box> &post_boxes,
                    std::vector<size_t> &post_labels,
                    std::vector<float> &post_scores);
-  void get_pred(std::vector<BndBox> &boxes) const;
+  void get_pred(std::vector<Bndbox> &boxes) const;
 
  public:
   PCDetCPU() = delete;
@@ -60,7 +60,7 @@ class PCDetCPU {
   PCDetCPU(const std::string &pfe_path, const std::string &rpn_path);
   ~PCDetCPU() = default;
   void run(const float *points, size_t point_buf_len, size_t point_stride,
-           std::vector<BndBox> &boxes);
+           std::vector<Bndbox> &boxes);
   void run(const float *points, size_t point_buf_len, size_t point_stride,
            std::vector<Box> &final_boxes, std::vector<size_t> &final_labels,
            std::vector<float> &final_scores);

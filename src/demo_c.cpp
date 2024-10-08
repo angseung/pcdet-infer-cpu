@@ -64,12 +64,12 @@ int main(int argc, const char **argv) {
     /*
         Buffers for inference
     */
-    BndBox *preds;
+    Bndbox *preds;
 
     std::vector<float> nms_scores;
     std::vector<size_t> nms_labels;
     std::vector<Box> nms_boxes;
-    std::vector<BndBox> nms_preds;
+    std::vector<Bndbox> nms_preds;
 
     /*
         Do inference

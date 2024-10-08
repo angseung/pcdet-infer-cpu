@@ -21,7 +21,7 @@ void pcdet_initialize(const char* metadata_path, const char* onnx_hash,
                       const struct RuntimeConfig* runtimeconfig);
 
 int pcdet_infer(const float* points, int point_buf_len, int point_stride,
-                BndBox** box);
+                struct Bndbox** box);
 
 void pcdet_finalize(void);
 

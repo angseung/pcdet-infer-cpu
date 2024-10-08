@@ -8,7 +8,7 @@
 extern "C" {
 
 static std::unique_ptr<vueron::PCDetCPU> pcdet;
-static std::vector<BndBox> g_nms_boxes;
+static std::vector<Bndbox> g_nms_boxes;
 
 // Global static buffers for pcdet->pcdet_run()
 static std::vector<Box> g_nms_pred;
@@ -47,7 +47,7 @@ void pcdet_initialize(const char* metadata_path, const char* onnx_hash,
 }
 
 int pcdet_infer(const float* points, const int point_buf_len,
-                const int point_stride, BndBox** box) {
+                const int point_stride, struct Bndbox** box) {
   // check point input size
   assert(point_buf_len % point_stride == 0);
   g_nms_boxes.clear();
@@ -64,7 +64,7 @@ int pcdet_infer(const float* points, const int point_buf_len,
   // copy address of output buffer to return pointers
   const int n_pred_boxes = static_cast<int>(g_nms_labels.size());
   for (int i = 0; i < n_pred_boxes; i++) {
-    BndBox temp_box{0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f};
+    Bndbox temp_box{0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f};
     temp_box.x = g_nms_pred[i].x;
     temp_box.y = g_nms_pred[i].y;
     temp_box.z = g_nms_pred[i].z;
