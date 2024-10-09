@@ -135,11 +135,6 @@ void Metadata::Setup(const std::string& filename) {
   } else {
     throw std::runtime_error{"No model file found"};
   }
-  if (pimpl->data["metadata"].contains("configurable_params")) {
-    std::cout
-        << "Found configurable_params in metadata file. Use this configuration."
-        << std::endl;
-  }
 
   /*
     Copy json contents into each field of Metadata::metastruct for speed issue
@@ -189,14 +184,28 @@ void Metadata::Setup(const std::string& filename) {
   metastruct.iou_rectifier = static_cast<std::vector<float>>(
       pimpl->data["metadata"]["post"]["IOU_RECTIFIER"]);
 
-  metastruct.pre_nms_max_preds =
-      pimpl->data["metadata"]["configurable_params"]["NMS_PRE_MAXSIZE"];
-  metastruct.max_preds =
-      pimpl->data["metadata"]["configurable_params"]["MAX_OBJ_PER_SAMPLE"];
-  metastruct.nms_score_thd =
-      pimpl->data["metadata"]["configurable_params"]["SCORE_THRESH"];
-  metastruct.nms_iou_thd =
-      pimpl->data["metadata"]["configurable_params"]["NMS_THRESH"];
+  if (pimpl->data["metadata"].contains("configurable_params")) {
+    std::cout
+        << "Found configurable_params in metadata file. Use this configuration."
+        << std::endl;
+    metastruct.pre_nms_max_preds =
+        pimpl->data["metadata"]["configurable_params"]["NMS_PRE_MAXSIZE"];
+    metastruct.max_preds =
+        pimpl->data["metadata"]["configurable_params"]["MAX_OBJ_PER_SAMPLE"];
+    metastruct.nms_score_thd =
+        pimpl->data["metadata"]["configurable_params"]["SCORE_THRESH"];
+    metastruct.nms_iou_thd =
+        pimpl->data["metadata"]["configurable_params"]["NMS_THRESH"];
+  } else {
+    std::cout
+        << "Not found configurable_params in metadata file. Run with default "
+           "configuration."
+        << std::endl;
+    metastruct.pre_nms_max_preds = 500;
+    metastruct.max_preds = 83;
+    metastruct.nms_score_thd = 0.1f;
+    metastruct.nms_iou_thd = 0.2f;
+  }
 }
 
 void Metadata::ValidateMetadata() {
