@@ -44,7 +44,7 @@ int main(int argc, const char **argv) {
       10.0f,  // float pre_nms_distance_thd;
   };
 
-  pcdet_initialize(metadata_path.c_str(), nullptr, &config);
+  pcdet_initialize_with_metadata(metadata_path.c_str(), nullptr, &config);
 
   for (const auto &pcd_file : pcd_files) {
     /*

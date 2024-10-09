@@ -10,6 +10,7 @@
 #endif
 
 #include "common/box.h"
+#include "common/metadata.h"
 #include "common/runtimeconfig.h"
 
 #ifdef __cplusplus
@@ -21,8 +22,13 @@ const char* GetlibDLVersion(void);
 const char* GetCUDATRTVersion(void);
 
 // Use "struct" keyword for compatibility with C.
-void pcdet_initialize(const char* metadata_path, const char* onnx_hash,
-                      const struct RuntimeConfig* runtimeconfig);
+
+void pcdet_initialize(const char* onnx_file, const char* onnx_hash,
+                      const struct Runtimeconfig runtimeconfig);
+
+void pcdet_initialize_with_metadata(const char* metadata_path,
+                                    const char* onnx_hash,
+                                    const struct RuntimeConfig* runtimeconfig);
 
 int pcdet_infer(size_t points_size, const float* points, struct Bndbox** boxes);
 

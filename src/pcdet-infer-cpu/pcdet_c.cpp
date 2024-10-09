@@ -31,9 +31,32 @@ const char* GetCUDATRTVersion(void) {
 
   return trt_version_info.c_str();
 }
+void pcdet_initialize(const char* onnx_file, const char* onnx_hash,
+                      const struct Runtimeconfig runtimeconfig) {
+  std::ignore = onnx_hash;
+  const std::string onnx_file_string{onnx_file};
 
-void pcdet_initialize(const char* metadata_path, const char* onnx_hash,
-                      const struct RuntimeConfig* runtimeconfig) {
+  // initialize model with runtimeconfig
+  vueron::LoadMetadata(runtimeconfig, onnx_file_string);
+  pcdet = std::make_unique<vueron::PCDetCPU>(PFE_FILE, RPN_FILE, nullptr);
+
+  // MAX_OBJ_PER_SAMPLE is the maximum number of each vector.
+  g_nms_boxes.reserve(MAX_OBJ_PER_SAMPLE);
+  g_nms_pred.reserve(MAX_OBJ_PER_SAMPLE);
+  g_nms_score.reserve(MAX_OBJ_PER_SAMPLE);
+  g_nms_labels.reserve(MAX_OBJ_PER_SAMPLE);
+
+  // logging Metadata & RuntimeConfig
+  std::cout << vueron::GetMetadata() << std::endl;
+  std::cout << vueron::GetRuntimeConfig() << std::endl;
+
+  // logging version info
+  std::cout << std::string{GetlibDLVersion()} << std::endl;
+}
+
+void pcdet_initialize_with_metadata(const char* metadata_path,
+                                    const char* onnx_hash,
+                                    const struct RuntimeConfig* runtimeconfig) {
   // Use "struct" keyword for compatibility with C.
   const std::string metadata_path_string{metadata_path};
   std::ignore = onnx_hash;  // unused param for same interface with pcdet-infer.
