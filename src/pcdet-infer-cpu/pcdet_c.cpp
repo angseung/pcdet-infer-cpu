@@ -64,7 +64,7 @@ int pcdet_infer(const float* points, const int point_buf_len,
   // copy address of output buffer to return pointers
   const int n_pred_boxes = static_cast<int>(g_nms_labels.size());
   for (int i = 0; i < n_pred_boxes; i++) {
-    Bndbox temp_box{0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f};
+    Bndbox temp_box{0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0, 0.0f};
     temp_box.x = g_nms_pred[i].x;
     temp_box.y = g_nms_pred[i].y;
     temp_box.z = g_nms_pred[i].z;
@@ -72,8 +72,8 @@ int pcdet_infer(const float* points, const int point_buf_len,
     temp_box.dy = g_nms_pred[i].dy;
     temp_box.dz = g_nms_pred[i].dz;
     temp_box.heading = g_nms_pred[i].heading;
-    temp_box.label = static_cast<float>(g_nms_labels[i]);
     temp_box.score = g_nms_score[i];
+    temp_box.label = static_cast<int>(g_nms_labels[i]);
 
     // append temp_box into g_nms_boxes
     g_nms_boxes.push_back(temp_box);

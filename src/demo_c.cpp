@@ -80,7 +80,7 @@ int main(int argc, const char **argv) {
         Copy predicted boxes into vector
     */
     for (size_t box_index = 0; box_index < n_boxes; box_index++) {
-      auto [x, y, z, dx, dy, dz, heading, score, label]{preds[box_index]};
+      auto [x, y, z, dx, dy, dz, heading, label, score]{preds[box_index]};
       Box box{0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f};
       nms_labels.push_back(label);
       nms_scores.push_back(score);

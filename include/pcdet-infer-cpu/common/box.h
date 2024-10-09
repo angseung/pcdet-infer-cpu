@@ -14,7 +14,15 @@ struct Box {
 };
 
 struct Bndbox {
-  float x, y, z, dx, dy, dz, heading, score, label;
+  float x;
+  float y;
+  float z;
+  float dx;
+  float dy;
+  float dz;
+  float heading;
+  int label;
+  float score;
 
 #ifdef __cplusplus
   // Operator overload to cast Bndbox to const float*
