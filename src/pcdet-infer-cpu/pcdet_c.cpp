@@ -39,11 +39,11 @@ void pcdet_initialize(const char* metadata_path, const char* onnx_hash,
   g_nms_labels.reserve(MAX_OBJ_PER_SAMPLE);
 
   // logging Metadata & RuntimeConfig
-  std::cout << std::string{GetlibDLVersion()} << std::endl;
   std::cout << vueron::GetMetadata() << std::endl;
+  std::cout << vueron::GetRuntimeConfig() << std::endl;
 
   // logging version info
-  std::cout << vueron::GetRuntimeConfig() << std::endl;
+  std::cout << std::string{GetlibDLVersion()} << std::endl;
 }
 
 int pcdet_infer(const float* points, const int point_buf_len,

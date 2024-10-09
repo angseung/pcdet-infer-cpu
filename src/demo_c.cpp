@@ -15,9 +15,8 @@ int main(int argc, const char **argv) {
               << " <path_to_your_metadata_files_directory>" << std::endl;
     pcd_path = "./pcd/cepton";
     metadata_path = wd + "/models/gcm_v4_residual/metadata.json";
-    std::cout << "It will run with a default pcd path: " << pcd_path
-              << std::endl;
-    std::cout << "It will run with a default metadata file: " << metadata_path
+    std::cout << "Run with a default pcd path: " << pcd_path << std::endl;
+    std::cout << "Run with a default metadata file: " << metadata_path
               << std::endl;
   } else if (argc == 2) {
     /*
