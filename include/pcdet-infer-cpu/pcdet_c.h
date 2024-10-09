@@ -3,6 +3,8 @@
 
 #ifdef __cplusplus
 #include <cstddef>
+#include <string>
+#include <vector>
 #else
 #include <stddef.h>
 #endif
@@ -28,6 +30,13 @@ void pcdet_finalize(void);
 
 #ifdef __cplusplus
 }  // extern "C"
+#endif
+
+// Interface for "C++"
+#ifdef __cplusplus
+
+std::vector<Bndbox> pcdet_infer(size_t points_size, const float* points);
+
 #endif
 
 #endif  // __PCDET_C_H__

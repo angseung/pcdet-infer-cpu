@@ -58,6 +58,35 @@ void pcdet_initialize(const char* metadata_path, const char* onnx_hash,
 
 int pcdet_infer(size_t points_size, const float* points,
                 struct Bndbox** boxes) {
+  pcdet_infer(points_size, points);
+  *boxes = g_nms_boxes.data();
+
+  return static_cast<int>(g_nms_labels.size());
+}
+
+void pcdet_finalize(void) {
+  // destruct pcdet model, which is std::unique_ptr
+  pcdet = nullptr;
+
+  // reset global static buffers
+  g_nms_score.clear();
+  g_nms_pred.clear();
+  g_nms_labels.clear();
+  g_nms_boxes.clear();
+
+  // check vector is empty
+  assert(g_nms_score.empty() && g_nms_pred.empty() && g_nms_labels.empty() &&
+         g_nms_boxes.empty());
+}
+
+}  // extern "C"
+
+std::vector<Bndbox> pcdet_infer(size_t points_size, const float* points) {
+  // clear global static buffers
+  g_nms_score.clear();
+  g_nms_pred.clear();
+  g_nms_labels.clear();
+
   // check point input size
   g_nms_boxes.clear();
   assert(g_nms_boxes.empty());
@@ -87,28 +116,5 @@ int pcdet_infer(size_t points_size, const float* points,
     g_nms_boxes.push_back(temp_box);
   }
 
-  // clear global static buffers
-  g_nms_score.clear();
-  g_nms_pred.clear();
-  g_nms_labels.clear();
-  *boxes = g_nms_boxes.data();
-
-  return n_pred_boxes;
+  return g_nms_boxes;
 }
-
-void pcdet_finalize(void) {
-  // destruct pcdet model, which is std::unique_ptr
-  pcdet = nullptr;
-
-  // reset global static buffers
-  g_nms_score.clear();
-  g_nms_pred.clear();
-  g_nms_labels.clear();
-  g_nms_boxes.clear();
-
-  // check vector is empty
-  assert(g_nms_score.empty() && g_nms_pred.empty() && g_nms_labels.empty() &&
-         g_nms_boxes.empty());
-}
-
-}  // extern "C"
