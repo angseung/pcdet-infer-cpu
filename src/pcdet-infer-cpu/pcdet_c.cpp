@@ -22,6 +22,16 @@ const char* GetlibDLVersion(void) {
   return version.c_str();
 }
 
+const char* GetCUDATRTVersion(void) {
+  static std::string trt_version_info;
+  std::string cuda_version{"None"};
+  std::string trt_version{"None"};
+
+  trt_version_info = "cuda_" + cuda_version + "_trt_" + trt_version;
+
+  return trt_version_info.c_str();
+}
+
 void pcdet_initialize(const char* metadata_path, const char* onnx_hash,
                       const struct RuntimeConfig* runtimeconfig) {
   // Use "struct" keyword for compatibility with C.
@@ -46,16 +56,14 @@ void pcdet_initialize(const char* metadata_path, const char* onnx_hash,
   std::cout << std::string{GetlibDLVersion()} << std::endl;
 }
 
-int pcdet_infer(const float* points, const int point_buf_len,
-                const int point_stride, struct Bndbox** box) {
+int pcdet_infer(size_t points_size, const float* points,
+                struct Bndbox** boxes) {
   // check point input size
-  assert(point_buf_len % point_stride == 0);
   g_nms_boxes.clear();
   assert(g_nms_boxes.empty());
 
   // run inference session
-  pcdet->run(points, point_buf_len, point_stride, g_nms_pred, g_nms_labels,
-             g_nms_score);
+  pcdet->run(points, points_size, 4, g_nms_pred, g_nms_labels, g_nms_score);
 
   // check predicted buffer size
   assert(g_nms_pred.size() == g_nms_labels.size() &&
@@ -83,7 +91,7 @@ int pcdet_infer(const float* points, const int point_buf_len,
   g_nms_score.clear();
   g_nms_pred.clear();
   g_nms_labels.clear();
-  *box = g_nms_boxes.data();
+  *boxes = g_nms_boxes.data();
 
   return n_pred_boxes;
 }

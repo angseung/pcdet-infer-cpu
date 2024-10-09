@@ -16,12 +16,13 @@ extern "C" {
 
 const char* GetlibDLVersion(void);
 
+const char* GetCUDATRTVersion(void);
+
 // Use "struct" keyword for compatibility with C.
 void pcdet_initialize(const char* metadata_path, const char* onnx_hash,
                       const struct RuntimeConfig* runtimeconfig);
 
-int pcdet_infer(const float* points, int point_buf_len, int point_stride,
-                struct Bndbox** box);
+int pcdet_infer(size_t points_size, const float* points, struct Bndbox** boxes);
 
 void pcdet_finalize(void);
 
