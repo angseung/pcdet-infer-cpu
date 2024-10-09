@@ -244,4 +244,57 @@ void Metadata::ValidateMetadata() {
   std::cout << "Validated Metadata successfully" << std::endl;
 }
 
+void LoadMetadata(const Runtimeconfig& runtimeconfig,
+                  const std::string& onnx_file_name) {
+  MetaStruct meta_from_runtimeconfig;
+  copyMetadata(runtimeconfig, meta_from_runtimeconfig, onnx_file_name);
+  Metadata::Instance().metastruct = meta_from_runtimeconfig;
+  Metadata::initialized = true;
+  Metadata::ValidateMetadata();
+  std::cout << "Loaded Metadata successfully." << std::endl;
+}
+
+void copyMetadata(const Runtimeconfig& runtimeConfig, MetaStruct& metastruct,
+                  const std::string& onnx_file) {
+  metastruct.pfe_file = insertSuffix(onnx_file, "_pfe");
+  metastruct.rpn_file = insertSuffix(onnx_file, "_rpn");
+  metastruct.min_x_range = runtimeConfig.min_x_range;
+  metastruct.max_x_range = runtimeConfig.max_x_range;
+  metastruct.min_y_range = runtimeConfig.min_y_range;
+  metastruct.max_y_range = runtimeConfig.max_y_range;
+  metastruct.min_z_range = runtimeConfig.min_z_range;
+  metastruct.max_z_range = runtimeConfig.max_z_range;
+
+  metastruct.pillar_x_size = runtimeConfig.pillar_x_size;
+  metastruct.pillar_y_size = runtimeConfig.pillar_y_size;
+  metastruct.pillar_z_size = runtimeConfig.pillar_z_size;
+
+  metastruct.num_point_values = runtimeConfig.num_point_values;
+  metastruct.zero_intensity = runtimeConfig.zero_intensity;
+
+  metastruct.max_num_points_per_pillar =
+      runtimeConfig.max_num_points_per_pillar;
+  metastruct.max_voxels = runtimeConfig.max_voxels;
+  metastruct.feature_num = runtimeConfig.feature_num;
+
+  metastruct.num_feature_scatter = runtimeConfig.num_feature_scatter;
+  metastruct.grid_x_size = runtimeConfig.grid_x_size;
+  metastruct.grid_y_size = runtimeConfig.grid_y_size;
+  metastruct.grid_z_size = runtimeConfig.grid_z_size;
+
+  metastruct.class_num = runtimeConfig.class_num;
+  metastruct.feature_x_size = runtimeConfig.feature_x_size;
+  metastruct.feature_y_size = runtimeConfig.feature_y_size;
+
+  metastruct.iou_rectifier.clear();
+  metastruct.iou_rectifier.push_back(runtimeConfig.iou_rectifier[0]);
+  metastruct.iou_rectifier.push_back(runtimeConfig.iou_rectifier[1]);
+  metastruct.iou_rectifier.push_back(runtimeConfig.iou_rectifier[2]);
+
+  metastruct.pre_nms_max_preds = runtimeConfig.nms_pre_maxsize;
+  metastruct.max_preds = runtimeConfig.max_obj_per_sample;
+  metastruct.nms_score_thd = runtimeConfig.score_thresh;
+  metastruct.nms_iou_thd = runtimeConfig.nms_thresh;
+}
+
 }  // namespace vueron

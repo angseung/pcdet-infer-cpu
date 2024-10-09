@@ -8,6 +8,74 @@
 
 #include "runtimeconfig.h"
 
+struct Runtimeconfig {
+  /**
+   * Temporary Structure Same Interface with pcdet-infer
+   * ============================================
+   * DO NOT CONFIGURE HERE
+   */
+  float min_x_range;
+  float max_x_range;
+  float min_y_range;
+  float max_y_range;
+  float min_z_range;
+  float max_z_range;
+
+  float pillar_x_size;
+  float pillar_y_size;
+  float pillar_z_size;
+
+  int num_point_values;
+  bool zero_intensity;
+
+  int max_num_points_per_pillar;
+  int max_voxels;
+  int feature_num;
+
+  int num_feature_scatter;
+  int grid_x_size;
+  int grid_y_size;
+  int grid_z_size;
+
+  int class_num;
+  int feature_x_size;
+  int feature_y_size;
+  int out_size_factor;
+  /**
+   * iou_rectifier will be ignored if your models do not use IoU head.
+   * If your models do not use IoU head, initialize iou_rectifier with any float
+   * values.
+   */
+  float iou_rectifier[3];
+  /**
+   * ============================================
+   */
+
+  /**
+   * ============================================
+   * YOU CAN CONFIGURE HERE
+   */
+  int nms_pre_maxsize;
+  int max_obj_per_sample;
+  float score_thresh;
+  float nms_thresh;
+  /**
+   * ============================================
+   */
+};
+
+inline std::string insertSuffix(const std::string& filename,
+                                const std::string& suffix) {
+  std::string extension = ".onnx";
+  size_t pos = filename.rfind(extension);
+
+  if (pos != std::string::npos) {
+    return filename.substr(0, pos) + suffix + extension;
+  }
+
+  return filename;
+}
+
 namespace vueron {
 struct MetaStruct {
   std::string pfe_file;
@@ -92,6 +160,9 @@ class Metadata {
   }
 };
 
+void copyMetadata(const Runtimeconfig& runtimeConfig, MetaStruct& metastruct,
+                  const std::string& onnx_file);
+
 inline MetaStruct& GetMetadata() {
   if (!Metadata::initialized) {
     throw std::runtime_error{
@@ -107,6 +178,9 @@ inline void LoadMetadata(const std::string& filename) {
   Metadata::ValidateMetadata();
   std::cout << "Loaded Metadata successfully." << std::endl;
 }
+
+void LoadMetadata(const Runtimeconfig& runtimeconfig,
+                  const std::string& onnx_file_name);
 
 }  // namespace vueron
 

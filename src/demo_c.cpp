@@ -3,6 +3,36 @@
 
 namespace fs = std::filesystem;
 
+Runtimeconfig runtimeconfig{
+    0.0f,
+    71.68f,
+    -52.48f,
+    52.48f,
+    -2.0f,
+    4.0f,
+    0.32f,
+    0.32f,
+    6.0f,
+    4,
+    true,
+    20,
+    25000,
+    10,
+    64,
+    224,
+    328,
+    1,
+    3,
+    112,
+    164,
+    2,
+    {0.68f, 0.71f, 0.65f},
+    500,
+    83,
+    0.1f,
+    0.2f,
+};
+
 int main(int argc, const char **argv) {
   const std::string wd = fs::current_path().u8string();
   std::string pcd_path{};
@@ -44,7 +74,11 @@ int main(int argc, const char **argv) {
       10.0f,  // float pre_nms_distance_thd;
   };
 
-  pcdet_initialize(metadata_path.c_str(), nullptr, &config);
+  const std::string onnx_path{
+      ".//models/gcm_v4_residual/"
+      "gcm_resfpn_falcon_v4_residual_gelu_full_zero_f71.68_r0_s52.48.onnx"};
+  // pcdet_initialize_with_metadata(metadata_path.c_str(), nullptr, &config);
+  pcdet_initialize(onnx_path.c_str(), nullptr, runtimeconfig);
 
   for (const auto &pcd_file : pcd_files) {
     /*
