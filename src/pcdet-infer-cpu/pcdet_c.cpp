@@ -43,7 +43,7 @@ void pcdet_initialize(const char* metadata_path, const char* onnx_hash,
   std::cout << vueron::GetMetadata() << std::endl;
 
   // logging version info
-  std::cout << *runtimeconfig << std::endl;
+  std::cout << vueron::GetRuntimeConfig() << std::endl;
 }
 
 int pcdet_infer(const float* points, const int point_buf_len,

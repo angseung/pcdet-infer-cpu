@@ -15,9 +15,8 @@ struct RuntimeConfig {
 
 #ifdef __cplusplus
   RuntimeConfig() = delete;
-  explicit RuntimeConfig(unsigned char shuffle_on = true,
-                         unsigned char use_cpu = true,
-                         float pre_nms_distance_thd = 10.0f);
+  explicit RuntimeConfig(unsigned char shuffle_on, unsigned char use_cpu,
+                         float pre_nms_distance_thd);
   ~RuntimeConfig() = default;
 #endif
 };
@@ -29,7 +28,7 @@ namespace vueron {
 
 struct RuntimeConfigSingleton {
   RuntimeConfig config{
-      true,   // bool shuffle_on;
+      false,  // bool shuffle_on;
       true,   // bool use_cpu;
       10.0f,  // float pre_nms_distance_thd;
   };
