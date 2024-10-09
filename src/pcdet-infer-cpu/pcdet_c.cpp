@@ -58,7 +58,7 @@ void pcdet_initialize(const char* metadata_path, const char* onnx_hash,
 
 int pcdet_infer(size_t points_size, const float* points,
                 struct Bndbox** boxes) {
-  pcdet_infer(points_size, points);
+  const auto _ = pcdet_infer(points_size, points);
   *boxes = g_nms_boxes.data();
 
   return static_cast<int>(g_nms_labels.size());
