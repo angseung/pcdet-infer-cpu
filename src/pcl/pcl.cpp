@@ -80,6 +80,24 @@ const std::vector<float> &vueron::PCDReader::getData() const noexcept {
   return data;
 }
 
+const std::vector<float> &vueron::PCDReader::getXYZI() {
+  const int point_stride = getStride();
+  const int point_buffer_len = static_cast<int>(data.size());
+
+  if (point_buffer_len % point_stride != 0) {
+    throw std::runtime_error{"Invalid point buffer."};
+  }
+
+  for (int i = 0; i < point_buffer_len / point_stride; i++) {
+    xyzi_data.push_back(data[point_stride * i]);
+    xyzi_data.push_back(data[point_stride * i + 1]);
+    xyzi_data.push_back(data[point_stride * i + 2]);
+    xyzi_data.push_back(data[point_stride * i + 3]);
+  }
+
+  return xyzi_data;
+}
+
 int vueron::PCDReader::getStride() const noexcept { return stride; }
 
 std::vector<std::string> &vueron::getPCDFileList(

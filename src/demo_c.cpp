@@ -15,9 +15,8 @@ int main(int argc, const char **argv) {
               << " <path_to_your_metadata_files_directory>" << std::endl;
     pcd_path = "./pcd/cepton";
     metadata_path = wd + "/models/gcm_v4_residual/metadata.json";
-    std::cout << "It will run with a default pcd path: " << pcd_path
-              << std::endl;
-    std::cout << "It will run with a default metadata file: " << metadata_path
+    std::cout << "Run with a default pcd path: " << pcd_path << std::endl;
+    std::cout << "Run with a default metadata file: " << metadata_path
               << std::endl;
   } else if (argc == 2) {
     /*
@@ -45,15 +44,15 @@ int main(int argc, const char **argv) {
       10.0f,  // float pre_nms_distance_thd;
   };
 
-  pcdet_initialize(metadata_path.c_str(), nullptr, &config);
+  pcdet_initialize_with_metadata(metadata_path.c_str(), nullptr, &config);
 
   for (const auto &pcd_file : pcd_files) {
     /*
         Read points from pcd files
     */
     vueron::PCDReader reader{pcd_file};
-    const auto &buffer = reader.getData();
-    const auto point_stride = reader.getStride();
+    const auto &buffer = reader.getXYZI();
+    constexpr int point_stride = 4;
     const auto point_buf_len = static_cast<int>(buffer.size());
     const auto *points = buffer.data();
 
@@ -70,7 +69,7 @@ int main(int argc, const char **argv) {
     /*
         Do inference
     */
-    size_t n_boxes = pcdet_infer(points, point_buf_len, point_stride, &preds);
+    size_t n_boxes = pcdet_infer(point_buf_len, points, &preds);
 
     /*
         Copy predicted boxes into vector

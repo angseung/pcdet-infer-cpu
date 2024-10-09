@@ -10,6 +10,7 @@ namespace vueron {
 class PCDReader {
  private:
   std::vector<float> data;
+  std::vector<float> xyzi_data;
   int stride = 0;
 
  public:
@@ -20,6 +21,7 @@ class PCDReader {
   int getStride() const noexcept;
   PCDReader(PCDReader &copy) = delete;
   PCDReader &operator=(PCDReader &copy) = delete;
+  const std::vector<float> &getXYZI();
 };
 
 std::vector<std::string> &getPCDFileList(const std::string &folder_path);

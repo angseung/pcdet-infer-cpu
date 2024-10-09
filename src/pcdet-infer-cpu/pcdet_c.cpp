@@ -22,8 +22,41 @@ const char* GetlibDLVersion(void) {
   return version.c_str();
 }
 
-void pcdet_initialize(const char* metadata_path, const char* onnx_hash,
-                      const struct RuntimeConfig* runtimeconfig) {
+const char* GetCUDATRTVersion(void) {
+  static std::string trt_version_info;
+  std::string cuda_version{"None"};
+  std::string trt_version{"None"};
+
+  trt_version_info = "cuda_" + cuda_version + "_trt_" + trt_version;
+
+  return trt_version_info.c_str();
+}
+void pcdet_initialize(const char* onnx_file, const char* onnx_hash,
+                      const struct Runtimeconfig runtimeconfig) {
+  std::ignore = onnx_hash;
+  const std::string onnx_file_string{onnx_file};
+
+  // initialize model with runtimeconfig
+  vueron::LoadMetadata(runtimeconfig, onnx_file_string);
+  pcdet = std::make_unique<vueron::PCDetCPU>(PFE_FILE, RPN_FILE, nullptr);
+
+  // MAX_OBJ_PER_SAMPLE is the maximum number of each vector.
+  g_nms_boxes.reserve(MAX_OBJ_PER_SAMPLE);
+  g_nms_pred.reserve(MAX_OBJ_PER_SAMPLE);
+  g_nms_score.reserve(MAX_OBJ_PER_SAMPLE);
+  g_nms_labels.reserve(MAX_OBJ_PER_SAMPLE);
+
+  // logging Metadata & RuntimeConfig
+  std::cout << vueron::GetMetadata() << std::endl;
+  std::cout << vueron::GetRuntimeConfig() << std::endl;
+
+  // logging version info
+  std::cout << std::string{GetlibDLVersion()} << std::endl;
+}
+
+void pcdet_initialize_with_metadata(const char* metadata_path,
+                                    const char* onnx_hash,
+                                    const struct RuntimeConfig* runtimeconfig) {
   // Use "struct" keyword for compatibility with C.
   const std::string metadata_path_string{metadata_path};
   std::ignore = onnx_hash;  // unused param for same interface with pcdet-infer.
@@ -39,23 +72,50 @@ void pcdet_initialize(const char* metadata_path, const char* onnx_hash,
   g_nms_labels.reserve(MAX_OBJ_PER_SAMPLE);
 
   // logging Metadata & RuntimeConfig
-  std::cout << std::string{GetlibDLVersion()} << std::endl;
   std::cout << vueron::GetMetadata() << std::endl;
+  std::cout << vueron::GetRuntimeConfig() << std::endl;
 
   // logging version info
-  std::cout << vueron::GetRuntimeConfig() << std::endl;
+  std::cout << std::string{GetlibDLVersion()} << std::endl;
 }
 
-int pcdet_infer(const float* points, const int point_buf_len,
-                const int point_stride, struct Bndbox** box) {
+int pcdet_infer(size_t points_size, const float* points,
+                struct Bndbox** boxes) {
+  const auto _ = pcdet_infer(points_size, points);
+  *boxes = g_nms_boxes.data();
+
+  return static_cast<int>(g_nms_labels.size());
+}
+
+void pcdet_finalize(void) {
+  // destruct pcdet model, which is std::unique_ptr
+  pcdet = nullptr;
+
+  // reset global static buffers
+  g_nms_score.clear();
+  g_nms_pred.clear();
+  g_nms_labels.clear();
+  g_nms_boxes.clear();
+
+  // check vector is empty
+  assert(g_nms_score.empty() && g_nms_pred.empty() && g_nms_labels.empty() &&
+         g_nms_boxes.empty());
+}
+
+}  // extern "C"
+
+std::vector<Bndbox> pcdet_infer(size_t points_size, const float* points) {
+  // clear global static buffers
+  g_nms_score.clear();
+  g_nms_pred.clear();
+  g_nms_labels.clear();
+
   // check point input size
-  assert(point_buf_len % point_stride == 0);
   g_nms_boxes.clear();
   assert(g_nms_boxes.empty());
 
   // run inference session
-  pcdet->run(points, point_buf_len, point_stride, g_nms_pred, g_nms_labels,
-             g_nms_score);
+  pcdet->run(points, points_size, 4, g_nms_pred, g_nms_labels, g_nms_score);
 
   // check predicted buffer size
   assert(g_nms_pred.size() == g_nms_labels.size() &&
@@ -79,28 +139,5 @@ int pcdet_infer(const float* points, const int point_buf_len,
     g_nms_boxes.push_back(temp_box);
   }
 
-  // clear global static buffers
-  g_nms_score.clear();
-  g_nms_pred.clear();
-  g_nms_labels.clear();
-  *box = g_nms_boxes.data();
-
-  return n_pred_boxes;
+  return g_nms_boxes;
 }
-
-void pcdet_finalize(void) {
-  // destruct pcdet model, which is std::unique_ptr
-  pcdet = nullptr;
-
-  // reset global static buffers
-  g_nms_score.clear();
-  g_nms_pred.clear();
-  g_nms_labels.clear();
-  g_nms_boxes.clear();
-
-  // check vector is empty
-  assert(g_nms_score.empty() && g_nms_pred.empty() && g_nms_labels.empty() &&
-         g_nms_boxes.empty());
-}
-
-}  // extern "C"
