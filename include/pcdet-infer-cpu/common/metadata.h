@@ -10,7 +10,6 @@
 
 namespace vueron {
 struct MetaStruct {
-  bool initialized = false;
   std::string pfe_file;
   std::string rpn_file;
 
@@ -42,6 +41,11 @@ struct MetaStruct {
   int feature_y_size;
   std::vector<float> iou_rectifier;
 
+  int pre_nms_max_preds;
+  int max_preds;
+  float nms_score_thd;
+  float nms_iou_thd;
+
   MetaStruct() = default;
   // use non-const args for pfe_file & rpn_file since they will be moved.
   explicit MetaStruct(std::string pfe_file, std::string rpn_file,
@@ -53,7 +57,9 @@ struct MetaStruct {
                       int max_voxels, int feature_num, int num_feature_scatter,
                       int grid_x_size, int grid_y_size, int grid_z_size,
                       int class_num, int feature_x_size, int feature_y_size,
-                      const std::vector<float>& iou_rectifier);
+                      const std::vector<float>& iou_rectifier,
+                      int pre_nms_max_preds, int max_preds, float nms_score_thd,
+                      float nms_iou_thd);
   ~MetaStruct() = default;
 };
 
@@ -66,6 +72,7 @@ class Metadata {
   void Setup(const std::string& filename);
 
  public:
+  static bool initialized;
   Metadata();
   ~Metadata();
   MetaStruct metastruct;
@@ -86,7 +93,7 @@ class Metadata {
 };
 
 inline MetaStruct& GetMetadata() {
-  if (!Metadata::Instance().metastruct.initialized) {
+  if (!Metadata::initialized) {
     throw std::runtime_error{
         "Metadata is not initialized yet. Please call LoadMetadata "
         "function to initialize Metadata."};
@@ -96,7 +103,7 @@ inline MetaStruct& GetMetadata() {
 
 inline void LoadMetadata(const std::string& filename) {
   Metadata::Load(filename);
-  Metadata::Instance().metastruct.initialized = true;
+  Metadata::initialized = true;
   Metadata::ValidateMetadata();
   std::cout << "Loaded Metadata successfully." << std::endl;
 }
@@ -134,6 +141,11 @@ inline void LoadMetadata(const std::string& filename) {
 #define FEATURE_X_SIZE vueron::GetMetadata().feature_x_size
 #define FEATURE_Y_SIZE vueron::GetMetadata().feature_y_size
 #define IOU_RECTIFIER vueron::GetMetadata().iou_rectifier
+
+#define NMS_PRE_MAXSIZE vueron::GetMetadata().pre_nms_max_preds
+#define MAX_OBJ_PER_SAMPLE vueron::GetMetadata().max_preds
+#define SCORE_THRESH vueron::GetMetadata().nms_score_thd
+#define NMS_THRESH vueron::GetMetadata().nms_iou_thd
 
 #define INTENSITY_NORMALIZE_DIV 255
 

@@ -19,7 +19,9 @@ MetaStruct::MetaStruct(std::string pfe_file, std::string rpn_file,
                        int max_voxels, int feature_num, int num_feature_scatter,
                        int grid_x_size, int grid_y_size, int grid_z_size,
                        int class_num, int feature_x_size, int feature_y_size,
-                       const std::vector<float>& iou_rectifier)
+                       const std::vector<float>& iou_rectifier,
+                       int pre_nms_max_preds, int max_preds,
+                       float nms_score_thd, float nms_iou_thd)
     : pfe_file(std::move(pfe_file)),
       rpn_file(std::move(rpn_file)),
       min_x_range(min_x_range),
@@ -43,7 +45,11 @@ MetaStruct::MetaStruct(std::string pfe_file, std::string rpn_file,
       class_num(class_num),
       feature_x_size(feature_x_size),
       feature_y_size(feature_y_size),
-      iou_rectifier(iou_rectifier) {}
+      iou_rectifier(iou_rectifier),
+      pre_nms_max_preds(pre_nms_max_preds),
+      max_preds(max_preds),
+      nms_score_thd(nms_score_thd),
+      nms_iou_thd(nms_iou_thd) {}
 
 std::ostream& operator<<(std::ostream& os, const MetaStruct& metastruct) {
   os << "=============== Metadata ===============\n"
@@ -75,6 +81,11 @@ std::ostream& operator<<(std::ostream& os, const MetaStruct& metastruct) {
   for (const auto& value : metastruct.iou_rectifier) {
     os << value << " ";
   }
+  os << "\n";
+  os << "pre_nms_max_preds: " << metastruct.pre_nms_max_preds << "\n";
+  os << "max_preds: " << metastruct.max_preds << "\n";
+  os << "nms_score_thd: " << metastruct.nms_score_thd << "\n";
+  os << "nms_iou_thd: " << metastruct.nms_iou_thd << "\n";
   os << "\n=======================================\n";
   return os;
 }
@@ -101,6 +112,8 @@ class Metadata::Impl {
 Metadata::Metadata() : pimpl(std::make_unique<Impl>()), metastruct() {}
 
 Metadata::~Metadata() = default;
+
+bool Metadata::initialized = false;
 
 void Metadata::Setup(const std::string& filename) {
   pimpl->data = ReadFile(filename);
@@ -175,10 +188,19 @@ void Metadata::Setup(const std::string& filename) {
   metastruct.feature_y_size = pimpl->data["metadata"]["post"]["FEATURE_Y_SIZE"];
   metastruct.iou_rectifier = static_cast<std::vector<float>>(
       pimpl->data["metadata"]["post"]["IOU_RECTIFIER"]);
+
+  metastruct.pre_nms_max_preds =
+      pimpl->data["metadata"]["configurable_params"]["NMS_PRE_MAXSIZE"];
+  metastruct.max_preds =
+      pimpl->data["metadata"]["configurable_params"]["MAX_OBJ_PER_SAMPLE"];
+  metastruct.nms_score_thd =
+      pimpl->data["metadata"]["configurable_params"]["SCORE_THRESH"];
+  metastruct.nms_iou_thd =
+      pimpl->data["metadata"]["configurable_params"]["NMS_THRESH"];
 }
 
 void Metadata::ValidateMetadata() {
-  if (!Metadata::Instance().metastruct.initialized) {
+  if (!Metadata::initialized) {
     throw std::runtime_error("Metadata structure not initialized");
   }
   const bool validate_grid_sizes =

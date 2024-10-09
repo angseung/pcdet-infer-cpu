@@ -42,11 +42,7 @@ int main(int argc, const char **argv) {
   RuntimeConfig config{
       true,   // bool shuffle_on;
       true,   // bool use_cpu;
-      500,    // int pre_nms_max_preds;
-      83,     // int max_preds;
-      0.1f,   // float nms_score_thd;
       10.0f,  // float pre_nms_distance_thd;
-      0.2f,   // float nms_iou_thd;
   };
 
   pcdet_initialize(metadata_path.c_str(), nullptr, &config);

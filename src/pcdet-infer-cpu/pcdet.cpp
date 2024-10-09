@@ -50,6 +50,8 @@ vueron::PCDetCPU::PCDetCPU(const std::string &pfe_path,
   const std::string build_info{BUILD_TIME};
 
   version_info = "libpcdet-cpu " + git_tag_info + " (" + build_info + ")";
+  std::cout << GetMetadata() << std::endl;
+  std::cout << GetRuntimeConfig() << std::endl;
 };
 
 vueron::PCDetCPU::~PCDetCPU() = default;

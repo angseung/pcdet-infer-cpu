@@ -28,15 +28,15 @@ void pcdet_initialize(const char* metadata_path, const char* onnx_hash,
   const std::string metadata_path_string{metadata_path};
   std::ignore = onnx_hash;  // unused param for same interface with pcdet-infer.
 
+  // initialize model with metadata
+  vueron::LoadMetadata(metadata_path_string);
+  pcdet = std::make_unique<vueron::PCDetCPU>(PFE_FILE, RPN_FILE, runtimeconfig);
+
   // MAX_OBJ_PER_SAMPLE is the maximum number of each vector.
   g_nms_boxes.reserve(MAX_OBJ_PER_SAMPLE);
   g_nms_pred.reserve(MAX_OBJ_PER_SAMPLE);
   g_nms_score.reserve(MAX_OBJ_PER_SAMPLE);
   g_nms_labels.reserve(MAX_OBJ_PER_SAMPLE);
-
-  // initialize model with metadata
-  vueron::LoadMetadata(metadata_path_string);
-  pcdet = std::make_unique<vueron::PCDetCPU>(PFE_FILE, RPN_FILE, runtimeconfig);
 
   // logging Metadata & RuntimeConfig
   std::cout << std::string{GetlibDLVersion()} << std::endl;
