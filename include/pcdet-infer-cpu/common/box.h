@@ -13,11 +13,19 @@ struct Box {
 #endif  // __cplusplus
 };
 
-struct BndBox {
-  float x, y, z, dx, dy, dz, heading, score, label;
+struct Bndbox {
+  float x;
+  float y;
+  float z;
+  float dx;
+  float dy;
+  float dz;
+  float heading;
+  int label;
+  float score;
 
 #ifdef __cplusplus
-  // Operator overload to cast BndBox to const float*
+  // Operator overload to cast Bndbox to const float*
   explicit operator const float*() const {
     return &x;  // Return the address of the 'x' member
   }

@@ -59,7 +59,7 @@ TEST(IntegrationTest, IntegrationTest) {
                       nms_labels, nms_scores);
 
     // Buffers for inferece for pcdet
-    std::vector<BndBox> pcdet_nms_boxes;
+    std::vector<Bndbox> pcdet_nms_boxes;
 
     // Do inference with pcdet
     pcdet->run(points, point_buf_len, point_stride, pcdet_nms_boxes);

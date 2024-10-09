@@ -40,17 +40,12 @@ int main(int argc, const char **argv) {
     Set Metadata & RuntimeConfig
   */
   RuntimeConfig config{
-      1500000,  // int max_points;
-      true,     // bool shuffle_on;
-      true,     // bool use_cpu;
-      500,      // int pre_nms_max_preds;
-      83,       // int max_preds;
-      0.1f,     // float nms_score_thd;
-      10.0f,    // float pre_nms_distance_thd;
-      0.2f,     // float nms_iou_thd;
+      true,   // bool shuffle_on;
+      true,   // bool use_cpu;
+      10.0f,  // float pre_nms_distance_thd;
   };
 
-  pcdet_initialize(metadata_path.c_str(), &config);
+  pcdet_initialize(metadata_path.c_str(), nullptr, &config);
 
   for (const auto &pcd_file : pcd_files) {
     /*
@@ -65,23 +60,23 @@ int main(int argc, const char **argv) {
     /*
         Buffers for inference
     */
-    BndBox *preds;
+    Bndbox *preds;
 
     std::vector<float> nms_scores;
     std::vector<size_t> nms_labels;
     std::vector<Box> nms_boxes;
-    std::vector<BndBox> nms_preds;
+    std::vector<Bndbox> nms_preds;
 
     /*
         Do inference
     */
-    size_t n_boxes = pcdet_run(points, point_buf_len, point_stride, &preds);
+    size_t n_boxes = pcdet_infer(points, point_buf_len, point_stride, &preds);
 
     /*
         Copy predicted boxes into vector
     */
     for (size_t box_index = 0; box_index < n_boxes; box_index++) {
-      auto [x, y, z, dx, dy, dz, heading, score, label]{preds[box_index]};
+      auto [x, y, z, dx, dy, dz, heading, label, score]{preds[box_index]};
       Box box{0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f};
       nms_labels.push_back(label);
       nms_scores.push_back(score);

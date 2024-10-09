@@ -15,7 +15,7 @@ class PCDet {
  public:
   std::string version_info;
   virtual void run(const float *points, size_t point_buf_len,
-                   size_t point_stride, std::vector<BndBox> &boxes) = 0;
+                   size_t point_stride, std::vector<Bndbox> &boxes) = 0;
   virtual void run(const float *points, size_t point_buf_len,
                    size_t point_stride, std::vector<Box> &final_boxes,
                    std::vector<size_t> &final_labels,
@@ -71,7 +71,7 @@ class PCDetCPU : public PCDet {
   void postprocess(std::vector<Box> &post_boxes,
                    std::vector<size_t> &post_labels,
                    std::vector<float> &post_scores);
-  void get_pred(std::vector<BndBox> &boxes) const noexcept;
+  void get_pred(std::vector<Bndbox> &boxes) const noexcept;
 
  public:
   PCDetCPU() = delete;
@@ -83,7 +83,7 @@ class PCDetCPU : public PCDet {
            const RuntimeConfig *runtimeconfig = nullptr);
   ~PCDetCPU() override;
   void run(const float *points, size_t point_buf_len, size_t point_stride,
-           std::vector<BndBox> &boxes) override;
+           std::vector<Bndbox> &boxes) override;
   void run(const float *points, size_t point_buf_len, size_t point_stride,
            std::vector<Box> &final_boxes, std::vector<size_t> &final_labels,
            std::vector<float> &final_scores) override;

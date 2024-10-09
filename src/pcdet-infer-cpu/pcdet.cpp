@@ -50,6 +50,8 @@ vueron::PCDetCPU::PCDetCPU(const std::string &pfe_path,
   const std::string build_info{BUILD_TIME};
 
   version_info = "libpcdet-cpu " + git_tag_info + " (" + build_info + ")";
+  std::cout << GetMetadata() << std::endl;
+  std::cout << GetRuntimeConfig() << std::endl;
 };
 
 vueron::PCDetCPU::~PCDetCPU() = default;
@@ -75,9 +77,9 @@ void vueron::PCDetCPU::postprocess(std::vector<Box> &post_boxes,
                post_scores, suppressed);
 }
 
-void vueron::PCDetCPU::get_pred(std::vector<BndBox> &boxes) const noexcept {
+void vueron::PCDetCPU::get_pred(std::vector<Bndbox> &boxes) const noexcept {
   for (size_t i = 0; i < post_boxes.size(); i++) {
-    BndBox box{};
+    Bndbox box{};
     box.x = post_boxes[i].x;
     box.y = post_boxes[i].y;
     box.z = post_boxes[i].z;
@@ -94,7 +96,7 @@ void vueron::PCDetCPU::get_pred(std::vector<BndBox> &boxes) const noexcept {
 
 void vueron::PCDetCPU::run(const float *points, const size_t point_buf_len,
                            const size_t point_stride,
-                           std::vector<BndBox> &boxes) {
+                           std::vector<Bndbox> &boxes) {
   /**
    * @brief
    * It writes predictions into a vector, boxes.

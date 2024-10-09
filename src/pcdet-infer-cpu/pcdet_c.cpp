@@ -8,24 +8,29 @@
 extern "C" {
 
 static std::unique_ptr<vueron::PCDetCPU> pcdet;
-static std::vector<BndBox> g_nms_boxes;
+static std::vector<Bndbox> g_nms_boxes;
 
 // Global static buffers for pcdet->pcdet_run()
 static std::vector<Box> g_nms_pred;
 static std::vector<float> g_nms_score;
 static std::vector<size_t> g_nms_labels;
 
-const char* get_pcdet_cpu_version(void) {
+const char* GetlibDLVersion(void) {
   static std::string version;
   version = std::string{pcdet->version_info};
 
   return version.c_str();
 }
 
-void pcdet_initialize(const char* metadata_path,
+void pcdet_initialize(const char* metadata_path, const char* onnx_hash,
                       const struct RuntimeConfig* runtimeconfig) {
   // Use "struct" keyword for compatibility with C.
   const std::string metadata_path_string{metadata_path};
+  std::ignore = onnx_hash;  // unused param for same interface with pcdet-infer.
+
+  // initialize model with metadata
+  vueron::LoadMetadata(metadata_path_string);
+  pcdet = std::make_unique<vueron::PCDetCPU>(PFE_FILE, RPN_FILE, runtimeconfig);
 
   // MAX_OBJ_PER_SAMPLE is the maximum number of each vector.
   g_nms_boxes.reserve(MAX_OBJ_PER_SAMPLE);
@@ -33,20 +38,16 @@ void pcdet_initialize(const char* metadata_path,
   g_nms_score.reserve(MAX_OBJ_PER_SAMPLE);
   g_nms_labels.reserve(MAX_OBJ_PER_SAMPLE);
 
-  // initialize model with metadata
-  vueron::LoadMetadata(metadata_path_string);
-  pcdet = std::make_unique<vueron::PCDetCPU>(PFE_FILE, RPN_FILE, runtimeconfig);
-
   // logging Metadata & RuntimeConfig
-  std::cout << std::string{get_pcdet_cpu_version()} << std::endl;
+  std::cout << std::string{GetlibDLVersion()} << std::endl;
   std::cout << vueron::GetMetadata() << std::endl;
 
   // logging version info
-  std::cout << *runtimeconfig << std::endl;
+  std::cout << vueron::GetRuntimeConfig() << std::endl;
 }
 
-int pcdet_run(const float* points, const int point_buf_len,
-              const int point_stride, BndBox** box) {
+int pcdet_infer(const float* points, const int point_buf_len,
+                const int point_stride, struct Bndbox** box) {
   // check point input size
   assert(point_buf_len % point_stride == 0);
   g_nms_boxes.clear();
@@ -63,7 +64,7 @@ int pcdet_run(const float* points, const int point_buf_len,
   // copy address of output buffer to return pointers
   const int n_pred_boxes = static_cast<int>(g_nms_labels.size());
   for (int i = 0; i < n_pred_boxes; i++) {
-    BndBox temp_box{0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f};
+    Bndbox temp_box{0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0, 0.0f};
     temp_box.x = g_nms_pred[i].x;
     temp_box.y = g_nms_pred[i].y;
     temp_box.z = g_nms_pred[i].z;
@@ -71,8 +72,8 @@ int pcdet_run(const float* points, const int point_buf_len,
     temp_box.dy = g_nms_pred[i].dy;
     temp_box.dz = g_nms_pred[i].dz;
     temp_box.heading = g_nms_pred[i].heading;
-    temp_box.label = static_cast<float>(g_nms_labels[i]);
     temp_box.score = g_nms_score[i];
+    temp_box.label = static_cast<int>(g_nms_labels[i]);
 
     // append temp_box into g_nms_boxes
     g_nms_boxes.push_back(temp_box);
