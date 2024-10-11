@@ -9,7 +9,7 @@ extern "C" {
 
 static std::vector<Bndbox> g_nms_boxes;
 
-// Global static buffers for pcdet->pcdet_run()
+// Global static buffers for pcdet->pcdet_infer()
 static std::vector<Box> g_nms_pred;
 static std::vector<float> g_nms_score;
 static std::vector<size_t> g_nms_labels;
