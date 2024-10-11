@@ -35,6 +35,7 @@ const char* GetCUDATRTVersion(void) {
 
   return trt_version_info.c_str();
 }
+
 void pcdet_initialize(const char* onnx_file, const char* onnx_hash,
                       const struct Runtimeconfig runtimeconfig) {
   std::ignore = onnx_hash;
