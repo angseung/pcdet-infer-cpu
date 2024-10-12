@@ -7,17 +7,21 @@
 
 extern "C" {
 
-static std::unique_ptr<vueron::PCDetCPU> pcdet;
 static std::vector<Bndbox> g_nms_boxes;
 
-// Global static buffers for pcdet->pcdet_run()
+// Global static buffers for pcdet->pcdet_infer()
 static std::vector<Box> g_nms_pred;
 static std::vector<float> g_nms_score;
 static std::vector<size_t> g_nms_labels;
 
+std::unique_ptr<vueron::PCDetCPU>& getPCDetCPU() {
+  static std::unique_ptr<vueron::PCDetCPU> pcdet;
+  return pcdet;
+}
+
 const char* GetlibDLVersion(void) {
   static std::string version;
-  version = std::string{pcdet->version_info};
+  version = std::string{getPCDetCPU()->version_info};
 
   return version.c_str();
 }
@@ -31,6 +35,7 @@ const char* GetCUDATRTVersion(void) {
 
   return trt_version_info.c_str();
 }
+
 void pcdet_initialize(const char* onnx_file, const char* onnx_hash,
                       const struct Runtimeconfig runtimeconfig) {
   std::ignore = onnx_hash;
@@ -38,7 +43,8 @@ void pcdet_initialize(const char* onnx_file, const char* onnx_hash,
 
   // initialize model with runtimeconfig
   vueron::LoadMetadata(runtimeconfig, onnx_file_string);
-  pcdet = std::make_unique<vueron::PCDetCPU>(PFE_FILE, RPN_FILE, nullptr);
+  getPCDetCPU() =
+      std::make_unique<vueron::PCDetCPU>(PFE_FILE, RPN_FILE, nullptr);
 
   // MAX_OBJ_PER_SAMPLE is the maximum number of each vector.
   g_nms_boxes.reserve(MAX_OBJ_PER_SAMPLE);
@@ -63,7 +69,8 @@ void pcdet_initialize_with_metadata(const char* metadata_path,
 
   // initialize model with metadata
   vueron::LoadMetadata(metadata_path_string);
-  pcdet = std::make_unique<vueron::PCDetCPU>(PFE_FILE, RPN_FILE, runtimeconfig);
+  getPCDetCPU() =
+      std::make_unique<vueron::PCDetCPU>(PFE_FILE, RPN_FILE, runtimeconfig);
 
   // MAX_OBJ_PER_SAMPLE is the maximum number of each vector.
   g_nms_boxes.reserve(MAX_OBJ_PER_SAMPLE);
@@ -88,8 +95,8 @@ int pcdet_infer(size_t points_size, const float* points,
 }
 
 void pcdet_finalize(void) {
-  // destruct pcdet model, which is std::unique_ptr
-  pcdet = nullptr;
+  // destruct pcdet model, which is std::unique_ptr<vueron::PCDetCPU>
+  getPCDetCPU() = nullptr;
 
   // reset global static buffers
   g_nms_score.clear();
@@ -115,7 +122,8 @@ std::vector<Bndbox> pcdet_infer(size_t points_size, const float* points) {
   assert(g_nms_boxes.empty());
 
   // run inference session
-  pcdet->run(points, points_size, 4, g_nms_pred, g_nms_labels, g_nms_score);
+  getPCDetCPU()->run(points, points_size, 4, g_nms_pred, g_nms_labels,
+                     g_nms_score);
 
   // check predicted buffer size
   assert(g_nms_pred.size() == g_nms_labels.size() &&
