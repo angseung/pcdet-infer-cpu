@@ -5,11 +5,9 @@
 
 #include "pcdet-infer-cpu/pcdet.h"
 
-extern "C" {
-
 static std::vector<Bndbox> g_nms_boxes;
 
-// Global static buffers for pcdet->pcdet_infer()
+// Global static buffers for getPCDetCPU()->pcdet_infer()
 static std::vector<Box> g_nms_pred;
 static std::vector<float> g_nms_score;
 static std::vector<size_t> g_nms_labels;
@@ -18,6 +16,7 @@ std::unique_ptr<vueron::PCDetCPU>& getPCDetCPU() {
   static std::unique_ptr<vueron::PCDetCPU> pcdet;
   return pcdet;
 }
+extern "C" {
 
 const char* GetlibDLVersion(void) {
   static std::string version;
